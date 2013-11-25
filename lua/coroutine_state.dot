@@ -1,0 +1,10 @@
+digraph G
+{
+	START [shape box style=dotted];
+	 
+	START -> suspended[style=dotted label="tempCoroutine = coroutine.create(...)"];
+	suspended -> running[label="coroutine.resume(tempCoroutine)"];
+	running -> suspended[label="coroutine.yield()"];
+	running -> dead;
+	dead [shape box];
+}
