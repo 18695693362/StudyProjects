@@ -1,0 +1,5 @@
+TIPS:
+
+1 官方文档描述：当前线程调用mutex.lock()以后，继续调用mutex.try_lock()会照成死锁，但是，在mac平台下，发现不会。保险起见，还是要养成良好习惯，如果需要多次上锁，使用recursive_mutex.
+
+
