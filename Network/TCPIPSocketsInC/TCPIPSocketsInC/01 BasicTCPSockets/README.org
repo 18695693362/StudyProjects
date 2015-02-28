@@ -1,0 +1,11 @@
+* BasicTCPSockets
+
+** IPv4 TCP客户端
+典型TCP客户端通信涉及的四个步骤：
+（1）使用socket()创建TCP Socket
+（2）使用connect()建立到达服务器的连接
+（3）使用send()和recv()通信
+（4）使用close()关闭连接
+
+Tips：
+（1） TCP是一种字节流协议。这类协议的一种实现不会保持send()的边界。通过在连接的一端调用send()发送的字节可能不会通过在另一段单独调用一次recv()而全部都返回。

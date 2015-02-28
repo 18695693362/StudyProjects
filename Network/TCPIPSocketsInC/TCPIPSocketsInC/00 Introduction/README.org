@@ -1,0 +1,15 @@
+* Introduction
+
+** TCP/IP
+TCP/IP协议族中的主要协议是IP(Internet Protocol,网际协议)、TCP(Transmission Control Protocol, 传输控制协议)和UDP(User Datagram Protocol,用户数据报协议)
+网际协议提供了数据报服务：通过网络独立地处理并递送每个分组。IP是唯一一种"尽力而为"的协议：它尝试递送每个分组，但是在通过网络阐述过程中它可能(并且偶尔会)丢失、重新排序或者复制分组。
+
+[[./TCPIPNetwork.png]]
+
+** Sockets
+   
+一个应用程序可以对应多个Socket
+多个应用程序可以同时使用一个Socket
+一个Socket对应一个端口
+一个端口可以对应多个Socket
+[[./sockets-protocols-ports.png]]
