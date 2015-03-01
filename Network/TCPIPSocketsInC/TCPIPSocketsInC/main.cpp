@@ -7,9 +7,16 @@
 //
 
 #include <iostream>
+#include "TCPEchoClient4.h"
+#include "TCPEchoServer4.h"
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "Hello, World!\n";
+    
+#ifdef CLIENT_APP
+    Test01_TCPEchoClient();
+#else
+    Test01_TCPEchoServer();
+#endif
     return 0;
 }

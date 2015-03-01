@@ -9,3 +9,32 @@
 
 Tips：
 （1） TCP是一种字节流协议。这类协议的一种实现不会保持send()的边界。通过在连接的一端调用send()发送的字节可能不会通过在另一段单独调用一次recv()而全部都返回。
+ 
+（2） inet_pton()把服务器的Internet地址的字符串表示（以点分四组表示法作为命令行参数传入）转换为32位的二进制表示。[pton is printable to numeric]
+
+（3） htons()的意思是host to network short.其确保根据API的需要对二进制值进行格式化。
+
+** IPv4 TCP服务器
+典型TCP服务器通信设计的四个步骤：
+（1）使用socket()创建TCP套接字
+（2）利用bind()给套接字分配端口号
+（3）使用listen()告诉系统允许对该端口建立连接
+（4）反复执行以下操作：
+（4-1）调用accept()为每个客户连接获取新的套接字
+（4-2）使用send()和recv()通过新的套接字与客户通信
+（4-3）使用close()关闭客户连接
+
+Tips:
+（1）在sockaddr_in中设置地址和端口号之前，分别使用htonl()和htons()把他们转换为网络字节顺序。
+（2）listen()调用告诉TCP实现允许来自客户端进入的连接。
+（3）inet_pton()把地址的二进制表示转换为点分四组格式的字符串。[ntop is numeric to printable]
+
+** 创建和销毁sockets
+int socket(int domain, int type, int protocol)
+Sockets API为大量的通信领域提供了泛型接口。所以在socket()中需要指定通信领域
+
+** 指定地址
+int inet_pton(int addressFamily, const char* src, void* dst)
+int inet_ntop(int addressFamily, const char* src, void* dst, socklen_t dstBytes)
+Sockets API为大量的通信领域提供了泛型接口。所以在上面的函数中需要指定被转换的地址的地址族
+
