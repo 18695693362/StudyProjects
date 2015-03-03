@@ -48,6 +48,17 @@ void RunTCPEchoClient(const char* server_ip, const char* echo_str, const char* p
     }
     server_addr.sin_port = htons(server_port);
     
+    // bind client socket
+    struct sockaddr_in client_addr;
+    memset(&client_addr, 0, sizeof(client_addr));
+    client_addr.sin_family = AF_INET;
+    client_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    client_addr.sin_port = htons(4678);
+    if (bind(sock, (struct sockaddr *)&client_addr, sizeof(client_addr)))
+    {
+        GUtility::DieWithSystemMessage("bind() failed");
+    }
+    
     // 4 Establish the connection to the echo server
     if (connect(sock, (sockaddr*)&server_addr, sizeof(server_addr))<0)
     {

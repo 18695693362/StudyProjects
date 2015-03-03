@@ -62,6 +62,7 @@
 		463E05CA1AA1A59500CDA222 /* GUtility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GUtility.cpp; sourceTree = "<group>"; };
 		463E05CB1AA1A59500CDA222 /* GUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUtility.h; sourceTree = "<group>"; };
 		4649DF491AA1CB820048C607 /* README.org */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
+		4649DF4D1AA437320048C607 /* README.org */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
 		466A29FB1AA30FA900F9E4BE /* Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Server; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A061AA30FC900F9E4BE /* Client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer4.cpp; sourceTree = "<group>"; };
@@ -116,6 +117,7 @@
 			children = (
 				463E05C01AA1A3D400CDA222 /* 00 Introduction */,
 				463E05C51AA1A3FA00CDA222 /* 01 BasicTCPSockets */,
+				4649DF4C1AA437320048C607 /* 02 NamesAndAddressFamilies */,
 				463E05C91AA1A56E00CDA222 /* Common */,
 				463E05B91AA1A30100CDA222 /* main.cpp */,
 			);
@@ -151,6 +153,14 @@
 				463E05CB1AA1A59500CDA222 /* GUtility.h */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		4649DF4C1AA437320048C607 /* 02 NamesAndAddressFamilies */ = {
+			isa = PBXGroup;
+			children = (
+				4649DF4D1AA437320048C607 /* README.org */,
+			);
+			path = "02 NamesAndAddressFamilies";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

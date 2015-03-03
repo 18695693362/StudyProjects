@@ -26,6 +26,31 @@ void HandleTCPClient(int client_socket)
 {
     char buffer[BUFFSIZE];
     
+    // print client address
+    sockaddr_in temp_addr;
+    socklen_t   temp_addr_len = sizeof(temp_addr);
+    memset(&temp_addr, 0, sizeof(temp_addr));
+    getsockname(client_socket, (struct sockaddr *)&temp_addr, &temp_addr_len);
+    char temp_addr_str[INET_ADDRSTRLEN];
+    if ( inet_ntop(AF_INET, &temp_addr.sin_addr.s_addr, temp_addr_str,sizeof(temp_addr_str)) !=NULL )
+    {
+        printf("==local  info %s/%d\n", temp_addr_str, ntohs(temp_addr.sin_port));
+    }
+    else
+    {
+        puts("==unable to get client address");
+    }
+    // print server address
+    getpeername(client_socket, (struct sockaddr *)&temp_addr, &temp_addr_len);
+    if ( inet_ntop(AF_INET, &temp_addr.sin_addr.s_addr, temp_addr_str,sizeof(temp_addr_str)) !=NULL )
+    {
+        printf("==server info %s/%d\n", temp_addr_str, ntohs(temp_addr.sin_port));
+    }
+    else
+    {
+        puts("==unable to get server address");
+    }
+    
     ssize_t num_bytes_recv = recv(client_socket, buffer, BUFFSIZE, 0);
     if (num_bytes_recv<0) {
         GUtility::DieWithSystemMessage("recv() failed");

@@ -38,3 +38,39 @@ int inet_pton(int addressFamily, const char* src, void* dst)
 int inet_ntop(int addressFamily, const char* src, void* dst, socklen_t dstBytes)
 Sockets API为大量的通信领域提供了泛型接口。所以在上面的函数中需要指定被转换的地址的地址族
 
+int getpeername(int socket, struct sockaddr* remoteAddress, socklen_t* addressLength)
+查询与socket通信的远端协议地址
+int getsockname(int socket, struct sockaddr* remoteAddress, socklen_t* addressLength)
+查询socket通信的本地协议地址
+对于服务器来说，在bind以后就可以调用getsockname来获取本地地址和端口，虽然这没有什么太多的意义。getpeername只有在链接建立以后才调用，否则不能正确获得对方地址和端口，所以他的参数描述字一般是链接描述字而非监听套接口描述字。
+对于客户端来说，在调用socket时候内核还不会分配IP和端口，此时调用getsockname不会获得正确的端口和地址（当然链接没建立更不可能调用getpeername），当然如果调用了bind 以后可以使用getsockname。想要正确得到对方地址（一般客户端不需要这个功能），则必须在链接建立以后，同样链接建立以后，客户端地址和端口就已经被指定，此时是调用getsockname的时机。
+
+** 连接Socket
+通过一个TCP套接字发送任何信息之前必须把它连接到一个套接字。
+
+** 绑定地址
+虽然bind()通常由服务器使用，但是客户端也可以在调用connect()之前使用bind()来制定它的本地地址和端口,如果没有使用bind()，则在调用connect()期间由系统制定。
+
+** 处理进入的连接
+int listen(int socket, int queueLimit)
+queueLimit 指定在任意时间等待的进入连接数量的上限
+
+int accept(int socket, struct sockaddr* clientAddress, socklen_t* addressLength)
+已经被绑定到端口并且标记为“监听”的套接字从来不会用于发送和接受。它被用来获取新的套接字，其中每个新套接字用于一条客户连接；服务器在新套接字上执行发送和接收。
+addressLength 是一个输入/输出参数。
+
+** 通信
+TCP是一种字节流协议，因此不会保留send()边界。在接受者上调用recv()一次所读取的字节数不是由调用send()一次所写入的字节数确定的。
+
+** 使用IPv6
+
+
+
+
+
+
+
+
+
+
+
