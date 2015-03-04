@@ -16,13 +16,13 @@
 #include <arpa/inet.h>
 #include "GUtility.h"
 
-#define INET_ADDRSTRLEN 100
+//#define INET_ADDRSTRLEN 100
 #define BUFFSIZE 128
 
 //maximum outstanding connection requests
 static const int MAXPENDING = 5;
 
-void HandleTCPClient(int client_socket)
+static void HandleTCPClient(int client_socket)
 {
     char buffer[BUFFSIZE];
     
@@ -78,14 +78,14 @@ void HandleTCPClient(int client_socket)
     close(client_socket);
 }
 
-void RunTCPEchoServer(const char* port="7777");
-void RunTCPEchoServer(const char* port)
+static void RunTCPEchoServer(const char* port="7777");
+static void RunTCPEchoServer(const char* port)
 {
     in_port_t server_port = atoi(port);
     
     // 1 Create socket
     int server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (server_port<0)
+    if (server_socket<0)
     {
         GUtility::DieWithSystemMessage("socket() failed");
     }

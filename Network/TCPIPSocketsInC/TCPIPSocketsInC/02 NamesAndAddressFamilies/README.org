@@ -2,10 +2,17 @@
 
 ** 将名称映射到数字
 int getaddrinfo(const char* hostStr, const char* serviceStr, const struct addrinfo* hints, struct addrinfo** results)
+hostStr     为主机名称或者地址       例如:"www.baidu.com" 或者 "115.239.211.112"
+serviceStr  为服务名称或者端口号      例如:"whois" 或者 "43"
+hints       描述要获取的地址的信息
+result      指向一个链表，其保存了获取的地址信息
+
+** 编写地址通用的代码
 
 
-
-
+** 从数字获取名称
+int getnameinfo(const struct sockaddr,socklen_t addressLength,char* node,socklen_t nodeLength,char* service,socklen_t serviceLength,int flags)
+int gethostname(char* nameBuffer, size_t bufferLength)
 
 
 

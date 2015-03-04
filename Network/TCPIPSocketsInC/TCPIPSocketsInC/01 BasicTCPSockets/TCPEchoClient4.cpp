@@ -19,8 +19,8 @@
 
 #define BUFFSIZE 128
 
-void RunTCPEchoClient(const char* server_ip, const char* echo_str, const char* port="7777");
-void RunTCPEchoClient(const char* server_ip, const char* echo_str, const char* port)
+static void RunTCPEchoClient(const char* server_ip, const char* echo_str, const char* port="7777");
+static void RunTCPEchoClient(const char* server_ip, const char* echo_str, const char* port)
 {
     in_port_t server_port = atoi(port);
     

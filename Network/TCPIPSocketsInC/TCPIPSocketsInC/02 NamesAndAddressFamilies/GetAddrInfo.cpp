@@ -88,7 +88,7 @@ void Test02_GetAddrInfo(bool is_run)
     }
     GetAddrInfo("www.baidu.com", "80");
     GetAddrInfo("www.google.com", "80");
-    GetAddrInfo("www.qq.com", "80");
+    GetAddrInfo("www.qq.com", "whois");
     
     exit(0);
 }

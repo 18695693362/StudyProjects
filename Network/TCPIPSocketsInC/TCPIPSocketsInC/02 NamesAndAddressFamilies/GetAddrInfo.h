@@ -9,6 +9,9 @@
 #ifndef TCPIPSocketsInC_GetAddrInfo_h
 #define TCPIPSocketsInC_GetAddrInfo_h
 
+#include <stdio.h>
+
+void PrintSocketAddress(const struct sockaddr* address, FILE* stream);
 void Test02_GetAddrInfo(bool is_run);
 
 #endif
