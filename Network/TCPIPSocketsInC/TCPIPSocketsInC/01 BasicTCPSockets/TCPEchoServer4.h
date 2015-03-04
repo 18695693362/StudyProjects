@@ -9,6 +9,6 @@
 #ifndef __TCPIPSocketsInC__TCPEchoServer4__
 #define __TCPIPSocketsInC__TCPEchoServer4__
 
-void Test01_TCPEchoServer();
+void Test01_TCPEchoServer(bool is_run);
 
 #endif /* defined(__TCPIPSocketsInC__TCPEchoServer4__) */

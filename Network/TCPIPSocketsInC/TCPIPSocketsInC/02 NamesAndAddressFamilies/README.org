@@ -1,6 +1,8 @@
 * Of Names and Address Families
 
 ** 将名称映射到数字
+int getaddrinfo(const char* hostStr, const char* serviceStr, const struct addrinfo* hints, struct addrinfo** results)
+
 
 
 

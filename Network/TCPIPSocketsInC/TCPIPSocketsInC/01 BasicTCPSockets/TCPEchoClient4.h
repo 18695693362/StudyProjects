@@ -11,6 +11,6 @@
 
 #include <string>
 
-void Test01_TCPEchoClient();
+void Test01_TCPEchoClient(bool is_run);
 
 #endif /* defined(__TCPIPSocketsInC__TCPEchoClient4__) */

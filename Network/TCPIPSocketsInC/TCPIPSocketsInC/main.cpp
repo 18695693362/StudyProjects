@@ -9,14 +9,16 @@
 #include <iostream>
 #include "TCPEchoClient4.h"
 #include "TCPEchoServer4.h"
+#include "GetAddrInfo.h"
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    
+int main(int argc, const char * argv[])
+{
 #ifdef CLIENT_APP
-    Test01_TCPEchoClient();
+    Test01_TCPEchoClient(false);
 #else
-    Test01_TCPEchoServer();
+    Test01_TCPEchoServer(false);
 #endif
+    
+    Test02_GetAddrInfo(true);
     return 0;
 }

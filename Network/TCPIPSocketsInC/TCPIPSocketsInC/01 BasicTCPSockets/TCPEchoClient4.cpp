@@ -130,8 +130,12 @@ void RunTCPEchoClient(const char* server_ip, const char* echo_str, const char* p
     close(sock);
 }
 
-void Test01_TCPEchoClient()
+void Test01_TCPEchoClient(bool is_run)
 {
+    if (!is_run)
+    {
+        return;
+    }
     //RunTCPEchoClient("172.16.3.71", "Test", "4000");
     RunTCPEchoClient("127.0.0.1", "Test");
 }

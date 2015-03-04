@@ -10,6 +10,9 @@
 		463E05BA1AA1A30100CDA222 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
 		463E05C81AA1A47100CDA222 /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
+		4649DF5B1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF5A1AA57BE10048C607 /* GetAddrInfo.cpp */; };
+		4649DF5C1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF5A1AA57BE10048C607 /* GetAddrInfo.cpp */; };
+		4649DF5D1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF5A1AA57BE10048C607 /* GetAddrInfo.cpp */; };
 		466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
 		466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		466A29F51AA30FA900F9E4BE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
@@ -63,6 +66,8 @@
 		463E05CB1AA1A59500CDA222 /* GUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUtility.h; sourceTree = "<group>"; };
 		4649DF491AA1CB820048C607 /* README.org */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
 		4649DF4D1AA437320048C607 /* README.org */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
+		4649DF5A1AA57BE10048C607 /* GetAddrInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GetAddrInfo.cpp; sourceTree = "<group>"; };
+		4649DF5E1AA57C810048C607 /* GetAddrInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetAddrInfo.h; sourceTree = "<group>"; };
 		466A29FB1AA30FA900F9E4BE /* Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Server; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A061AA30FC900F9E4BE /* Client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer4.cpp; sourceTree = "<group>"; };
@@ -159,6 +164,8 @@
 			isa = PBXGroup;
 			children = (
 				4649DF4D1AA437320048C607 /* README.org */,
+				4649DF5E1AA57C810048C607 /* GetAddrInfo.h */,
+				4649DF5A1AA57BE10048C607 /* GetAddrInfo.cpp */,
 			);
 			path = "02 NamesAndAddressFamilies";
 			sourceTree = "<group>";
@@ -258,6 +265,7 @@
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */,
 				463E05C81AA1A47100CDA222 /* TCPEchoClient4.cpp in Sources */,
+				4649DF5B1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				463E05BA1AA1A30100CDA222 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +277,7 @@
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */,
 				466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */,
+				4649DF5C1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				466A29F51AA30FA900F9E4BE /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,6 +289,7 @@
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				466A29FE1AA30FC900F9E4BE /* GUtility.cpp in Sources */,
 				466A29FF1AA30FC900F9E4BE /* TCPEchoClient4.cpp in Sources */,
+				4649DF5D1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				466A2A001AA30FC900F9E4BE /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

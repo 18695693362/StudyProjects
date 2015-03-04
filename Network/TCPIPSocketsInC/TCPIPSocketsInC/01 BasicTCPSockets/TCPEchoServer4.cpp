@@ -137,7 +137,11 @@ void RunTCPEchoServer(const char* port)
     }
 }
 
-void Test01_TCPEchoServer()
+void Test01_TCPEchoServer(bool is_run)
 {
+    if (!is_run)
+    {
+        return;
+    }
     RunTCPEchoServer();
 }
