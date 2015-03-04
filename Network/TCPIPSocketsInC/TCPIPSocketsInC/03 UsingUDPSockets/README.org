@@ -1,8 +1,17 @@
 * Using UDP Sockets
 
+** UDP客户端
+典型UDP客户端通信涉及的步骤：
+（1）使用socket()创建UDP Socket
+（2）使用sendto()和recvfrom()通信
+（3）使用close()关闭连接
 
-
-
+** UDP服务器
+典型UDP服务器通信涉及的步骤：
+（1）使用socket()创建UDP Socket
+（2）利用bind()给套接字分配端口号
+（3）使用sendto()和recvfrom()通信
+（4）使用close()关闭连接
 
 
 

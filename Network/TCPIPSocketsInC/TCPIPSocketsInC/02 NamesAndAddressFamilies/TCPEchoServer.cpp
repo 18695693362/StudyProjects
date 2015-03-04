@@ -79,7 +79,6 @@ static void RunTCPEchoServer(const char* port)
     {
         int client_socket = AcceptTCPConnection(server_socket);
         HandleTCPClient(client_socket);
-        close(client_socket);
     }
 }
 

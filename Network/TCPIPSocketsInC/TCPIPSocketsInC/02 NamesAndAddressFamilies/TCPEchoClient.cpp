@@ -63,6 +63,7 @@ static void RunTCPEchoClient(const char* server_ip, const char* echo_str, const 
     }
     
     fputc('\n', stdout);
+    close(sock);
 }
 
 void Test02_TCPEchoClient(bool is_run)

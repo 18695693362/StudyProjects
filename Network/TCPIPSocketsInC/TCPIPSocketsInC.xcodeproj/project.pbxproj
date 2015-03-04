@@ -25,6 +25,12 @@
 		4649DF891AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF871AA6DB7A0048C607 /* TCPEchoServer.cpp */; };
 		4649DF8A1AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF871AA6DB7A0048C607 /* TCPEchoServer.cpp */; };
 		4649DF8B1AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF871AA6DB7A0048C607 /* TCPEchoServer.cpp */; };
+		4649DF901AA6F9590048C607 /* UDPEchoClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF8E1AA6F9590048C607 /* UDPEchoClient.cpp */; };
+		4649DF911AA6F9590048C607 /* UDPEchoClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF8E1AA6F9590048C607 /* UDPEchoClient.cpp */; };
+		4649DF921AA6F9590048C607 /* UDPEchoClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF8E1AA6F9590048C607 /* UDPEchoClient.cpp */; };
+		4649DF951AA7010E0048C607 /* UDPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */; };
+		4649DF961AA7010E0048C607 /* UDPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */; };
+		4649DF971AA7010E0048C607 /* UDPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */; };
 		466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
 		466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		466A29F51AA30FA900F9E4BE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
@@ -89,6 +95,10 @@
 		4649DF871AA6DB7A0048C607 /* TCPEchoServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer.cpp; sourceTree = "<group>"; };
 		4649DF881AA6DB7A0048C607 /* TCPEchoServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPEchoServer.h; sourceTree = "<group>"; };
 		4649DF8D1AA6F8BA0048C607 /* README.org */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
+		4649DF8E1AA6F9590048C607 /* UDPEchoClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UDPEchoClient.cpp; sourceTree = "<group>"; };
+		4649DF8F1AA6F9590048C607 /* UDPEchoClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPEchoClient.h; sourceTree = "<group>"; };
+		4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UDPEchoServer.cpp; sourceTree = "<group>"; };
+		4649DF941AA7010E0048C607 /* UDPEchoServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPEchoServer.h; sourceTree = "<group>"; };
 		466A29FB1AA30FA900F9E4BE /* Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Server; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A061AA30FC900F9E4BE /* Client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer4.cpp; sourceTree = "<group>"; };
@@ -204,6 +214,10 @@
 			isa = PBXGroup;
 			children = (
 				4649DF8D1AA6F8BA0048C607 /* README.org */,
+				4649DF8E1AA6F9590048C607 /* UDPEchoClient.cpp */,
+				4649DF8F1AA6F9590048C607 /* UDPEchoClient.h */,
+				4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */,
+				4649DF941AA7010E0048C607 /* UDPEchoServer.h */,
 			);
 			path = "03 UsingUDPSockets";
 			sourceTree = "<group>";
@@ -301,11 +315,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4649DF661AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
+				4649DF901AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				4649DF611AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */,
 				4649DF891AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */,
 				463E05C81AA1A47100CDA222 /* TCPEchoClient4.cpp in Sources */,
+				4649DF951AA7010E0048C607 /* UDPEchoServer.cpp in Sources */,
 				4649DF5B1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				463E05BA1AA1A30100CDA222 /* main.cpp in Sources */,
 				4649DF841AA6D4290048C607 /* TCPServerUtility.cpp in Sources */,
@@ -317,11 +333,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4649DF671AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
+				4649DF911AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				4649DF621AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */,
 				4649DF8A1AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */,
 				466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */,
+				4649DF961AA7010E0048C607 /* UDPEchoServer.cpp in Sources */,
 				4649DF5C1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				466A29F51AA30FA900F9E4BE /* main.cpp in Sources */,
 				4649DF851AA6D4290048C607 /* TCPServerUtility.cpp in Sources */,
@@ -333,11 +351,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4649DF681AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
+				4649DF921AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				4649DF631AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				466A29FE1AA30FC900F9E4BE /* GUtility.cpp in Sources */,
 				4649DF8B1AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */,
 				466A29FF1AA30FC900F9E4BE /* TCPEchoClient4.cpp in Sources */,
+				4649DF971AA7010E0048C607 /* UDPEchoServer.cpp in Sources */,
 				4649DF5D1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				466A2A001AA30FC900F9E4BE /* main.cpp in Sources */,
 				4649DF861AA6D4290048C607 /* TCPServerUtility.cpp in Sources */,
