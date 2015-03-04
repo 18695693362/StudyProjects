@@ -4,15 +4,18 @@
 典型UDP客户端通信涉及的步骤：
 （1）使用socket()创建UDP Socket
 （2）使用sendto()和recvfrom()通信
-（3）使用close()关闭连接
+（3）使用close()关闭socket
+Tips:
+（1）UDP通信没有建立连接，所以不用调用connect()。socket指定地址以后，就可以调用sendto()发送信息。第一次调用sendto()时，会为socket绑定一个可用的端口。
 
 ** UDP服务器
 典型UDP服务器通信涉及的步骤：
 （1）使用socket()创建UDP Socket
 （2）利用bind()给套接字分配端口号
 （3）使用sendto()和recvfrom()通信
-（4）使用close()关闭连接
-
+（4）使用close()关闭socket
+Tips:
+（1）UDP通信不需要建立连接，所以不用调用listen()监听连接请求。socket绑定端口以后，就可以接收信息。由于不像TCP那样为每个客户端建立连接，所以TCP服务器需要为每个连接建立一个socket进行通信，当连接断开时，close掉TCP的socket。在UDP中，只需要一个socket就可以和所有的客户端通信，当服务器停止服务时，close掉UDP的socket。
 
 
 
