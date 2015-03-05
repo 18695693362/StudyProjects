@@ -16,45 +16,6 @@
 #include "GUtility.h"
 #include "GetAddrInfo.h"
 
-void PrintSocketAddress(const struct sockaddr* address, FILE* stream)
-{
-    if (address == nullptr || stream == nullptr)
-    {
-        return;
-    }
-    
-    void* numeric_addr;
-    char addr_buffer[INET6_ADDRSTRLEN];
-    in_port_t port;
-    
-    switch (address->sa_family)
-    {
-        case AF_INET:
-            numeric_addr = &((struct sockaddr_in*) address)->sin_addr;
-            port = ntohs(((struct sockaddr_in*) address)->sin_port);
-            break;
-        case AF_INET6:
-            numeric_addr = &((struct sockaddr_in6*) address)->sin6_addr;
-            port = ntohs(((struct sockaddr_in6*) address)->sin6_port);
-        default:
-            fputs("[unknown type]", stream);
-            return;
-    }
-    
-    if (inet_ntop(address->sa_family, numeric_addr, addr_buffer, sizeof(addr_buffer))==nullptr)
-    {
-        fputs("[invalid address]", stream);
-    }
-    else
-    {
-        fprintf(stream, "%s", addr_buffer);
-        if (port != 0)
-        {
-            fprintf(stream, "-%u", port);
-        }
-    }
-}
-
 void GetAddrInfo(const char* addr_str,const char* port_str)
 {
     struct addrinfo temp_addrinfo;
@@ -72,7 +33,7 @@ void GetAddrInfo(const char* addr_str,const char* port_str)
     
     for (struct addrinfo* addr = addrlist; addr!=nullptr; addr=addr->ai_next)
     {
-        PrintSocketAddress(addr->ai_addr, stdout);
+        GUtility::PrintSocketAddress(addr->ai_addr, stdout);
         fputc('\n', stdout);
     }
     fputc('\n', stdout);

@@ -11,7 +11,6 @@
 
 #include <stdio.h>
 
-void PrintSocketAddress(const struct sockaddr* address, FILE* stream);
 void Test02_GetAddrInfo(bool is_run);
 
 #endif

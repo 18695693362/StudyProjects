@@ -52,7 +52,7 @@ int SetupTCPServerSocket(const char* service)
                 GUtility::DieWithSystemMessage("getsockname() failed");
             }
             fputs("Binding to ", stdout);
-            PrintSocketAddress((struct sockaddr*)&local_addr, stdout);
+            GUtility::PrintSocketAddress((struct sockaddr*)&local_addr, stdout);
             fputc('\n', stdout);
             break;
         }
@@ -77,7 +77,7 @@ int AcceptTCPConnection(int server_sock)
     }
     
     fputs("Handling client ", stdout);
-    PrintSocketAddress((struct sockaddr *)&client_addr, stdout);
+    GUtility::PrintSocketAddress((struct sockaddr *)&client_addr, stdout);
     fputc('\n', stdout);
     
     return client_sock;

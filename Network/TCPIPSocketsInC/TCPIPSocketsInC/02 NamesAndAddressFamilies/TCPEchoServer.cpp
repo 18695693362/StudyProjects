@@ -35,13 +35,13 @@ static void HandleTCPClient(int client_socket)
     memset(&temp_addr, 0, sizeof(temp_addr));
     getsockname(client_socket, (struct sockaddr *)&temp_addr, &temp_addr_len);
     puts("==local info==");
-    PrintSocketAddress((struct sockaddr *)&temp_addr, stdout);
+    GUtility::PrintSocketAddress((struct sockaddr *)&temp_addr, stdout);
     putc('\n', stdout);
 
     // print server address
     getpeername(client_socket, (struct sockaddr *)&temp_addr, &temp_addr_len);
     puts("==server info==");
-    PrintSocketAddress((struct sockaddr *)&temp_addr, stdout);
+    GUtility::PrintSocketAddress((struct sockaddr *)&temp_addr, stdout);
     putc('\n', stdout);
     
     while (num_bytes_recv>0)

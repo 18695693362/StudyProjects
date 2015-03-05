@@ -13,11 +13,12 @@
 #include "GUtility.h"
 #define MAXSTRINGLENGTH 100
 
-static void RunUDPEchoClient(const char* server_str,const char* echo_str,const char* service_str="echo");
-static void RunUDPEchoClient(const char* server_str,const char* echo_str,const char* service_str)
+static void RunUDPEchoClient(const char* server_str,const char* echo_str,bool is_connect,const char* service_str="echo");
+static void RunUDPEchoClient(const char* server_str,const char* echo_str,bool is_connect,const char* service_str)
 {
     size_t echo_str_len = strlen(echo_str);
-    if (echo_str_len>MAXSTRINGLENGTH)
+    //if (echo_str_len>MAXSTRINGLENGTH)
+    if (/* DISABLES CODE */ (false))
     {
         GUtility::DieWithUserMessage(echo_str,"string too long");
     }
@@ -42,8 +43,36 @@ static void RunUDPEchoClient(const char* server_str,const char* echo_str,const c
         GUtility::DieWithSystemMessage("socket() failed");
     }
     
+    GUtility::BindSocket(sock, 7777, stdout);
+    
+    if (is_connect)
+    {
+        fputs("Before connect:\n", stdout);
+        GUtility::PrintLocalForeignAddress(sock, stdout);
+        
+        if(connect(sock, server_addr_list->ai_addr, server_addr_list->ai_addrlen)<0)
+        {
+            GUtility::DieWithSystemMessage("connect() failed");
+        }
+        
+        fputs("Connected:\n", stdout);
+        GUtility::PrintLocalForeignAddress(sock, stdout);
+    }
+    
     // 2 Send data
-    ssize_t bytes_count = sendto(sock, echo_str, echo_str_len, 0, server_addr_list->ai_addr, server_addr_list->ai_addrlen);
+    ssize_t bytes_count = 0;
+    if (is_connect)
+    {
+        bytes_count = send(sock, echo_str, echo_str_len, 0);
+    }
+    else
+    {
+        fputs("Before sendto:\n", stdout);
+        GUtility::PrintLocalForeignAddress(sock, stdout);
+        bytes_count = sendto(sock, echo_str, echo_str_len, 0, server_addr_list->ai_addr, server_addr_list->ai_addrlen);
+        fputs("After sendto:\n", stdout);
+        GUtility::PrintLocalForeignAddress(sock, stdout);
+    }
     if (bytes_count < 0)
     {
         GUtility::DieWithSystemMessage("sendto() failed");
@@ -53,11 +82,20 @@ static void RunUDPEchoClient(const char* server_str,const char* echo_str,const c
         GUtility::DieWithUserMessage("sendto() error","send unexpected number of bytes");
     }
     
+    sleep(1);
+    
     struct sockaddr_storage from_addr;
     socklen_t from_addr_len = sizeof(from_addr);
     char buffer[MAXSTRINGLENGTH+1];
     // 3 Receive data
-    bytes_count = recvfrom(sock, buffer, MAXSTRINGLENGTH, 0, (struct sockaddr *)&from_addr, &from_addr_len);
+    if (is_connect)
+    {
+        bytes_count = recv(sock, buffer, MAXSTRINGLENGTH, 0);
+    }
+    else
+    {
+        bytes_count = recvfrom(sock, buffer, MAXSTRINGLENGTH, 0, (struct sockaddr *)&from_addr, &from_addr_len);
+    }
     if (bytes_count<0)
     {
         GUtility::DieWithSystemMessage("recvfrom() failed");
@@ -65,6 +103,15 @@ static void RunUDPEchoClient(const char* server_str,const char* echo_str,const c
     else if (bytes_count != echo_str_len)
     {
         GUtility::DieWithUserMessage("recvfrom() error", "received unexpected number of bytes");
+    }
+    
+    if (is_connect)
+    {
+        server_addr_list->ai_addr->sa_family = AF_UNSPEC;
+        connect(sock, server_addr_list->ai_addr, server_addr_list->ai_addrlen);
+        
+        fputs("Disonnected:\n", stdout);
+        GUtility::PrintLocalForeignAddress(sock, stdout);
     }
     
     freeaddrinfo(server_addr_list);
@@ -80,6 +127,24 @@ void Test03_UDPEchoClient(bool is_run)
     {
         return;
     }
+    //65507
+    int length = 8500;
+    char send_str[length];
+    for (int i=0; i<length-1; i++)
+    {
+        if (i%2==0)
+        {
+            send_str[i] = 'a';
+        }
+        else
+        {
+            send_str[i] = 'b';
+        }
+    }
+    send_str[length-1] = '\0';
     
-    RunUDPEchoClient("127.0.0.1","UDP-Test","7778");
+    //RunUDPEchoClient("127.0.0.1","UDP-Test",true,"7778");
+    //RunUDPEchoClient("127.0.0.1","UDP-Test",false,"7778");
+    //RunUDPEchoClient("127.0.0.1",send_str,true,"7778");
+    RunUDPEchoClient("220.0.0.1",send_str,true,"7778");
 }

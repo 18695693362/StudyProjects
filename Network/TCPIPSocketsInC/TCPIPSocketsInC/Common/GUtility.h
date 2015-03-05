@@ -16,6 +16,11 @@ class GUtility
 public:
     static void DieWithUserMessage(const std::string& msg,const std::string& detail="");
     static void DieWithSystemMessage(const std::string&msg);
+    
+    static void PrintSocketAddress(const struct sockaddr* address, FILE* stream);
+    static void PrintLocalForeignAddress(int socket,FILE* stream);
+    
+    static void BindSocket(int socket,unsigned int port,FILE* stream);
 };
 
 #endif /* defined(__TCPIPSocketsInC__GUtility__) */

@@ -15,7 +15,56 @@ Tips:
 （3）使用sendto()和recvfrom()通信
 （4）使用close()关闭socket
 Tips:
-（1）UDP通信不需要建立连接，所以不用调用listen()监听连接请求。socket绑定端口以后，就可以接收信息。由于不像TCP那样为每个客户端建立连接，所以TCP服务器需要为每个连接建立一个socket进行通信，当连接断开时，close掉TCP的socket。在UDP中，只需要一个socket就可以和所有的客户端通信，当服务器停止服务时，close掉UDP的socket。
+（1）UDP通信不需要建立连接，所以不用调用listen()监听连接请求。socket绑定端口以后，就可以接收信息。TCP服务器需要为每个连接建立一个socket进行通信，当连接断开时，close掉TCP的socket。在UDP中，由于不像TCP那样为每个客户端建立连接，只需要一个socket就可以和所有的客户端通信。
+
+** 使用UDP发送接收数据
+ssize_t sendto(int socket,const void* msg,size_t msgLength,int flags,const struct sockaddr* destAddr,socklen_t addrLen)
+ssize_t recvfrom(int socket,const void* msg,size_t msgLength,int flags,struct sockaddr* srcAddr,socklen_t* addrLen)
+Tips:
+（1）以TCP套接字调用send()返回时，发送的数据被复制到一个缓存中来传输，这些缓存数据可能会也可能不会被传输。
+（2）以UDP套接字调用sendto()返回时，发送的数据已经被传递给底层通道传输。UDP套接字不存在为了支持重新传输的缓存数据，因为它不支持从错误中恢复。
+（3）在消息从网络到达和消息通过recv()或recvfrom()被返回的时间间隔中，消息数据被存放在一个接收缓存队列中。
+（3-1）对于已经连接的TCPSocket，所有接收到的但没有被交付的字节被当做一个连续的序列。
+（3-2）对于UDPSocket，不同消息的数据可能来自不同的发送者，所以需要保持这些消息的边界，从而每个消息可以按照合适的地址返回。缓存中实际保存的是数据块队列，每一个数据块关联一个来源地址。每一次调用recvfrom()只会返回至多一个其中的数据块。如果为recvfrom()传递msgLength参数，当msgLength比数据块总字节数小时，只会返回msgsLength字节数的数据块，其他字节被丢弃，而且不会有任何提示信息给接收的程序。
+
+** 连接到UDP Socket
+在UDP套接字上调用connect()的一个优点是，它允许接收由套接字以前的动作产生的错误提示。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

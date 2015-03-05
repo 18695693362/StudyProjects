@@ -14,8 +14,8 @@
 #include "GetAddrInfo.h"
 #define MAXSTRINGLENGTH 100
 
-static void RunUDPEchoServer(const char* service_str="echo");
-static void RunUDPEchoServer(const char* service_str)
+static void RunUDPEchoServer(bool is_connect,const char* service_str="echo");
+static void RunUDPEchoServer(bool is_connect,const char* service_str)
 {
     struct addrinfo addr_criteria;
     memset(&addr_criteria, 0, sizeof(addr_criteria));
@@ -58,7 +58,7 @@ static void RunUDPEchoServer(const char* service_str)
         }
         
         fputs("Handling client ", stdout);
-        PrintSocketAddress((struct sockaddr *)&client_addr, stdout);
+        GUtility::PrintSocketAddress((struct sockaddr *)&client_addr, stdout);
         fputc('\n', stdout);
         
         ssize_t bytes_count_send = sendto(sock, buffer, bytes_count_recv, 0, (struct sockaddr *)&client_addr, client_addr_len);
@@ -80,5 +80,5 @@ void Test03_UDPEchoServer(bool is_run)
         return;
     }
     
-    RunUDPEchoServer("7778");
+    RunUDPEchoServer(false,"7778");
 }
