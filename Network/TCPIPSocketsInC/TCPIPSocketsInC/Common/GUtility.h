@@ -21,6 +21,8 @@ public:
     static void PrintLocalForeignAddress(int socket,FILE* stream);
     
     static void BindSocket(int socket,unsigned int port,FILE* stream);
+    template<typename SrcDataType>
+    static void PrintWithBinaryFormat(FILE* stream,SrcDataType data,size_t bytes_len=0);
 };
 
 #endif /* defined(__TCPIPSocketsInC__GUtility__) */

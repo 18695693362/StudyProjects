@@ -29,6 +29,9 @@ static void RunUDPEchoClient(const char* server_str,const char* echo_str,bool is
     addr_criteria.ai_socktype = SOCK_DGRAM;
     addr_criteria.ai_protocol = IPPROTO_UDP;
     
+    //addr_criteria.ai_socktype = SOCK_STREAM;
+    //addr_criteria.ai_protocol = IPPROTO_TCP;
+    
     struct addrinfo* server_addr_list;
     int result = getaddrinfo(server_str, service_str, &addr_criteria, &server_addr_list);
     if (result!=0)
@@ -146,5 +149,5 @@ void Test03_UDPEchoClient(bool is_run)
     //RunUDPEchoClient("127.0.0.1","UDP-Test",true,"7778");
     //RunUDPEchoClient("127.0.0.1","UDP-Test",false,"7778");
     //RunUDPEchoClient("127.0.0.1",send_str,true,"7778");
-    RunUDPEchoClient("220.0.0.1",send_str,true,"7778");
+    RunUDPEchoClient("11.4.0.1",send_str,true,"7778");
 }

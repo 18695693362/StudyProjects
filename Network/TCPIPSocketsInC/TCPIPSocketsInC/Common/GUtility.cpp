@@ -116,7 +116,18 @@ void GUtility::BindSocket(int socket,unsigned int port,FILE* stream)
     bind(socket, (struct sockaddr *)&temp_addr, temp_addr_len);
 }
 
-
+template<typename SrcDataType>
+void GUtility::PrintWithBinaryFormat(FILE* stream,SrcDataType data,size_t bytes_len)
+{
+    if (bytes_len==0)
+    {
+        bytes_len = sizeof(SrcDataType);
+    }
+    for (size_t i=0; i<bytes_len; i++)
+    {
+        //todo
+    }
+}
 
 
 

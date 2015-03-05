@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		460BA4A91AA8B40900EB1D3D /* TestSizes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */; };
+		460BA4AA1AA8B40900EB1D3D /* TestSizes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */; };
+		460BA4AB1AA8B40900EB1D3D /* TestSizes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */; };
 		463E05BA1AA1A30100CDA222 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
 		463E05C81AA1A47100CDA222 /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
@@ -73,6 +76,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		460BA4A61AA8A83600EB1D3D /* README.org */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
+		460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSizes.cpp; sourceTree = "<group>"; };
+		460BA4A81AA8B40900EB1D3D /* TestSizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSizes.h; sourceTree = "<group>"; };
 		463E05B61AA1A30100CDA222 /* TCPIPSocketsInC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TCPIPSocketsInC; sourceTree = BUILT_PRODUCTS_DIR; };
 		463E05B91AA1A30100CDA222 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		463E05C21AA1A3D400CDA222 /* README.org */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
@@ -130,6 +136,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		460BA4A51AA8A83600EB1D3D /* 04 SendingAndReceivingData */ = {
+			isa = PBXGroup;
+			children = (
+				460BA4A61AA8A83600EB1D3D /* README.org */,
+				460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */,
+				460BA4A81AA8B40900EB1D3D /* TestSizes.h */,
+			);
+			path = "04 SendingAndReceivingData";
+			sourceTree = "<group>";
+		};
 		463E05AD1AA1A30100CDA222 = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +171,7 @@
 				463E05C51AA1A3FA00CDA222 /* 01 BasicTCPSockets */,
 				4649DF4C1AA437320048C607 /* 02 NamesAndAddressFamilies */,
 				4649DF8C1AA6F8BA0048C607 /* 03 UsingUDPSockets */,
+				460BA4A51AA8A83600EB1D3D /* 04 SendingAndReceivingData */,
 				463E05C91AA1A56E00CDA222 /* Common */,
 				463E05B91AA1A30100CDA222 /* main.cpp */,
 			);
@@ -314,6 +331,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				460BA4A91AA8B40900EB1D3D /* TestSizes.cpp in Sources */,
 				4649DF661AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF901AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
@@ -332,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				460BA4AA1AA8B40900EB1D3D /* TestSizes.cpp in Sources */,
 				4649DF671AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF911AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
@@ -350,6 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				460BA4AB1AA8B40900EB1D3D /* TestSizes.cpp in Sources */,
 				4649DF681AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF921AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
