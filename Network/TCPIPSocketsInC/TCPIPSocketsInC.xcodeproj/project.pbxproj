@@ -43,6 +43,9 @@
 		466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */; };
 		466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */; };
 		466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */; };
+		4672F1B01AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */; };
+		4672F1B11AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */; };
+		4672F1B21AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -109,6 +112,8 @@
 		466A2A061AA30FC900F9E4BE /* Client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer4.cpp; sourceTree = "<group>"; };
 		466A2A081AA310BC00F9E4BE /* TCPEchoServer4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPEchoServer4.h; sourceTree = "<group>"; };
+		4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BruteForceCoding.cpp; sourceTree = "<group>"; };
+		4672F1AF1AA9AB5800640ED2 /* BruteForceCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BruteForceCoding.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +147,8 @@
 				460BA4A61AA8A83600EB1D3D /* README.org */,
 				460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */,
 				460BA4A81AA8B40900EB1D3D /* TestSizes.h */,
+				4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */,
+				4672F1AF1AA9AB5800640ED2 /* BruteForceCoding.h */,
 			);
 			path = "04 SendingAndReceivingData";
 			sourceTree = "<group>";
@@ -334,6 +341,7 @@
 				460BA4A91AA8B40900EB1D3D /* TestSizes.cpp in Sources */,
 				4649DF661AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF901AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
+				4672F1B01AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */,
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				4649DF611AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */,
@@ -353,6 +361,7 @@
 				460BA4AA1AA8B40900EB1D3D /* TestSizes.cpp in Sources */,
 				4649DF671AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF911AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
+				4672F1B11AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */,
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				4649DF621AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */,
@@ -372,6 +381,7 @@
 				460BA4AB1AA8B40900EB1D3D /* TestSizes.cpp in Sources */,
 				4649DF681AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF921AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
+				4672F1B21AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */,
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				4649DF631AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				466A29FE1AA30FC900F9E4BE /* GUtility.cpp in Sources */,

@@ -15,6 +15,7 @@
 #include "UDPEchoClient.h"
 #include "UDPEchoServer.h"
 #include "TestSizes.h"
+#include "BruteForceCoding.h"
 
 int main(int argc, const char * argv[])
 {
@@ -29,6 +30,7 @@ int main(int argc, const char * argv[])
 #endif
     
     Test02_GetAddrInfo(false);
-    Test04_TestSizes(true);
+    Test04_TestSizes(false);
+    Test04_TestCodingAndEncoding(true);
     return 0;
 }
