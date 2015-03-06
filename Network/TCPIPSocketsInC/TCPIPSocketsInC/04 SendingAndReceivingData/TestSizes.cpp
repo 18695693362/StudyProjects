@@ -9,6 +9,7 @@
 #include "TestSizes.h"
 #include <stdint.h>
 #include <iostream>
+#include "GUtility.h"
 
 using namespace std;
 
@@ -25,4 +26,6 @@ void Test04_TestSizes(bool is_run)
     printf("int16_value : %x\n",int16_value);
     printf("int8_value  : %d\n",int8_value);
     printf("int16_value : %d\n",int16_value);
+    PrintWithBinaryFormat(stdout, int8_value);
+    PrintWithBinaryFormat(stdout, int16_value);
 }

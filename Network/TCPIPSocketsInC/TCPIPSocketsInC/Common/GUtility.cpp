@@ -116,19 +116,17 @@ void GUtility::BindSocket(int socket,unsigned int port,FILE* stream)
     bind(socket, (struct sockaddr *)&temp_addr, temp_addr_len);
 }
 
-template<typename SrcDataType>
-void GUtility::PrintWithBinaryFormat(FILE* stream,SrcDataType data,size_t bytes_len)
+GByteOrderType GUtility::CheckSystemByteOrderType()
 {
-    if (bytes_len==0)
+    int16_t temp_value = 1;
+    if (*((int8_t*)&temp_value) & 1)
     {
-        bytes_len = sizeof(SrcDataType);
+        printf("Little-Endian-Order\n");
+        return GByteOrderType::kLittleEndianOrder;
     }
-    for (size_t i=0; i<bytes_len; i++)
-    {
-        //todo
-    }
+    printf("Big-Endian-Order\n");
+    return GByteOrderType::kBigEndianOrder;
 }
-
 
 
 
