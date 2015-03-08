@@ -10,6 +10,9 @@
 		460BA4A91AA8B40900EB1D3D /* TestSizes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */; };
 		460BA4AA1AA8B40900EB1D3D /* TestSizes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */; };
 		460BA4AB1AA8B40900EB1D3D /* TestSizes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */; };
+		460EA0421AAB03EB00E43EC1 /* VoteClientTCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460EA0401AAB03EB00E43EC1 /* VoteClientTCP.cpp */; };
+		460EA0431AAB03EB00E43EC1 /* VoteClientTCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460EA0401AAB03EB00E43EC1 /* VoteClientTCP.cpp */; };
+		460EA0441AAB03EB00E43EC1 /* VoteClientTCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 460EA0401AAB03EB00E43EC1 /* VoteClientTCP.cpp */; };
 		463E05BA1AA1A30100CDA222 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
 		463E05C81AA1A47100CDA222 /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
@@ -34,6 +37,9 @@
 		4649DF951AA7010E0048C607 /* UDPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */; };
 		4649DF961AA7010E0048C607 /* UDPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */; };
 		4649DF971AA7010E0048C607 /* UDPEchoServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */; };
+		4658B5EA1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */; };
+		4658B5EB1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */; };
+		4658B5EC1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */; };
 		466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
 		466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		466A29F51AA30FA900F9E4BE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
@@ -46,6 +52,24 @@
 		4672F1B01AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */; };
 		4672F1B11AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */; };
 		4672F1B21AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */; };
+		46E4BAEA1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAE81AAB17D900B79E19 /* VoteServerTCP.cpp */; };
+		46E4BAEB1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAE81AAB17D900B79E19 /* VoteServerTCP.cpp */; };
+		46E4BAEC1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAE81AAB17D900B79E19 /* VoteServerTCP.cpp */; };
+		46E4BAEF1AAB3E9100B79E19 /* DelimFramer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAED1AAB3E9100B79E19 /* DelimFramer.cpp */; };
+		46E4BAF01AAB3E9100B79E19 /* DelimFramer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAED1AAB3E9100B79E19 /* DelimFramer.cpp */; };
+		46E4BAF11AAB3E9100B79E19 /* DelimFramer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAED1AAB3E9100B79E19 /* DelimFramer.cpp */; };
+		46E4BAF41AAB42C800B79E19 /* LengthFramer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAF21AAB42C800B79E19 /* LengthFramer.cpp */; };
+		46E4BAF51AAB42C800B79E19 /* LengthFramer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAF21AAB42C800B79E19 /* LengthFramer.cpp */; };
+		46E4BAF61AAB42C800B79E19 /* LengthFramer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAF21AAB42C800B79E19 /* LengthFramer.cpp */; };
+		46E4BAF91AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAF71AAB4A7B00B79E19 /* VoteEncodingText.cpp */; };
+		46E4BAFA1AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAF71AAB4A7B00B79E19 /* VoteEncodingText.cpp */; };
+		46E4BAFB1AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAF71AAB4A7B00B79E19 /* VoteEncodingText.cpp */; };
+		46E4BAFE1AAB525A00B79E19 /* Framer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAFC1AAB525A00B79E19 /* Framer.cpp */; };
+		46E4BAFF1AAB525A00B79E19 /* Framer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAFC1AAB525A00B79E19 /* Framer.cpp */; };
+		46E4BB001AAB525A00B79E19 /* Framer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BAFC1AAB525A00B79E19 /* Framer.cpp */; };
+		46E4BB031AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */; };
+		46E4BB041AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */; };
+		46E4BB051AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -82,6 +106,9 @@
 		460BA4A61AA8A83600EB1D3D /* README.org */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
 		460BA4A71AA8B40900EB1D3D /* TestSizes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestSizes.cpp; sourceTree = "<group>"; };
 		460BA4A81AA8B40900EB1D3D /* TestSizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestSizes.h; sourceTree = "<group>"; };
+		460EA0401AAB03EB00E43EC1 /* VoteClientTCP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteClientTCP.cpp; sourceTree = "<group>"; };
+		460EA0411AAB03EB00E43EC1 /* VoteClientTCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteClientTCP.h; sourceTree = "<group>"; };
+		460EA0451AAB060B00E43EC1 /* VoteProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteProtocol.h; sourceTree = "<group>"; };
 		463E05B61AA1A30100CDA222 /* TCPIPSocketsInC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TCPIPSocketsInC; sourceTree = BUILT_PRODUCTS_DIR; };
 		463E05B91AA1A30100CDA222 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		463E05C21AA1A3D400CDA222 /* README.org */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
@@ -108,12 +135,27 @@
 		4649DF8F1AA6F9590048C607 /* UDPEchoClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPEchoClient.h; sourceTree = "<group>"; };
 		4649DF931AA7010E0048C607 /* UDPEchoServer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UDPEchoServer.cpp; sourceTree = "<group>"; };
 		4649DF941AA7010E0048C607 /* UDPEchoServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPEchoServer.h; sourceTree = "<group>"; };
+		4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteEncodingBin.cpp; sourceTree = "<group>"; };
+		4658B5E91AAC3D940080276F /* VoteEncodingBin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteEncodingBin.h; sourceTree = "<group>"; };
+		4658B5EE1AAC920A0080276F /* README.org */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
 		466A29FB1AA30FA900F9E4BE /* Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Server; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A061AA30FC900F9E4BE /* Client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer4.cpp; sourceTree = "<group>"; };
 		466A2A081AA310BC00F9E4BE /* TCPEchoServer4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPEchoServer4.h; sourceTree = "<group>"; };
 		4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BruteForceCoding.cpp; sourceTree = "<group>"; };
 		4672F1AF1AA9AB5800640ED2 /* BruteForceCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BruteForceCoding.h; sourceTree = "<group>"; };
+		46E4BAE81AAB17D900B79E19 /* VoteServerTCP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteServerTCP.cpp; sourceTree = "<group>"; };
+		46E4BAE91AAB17D900B79E19 /* VoteServerTCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteServerTCP.h; sourceTree = "<group>"; };
+		46E4BAED1AAB3E9100B79E19 /* DelimFramer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DelimFramer.cpp; sourceTree = "<group>"; };
+		46E4BAEE1AAB3E9100B79E19 /* DelimFramer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DelimFramer.h; sourceTree = "<group>"; };
+		46E4BAF21AAB42C800B79E19 /* LengthFramer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LengthFramer.cpp; sourceTree = "<group>"; };
+		46E4BAF31AAB42C800B79E19 /* LengthFramer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LengthFramer.h; sourceTree = "<group>"; };
+		46E4BAF71AAB4A7B00B79E19 /* VoteEncodingText.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteEncodingText.cpp; sourceTree = "<group>"; };
+		46E4BAF81AAB4A7B00B79E19 /* VoteEncodingText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteEncodingText.h; sourceTree = "<group>"; };
+		46E4BAFC1AAB525A00B79E19 /* Framer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Framer.cpp; sourceTree = "<group>"; };
+		46E4BAFD1AAB525A00B79E19 /* Framer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Framer.h; sourceTree = "<group>"; };
+		46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteEncoding.cpp; sourceTree = "<group>"; };
+		46E4BB021AAB53BD00B79E19 /* VoteEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteEncoding.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +191,23 @@
 				460BA4A81AA8B40900EB1D3D /* TestSizes.h */,
 				4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */,
 				4672F1AF1AA9AB5800640ED2 /* BruteForceCoding.h */,
+				460EA0401AAB03EB00E43EC1 /* VoteClientTCP.cpp */,
+				460EA0411AAB03EB00E43EC1 /* VoteClientTCP.h */,
+				46E4BAE81AAB17D900B79E19 /* VoteServerTCP.cpp */,
+				46E4BAE91AAB17D900B79E19 /* VoteServerTCP.h */,
+				460EA0451AAB060B00E43EC1 /* VoteProtocol.h */,
+				46E4BAFC1AAB525A00B79E19 /* Framer.cpp */,
+				46E4BAFD1AAB525A00B79E19 /* Framer.h */,
+				46E4BAED1AAB3E9100B79E19 /* DelimFramer.cpp */,
+				46E4BAEE1AAB3E9100B79E19 /* DelimFramer.h */,
+				46E4BAF21AAB42C800B79E19 /* LengthFramer.cpp */,
+				46E4BAF31AAB42C800B79E19 /* LengthFramer.h */,
+				46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */,
+				46E4BB021AAB53BD00B79E19 /* VoteEncoding.h */,
+				46E4BAF71AAB4A7B00B79E19 /* VoteEncodingText.cpp */,
+				46E4BAF81AAB4A7B00B79E19 /* VoteEncodingText.h */,
+				4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */,
+				4658B5E91AAC3D940080276F /* VoteEncodingBin.h */,
 			);
 			path = "04 SendingAndReceivingData";
 			sourceTree = "<group>";
@@ -179,6 +238,7 @@
 				4649DF4C1AA437320048C607 /* 02 NamesAndAddressFamilies */,
 				4649DF8C1AA6F8BA0048C607 /* 03 UsingUDPSockets */,
 				460BA4A51AA8A83600EB1D3D /* 04 SendingAndReceivingData */,
+				4658B5ED1AAC920A0080276F /* 05 BeyondBasicSocketProgramming */,
 				463E05C91AA1A56E00CDA222 /* Common */,
 				463E05B91AA1A30100CDA222 /* main.cpp */,
 			);
@@ -244,6 +304,14 @@
 				4649DF941AA7010E0048C607 /* UDPEchoServer.h */,
 			);
 			path = "03 UsingUDPSockets";
+			sourceTree = "<group>";
+		};
+		4658B5ED1AAC920A0080276F /* 05 BeyondBasicSocketProgramming */ = {
+			isa = PBXGroup;
+			children = (
+				4658B5EE1AAC920A0080276F /* README.org */,
+			);
+			path = "05 BeyondBasicSocketProgramming";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,14 +410,22 @@
 				4649DF661AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF901AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				4672F1B01AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */,
+				46E4BAEA1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
+				46E4BB031AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
 				4649DF611AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
+				46E4BAF91AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */,
 				463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */,
+				46E4BAF41AAB42C800B79E19 /* LengthFramer.cpp in Sources */,
+				46E4BAFE1AAB525A00B79E19 /* Framer.cpp in Sources */,
+				46E4BAEF1AAB3E9100B79E19 /* DelimFramer.cpp in Sources */,
+				4658B5EA1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */,
 				4649DF891AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */,
 				463E05C81AA1A47100CDA222 /* TCPEchoClient4.cpp in Sources */,
 				4649DF951AA7010E0048C607 /* UDPEchoServer.cpp in Sources */,
 				4649DF5B1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				463E05BA1AA1A30100CDA222 /* main.cpp in Sources */,
+				460EA0421AAB03EB00E43EC1 /* VoteClientTCP.cpp in Sources */,
 				4649DF841AA6D4290048C607 /* TCPServerUtility.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -362,14 +438,22 @@
 				4649DF671AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF911AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				4672F1B11AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */,
+				46E4BAEB1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
+				46E4BB041AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
 				4649DF621AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
+				46E4BAFA1AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */,
 				466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */,
+				46E4BAF51AAB42C800B79E19 /* LengthFramer.cpp in Sources */,
+				46E4BAFF1AAB525A00B79E19 /* Framer.cpp in Sources */,
+				46E4BAF01AAB3E9100B79E19 /* DelimFramer.cpp in Sources */,
+				4658B5EB1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */,
 				4649DF8A1AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */,
 				466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */,
 				4649DF961AA7010E0048C607 /* UDPEchoServer.cpp in Sources */,
 				4649DF5C1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				466A29F51AA30FA900F9E4BE /* main.cpp in Sources */,
+				460EA0431AAB03EB00E43EC1 /* VoteClientTCP.cpp in Sources */,
 				4649DF851AA6D4290048C607 /* TCPServerUtility.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,14 +466,22 @@
 				4649DF681AA6B2CE0048C607 /* TCPEchoClient.cpp in Sources */,
 				4649DF921AA6F9590048C607 /* UDPEchoClient.cpp in Sources */,
 				4672F1B21AA9AB5800640ED2 /* BruteForceCoding.cpp in Sources */,
+				46E4BAEC1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
+				46E4BB051AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
 				4649DF631AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
+				46E4BAFB1AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */,
 				466A29FE1AA30FC900F9E4BE /* GUtility.cpp in Sources */,
+				46E4BAF61AAB42C800B79E19 /* LengthFramer.cpp in Sources */,
+				46E4BB001AAB525A00B79E19 /* Framer.cpp in Sources */,
+				46E4BAF11AAB3E9100B79E19 /* DelimFramer.cpp in Sources */,
+				4658B5EC1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */,
 				4649DF8B1AA6DB7A0048C607 /* TCPEchoServer.cpp in Sources */,
 				466A29FF1AA30FC900F9E4BE /* TCPEchoClient4.cpp in Sources */,
 				4649DF971AA7010E0048C607 /* UDPEchoServer.cpp in Sources */,
 				4649DF5D1AA57BE10048C607 /* GetAddrInfo.cpp in Sources */,
 				466A2A001AA30FC900F9E4BE /* main.cpp in Sources */,
+				460EA0441AAB03EB00E43EC1 /* VoteClientTCP.cpp in Sources */,
 				4649DF861AA6D4290048C607 /* TCPServerUtility.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
