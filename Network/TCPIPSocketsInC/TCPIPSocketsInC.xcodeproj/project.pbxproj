@@ -40,6 +40,9 @@
 		4658B5EA1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */; };
 		4658B5EB1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */; };
 		4658B5EC1AAC3D940080276F /* VoteEncodingBin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */; };
+		4658B5F11AAC9FD10080276F /* SigAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5EF1AAC9FD10080276F /* SigAction.cpp */; };
+		4658B5F21AAC9FD10080276F /* SigAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5EF1AAC9FD10080276F /* SigAction.cpp */; };
+		4658B5F31AAC9FD10080276F /* SigAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4658B5EF1AAC9FD10080276F /* SigAction.cpp */; };
 		466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05CA1AA1A59500CDA222 /* GUtility.cpp */; };
 		466A29F41AA30FA900F9E4BE /* TCPEchoClient4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05C61AA1A47100CDA222 /* TCPEchoClient4.cpp */; };
 		466A29F51AA30FA900F9E4BE /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 463E05B91AA1A30100CDA222 /* main.cpp */; };
@@ -138,6 +141,8 @@
 		4658B5E81AAC3D940080276F /* VoteEncodingBin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteEncodingBin.cpp; sourceTree = "<group>"; };
 		4658B5E91AAC3D940080276F /* VoteEncodingBin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteEncodingBin.h; sourceTree = "<group>"; };
 		4658B5EE1AAC920A0080276F /* README.org */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
+		4658B5EF1AAC9FD10080276F /* SigAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SigAction.cpp; sourceTree = "<group>"; };
+		4658B5F01AAC9FD10080276F /* SigAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SigAction.h; sourceTree = "<group>"; };
 		466A29FB1AA30FA900F9E4BE /* Server */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Server; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A061AA30FC900F9E4BE /* Client */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Client; sourceTree = BUILT_PRODUCTS_DIR; };
 		466A2A071AA310BC00F9E4BE /* TCPEchoServer4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCPEchoServer4.cpp; sourceTree = "<group>"; };
@@ -310,6 +315,8 @@
 			isa = PBXGroup;
 			children = (
 				4658B5EE1AAC920A0080276F /* README.org */,
+				4658B5EF1AAC9FD10080276F /* SigAction.cpp */,
+				4658B5F01AAC9FD10080276F /* SigAction.h */,
 			);
 			path = "05 BeyondBasicSocketProgramming";
 			sourceTree = "<group>";
@@ -413,6 +420,7 @@
 				46E4BAEA1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				46E4BB031AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
+				4658B5F11AAC9FD10080276F /* SigAction.cpp in Sources */,
 				4649DF611AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				46E4BAF91AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */,
 				463E05CC1AA1A59500CDA222 /* GUtility.cpp in Sources */,
@@ -441,6 +449,7 @@
 				46E4BAEB1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				46E4BB041AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
+				4658B5F21AAC9FD10080276F /* SigAction.cpp in Sources */,
 				4649DF621AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				46E4BAFA1AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */,
 				466A29F31AA30FA900F9E4BE /* GUtility.cpp in Sources */,
@@ -469,6 +478,7 @@
 				46E4BAEC1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
 				46E4BB051AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
+				4658B5F31AAC9FD10080276F /* SigAction.cpp in Sources */,
 				4649DF631AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
 				46E4BAFB1AAB4A7B00B79E19 /* VoteEncodingText.cpp in Sources */,
 				466A29FE1AA30FC900F9E4BE /* GUtility.cpp in Sources */,
