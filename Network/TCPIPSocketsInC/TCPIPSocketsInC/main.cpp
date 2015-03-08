@@ -16,6 +16,8 @@
 #include "UDPEchoServer.h"
 #include "TestSizes.h"
 #include "BruteForceCoding.h"
+#include "VoteClientTCP.h"
+#include "VoteServerTCP.h"
 
 int main(int argc, const char * argv[])
 {
@@ -23,14 +25,16 @@ int main(int argc, const char * argv[])
     Test01_TCPEchoClient(false);
     Test02_TCPEchoClient(false);
     Test03_UDPEchoClient(false);
+    Test04_TestVoteClient(true);
 #else
     Test01_TCPEchoServer(false);
     Test02_TCPEchoServer(false);
     Test03_UDPEchoServer(false);
+    Test04_TestVoteServer(true);
 #endif
     
     Test02_GetAddrInfo(false);
     Test04_TestSizes(false);
-    Test04_TestCodingAndEncoding(true);
+    Test04_TestCodingAndEncoding(false);
     return 0;
 }
