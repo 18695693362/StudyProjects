@@ -146,8 +146,8 @@ void Test03_UDPEchoClient(bool is_run)
     }
     send_str[length-1] = '\0';
     
-    //RunUDPEchoClient("127.0.0.1","UDP-Test",true,"7778");
+    RunUDPEchoClient("127.0.0.1","UDP-Test",true,"7778");
     //RunUDPEchoClient("127.0.0.1","UDP-Test",false,"7778");
     //RunUDPEchoClient("127.0.0.1",send_str,true,"7778");
-    RunUDPEchoClient("11.4.0.1",send_str,true,"7778");
+    //RunUDPEchoClient("11.4.0.1",send_str,true,"7778");
 }

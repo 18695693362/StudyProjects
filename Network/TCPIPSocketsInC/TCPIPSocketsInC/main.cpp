@@ -19,24 +19,26 @@
 #include "VoteClientTCP.h"
 #include "VoteServerTCP.h"
 #include "SigAction.h"
+#include "UDPEchoServer_SIGIO.h"
 
 int main(int argc, const char * argv[])
 {
 #ifdef CLIENT_APP
     Test01_TCPEchoClient(false);
     Test02_TCPEchoClient(false);
-    Test03_UDPEchoClient(false);
+    Test03_UDPEchoClient(true);
     Test04_TestVoteClient(false);
 #else
     Test01_TCPEchoServer(false);
     Test02_TCPEchoServer(false);
     Test03_UDPEchoServer(false);
     Test04_TestVoteServer(false);
+    Test05_UDPEchoServer_SIGIO(true);
 #endif
     
     Test02_GetAddrInfo(false);
     Test04_TestSizes(false);
     Test04_TestCodingAndEncoding(false);
-    Test05_TestSigAction(true);
+    Test05_TestSigAction(false);
     return 0;
 }
