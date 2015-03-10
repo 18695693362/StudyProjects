@@ -76,6 +76,9 @@
 		46E4BB031AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */; };
 		46E4BB041AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */; };
 		46E4BB051AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */; };
+		46F4D99E1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F4D99C1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp */; };
+		46F4D99F1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F4D99C1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp */; };
+		46F4D9A01AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F4D99C1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -166,6 +169,8 @@
 		46E4BAFD1AAB525A00B79E19 /* Framer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Framer.h; sourceTree = "<group>"; };
 		46E4BB011AAB53BD00B79E19 /* VoteEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteEncoding.cpp; sourceTree = "<group>"; };
 		46E4BB021AAB53BD00B79E19 /* VoteEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteEncoding.h; sourceTree = "<group>"; };
+		46F4D99C1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UDPEchoClientTimeout.cpp; sourceTree = "<group>"; };
+		46F4D99D1AAF2D2C00690C75 /* UDPEchoClientTimeout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPEchoClientTimeout.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +329,8 @@
 				4658B5F01AAC9FD10080276F /* SigAction.h */,
 				465B886F1AADED07007293F5 /* UDPEchoServer_SIGIO.cpp */,
 				465B88701AADED07007293F5 /* UDPEchoServer_SIGIO.h */,
+				46F4D99C1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp */,
+				46F4D99D1AAF2D2C00690C75 /* UDPEchoClientTimeout.h */,
 			);
 			path = "05 BeyondBasicSocketProgramming";
 			sourceTree = "<group>";
@@ -427,6 +434,7 @@
 				46E4BAEA1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				465B88711AADED07007293F5 /* UDPEchoServer_SIGIO.cpp in Sources */,
 				466A2A091AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
+				46F4D99E1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp in Sources */,
 				46E4BB031AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
 				4658B5F11AAC9FD10080276F /* SigAction.cpp in Sources */,
 				4649DF611AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
@@ -457,6 +465,7 @@
 				46E4BAEB1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				465B88721AADED07007293F5 /* UDPEchoServer_SIGIO.cpp in Sources */,
 				466A2A0A1AA310BC00F9E4BE /* TCPEchoServer4.cpp in Sources */,
+				46F4D99F1AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp in Sources */,
 				46E4BB041AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
 				4658B5F21AAC9FD10080276F /* SigAction.cpp in Sources */,
 				4649DF621AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,
@@ -487,6 +496,7 @@
 				46E4BAEC1AAB17D900B79E19 /* VoteServerTCP.cpp in Sources */,
 				465B88731AADED07007293F5 /* UDPEchoServer_SIGIO.cpp in Sources */,
 				466A2A0D1AA31DC200F9E4BE /* TCPEchoServer4.cpp in Sources */,
+				46F4D9A01AAF2D2C00690C75 /* UDPEchoClientTimeout.cpp in Sources */,
 				46E4BB051AAB53BD00B79E19 /* VoteEncoding.cpp in Sources */,
 				4658B5F31AAC9FD10080276F /* SigAction.cpp in Sources */,
 				4649DF631AA6AE0E0048C607 /* TCPClientUtility.cpp in Sources */,

@@ -20,14 +20,16 @@
 #include "VoteServerTCP.h"
 #include "SigAction.h"
 #include "UDPEchoServer_SIGIO.h"
+#include "UDPEchoClientTimeout.h"
 
 int main(int argc, const char * argv[])
 {
 #ifdef CLIENT_APP
     Test01_TCPEchoClient(false);
     Test02_TCPEchoClient(false);
-    Test03_UDPEchoClient(true);
+    Test03_UDPEchoClient(false);
     Test04_TestVoteClient(false);
+    Test05_UDPEchoClient_Timeout(true);
 #else
     Test01_TCPEchoServer(false);
     Test02_TCPEchoServer(false);
