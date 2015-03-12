@@ -157,6 +157,7 @@
 		466A2A081AA310BC00F9E4BE /* TCPEchoServer4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPEchoServer4.h; sourceTree = "<group>"; };
 		4672F1AE1AA9AB5800640ED2 /* BruteForceCoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BruteForceCoding.cpp; sourceTree = "<group>"; };
 		4672F1AF1AA9AB5800640ED2 /* BruteForceCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BruteForceCoding.h; sourceTree = "<group>"; };
+		4672F1C71AB1694200640ED2 /* README.org */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.org; sourceTree = "<group>"; };
 		46E4BAE81AAB17D900B79E19 /* VoteServerTCP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteServerTCP.cpp; sourceTree = "<group>"; };
 		46E4BAE91AAB17D900B79E19 /* VoteServerTCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoteServerTCP.h; sourceTree = "<group>"; };
 		46E4BAED1AAB3E9100B79E19 /* DelimFramer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DelimFramer.cpp; sourceTree = "<group>"; };
@@ -254,6 +255,7 @@
 				4649DF8C1AA6F8BA0048C607 /* 03 UsingUDPSockets */,
 				460BA4A51AA8A83600EB1D3D /* 04 SendingAndReceivingData */,
 				4658B5ED1AAC920A0080276F /* 05 BeyondBasicSocketProgramming */,
+				4672F1C61AB1694200640ED2 /* 06 UnderTheHood */,
 				463E05C91AA1A56E00CDA222 /* Common */,
 				463E05B91AA1A30100CDA222 /* main.cpp */,
 			);
@@ -333,6 +335,14 @@
 				46F4D99D1AAF2D2C00690C75 /* UDPEchoClientTimeout.h */,
 			);
 			path = "05 BeyondBasicSocketProgramming";
+			sourceTree = "<group>";
+		};
+		4672F1C61AB1694200640ED2 /* 06 UnderTheHood */ = {
+			isa = PBXGroup;
+			children = (
+				4672F1C71AB1694200640ED2 /* README.org */,
+			);
+			path = "06 UnderTheHood";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
