@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4623DB801ACD6560002E2B85 /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4623DB7E1ACD6560002E2B85 /* test.cpp */; };
 		468610FA19DAACC0007F559D /* HelloWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 468610F819DAACC0007F559D /* HelloWorld.cpp */; };
 		4686110119DAAEBD007F559D /* thread_study.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 468610FF19DAAEBD007F559D /* thread_study.cpp */; };
 		4686110619DABABA007F559D /* mutex_study.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4686110419DABABA007F559D /* mutex_study.cpp */; };
@@ -34,6 +35,9 @@
 
 /* Begin PBXFileReference section */
 		46037B3A19DFAA7200983384 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		4623DB761ACD3F99002E2B85 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		4623DB7E1ACD6560002E2B85 /* test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
+		4623DB7F1ACD6560002E2B85 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
 		468610F319DA9FB0007F559D /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		468610F819DAACC0007F559D /* HelloWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorld.cpp; sourceTree = "<group>"; };
 		468610F919DAACC0007F559D /* HelloWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorld.h; sourceTree = "<group>"; };
@@ -83,6 +87,15 @@
 			path = lesson5;
 			sourceTree = "<group>";
 		};
+		4623DB7D1ACD6560002E2B85 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				4623DB7E1ACD6560002E2B85 /* test.cpp */,
+				4623DB7F1ACD6560002E2B85 /* test.h */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 		468610F219DA9FB0007F559D /* doc */ = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +108,7 @@
 		468610F719DAACC0007F559D /* lesson1 */ = {
 			isa = PBXGroup;
 			children = (
+				4623DB761ACD3F99002E2B85 /* README.txt */,
 				468610F819DAACC0007F559D /* HelloWorld.cpp */,
 				468610F919DAACC0007F559D /* HelloWorld.h */,
 			);
@@ -150,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				4686110219DAAF88007F559D /* lessons_header.h */,
+				4623DB7D1ACD6560002E2B85 /* test */,
 				468610F719DAACC0007F559D /* lesson1 */,
 				468610FB19DAAE56007F559D /* lesson2 */,
 				4686110319DABAA0007F559D /* lesson3 */,
@@ -239,6 +254,7 @@
 				4686110119DAAEBD007F559D /* thread_study.cpp in Sources */,
 				46C8E9E218EBB0A4007399AC /* main.cpp in Sources */,
 				468610FA19DAACC0007F559D /* HelloWorld.cpp in Sources */,
+				4623DB801ACD6560002E2B85 /* test.cpp in Sources */,
 				46C8E9F418EBEA5E007399AC /* TheaterSimulator.cpp in Sources */,
 				46C8E9FD18ED53D9007399AC /* Promise.cpp in Sources */,
 				4686110619DABABA007F559D /* mutex_study.cpp in Sources */,

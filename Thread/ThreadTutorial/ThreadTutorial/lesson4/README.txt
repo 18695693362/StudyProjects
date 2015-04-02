@@ -22,7 +22,7 @@ This shared state can be associated to a future object by calling member get_fut
 - future对象是同步返回的对象，它可以获得共享状态的值，如果需要的话，它会等待共享状态变为ready。
 
 The lifetime of the shared state lasts at least until the last object with which it is associated releases it or is destroyed. Therefore it can survive the promise object that obtained it in the first place if associated also to a future.
-共享状态的生命周期一直持续到和他关联的最后一个对象释放它或者被销毁。所以当天它依然和一个future关联的时候，它不会随持有它的promise对象的销毁而销毁。
+共享状态的生命周期一直持续到和他关联的最后一个对象释放它或者被销毁。所以当它依然和一个future关联的时候，它不会随持有它的promise对象的销毁而销毁。
 
 
 

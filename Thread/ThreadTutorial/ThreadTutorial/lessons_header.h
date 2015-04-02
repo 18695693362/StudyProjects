@@ -9,6 +9,8 @@
 #ifndef ThreadTutorial_lessons_header_h
 #define ThreadTutorial_lessons_header_h
 
+#include "test.h"
+
 #include "HelloWorld.h"
 #include "thread_study.h"
 #include "mutex_study.h"

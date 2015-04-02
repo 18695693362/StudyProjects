@@ -17,10 +17,11 @@
 
 int main(int argc, const char * argv[])
 {
+    threadYield();
     //lesson1_test();
     //lesson2_test();
     //lesson3_test();
-    lesson4_test();
+    //lesson4_test();
     
 //    CreateThreadTest();
 //    CreateThreadDetach();
