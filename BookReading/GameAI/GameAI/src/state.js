@@ -3,16 +3,25 @@
  */
 
 var StateBase = cc.Class.extend({
-    ctor : function () {
-
+    _name : "INVALID",
+    ctor : function (name)
+    {
+        if(name)
+        {
+            this._name = name
+        }
     },
-    OnEnter : function () {
-
+    OnEnter : function (entity) {
+        // do nothing
     },
-    OnExit : function () {
-
+    OnExit : function (entity) {
+        // do nothing
     },
-    Update : function () {
-
+    Update : function (entity,delta_time) {
+        // do nothing
+    },
+    GetName : function ()
+    {
+        return this._name
     }
 })
