@@ -1,7 +1,8 @@
 
 var HelloWorldLayer = cc.Layer.extend({
     sprite:null,
-    ctor:function () {
+    ctor:function ()
+    {
         //////////////////////////////
         // 1. super init first
         this._super();
@@ -15,8 +16,21 @@ var HelloWorldLayer = cc.Layer.extend({
         var mainscene = ccs.load(res.MainScene_json);
         this.addChild(mainscene.node);
 
+        this._btn_test = ccui.helper.seekWidgetByName(mainscene.node,"Button_1")
+        this._btn_test.addTouchEventListener(this.OnPressedTest,this)
+
+        cc.log("test start ----- ")
+
         return true;
-    }
+    },
+
+    OnPressedTest : function (sender,type)
+    {
+        if(type == ccui.Widget.TOUCH_ENDED)
+        {
+            cc.log("pressed test")
+        }
+    },
 });
 
 var HelloWorldScene = cc.Scene.extend({
