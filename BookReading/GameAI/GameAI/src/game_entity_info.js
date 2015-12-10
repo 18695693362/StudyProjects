@@ -15,7 +15,7 @@ var EntityHelper =
         {
             this._entity_name_map = {}
 
-            this._entity_name_map[this.EntityID.kMiner_Bob ] = "Bob"
+            this._entity_name_map[this.EntityID.kMiner_Bob ] = "Bob "
             this._entity_name_map[this.EntityID.kElsa      ] = "Elsa"
         }
         return this._entity_name_map
@@ -23,7 +23,7 @@ var EntityHelper =
 
     GetEntityName : function (entity_id)
     {
-        return this._entity_name_map[entity_id] || "UNKNOWN"
+        return this._entity_name_map[entity_id] || "UNKNOWN_entity"
     },
 
     Location : {
@@ -37,16 +37,16 @@ var EntityHelper =
         if(!this._location_name_map)
         {
             this._location_name_map = {}
-            this._location_name_map[this.Location.kInvalid  ] = "INVALID "
-            this._location_name_map[this.Location.kShack    ] = "Shack   "
-            this._location_name_map[this.Location.kGoldmine ] = "Goldmine"
-            this._location_name_map[this.Location.kBank     ] = "Bank    "
-            this._location_name_map[this.Location.kSaloon   ] = "Saloon  "
+            this._location_name_map[this.Location.kInvalid  ] = "INVALID_location"
+            this._location_name_map[this.Location.kShack    ] = "Shack           "
+            this._location_name_map[this.Location.kGoldmine ] = "Goldmine        "
+            this._location_name_map[this.Location.kBank     ] = "Bank            "
+            this._location_name_map[this.Location.kSaloon   ] = "Saloon          "
         }
         return this._location_name_map
     },
     GetLocationName : function (location_type)
     {
-        return this._entity_name_map[location_type] || "UNKNOWN"
+        return this._entity_name_map[location_type] || "UNKNOWN_location"
     }
 }

@@ -11,6 +11,11 @@ var GameEntityBase = cc.Class.extend({
         this.SetID(id)
     },
 
+    GetName : function ()
+    {
+        return EntityHelper.GetEntityName(this._id)
+    },
+
     GetID : function ()
     {
         return this._id
@@ -19,7 +24,7 @@ var GameEntityBase = cc.Class.extend({
     SetID : function (id)
     {
         cc.assert(id>=GameEntityBase._next_valid_id,"entity id error. id="+id)
-        this.SetID(id)
+        this._id = id
 
         GameEntityBase._next_valid_id = id+1
     },

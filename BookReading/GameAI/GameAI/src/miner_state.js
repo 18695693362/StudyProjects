@@ -26,6 +26,10 @@ var EnterMineAndDigForNugget = StateBase.extend({
         {
             entity.ChangeState(VisitBankAndDepositGold.GetInstance())
         }
+        else if(entity.IsThirst())
+        {
+            entity.ChangeState(QuenchThirst.GetInstance())
+        }
     }
 })
 MM.MakeSingleton(EnterMineAndDigForNugget)
@@ -37,6 +41,10 @@ var VisitBankAndDepositGold = StateBase.extend({
     },
     OnEnter : function (entity)
     {
+        if(entity._cur_location != EntityHelper.Location.kBank)
+        {
+            entity._cur_location = EntityHelper.Location.kBank
+        }
         MM.StateHelper.PrintStateEnterExit(entity,this,true)
     },
     OnExit : function (entity)
@@ -45,7 +53,16 @@ var VisitBankAndDepositGold = StateBase.extend({
     },
     Update : function (entity,delta_time)
     {
+        entity.AddCarriedGoldToBank()
 
+        if(entity.IsComfortable())
+        {
+            entity.ChangeState(GoHomeAndSleepTilRested.GetInstance())
+        }
+        else
+        {
+            entity.ChangeState(EnterMineAndDigForNugget.GetInstance())
+        }
     }
 })
 MM.MakeSingleton(VisitBankAndDepositGold)
@@ -57,6 +74,10 @@ var GoHomeAndSleepTilRested = StateBase.extend({
     },
     OnEnter : function (entity)
     {
+        if(entity._cur_location != EntityHelper.Location.kShack)
+        {
+            entity._cur_location = EntityHelper.Location.kShack
+        }
         MM.StateHelper.PrintStateEnterExit(entity,this,true)
     },
     OnExit : function (entity)
@@ -65,7 +86,15 @@ var GoHomeAndSleepTilRested = StateBase.extend({
     },
     Update : function (entity,delta_time)
     {
-
+        if(!entity.IsFatigue())
+        {
+            entity.ChangeState(EnterMineAndDigForNugget.GetInstance())
+        }
+        else
+        {
+            entity.MinusFatigue()
+            entity.ShowSleep()
+        }
     }
 })
 MM.MakeSingleton(GoHomeAndSleepTilRested)
@@ -74,6 +103,10 @@ var QuenchThirst = StateBase.extend({
     ctor : function ()
     {
         this._super("QuenchThirst")
+    },
+    IsEnableChangeTo : function (entity)
+    {
+        return entity.IsEnoughForDrink()
     },
     OnEnter : function (entity)
     {
@@ -85,7 +118,23 @@ var QuenchThirst = StateBase.extend({
     },
     Update : function (entity,delta_time)
     {
-
+        if(entity.IsThirst())
+        {
+            if(entity.IsEnoughForDrink())
+            {
+                entity.BuyAndDrinkAWhiskey()
+                entity.ShowDrink()
+                entity.ChangeState(EnterMineAndDigForNugget.GetInstance())
+            }
+            else
+            {
+                MM.StateHelper.PrintError(entity,this,"gold in bank is not enough!")
+            }
+        }
+        else
+        {
+            MM.StateHelper.PrintError(entity,this,"entity is not thirst!")
+        }
     }
 })
 MM.MakeSingleton(QuenchThirst)
@@ -105,6 +154,10 @@ MM.StateHelper =
             MM.Log("------")
         }
     },
+    PrintError : function (entity, state, error_str)
+    {
+        MM.Log("ERROR: "+entity.GetName()+" "+state.GetName()+" "+error_str)
+    }
 }
 
 

@@ -10,8 +10,8 @@ var Miner = GameEntityBase.extend({
     _thirst_value   : 0,
     _fatigue_value  : 0,
 
-    ctor : function () {
-
+    ctor : function (id) {
+        this._super(id)
     },
 
     IsNeedSaveGoldToBank : function ()
@@ -37,6 +37,12 @@ var Miner = GameEntityBase.extend({
 
         return true
     },
+    IsComfortable : function () {
+        return this._bank_gold>=Miner.kComfortLevel
+    },
+    IsEnoughForDrink : function () {
+        return this._bank_gold>=Miner.kDrinkOnceCost
+    },
 
     IsThirst : function () {
         return this._thirst_value>=Miner.kThirstLevel
@@ -57,7 +63,7 @@ var Miner = GameEntityBase.extend({
     BuyAndDrinkAWhiskey : function ()
     {
         this._thirst_value  =  0
-        this._bank_gold     -= 2
+        this._bank_gold     -= Miner.kDrinkOnceCost
     },
 
     ChangeState : function (new_state)
@@ -79,9 +85,24 @@ var Miner = GameEntityBase.extend({
         this._super()
         this._thirst_value += 1
 
-        this._cur_state.Update()
+        if(this._cur_state)
+        {
+            this._cur_state.Update()
+        }
     },
+
+    // display
+    ShowSleep : function ()
+    {
+        MM.Log(this.GetName()+": Zzzzzz")
+    },
+    ShowDrink : function ()
+    {
+        MM.Log(this.GetName()+": I Love Whisky!")
+    }
 })
 Miner.kFatigueLevel     = 5
 Miner.kThirstLevel      = 5
 Miner.kMaxCarriedGold   = 5
+Miner.kComfortLevel     = 20
+Miner.kDrinkOnceCost    = 2

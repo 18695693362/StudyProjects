@@ -3,13 +3,16 @@
  */
 
 var StateBase = cc.Class.extend({
-    _name : "INVALID",
+    _name : "INVALID_state",
     ctor : function (name)
     {
         if(name)
         {
             this._name = name
         }
+    },
+    IsEnableChangeTo : function (entity) {
+        return true
     },
     OnEnter : function (entity) {
         // do nothing
