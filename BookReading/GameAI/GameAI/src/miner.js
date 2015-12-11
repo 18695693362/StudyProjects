@@ -43,6 +43,9 @@ var Miner = GameEntityBase.extend({
     IsEnoughForDrink : function () {
         return this._bank_gold>=Miner.kDrinkOnceCost
     },
+    IsSaveCarriedGoldEnoughForDrink : function () {
+        return (this._bank_gold+this._carried_gold)>=Miner.kDrinkOnceCost
+    },
 
     IsThirst : function () {
         return this._thirst_value>=Miner.kThirstLevel
@@ -72,12 +75,12 @@ var Miner = GameEntityBase.extend({
         cc.assert(new_state&&this._cur_state!=new_state,new_state?new_state.GetName():"NONE")
         if(old_state)
         {
-            old_state.OnExit()
+            old_state.OnExit(this)
         }
 
         this._cur_state = new_state
 
-        new_state.OnEnter()
+        new_state.OnEnter(this)
     },
 
     Update : function ()
@@ -87,7 +90,7 @@ var Miner = GameEntityBase.extend({
 
         if(this._cur_state)
         {
-            this._cur_state.Update()
+            this._cur_state.Update(this)
         }
     },
 
@@ -99,10 +102,19 @@ var Miner = GameEntityBase.extend({
     ShowDrink : function ()
     {
         MM.Log(this.GetName()+": I Love Whisky!")
+    },
+    ShowDigGold : function (count) {
+        MM.Log(this.GetName()+": I got "+count+" gold! carried = "+this._carried_gold)
+    },
+    ShowTired : function () {
+        MM.Log(this.GetName()+": I feel tired! fatigue = "+this._fatigue_value)
+    },
+    ShowSaveGoldToBank : function (carried) {
+        MM.Log(this.GetName()+": I save "+carried+" gold to bank! total = "+this._bank_gold)
     }
 })
 Miner.kFatigueLevel     = 5
-Miner.kThirstLevel      = 5
+Miner.kThirstLevel      = 10
 Miner.kMaxCarriedGold   = 5
 Miner.kComfortLevel     = 20
 Miner.kDrinkOnceCost    = 2

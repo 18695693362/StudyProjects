@@ -11,8 +11,9 @@ var StateBase = cc.Class.extend({
             this._name = name
         }
     },
-    IsEnableChangeTo : function (entity) {
-        return true
+    OnChangeToFailed : function (entity,from_state)
+    {
+        // do nothing
     },
     OnEnter : function (entity) {
         // do nothing

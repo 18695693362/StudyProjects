@@ -23,7 +23,7 @@ var EntityHelper =
 
     GetEntityName : function (entity_id)
     {
-        return this._entity_name_map[entity_id] || "UNKNOWN_entity"
+        return this.GetEntityNameMap()[entity_id] || "UNKNOWN_entity"
     },
 
     Location : {

@@ -22,13 +22,28 @@ var EnterMineAndDigForNugget = StateBase.extend({
     Update : function (entity,delta_time)
     {
         entity.AddCarriedGold(1)
+        entity.ShowDigGold(1)
+        entity.AddFatigue()
+        entity.ShowTired()
+
         if(entity.IsNeedSaveGoldToBank())
         {
             entity.ChangeState(VisitBankAndDepositGold.GetInstance())
         }
         else if(entity.IsThirst())
         {
-            entity.ChangeState(QuenchThirst.GetInstance())
+            if(entity.IsEnoughForDrink())
+            {
+                entity.ChangeState(QuenchThirst.GetInstance())
+            }
+            else if(entity.IsSaveCarriedGoldEnoughForDrink())
+            {
+                entity.ChangeState(VisitBankAndDepositGold.GetInstance())
+            }
+        }
+        else if(entity.IsFatigue())
+        {
+            entity.ChangeState(GoHomeAndSleepTilRested.GetInstance())
         }
     }
 })
@@ -53,9 +68,15 @@ var VisitBankAndDepositGold = StateBase.extend({
     },
     Update : function (entity,delta_time)
     {
+        var carried_gold = entity._carried_gold
         entity.AddCarriedGoldToBank()
+        entity.ShowSaveGoldToBank(carried_gold)
 
-        if(entity.IsComfortable())
+        if(entity.IsThirst())
+        {
+            entity.ChangeState(QuenchThirst.GetInstance())
+        }
+        else if(entity.IsComfortable())
         {
             entity.ChangeState(GoHomeAndSleepTilRested.GetInstance())
         }
@@ -103,10 +124,6 @@ var QuenchThirst = StateBase.extend({
     ctor : function ()
     {
         this._super("QuenchThirst")
-    },
-    IsEnableChangeTo : function (entity)
-    {
-        return entity.IsEnoughForDrink()
     },
     OnEnter : function (entity)
     {

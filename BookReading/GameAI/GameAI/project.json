@@ -12,7 +12,5 @@
     "modules" : ["cocos2d", "cocostudio"],
 
     "jsList" : [
-        "src/resource.js",
-        "src/app.js"
     ]
 }
