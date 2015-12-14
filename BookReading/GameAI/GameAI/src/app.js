@@ -41,7 +41,6 @@ var HelloWorldLayer = cc.Layer.extend({
                 if(!this._tmp_miner)
                 {
                     this._tmp_miner = new Miner(EntityHelper.EntityID.kMiner_Bob)
-                    this._tmp_miner.ChangeState(GoHomeAndSleepTilRested.GetInstance())
                 }
 
                 cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)

@@ -29,7 +29,7 @@ var GameEntityBase = cc.Class.extend({
         GameEntityBase._next_valid_id = id+1
     },
 
-    Update : function ()
+    Update : function (dt)
     {
         // do nothing
     },

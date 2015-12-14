@@ -5,6 +5,7 @@ MM._custom_js_files = []
 Array.prototype.push.apply(MM._custom_js_files,[
     "src/utility.js",
     "src/state.js",
+    "src/state_machine.js",
 
     "src/resource.js",
 

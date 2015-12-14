@@ -3,7 +3,7 @@
  */
 
 var Miner = GameEntityBase.extend({
-    _cur_state      : null,
+    _state_machine  : null,
     _cur_location   : EntityHelper.Location.kInvalid,
     _carried_gold   : 0,
     _bank_gold      : 0,
@@ -12,6 +12,8 @@ var Miner = GameEntityBase.extend({
 
     ctor : function (id) {
         this._super(id)
+        this._state_machine = new StateMachine(this)
+        this._state_machine._cur_state = GoHomeAndSleepTilRested.GetInstance()
     },
 
     IsNeedSaveGoldToBank : function ()
@@ -69,28 +71,13 @@ var Miner = GameEntityBase.extend({
         this._bank_gold     -= Miner.kDrinkOnceCost
     },
 
-    ChangeState : function (new_state)
+    Update : function (dt)
     {
-        var old_state = this._cur_state
-        cc.assert(new_state&&this._cur_state!=new_state,new_state?new_state.GetName():"NONE")
-        if(old_state)
-        {
-            old_state.OnExit(this)
-        }
-
-        this._cur_state = new_state
-
-        new_state.OnEnter(this)
-    },
-
-    Update : function ()
-    {
-        this._super()
         this._thirst_value += 1
 
-        if(this._cur_state)
+        if(this._state_machine)
         {
-            this._cur_state.Update(this)
+            this._state_machine.Update(dt)
         }
     },
 

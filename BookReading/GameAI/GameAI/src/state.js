@@ -3,7 +3,8 @@
  */
 
 var StateBase = cc.Class.extend({
-    _name : "INVALID_state",
+    _name           : "INVALID_state",
+
     ctor : function (name)
     {
         if(name)

@@ -28,22 +28,22 @@ var EnterMineAndDigForNugget = StateBase.extend({
 
         if(entity.IsNeedSaveGoldToBank())
         {
-            entity.ChangeState(VisitBankAndDepositGold.GetInstance())
+            entity._state_machine.ChangeToState(VisitBankAndDepositGold.GetInstance())
         }
         else if(entity.IsThirst())
         {
             if(entity.IsEnoughForDrink())
             {
-                entity.ChangeState(QuenchThirst.GetInstance())
+                entity._state_machine.ChangeToState(QuenchThirst.GetInstance())
             }
             else if(entity.IsSaveCarriedGoldEnoughForDrink())
             {
-                entity.ChangeState(VisitBankAndDepositGold.GetInstance())
+                entity._state_machine.ChangeToState(VisitBankAndDepositGold.GetInstance())
             }
         }
         else if(entity.IsFatigue())
         {
-            entity.ChangeState(GoHomeAndSleepTilRested.GetInstance())
+            entity._state_machine.ChangeToState(GoHomeAndSleepTilRested.GetInstance())
         }
     }
 })
@@ -74,15 +74,15 @@ var VisitBankAndDepositGold = StateBase.extend({
 
         if(entity.IsThirst())
         {
-            entity.ChangeState(QuenchThirst.GetInstance())
+            entity._state_machine.ChangeToState(QuenchThirst.GetInstance())
         }
         else if(entity.IsComfortable())
         {
-            entity.ChangeState(GoHomeAndSleepTilRested.GetInstance())
+            entity._state_machine.ChangeToState(GoHomeAndSleepTilRested.GetInstance())
         }
         else
         {
-            entity.ChangeState(EnterMineAndDigForNugget.GetInstance())
+            entity._state_machine.ChangeToState(EnterMineAndDigForNugget.GetInstance())
         }
     }
 })
@@ -109,7 +109,7 @@ var GoHomeAndSleepTilRested = StateBase.extend({
     {
         if(!entity.IsFatigue())
         {
-            entity.ChangeState(EnterMineAndDigForNugget.GetInstance())
+            entity._state_machine.ChangeToState(EnterMineAndDigForNugget.GetInstance())
         }
         else
         {
@@ -141,7 +141,7 @@ var QuenchThirst = StateBase.extend({
             {
                 entity.BuyAndDrinkAWhiskey()
                 entity.ShowDrink()
-                entity.ChangeState(EnterMineAndDigForNugget.GetInstance())
+                entity._state_machine.ChangeToState(EnterMineAndDigForNugget.GetInstance())
             }
             else
             {
