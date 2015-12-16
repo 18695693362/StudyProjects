@@ -29,28 +29,38 @@ var HelloWorldLayer = cc.Layer.extend({
         if(type == ccui.Widget.TOUCH_ENDED)
         {
             cc.log("pressed test")
-            this.TestMineState(true)
+            //this.TestMineState(true)
+            this.TestRandomRange(true)
         }
     },
 
     TestMineState : function (test) {
-        if(test)
-        {
-            if(!this._test_mine_state_start)
-            {
-                if(!this._tmp_miner)
-                {
-                    this._tmp_miner = new Miner(EntityHelper.EntityID.kMiner_Bob)
-                }
+        if(!test)return
 
-                cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)
-                this._test_mine_state_start = true
-            }
-            else
+        if(!this._test_mine_state_start)
+        {
+            if(!this._tmp_miner)
             {
-                cc.director.getScheduler().unschedule(this._tmp_miner.Update,this._tmp_miner)
-                this._test_mine_state_start = false
+                this._tmp_miner = new Miner(EntityHelper.EntityID.kMiner_Bob)
             }
+
+            cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)
+            this._test_mine_state_start = true
+        }
+        else
+        {
+            cc.director.getScheduler().unschedule(this._tmp_miner.Update,this._tmp_miner)
+            this._test_mine_state_start = false
+        }
+    },
+
+    TestRandomRange : function (test) {
+        if(!test)return
+
+        for(var i=0; i<20; i++)
+        {
+            //MM.Log(MM.RandomRange(0,10))
+            MM.PrintObj(MM.RandomArray(10,15,4))
         }
     },
 });

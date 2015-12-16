@@ -75,10 +75,7 @@ var Miner = GameEntityBase.extend({
     {
         this._thirst_value += 1
 
-        if(this._state_machine)
-        {
-            this._state_machine.Update(dt)
-        }
+        this._state_machine.Update(dt)
     },
 
     // display
