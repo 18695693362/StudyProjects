@@ -13,7 +13,12 @@ var Miner = GameEntityBase.extend({
     ctor : function (id) {
         this._super(id)
         this._state_machine = new StateMachine(this)
-        this._state_machine._cur_state = GoHomeAndSleepTilRested.GetInstance()
+        this._state_machine.ChangeToState(GoHomeAndSleepTilRested.GetInstance())
+    },
+
+    GetName : function ()
+    {
+        return EntityHelper.GetEntityName(this._id)
     },
 
     IsNeedSaveGoldToBank : function ()

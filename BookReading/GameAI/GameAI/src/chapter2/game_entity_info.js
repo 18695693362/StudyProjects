@@ -31,7 +31,8 @@ var EntityHelper =
         kShack      :1,
         kGoldmine   :2,
         kBank       :3,
-        kSaloon     :4
+        kSaloon     :4,
+        kBathroom   :5,
     },
     GetLocationNameMap : function () {
         if(!this._location_name_map)
@@ -42,6 +43,7 @@ var EntityHelper =
             this._location_name_map[this.Location.kGoldmine ] = "Goldmine        "
             this._location_name_map[this.Location.kBank     ] = "Bank            "
             this._location_name_map[this.Location.kSaloon   ] = "Saloon          "
+            this._location_name_map[this.Location.kBathroom ] = "Bathroom        "
         }
         return this._location_name_map
     },

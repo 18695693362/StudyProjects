@@ -3,18 +3,20 @@ var MM = MM || {}
 MM._js_cache = {}
 MM._custom_js_files = []
 Array.prototype.push.apply(MM._custom_js_files,[
-    "src/utility.js",
-    "src/state.js",
-    "src/state_machine.js",
+    "src/common/utility.js",
 
-    "src/resource.js",
+    "src/common/state/state.js",
+    "src/common/state/state_machine.js",
+    "src/common/game_entity.js",
 
-    "src/game_entity_info.js",
-    "src/game_entity.js",
-    "src/miner.js",
-    "src/miner_state.js",
+    "src/chapter2/game_entity_info.js",
+    "src/chapter2/miner.js",
+    "src/chapter2/miner_state.js",
+    "src/chapter2/miners_wife.js",
+    "src/chapter2/miners_wife_state.js",
 
     "src/app.js",
+    "src/resource.js"
 ])
 
 MM.LoadJs = function (js_path,cb)

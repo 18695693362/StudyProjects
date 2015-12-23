@@ -16,6 +16,16 @@ MM.MakeSingleton = function (SingletonClass)
             }
             return SingletonClass.__singleon
         }
+        SingletonClass.ClearInstance = function () {
+            if(SingletonClass.__singleon)
+            {
+                if(SingletonClass.OnClear)
+                {
+                    SingletonClass.OnClear.call(SingletonClass.__singleon)
+                    SingletonClass.__singleon = null
+                }
+            }
+        }
     }
 }
 
@@ -35,6 +45,10 @@ MM.PrintObj = function (obj)
 {
     var obj_str = MM.GetObjStr(obj)
     MM.Log(obj_str)
+}
+
+MM.Random = function () {
+    return Math.random()
 }
 
 /**

@@ -21,15 +21,24 @@ var StateMachine = cc.Class.extend({
             this._cur_state.Update(this._owner,dt)
         }
     },
-    ChangeToState : function (new_state) {
-        var old_state = this._cur_state
-        cc.assert(new_state&&this._cur_state!=new_state, "state name is " + new_state?new_state.GetName():"NONE")
+    ChangeToState : function (new_state,is_global)
+    {
+        var old_state = is_global ? this._global_state : this._cur_state
+        cc.assert(new_state&&old_state!=new_state, "state name is " + new_state?new_state.GetName():"NONE")
         if(old_state)
         {
             old_state.OnExit(this._owner)
         }
 
-        this._cur_state = new_state
+        if(is_global)
+        {
+            this._global_state = new_state
+        }
+        else
+        {
+            this._pre_state = old_state
+            this._cur_state = new_state
+        }
 
         new_state.OnEnter(this._owner)
     },

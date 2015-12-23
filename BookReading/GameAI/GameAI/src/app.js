@@ -29,8 +29,8 @@ var HelloWorldLayer = cc.Layer.extend({
         if(type == ccui.Widget.TOUCH_ENDED)
         {
             cc.log("pressed test")
-            //this.TestMineState(true)
-            this.TestRandomRange(true)
+            this.TestMineState(true)
+            //this.TestRandomRange(true)
         }
     },
 
@@ -43,13 +43,19 @@ var HelloWorldLayer = cc.Layer.extend({
             {
                 this._tmp_miner = new Miner(EntityHelper.EntityID.kMiner_Bob)
             }
+            if(!this._tmp_miner_wife)
+            {
+                this._tmp_miner_wife = new MinersWife(EntityHelper.EntityID.kElsa)
+            }
 
-            cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)
+            //cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)
+            cc.director.getScheduler().schedule(this._tmp_miner_wife.Update,this._tmp_miner_wife,1,999,0,false)
             this._test_mine_state_start = true
         }
         else
         {
-            cc.director.getScheduler().unschedule(this._tmp_miner.Update,this._tmp_miner)
+            //cc.director.getScheduler().unschedule(this._tmp_miner.Update,this._tmp_miner)
+            cc.director.getScheduler().unschedule(this._tmp_miner_wife.Update,this._tmp_miner_wife)
             this._test_mine_state_start = false
         }
     },
