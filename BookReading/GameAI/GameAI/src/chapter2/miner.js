@@ -8,6 +8,7 @@ var Miner = GameEntityBase.extend({
     _carried_gold   : 0,
     _bank_gold      : 0,
     _thirst_value   : 0,
+    _hungry_value   : 0,
     _fatigue_value  : 0,
 
     ctor : function (id) {
@@ -19,6 +20,11 @@ var Miner = GameEntityBase.extend({
     GetName : function ()
     {
         return EntityHelper.GetEntityName(this._id)
+    },
+
+    HandleMsg : function (telegram)
+    {
+        this._state_machine.HandleMsg(telegram)
     },
 
     IsNeedSaveGoldToBank : function ()
@@ -60,6 +66,12 @@ var Miner = GameEntityBase.extend({
     AddThirst : function () {
         this._thirst_value += 1
     },
+    IsHungry : function () {
+        return this._hungry_value>=Miner.kHungryLevel
+    },
+    AddHungry : function () {
+        this._hungry_value += 1
+    },
 
     IsFatigue : function () {
         return this._fatigue_value>=Miner.kFatigueLevel
@@ -76,9 +88,16 @@ var Miner = GameEntityBase.extend({
         this._bank_gold     -= Miner.kDrinkOnceCost
     },
 
+    IsInLocation : function (des_location)
+    {
+        cc.assert(des_location,"des_location is Invalid. des_location="+des_location)
+        return this._cur_location==des_location
+    },
+
     Update : function (dt)
     {
-        this._thirst_value += 1
+        this.AddThirst()
+        this.AddHungry()
 
         this._state_machine.Update(dt)
     },
@@ -100,10 +119,18 @@ var Miner = GameEntityBase.extend({
     },
     ShowSaveGoldToBank : function (carried) {
         MM.Log(this.GetName()+": I save "+carried+" gold to bank! total = "+this._bank_gold)
+    },
+    ShowWaitFood : function () {
+        MM.Log(this.GetName()+": Oh! I'm hungry ....")
+    },
+    ShowEatStew : function () {
+        MM.Log(this.GetName()+": Oh! delicious stew")
+        MM.Log(this.GetName()+": I'm full!")
     }
 })
 Miner.kFatigueLevel     = 5
 Miner.kThirstLevel      = 10
+Miner.kHungryLevel      = 10
 Miner.kMaxCarriedGold   = 5
 Miner.kComfortLevel     = 20
 Miner.kDrinkOnceCost    = 2

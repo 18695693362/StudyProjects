@@ -7,6 +7,8 @@ Array.prototype.push.apply(MM._custom_js_files,[
 
     "src/common/state/state.js",
     "src/common/state/state_machine.js",
+    "src/common/state/qwe.js",
+    "src/common/message/msg_dispatcher.js",
     "src/common/game_entity.js",
 
     "src/chapter2/game_entity_info.js",

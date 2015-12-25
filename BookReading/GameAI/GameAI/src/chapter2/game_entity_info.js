@@ -49,6 +49,31 @@ var EntityHelper =
     },
     GetLocationName : function (location_type)
     {
-        return this._entity_name_map[location_type] || "UNKNOWN_location"
+        return this.GetLocationNameMap()[location_type] || "UNKNOWN_location"
+    },
+
+    MsgType : {
+        kMsg_Invalid            : 0,
+        kMsg_HiHoneyImHome      : 1,
+        kMsg_StewReady          : 2,
+        kMsg_HiHoneyImAway      : 3,
+        kMsg_HiHoneyImHungry    : 4,
+    },
+    GetMsgStrMap : function ()
+    {
+        if(!this._msg_str_map)
+        {
+            this._msg_str_map = {}
+            this._msg_str_map[this.MsgType.kMsg_Invalid        ] = "MSG_INVALID        "
+            this._msg_str_map[this.MsgType.kMsg_HiHoneyImHome  ] = "MSG_HiHoneyImHome  "
+            this._msg_str_map[this.MsgType.kMsg_StewReady      ] = "MSG_StewReady      "
+            this._msg_str_map[this.MsgType.kMsg_HiHoneyImAway  ] = "Msg_HiHoneyImAway  "
+            this._msg_str_map[this.MsgType.kMsg_HiHoneyImHungry] = "Msg_HiHoneyImHungry"
+        }
+        return this._msg_str_map
+    },
+    GetMsgStr : function (msg_type)
+    {
+        return this.GetMsgStrMap()[msg_type] || "UNKNOWN_MSG"
     }
 }

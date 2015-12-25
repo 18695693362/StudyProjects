@@ -29,8 +29,9 @@ var HelloWorldLayer = cc.Layer.extend({
         if(type == ccui.Widget.TOUCH_ENDED)
         {
             cc.log("pressed test")
-            this.TestMineState(true)
+            //this.TestMineState(true)
             //this.TestRandomRange(true)
+            this.TestQWE(true)
         }
     },
 
@@ -48,13 +49,13 @@ var HelloWorldLayer = cc.Layer.extend({
                 this._tmp_miner_wife = new MinersWife(EntityHelper.EntityID.kElsa)
             }
 
-            //cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)
+            cc.director.getScheduler().schedule(this._tmp_miner.Update,this._tmp_miner,1,999,0,false)
             cc.director.getScheduler().schedule(this._tmp_miner_wife.Update,this._tmp_miner_wife,1,999,0,false)
             this._test_mine_state_start = true
         }
         else
         {
-            //cc.director.getScheduler().unschedule(this._tmp_miner.Update,this._tmp_miner)
+            cc.director.getScheduler().unschedule(this._tmp_miner.Update,this._tmp_miner)
             cc.director.getScheduler().unschedule(this._tmp_miner_wife.Update,this._tmp_miner_wife)
             this._test_mine_state_start = false
         }
@@ -69,6 +70,69 @@ var HelloWorldLayer = cc.Layer.extend({
             MM.PrintObj(MM.RandomArray(10,15,4))
         }
     },
+
+    TestQWE : function (test) {
+        if(!test)return
+        qwe.dbgMode(true);
+        var log = MM.Log
+
+        var StateA = qwe.state('StateA');
+        StateA.trace  = function(text) {
+            var state = this.hsm.state;
+            log(state.name +': ' + text + '\n');
+        };
+        StateA.moveTo = function(e, state){
+            log('executing Action "moveTo" ' + state.name +'\n');
+            this.hsm.tran(state);
+        };
+
+        var StateB = qwe.state('StateB', StateA);
+        var StateC = qwe.state('StateC', StateB, false);
+        var StateD = qwe.state('StateD', StateC);
+        var StateE = qwe.state('StateE', StateC);
+        var StateF = qwe.state('StateF', StateB);
+        var StateG = qwe.state('StateG', StateF, false);
+        var StateH = qwe.state('StateH', StateF);
+        var StateX = qwe.state('StateX', StateB);
+        var StateY = qwe.state('StateY', StateA);
+        var StateZ = qwe.state('StateZ');
+// A Whole new state machine
+        StateZ.trace  = function(text) {
+            var state = this.hsm.state;
+            log(state.name +': ' + text + '\n')
+        };
+        StateZ.moveTo = function(e, state){ this.hsm.tran(state); };
+
+
+        function MyObject(){
+            // Put here any state you want
+        }
+
+        var obj = new MyObject();
+        qwe.init(obj, StateZ, function(srcState, currState){
+            this.hsm.trace('Previous state was: ' + srcState.name);
+            this.hsm.trace('Current state is: ' + currState.name);
+        });
+
+///////////////////////////////////////////////////////////////////////////////////////
+// From here just the scene setup
+///////////////////////////////////////////////////////////////////////////////////////
+
+        var all_states = []
+        all_states.push(StateA)
+        all_states.push(StateB)
+        all_states.push(StateC)
+        all_states.push(StateD)
+        all_states.push(StateE)
+        all_states.push(StateF)
+        all_states.push(StateG)
+        all_states.push(StateH)
+        all_states.push(StateX)
+        all_states.push(StateY)
+        all_states.push(StateZ)
+
+        obj.hsm.send('moveTo', StateD);
+    }
 });
 
 var HelloWorldScene = cc.Scene.extend({

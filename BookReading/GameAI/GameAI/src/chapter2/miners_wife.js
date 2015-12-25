@@ -5,6 +5,8 @@
 var MinersWife = GameEntityBase.extend({
     _state_machine  : null,
     _cur_location   : EntityHelper.Location.kInvalid,
+    _is_cooking     : false,
+
     ctor : function (id) {
         this._super(id)
         this._state_machine = new StateMachine(this)
@@ -17,8 +19,26 @@ var MinersWife = GameEntityBase.extend({
         return EntityHelper.GetEntityName(this._id)
     },
 
+    HandleMsg : function (telegram)
+    {
+        this._state_machine.HandleMsg(telegram)
+    },
+
     IsNeedToBathroom : function () {
         return MM.Random()<MinersWife.kGoToBathroomCondition
+    },
+
+    SetCooking : function (is_cooking) {
+        this._is_cooking = is_cooking
+    },
+
+    IsHusbandInHome : function () {
+        var husband = GameEntityMgr.GetInstance().GetEntity(EntityHelper.EntityID.kMiner_Bob)
+        if(husband)
+        {
+            return husband.IsInLocation(EntityHelper.Location.kShack)
+        }
+        return false
     },
 
     Update : function (dt) {
@@ -51,6 +71,15 @@ var MinersWife = GameEntityBase.extend({
     },
     ShowMakeBed : function () {
         MM.Log(this.GetName()+": Makin bed!")
+    },
+    ShowWelcomeBack : function () {
+        MM.Log(this.GetName()+": Hi honey welcome back!")
+    },
+    ShowGotoCook : function () {
+        MM.Log(this.GetName()+": I'm going to cook!")
+    },
+    ShowCooking : function () {
+        MM.Log(this.GetName()+": Cooking ...")
     }
 })
 MinersWife.kGoToBathroomCondition = 0.1

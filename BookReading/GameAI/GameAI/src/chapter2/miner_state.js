@@ -1,6 +1,38 @@
 /**
  * Created by guodong on 12/9/15.
  */
+var MinerGlobalState = StateBase.extend({
+    ctor : function () {
+        this._super("MinerGlobalState")
+    },
+    OnEnter : function (entity)
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this,true)
+    },
+    OnExit : function (entity)
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this)
+    },
+    Update : function (entity,delta_time)
+    {
+        if(entity.IsThirst())
+        {
+            if(entity.IsEnoughForDrink())
+            {
+                entity._state_machine.ChangeToState(QuenchThirst.GetInstance())
+            }
+            else if(entity.IsSaveCarriedGoldEnoughForDrink())
+            {
+                entity._state_machine.ChangeToState(VisitBankAndDepositGold.GetInstance())
+            }
+        }
+        else if(entity.IsHungry())
+        {
+            entity._state_machine.ChangeToState(GoHome.GetInstance())
+        }
+    }
+})
+MM.MakeSingleton(MinerGlobalState)
 
 var EnterMineAndDigForNugget = StateBase.extend({
     ctor : function ()
@@ -26,24 +58,13 @@ var EnterMineAndDigForNugget = StateBase.extend({
         entity.AddFatigue()
         entity.ShowTired()
 
-        if(entity.IsNeedSaveGoldToBank())
+        if(entity.IsFatigue())
+        {
+            entity._state_machine.ChangeToState(GoHome.GetInstance())
+        }
+        else if(entity.IsNeedSaveGoldToBank())
         {
             entity._state_machine.ChangeToState(VisitBankAndDepositGold.GetInstance())
-        }
-        else if(entity.IsThirst())
-        {
-            if(entity.IsEnoughForDrink())
-            {
-                entity._state_machine.ChangeToState(QuenchThirst.GetInstance())
-            }
-            else if(entity.IsSaveCarriedGoldEnoughForDrink())
-            {
-                entity._state_machine.ChangeToState(VisitBankAndDepositGold.GetInstance())
-            }
-        }
-        else if(entity.IsFatigue())
-        {
-            entity._state_machine.ChangeToState(GoHomeAndSleepTilRested.GetInstance())
         }
     }
 })
@@ -78,7 +99,7 @@ var VisitBankAndDepositGold = StateBase.extend({
         }
         else if(entity.IsComfortable())
         {
-            entity._state_machine.ChangeToState(GoHomeAndSleepTilRested.GetInstance())
+            entity._state_machine.ChangeToState(GoHome.GetInstance())
         }
         else
         {
@@ -88,10 +109,37 @@ var VisitBankAndDepositGold = StateBase.extend({
 })
 MM.MakeSingleton(VisitBankAndDepositGold)
 
-var GoHomeAndSleepTilRested = StateBase.extend({
+var GoHome = StateBase.extend({
+    ctor : function () {
+        this._super("GoHome",[SleepTilRested.GetInstance(),WaitFood.GetInstance(),EatStew.GetInstance()])
+    },
+    OnBeforeEnter : function (entity)
+    {
+        if(entity._cur_location != EntityHelper.Location.kShack)
+        {
+            entity._cur_location = EntityHelper.Location.kShack
+        }
+        MM.StateHelper.PrintStateEnterExit(entity,this,true)
+    },
+    OnAfterExit : function ()
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this)
+    },
+    Update : function (entity, delta_time)
+    {
+        this._super(entity, delta_time)
+    }
+})
+MM.MakeSingleton(GoHome)
+
+var SleepTilRested = StateBase.extend({
     ctor : function ()
     {
-        this._super("GoHomeAndSleepTilRested")
+        this._super("SleepTilRested")
+    },
+    IsEnableEnter : function (entity)
+    {
+        return entity.IsFatigue()
     },
     OnEnter : function (entity)
     {
@@ -103,6 +151,11 @@ var GoHomeAndSleepTilRested = StateBase.extend({
     },
     OnExit : function (entity)
     {
+        MsgDispatcher.GetInstance().DispatchMsg(0,
+            EntityHelper.EntityID.kMiner_Bob,
+            EntityHelper.EntityID.kElsa,
+            EntityHelper.MsgType.kMsg_HiHoneyImAway
+        )
         MM.StateHelper.PrintStateEnterExit(entity,this)
     },
     Update : function (entity,delta_time)
@@ -118,7 +171,66 @@ var GoHomeAndSleepTilRested = StateBase.extend({
         }
     }
 })
-MM.MakeSingleton(GoHomeAndSleepTilRested)
+MM.MakeSingleton(GoHome)
+
+var WaitFood = StateBase.extend({
+    ctor : function () {
+        this._super("WaitFood")
+    },
+    IsEnableEnter : function (entity)
+    {
+        return entity.IsHungry()
+    },
+    OnEnter : function (entity)
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this,true)
+        MsgDispatcher.GetInstance().DispatchMsg(0,
+            EntityHelper.EntityID.kMiner_Bob,
+            EntityHelper.EntityID.kElsa,
+            EntityHelper.MsgType.kMsg_HiHoneyImHungry
+        )
+    },
+    OnExit : function (entity)
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this)
+    },
+    OnMsg : function (entity, telegram)
+    {
+        switch (telegram.msg)
+        {
+            case EntityHelper.MsgType.kMsg_StewReady:
+                entity._state_machine.ChangeToState(EatStew.GetInstance())
+                return true
+        }
+        return false
+    },
+    Update : function (entity,delta_time)
+    {
+        entity.ShowWaitFood()
+    }
+})
+MM.MakeSingleton(WaitFood)
+
+var EatStew = StateBase.extend({
+    ctor : function () {
+        this._super("EatStew")
+    },
+    OnEnter : function (entity)
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this,true)
+    },
+    OnExit : function (entity)
+    {
+        MM.StateHelper.PrintStateEnterExit(entity,this)
+    },
+    Update : function (entity,delta_time)
+    {
+        entity.ShowEatStew()
+        entity._hungry_value = 0
+        entity._state_machine.RevertToPreState()
+    }
+})
+MM.MakeSingleton(EatStew)
 
 var QuenchThirst = StateBase.extend({
     ctor : function ()

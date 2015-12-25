@@ -5,19 +5,18 @@
 var MsgDispatcher = cc.Class.extend({
     _msg_arr : [],
 
-    ctor : function (clock)
+    ctor : function ()
     {
-        this._clock = clock
-        this._clock.RegisterUpdate(this.DispatchDelayedMsg)
+        cc.director.getScheduler().schedule(this._DispatchDelayedMsg,this,0,cc.REPEAT_FOREVER,0,0)
     },
     OnClear : function () {
-        this._clock.UnregisterUpdate(this.DispatchDelayedMsg)
+        cc.director.getScheduler().unschedule(this._DispatchDelayedMsg,this)
     },
 
-    _Discharge : function (receiver, telegram) {
-        if(!receiver.HandleMsg(telegram))
+    _Discharge : function (pReceiver, telegram) {
+        if(!pReceiver.HandleMsg(telegram))
         {
-            MM.Log("Warnning: msg not handle!")
+            MM.Log("Warnning: msg not handle! msg="+EntityHelper.GetMsgStr(telegram.msg))
         }
     },
 
@@ -31,22 +30,22 @@ var MsgDispatcher = cc.Class.extend({
         var telegram = new Telegram(sender,receiver,msg,extra_info,0)
         if(delay>0)
         {
-            telegram.dispatch_time = this._clock.GetCurTime()+delay
+            telegram.dispatch_time = Date.now()/1000+delay
             this._msg_arr.push(telegram)
         }
         else
         {
-            this._Discharge(receiver,telegram)
+            this._Discharge(pReceiver,telegram)
         }
     },
 
-    DispatchDelayedMsg : function ()
+    _DispatchDelayedMsg : function ()
     {
         this._msg_arr.sort(function (one, two) {
             return one.dispatch_time-two.dispatch_time
         })
 
-        var cur_time = this._clock.GetCurTime()
+        var cur_time = Date.now()/1000
         while(this._msg_arr.length>0 && this._msg_arr[0].dispatch_time<cur_time && this._msg_arr[0].dispatch_time>0)
         {
             var pReceiver = GameEntityMgr.GetInstance().GetEntity(this._msg_arr[0].receiver)
@@ -55,6 +54,7 @@ var MsgDispatcher = cc.Class.extend({
         }
     }
 })
+MM.MakeSingleton(MsgDispatcher)
 
 var Telegram = cc.Class.extend({
     ctor : function (sender,receiver,msg,extra_info,dispatch_time)

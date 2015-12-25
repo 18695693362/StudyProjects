@@ -28,6 +28,7 @@ var StateMachine = cc.Class.extend({
         if(old_state)
         {
             old_state.OnExit(this._owner)
+            old_state.OnAfterExit(this._owner)
         }
 
         if(is_global)
@@ -40,6 +41,7 @@ var StateMachine = cc.Class.extend({
             this._cur_state = new_state
         }
 
+        new_state.OnBeforeEnter(this._owner)
         new_state.OnEnter(this._owner)
     },
     RevertToPreState : function () {
@@ -52,6 +54,17 @@ var StateMachine = cc.Class.extend({
         cc.assert(state_class, "state_class is none!")
         cc.assert(this._cur_state, "cur_state is none!")
 
-        return state_class.id = this._cur_state.prototype.id
+        return state_class.GetInstance() == this._cur_state
+    },
+    HandleMsg : function (telegram) {
+        if(this._cur_state && this._cur_state.OnMsg(this._owner,telegram))
+        {
+            return true
+        }
+        if(this._global_state && this._global_state.OnMsg(this._owner,telegram))
+        {
+            return true
+        }
+        return false
     }
 })
