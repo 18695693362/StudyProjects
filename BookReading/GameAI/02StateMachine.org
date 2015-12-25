@@ -28,3 +28,6 @@
 XX->回家等待吃饭->吃饭 吃饭完毕后需要返回XX。
 这种情况可以通过子状态来实现。XX->在家。在家包含两个子状态 等待吃饭 和 吃饭。
 
+包含子状态的状态机实现
+https://github.com/filasienof/qwe
+http://jsfiddle.net/filasienof/m53ob1q6/light/
