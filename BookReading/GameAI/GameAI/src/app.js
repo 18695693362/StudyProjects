@@ -29,9 +29,9 @@ var HelloWorldLayer = cc.Layer.extend({
         if(type == ccui.Widget.TOUCH_ENDED)
         {
             cc.log("pressed test")
-            //this.TestMineState(true)
+            this.TestMineState(true)
             //this.TestRandomRange(true)
-            this.TestQWE(true)
+            //this.TestQWE(true)
         }
     },
 

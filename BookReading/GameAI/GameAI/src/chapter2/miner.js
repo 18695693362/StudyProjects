@@ -14,7 +14,7 @@ var Miner = GameEntityBase.extend({
     ctor : function (id) {
         this._super(id)
         this._state_machine = new StateMachine(this)
-        this._state_machine.ChangeToState(GoHomeAndSleepTilRested.GetInstance())
+        this._state_machine.ChangeToState(Home_SleepTilRested.GetInstance())
     },
 
     GetName : function ()
@@ -134,3 +134,25 @@ Miner.kHungryLevel      = 10
 Miner.kMaxCarriedGold   = 5
 Miner.kComfortLevel     = 20
 Miner.kDrinkOnceCost    = 2
+
+Miner.StateHelper = {
+    StateKey : {
+        kPreState : "PreState",
+    },
+    SavePreState : function (entity)
+    {
+        entity._state_machine._state_data[this.StateKey.kPreState] = entity._state_machine._cur_state
+    },
+    GetPreState : function (entity)
+    {
+        return entity._state_machine._state_data[this.StateKey.kPreState]
+    },
+    RevertToPreState : function (entity)
+    {
+        entity._state_machine.ChangeToState(this.GetPreState(entity))
+        entity._state_machine._state_data[this.StateKey.kPreState] = null
+    }
+}
+Miner.StateDataKey = {
+
+}
