@@ -16,7 +16,7 @@ var WifesGlobalState = StateBase.extend({
     },
     Update : function (entity,delta_time)
     {
-        if(!entity._state_machine.IsInState(VisitBathroom) && entity.IsNeedToBathroom())
+        if(!entity._state_machine.IsInState(VisitBathroom.GetInstance()) && entity.IsNeedToBathroom())
         {
             entity._state_machine.ChangeToState(VisitBathroom.GetInstance())
         }

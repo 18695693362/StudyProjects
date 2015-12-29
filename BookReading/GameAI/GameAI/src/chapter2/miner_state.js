@@ -234,7 +234,14 @@ var Home_EatStew = StateBase.extend({
     {
         entity.ShowEatStew()
         entity._hungry_value = 0
-        Miner.StateHelper.RevertToPreState(entity)
+        if(Miner.StateHelper.IsPreStateEmpty(entity))
+        {
+            entity._state_machine.ChangeToState(EnterMineAndDigForNugget.GetInstance())
+        }
+        else
+        {
+            Miner.StateHelper.RevertToPreState(entity)
+        }
     }
 })
 MM.MakeSingleton(Home_EatStew)

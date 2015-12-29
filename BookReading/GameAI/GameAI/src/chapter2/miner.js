@@ -147,12 +147,13 @@ Miner.StateHelper = {
     {
         return entity._state_machine._state_data[this.StateKey.kPreState]
     },
+    IsPreStateEmpty : function (entity)
+    {
+        return entity._state_machine._state_data[this.StateKey.kPreState]==null
+    },
     RevertToPreState : function (entity)
     {
         entity._state_machine.ChangeToState(this.GetPreState(entity))
         entity._state_machine._state_data[this.StateKey.kPreState] = null
     }
-}
-Miner.StateDataKey = {
-
 }
