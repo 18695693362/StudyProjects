@@ -11,11 +11,11 @@ Array.prototype.push.apply(MM._custom_js_files,[
     "src/common/message/msg_dispatcher.js",
     "src/common/game_entity.js",
 
-    "src/chapter2/game_entity_info.js",
-    "src/chapter2/miner.js",
-    "src/chapter2/miner_state.js",
-    "src/chapter2/miners_wife.js",
-    "src/chapter2/miners_wife_state.js",
+    "src/chapter02/game_entity_info.js",
+    "src/chapter02/miner.js",
+    "src/chapter02/miner_state.js",
+    "src/chapter02/miners_wife.js",
+    "src/chapter02/miners_wife_state.js",
 
     "src/app.js",
     "src/resource.js"
