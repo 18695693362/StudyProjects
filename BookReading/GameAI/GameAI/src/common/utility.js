@@ -80,6 +80,63 @@ MM.RandomArray = function (begin, end, count) {
     return random_arr
 }
 
+MM.VecMultiNumber = function (src_vec, number)
+{
+    var result = {
+        x : src_vec.x*number,
+        y : src_vec.y*number,
+        z : src_vec.z*number
+    }
+
+    return result
+}
+
+MM.VecPlusVec = function (vec_1, vec_2)
+{
+    var result = {
+        x : vec_1.x+vec_2.x,
+        y : vec_1.y+vec_2.y,
+        z : vec_1.z+vec_2.z
+    }
+    return result
+}
+
+MM.VecLenSquare = function (vec)
+{
+    return vec.x*vec.x+vec.y*vec.y+vec.z*vec.z
+}
+
+MM.VecNormalize = function (vec) {
+    var vec_len = Math.sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)
+    var result = {x:0,y:0,z:0}
+    if(vec_len>0)
+    {
+        result = {x:vec.x/vec_len , y:vec.y/vec_len , z:vec.z/vec_len}
+    }
+    return result
+}
+
+MM.VectPerp = function (vec) {
+    var result = {
+        x:vec.y,
+        y:vec.x
+    }
+    return result
+}
+
+MM.VecTruncate = function (src_vec,max_len) {
+    var max_len_square = max_len*max_len
+    var src_vec_len_square = src_vec.x*src_vec.x+src_vec.y*src_vec.y+src_vec.z*src_vec.z
+    if( src_vec_len_square > max_len_square )
+    {
+        var src_vec_len = Math.sqrt(src_vec_len_square)
+        src_vec.x = src_vec.x/src_vec_len
+        src_vec.y = src_vec.y/src_vec_len
+        src_vec.z = src_vec.z/src_vec_len
+    }
+    return src_vec
+}
+
 MM.FrameByFrameTask = cc.Class.extend({
     /**
      * _step_cb(task_cur_count, task_total_num)
