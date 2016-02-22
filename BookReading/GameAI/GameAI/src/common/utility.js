@@ -80,6 +80,21 @@ MM.RandomArray = function (begin, end, count) {
     return random_arr
 }
 
+MM.VecZero = function (src_vec)
+{
+    if(src_vec)
+    {
+        src_vec.x = 0
+        src_vec.y = 0
+        src_vec.z = 0
+        return src_vec
+    }
+    else
+    {
+        return {x:0,y:0,z:0}
+    }
+}
+
 MM.VecMultiNumber = function (src_vec, number)
 {
     var result = {
@@ -99,6 +114,21 @@ MM.VecPlusVec = function (vec_1, vec_2)
         z : vec_1.z+vec_2.z
     }
     return result
+}
+
+MM.VecMinusVec = function (vec_1, vec_2)
+{
+    var result = {
+        x : vec_1.x-vec_2.x,
+        y : vec_1.y-vec_2.y,
+        z : vec_1.z-vec_2.z
+    }
+    return result
+}
+
+MM.VecLen = function (vec)
+{
+    return Math.sqrt(vec.x*vec.x+vec.y*vec.y+vec.z*vec.z)
 }
 
 MM.VecLenSquare = function (vec)
@@ -135,6 +165,10 @@ MM.VecTruncate = function (src_vec,max_len) {
         src_vec.z = src_vec.z/src_vec_len
     }
     return src_vec
+}
+
+MM.VecDotMultiVec = function (vec1, vec2) {
+    return vec1.x*vec2.x+vec1.y*vec2.y+vec1.z*vec2.z
 }
 
 MM.FrameByFrameTask = cc.Class.extend({

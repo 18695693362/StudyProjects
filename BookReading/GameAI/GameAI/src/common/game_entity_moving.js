@@ -36,12 +36,64 @@ var Vehicle = MovingEntity.extend({
             this._heading = MM.VecNormalize(this._velocity)
             this._side    = MM.VectPerp(this._heading)
         }
+    },
+
+    MaxSpeed : function () {
+        return this._max_speed
     }
 })
 
-var SteeringForce = cc.Class.extend({
+var SteeringBehaviors = cc.Class.extend({
+    ctor : function (vehicle)
+    {
+        this._vehicle = vehicle
+    },
     Calculate : function ()
     {
         return 0;
+    },
+    Seek : function (target_pos)
+    {
+        var desired_velocity = MM.VecMultiNumber(
+            MM.VecNormalize(MM.VecMinusVec(target_pos - this._vehicle._position)),
+            this._vehicle.MaxSpeed()
+        )
+
+        return MM.VecMinusVec(desired_velocity,this._vehicle._velocity);
+    },
+    Flee : function (target_pos)
+    {
+        var desired_velocity = MM.VecMultiNumber(
+            MM.VecNormalize(MM.VecMinusVec(this._vehicle._position - target_pos)),
+            this._vehicle.MaxSpeed()
+        )
+
+        return MM.VecMinusVec(desired_velocity - this._vehicle._velocity);
+    },
+    Arrive : function (target_pos, deceleration)
+    {
+        var to_target = MM.VecMinusVec(target_pos, this._vehicle._position)
+        var dist = MM.VecLen(to_target)
+
+        if(dist > 0)
+        {
+            var deceleration_tweaker = 0.3
+            var speed = dist / (deceleration*deceleration_tweaker)
+            speed = Math.min(speed, this._vehicle.MaxSpeed())
+            var desired_velocity = MM.VecMultiNumber(to_target,speed/dist)
+            return MM.VecMinusVec(desired_velocity - this._vehicle._velocity);
+        }
+        return MM.VecZero()
+    },
+    Pursuit : function (evader)
+    {
+        var to_evader = evader._position - this._vehicle._position
+        var relative_heading = MM.VecDotMultiVec(this._vehicle._heading, evader._heading)
     }
 })
+SteeringBehaviors.Deceleration =
+{
+    kSlow   : 1,
+    kNormal : 2,
+    kFast   : 3
+}
