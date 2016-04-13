@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QGLFormat format;
-    format.setVersion(3,3);
+    format.setVersion(4,1);
     format.setProfile(QGLFormat::CoreProfile);
     QGLFormat::setDefaultFormat(format);
 
