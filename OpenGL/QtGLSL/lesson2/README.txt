@@ -71,6 +71,9 @@ inout               值被copy到函数内、外
 ==7== 计算不变性
 invariant 和 precise 可以保证shader中的计算不变性。
 invariant 用于任何shader的输出变量。如果两个shader使用同一个表达式计算该输出变量，那么结果是相同的
+invariant gl_Position;
+invariant centroid out vec3 Color;
+#pragma STDGL invariant(all)
 precise   用于任何函数返回值或任何计算变量。也可用于内置变量，用户变量。
 precise gl_Position;
 precise out vec3 Location;
@@ -78,7 +81,61 @@ precise vec3 subdivide(vec3 P1, vec3 P2)
 {
     // .....
 }
+==8== Shader Preprocessor
+    #define
+    #define LPos(n) gl_LightSource[n].position
+    __LINE__
+    __FILE__
+    __VERSION__
+#undef
+#if
+#ifdef
+#ifndef
+#else
+#elif
+#endif
+#error text 在编译shader时,向日志消息中插入text
+#pragma options
+    #pragma optimize(on)
+    #pragma optimize(off)
+    #pragma debug(on)
+    #pragma debug(off)
+#extension options
+    #extension extension_name : <directive>
+    #extension all : <directive>
+    -Directive-         -Description-
+    require             如果扩展不存在或扩展为all,则标记一个错误
+    enable              如果特定的扩展不存在则给一个警告,如果为all,则标记一个错误
+    warn                如果特定扩展不存在,或者使用了任意扩展,则给一个警告
+    disable             如果扩展不支持,则产生一个错误或者警告
+#version number
+#line options
 =4= Interface Blocks
+==1== 概述
+shader和app或shader之间共享的变量可以组织为blocks,Uniform变量可以组织到uniform blocks中,
+input和output变量可以组织到in/out blocks中,shader存储缓存组织到buffer blocks中.
+uniform b {     // uniform or in or out or buffer
+    vec4 v1;    // list of variables
+    bool v2;    // ...
+};              // access members as v1 and v2
+uniform b {     // uniform or in or out or buffer
+    vec4 v1;    // list of variables
+    bool v2;    // ...
+} name;         // access members as name.v1 and name.v2
+==2== Uniform Block Layout Control
+-LayoutQualifier-           -Description-
+shared                      指定uniform block被多个程序共享(这个是默认修饰)
+packed                      指定uniform block使用最小内存布局.uniform block不能夸程序共享
+std140                      使用标准布局.
+std430                      使用标准布局.
+row_major                   uniform block中的矩阵为行主序存储
+column_major                uniform block中的矩阵为列主序存储(这是默认方式)
+layout (shared, row_major) uniform
+{
+    //.....
+};
+==3== 在app中访问Uniform blocks
+GLuint glGetUniformBlockIndex(GLuint program, const char* uniformBlockName);
 =5= Compiling Shaders
 =6= Shader Subroutines
 =7= Separate Shader Objects
