@@ -14,12 +14,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mglwidget.cpp
+    mglwidget.cpp \
+    ../../common/glhelper.cpp
 
 HEADERS  += \
-    mglwidget.h
+    mglwidget.h \
+    ../../common/glhelper.h
 
 FORMS    +=
 
 OTHER_FILES += \
     README.txt
+
+RESOURCES += \
+    shaders.qrc

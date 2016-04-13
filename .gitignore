@@ -1,16 +1,16 @@
 # unity project
 *.userprefs
-OpenGL/UnityCg/Basics/MinimalShader/Library/
-OpenGL/UnityCg/Basics/MinimalShader/Temp/
-OpenGL/UnityCg/Basics/RGBCube/Library/
-OpenGL/UnityCg/Basics/RGBCube/Temp/
-OpenGL/UnityCg/Basics/DebuggingOfShaders/Library/
-OpenGL/UnityCg/Basics/DebuggingOfShaders/Temp/
+OpenGL/UnityCg/*/Library/
+OpenGL/UnityCg/*/Temp/
 
 # xcode project
 xcuserdata
-TCPIPSocketsInC.xccheckout
-contents.xcworkspacedata
-xcshareddata
-BookReading/GameAI/.idea
-BookReading/GameAI/GameAI/.idea
+*xccheckout
+*xcworkspacedata
+*xcshareddata
+
+# jetbrain proj
+.idea
+
+# custom proj
+.build

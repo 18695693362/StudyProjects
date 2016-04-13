@@ -1,6 +1,7 @@
 #include "mglwidget.h"
-//#include <glu.h>
 #include <iostream>
+#include "../../common/glhelper.h"
+
 using namespace std;
 
 #define kMinWidth   50.0f
@@ -27,53 +28,6 @@ GLuint VAOs[NumVAOs];
 GLuint Buffers[NumBuffers];
 const GLuint NumVertices = 6;
 
-GLuint CompileShader(GLuint shader_type, const char* shader_str)
-{
-    GLuint shader_obj = glCreateShader(shader_type);
-    glShaderSource(shader_obj,1,&shader_str,NULL);
-    glCompileShader(shader_obj);
-
-    GLint status;
-    glGetShaderiv(shader_obj,GL_COMPILE_STATUS,&status);
-    if(status != GL_TRUE)
-    {
-        GLint log_size;
-        glGetShaderiv(shader_obj,GL_INFO_LOG_LENGTH,&log_size);
-        char* log = new char[log_size];
-        memset(log,0,log_size);
-        glGetShaderInfoLog(shader_obj,log_size,&log_size,log);
-        cout << log << endl;
-
-        //TODO
-    }
-    return shader_obj;
-}
-
-GLuint CreateShaderProgram(const char* vertex_shader_str, const char* fragment_shader_str)
-{
-    GLuint vertex_shader_obj = CompileShader(GL_VERTEX_SHADER,vertex_shader_str);
-    GLuint fragment_shader_obj = CompileShader(GL_FRAGMENT_SHADER,fragment_shader_str);
-    GLuint program = glCreateProgram();
-    glAttachShader(program,vertex_shader_obj);
-    glAttachShader(program,fragment_shader_obj);
-    glLinkProgram(program);
-
-    GLint status;
-    glGetProgramiv(program,GL_LINK_STATUS,&status);
-    if(status != GL_TRUE)
-    {
-        GLint log_size;
-        glGetProgramiv(program,GL_INFO_LOG_LENGTH,&log_size);
-        char* log = new char[log_size];
-        memset(log,0,log_size);
-        glGetProgramInfoLog(program,log_size,&log_size,log);
-        cout << log << endl;
-
-        //TODO
-    }
-    return program;
-}
-
 MGLWidget::MGLWidget(QWidget *parent, const char* name, bool full_screen) :
     QGLWidget(parent)
 {
@@ -99,6 +53,8 @@ void MGLWidget::initializeGL()
     glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+    cout << "gl version = " << glGetString(GL_VERSION) << endl;
+
     glGenVertexArrays(NumVAOs, VAOs);
     glBindVertexArray(VAOs[Triangles]);
     GLfloat vertices[NumVertices][2] = {
@@ -114,20 +70,7 @@ void MGLWidget::initializeGL()
     glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    QString vertex_shader = "\
-        #version 410 core \
-        layout(location = 0) in vec4 vPosition; \
-        void main() { \
-            gl_Position = vPosition; \
-        }";
-    QString fragment_shader = "\
-        #version 410 core \
-        out vec4 fColor; \
-        void main() {\
-            fColor = vec4(1.0, 1.0, 0.0, 1.0);\
-        }";
-
-    GLint program = CreateShaderProgram(vertex_shader.toStdString().c_str(),fragment_shader.toStdString().c_str());
+    GLint program = GLHelper::CreateShaderProgramWithFiles(":/vertex.vert",":/fragment.frag");
     glUseProgram(program);
     glVertexAttribPointer(vPosition,2,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
     glEnableVertexAttribArray(vPosition);
