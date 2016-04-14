@@ -1,4 +1,4 @@
-#include "mglwidget.h"
+#include "mglwidget_UniformBlock.h"
 #include <QApplication>
 #include <QGLFormat>
 
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     format.setProfile(QGLFormat::CoreProfile);
     QGLFormat::setDefaultFormat(format);
 
-    MGLWidget widget(NULL,"My OpenGL Window",false);
+    MGLWidgetUniformBlock widget(NULL,"UniformBlock",false);
     widget.show();
     
     return a.exec();

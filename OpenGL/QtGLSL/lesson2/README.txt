@@ -136,6 +136,9 @@ layout (shared, row_major) uniform
 };
 ==3== 在app中访问Uniform blocks
 GLuint glGetUniformBlockIndex(GLuint program, const char* uniformBlockName);
+glGetActiveUniformBlockiv()
+void glBindBufferRange(GLenum target,GLuint index,GLuint buffer,GLintptr offset,GLsizeiptr size);
+void glBindBufferBase(GLenum target,GLuint index,GLuint buffer);
 =5= Compiling Shaders
 =6= Shader Subroutines
 =7= Separate Shader Objects

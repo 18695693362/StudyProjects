@@ -3,11 +3,11 @@
 
 #include <QGLWidget>
 
-class MGLWidget : public QGLWidget
+class MGLWidgetUniformBlock : public QGLWidget
 {
     Q_OBJECT
 public:
-    explicit MGLWidget(QWidget *parent = 0, const char* name="", bool full_screen=false);
+    explicit MGLWidgetUniformBlock(QWidget *parent = 0, const char* name="", bool full_screen=false);
     
 signals:
     

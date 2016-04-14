@@ -14,12 +14,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    mglwidget.cpp \
-    ../../common/glhelper.cpp
+    ../../common/glhelper.cpp \
+    mglwidget_UniformBlock.cpp
 
 HEADERS  += \
-    mglwidget.h \
-    ../../common/glhelper.h
+    ../../common/glhelper.h \
+    mglwidget_UniformBlock.h
 
 FORMS    +=
 
