@@ -22,7 +22,7 @@ enum Buffer_IDs {
     NumBuffers
 };
 enum Attrib_IDs {
-    vPosition
+    vPos = 1
 };
 GLuint VAOs[NumVAOs];
 GLuint Buffers[NumBuffers];
@@ -123,10 +123,8 @@ void MGLWidgetUniformBlock::initializeGL()
         glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-        GLint program = GLHelper::CreateShaderProgramWithFiles(":/vertex_UniformBlock.vert",":/fragment_UniformBlock.frag");
-        glUseProgram(program);
-        //glVertexAttribPointer(vPosition,2,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
-        //glEnableVertexAttribArray(vPosition);
+        glVertexAttribPointer(vPos,2,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
+        glEnableVertexAttribArray(vPos);
     }
 }
 

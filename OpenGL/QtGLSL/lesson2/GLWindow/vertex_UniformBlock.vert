@@ -5,7 +5,7 @@ uniform Uniforms {
     vec4 rotation;
     bool enabled;
 };
-in vec2 vPos;
+layout(location = 1) in vec2 vPos;
 in vec3 vColor;
 out vec4 fColor;
 
