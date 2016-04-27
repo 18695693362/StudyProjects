@@ -135,10 +135,29 @@ layout (shared, row_major) uniform
     //.....
 };
 ==3== 在app中访问Uniform blocks
+(1) 返回program中名称为uniformBlockName的uniform block 索引
 GLuint glGetUniformBlockIndex(GLuint program, const char* uniformBlockName);
-glGetActiveUniformBlockiv()
+e.g:
+uboIndex = glGetUniformBlockIndex(program, "Uniforms");
+(2) 获取program中index为uniformBlockIndex的uniform block的名称为pname的参数的值
+glGetActiveUniformBlockiv (GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint *params);
+e.g:
+glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
+(3) 依据names获取program中对应uniform变量的索引
+
+e.g:
+glGetUniformIndices(program,NumUniforms, names, indices);
+(4) 依据uniform变量的索引,获取其其他参数
+glGetActiveUniformsiv (GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params);
+e.g:
+glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_OFFSET, offset);
+glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_SIZE, size);
+glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_TYPE, type);
+(5) 将当前绑定的缓冲区对象和索引为index的uniform block关联
 void glBindBufferRange(GLenum target,GLuint index,GLuint buffer,GLintptr offset,GLsizeiptr size);
 void glBindBufferBase(GLenum target,GLuint index,GLuint buffer);
+e.g:
+glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
 =5= Compiling Shaders
 =6= Shader Subroutines
 =7= Separate Shader Objects
