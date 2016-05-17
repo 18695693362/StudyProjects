@@ -16,3 +16,5 @@ xcuserdata
 
 # custom proj
 .build
+build-Debug
+build-Release

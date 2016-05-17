@@ -158,7 +158,35 @@ void glBindBufferRange(GLenum target,GLuint index,GLuint buffer,GLintptr offset,
 void glBindBufferBase(GLenum target,GLuint index,GLuint buffer);
 e.g:
 glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
+==4== buffer blocks
+buffer blocks和uniform block相比，有两个优点：
+(1) 着色器可以写入，修改buffer blocks的内容。
+(2) buffer blocks的大小可以在渲染之前再确定，而不是编译连接的时候。
+buffer BufferObject {
+    int     mode;
+    vec4    points[];    // 改数组的大小可以在渲染之前确定
+};
+==5== In/Out Blocks
+out Lighting {
+    vec3 normal;
+    vec2 bumpCoord;
+}
+in Lighting {
+    vec3 normal;
+    vec2 bumpCoord;
+};
 =5= Compiling Shaders
+使用shader的步骤：
+对于每个shader object：
+step 1. create a shader object.
+step 2. compile your shader source into the object.
+step 3. verify that your shader compiled successfully
+将多个shader objects连接到一个shader程序
+step 1. create a shader program
+step 2. attach the appropriate shader objects to the shader program.
+step 3. link the shader program
+step 4. verify that the shader link phase completed successfully
+step 5. use the shader for vertex or fragment processing
 =6= Shader Subroutines
 =7= Separate Shader Objects
 
