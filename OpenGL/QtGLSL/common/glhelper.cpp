@@ -53,6 +53,15 @@ GLuint GLHelper::CreateShaderProgram(const char* vertex_shader_str, const char* 
     glAttachShader(program,fragment_shader_obj);
     glLinkProgram(program);
 
+    if(vertex_shader_obj)
+    {
+        glDeleteShader(vertex_shader_obj);
+    }
+    if(fragment_shader_obj)
+    {
+        glDeleteShader(fragment_shader_obj);
+    }
+
     GLint status;
     glGetProgramiv(program,GL_LINK_STATUS,&status);
     if(status != GL_TRUE)

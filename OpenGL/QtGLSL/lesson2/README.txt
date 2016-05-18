@@ -1,5 +1,8 @@
+    Shader Fundamentals
+
 =1= Shaders and OpenGL
 从3.1版本开始，固定函数管线从CoreProfile中移除了，shaders成为强制要求的。
+
 =2= OpenGL's Programmable pipline
 ==1== 4.3版本的图形管线包含4个阶段：
 (1) vertex shading stage.       [mandatory]
@@ -15,6 +18,7 @@
 ==2== 数据传输
 shader  通过in/out(输入/输出)变量来进行数据传递。
 uniform 为OpenGL应用程序定义变量，在shader中只能读不能修改。
+
 =3= Shading Language
 ==1== 类型转换
 隐式类型转换
@@ -110,6 +114,7 @@ precise vec3 subdivide(vec3 P1, vec3 P2)
     disable             如果扩展不支持,则产生一个错误或者警告
 #version number
 #line options
+
 =4= Interface Blocks
 ==1== 概述
 shader和app或shader之间共享的变量可以组织为blocks,Uniform变量可以组织到uniform blocks中,
@@ -175,20 +180,127 @@ in Lighting {
     vec3 normal;
     vec2 bumpCoord;
 };
+
 =5= Compiling Shaders
-使用shader的步骤：
-对于每个shader object：
+=== 使用shader的步骤： ===
+==== 对于每个shader object ====
 step 1. create a shader object.
+// 创建shader对象
+//GLuint glCreateShader(GLenum type);
+// 关联shader对象和shader源代码
+//void   glShaderSource(GLuint shader,GLsizei count,const GLchar** string, const GLint* length);
 step 2. compile your shader source into the object.
+// 编译shader源代码
+//void glCompileShader(GLuint shader);
 step 3. verify that your shader compiled successfully
-将多个shader objects连接到一个shader程序
+// void glGetShaderiv (GLuint shader, GLenum pname, GLint *params);
+// void glGetShaderInfoLog(GLuint shader,GLsizei bufSize,GLsizei* length,char* infoLog);
+==== 将多个shader objects连接到一个shader程序 ====
 step 1. create a shader program
+//GLuint glCreateProgram(void);
 step 2. attach the appropriate shader objects to the shader program.
+//void glAttachShader(GLuint program,GLuint shader);
+//void glDetachShader(GLuint program,GLuint shader);
 step 3. link the shader program
+//void glLinkProgram(GLuint program);
 step 4. verify that the shader link phase completed successfully
+//void glGetProgramiv (GLuint program, GLenum pname, GLint *params);
+//void glGetProgramInfoLog (GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
 step 5. use the shader for vertex or fragment processing
+//void glUseProgram(GLuint program);
+//GLboolean glIsShader(GLuint shader);
+//GLboolean glIsProgram(GLuint program);
+
 =6= Shader Subroutines
+== GLSL Subroutine Setup ==
+(1) 定义Subroutine类型
+subroutine returnType subroutineType(type param, ...);
+e.g:
+subroutine vec4 LightFunc(vec3);
+(2) 使用前面定义好的Subroutine类型来定义一组subroutine
+subroutine (LightFunc) vec4 ambient(vec3 n)
+{
+    return Materials.ambient;
+}
+subroutine (LightFunc) vec4 diffuse(vec3 n)
+{
+    return Materials.diffuse*max(dot(normalize(n),LightVec.xyz),0.0);
+}
+(3) 指定一个subroutine uniform变量来保存你在程序中选择的subroutine函数指针
+e.g:
+subroutine uniform LightFunc materialShader;
+~Tips~
+一个subroutine可以对应多个subroutine类型
+subroutine void Type_1();
+subroutine void Type_2();
+
+subroutine (Type_1) Func_1();
+subroutine (Type_2) Func_2();
+subroutine (Type_1,Type_2) Func_12();
+
+subroutine uniform Type_1 func_1;  // 可以使用Func_1 Func_12
+subroutine uniform Type_2 func_2;  // 可以使用Func_2 Func_12
+== Selecting Shader Subroutines ==
+GLint glGetSubroutineUniformLocation(GLuint program,GLenum shadertype,const char* name);
+获得subroutine uniform的位置
+GLuint glGetSubroutineIndex(GLuint program,GLenum shadertype,const char* name);
+获得subroutine的index
+GLuint glUniformSubroutinesuiv(GLenum shadertype,GLsizei count,const GLuint* indices);
+设置count个subroutine uniforms为indices中保存的值
+e.g:
+GLint materialShaderLoc;
+GLuint ambientIndex;
+GLuint diffuseIndex;
+
+glUseProgram(program);
+
+materialShaderLoc = glGetSubroutineUniformLocation(program,GL_VERTEX_SHADER,"materialShader");
+
+if (materialShaderLoc < 0)
+{
+    // Error
+}
+ambientIndex = glGetSubroutineIndex(program,GL_VERTEX_SHADER,"ambient");
+diffuseIndex = glGetSubroutineIndex(program,GL_VERTEX_SHADER,"diffuse");
+if(ambientIndex==GL_INVALID_INDEX || diffuseIndex==GL_INVALID_INDEX)
+{
+    //
+}
+else
+{
+    GLsizei n;
+    glGetIntegerv(GL_MAX_SUBROUTINE_UNIFORM_LOCATIONS, &n);
+
+    GLuint* indices = new GLuint[n];
+    indices[materialShaderLoc] = ambientIndex;
+
+    glUniformSubroutinesuiv(GL_VERTEX_SHADER, n, indices);
+
+    delete [] indices;
+}
 =7= Separate Shader Objects
+4.1版本之前的OpenGL，应用程序执行期间，同一时间只能绑定一个shader program。
+一个vertex shader处理一组几何元素然后交由多个fragment shader进行后续处理，这种情况下，你需要多个shader program
+对应，这些shader program都有相同的vertex shader.
+4.1版本中Separate shader objects可以将不同shader programs的多个shader阶段组合到一个program pipeline中。其步骤如下：
+(1) 创建可重用的shader program
+//glProgramParameter(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
+//glCreateShaderProgramv()
+(2) 使用新的shader pipeline将多个来自不同shader programs的shader阶段组合为一个可复用的program pipeline.
+(2.1) glGenProgramPipelines()
+(2.2) glBindProgramPipeline()
+(2.3) glUseProgramStages (GLuint pipeline, GLbitfield stages, GLuint program);
+~Tips~
+删除program pipelines
+glDeleteProgramPipelines()
+设置uniform变量值:
+(1)
+glActiveShaderProgram()
+glUniform*()
+(2)
+glProgramUniform*()
+glProgramUniformMatrix*()
+
 
 
 

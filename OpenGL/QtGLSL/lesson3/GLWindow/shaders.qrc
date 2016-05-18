@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fragment_UniformBlock.frag</file>
+        <file>vertex_UniformBlock.vert</file>
+    </qresource>
+</RCC>
