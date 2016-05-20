@@ -107,9 +107,39 @@ GL_INT_2_10_10_10_REV
 GL_UNSIGNED_INT_2_10_10_10_REV
 
 5. Static Vertex-Attribute Specification
+静态顶点属性是顶点属性的默认值。
+void glVertexAttrib{1234}{fds}(GLuint index,TYPE values);
+void glVertexAttrib{1234}{fds}v(GLuint index,const TYPE* values);
+void glVertexAttrib4{bsifd ub us ui}v(GLuint index,const TYPE* values);
 
+void glVertexAttrib4Nub(GLuint index,GLubyte x,GLubyte y,GLubyte z,GLubyte w);
+void glVertexAttrib4N{bsi ub us ui}v(GLuint index,const TYPE* v);
+
+void glVertexAttribI{1234}{i ui}(GLuint index, TYPE values);
+void glVertexAttribI{123}{i ui}v(GLuint index,const TYPE *values);
+void glVertexAttribI4{bsi ub us ui}v(GLuint index,const TYPE *values);
+
+void glVertexAttribL{1234}(GLuint index, TYPE values);
+void glVertexAttribL{1234}v(GLuint index, const TYPE *values);
 
 四、 OpenGL Drawing Commands
+1. 绘图命令
+Open的绘图命令可以粗略的分为两类：基于索引的和非索引的
+void glDrawArrays(GLenum mode,GLint first, GLsizei count);
+void glDrawElements(GLenum mode,GLsizei count,GLenum type,const GLvoid* indices);
+void glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
+void glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count,GLenum type,const GLvoid *indices);
+void glDrawRangeElementsBaseVertex(GLenum mode,GLuint start, GLuint end,GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
+void glDrawArraysIndirect(GLenum mode,const GLvoid *indirect);
+void glDrawElementsIndirect(GLenum mode, GLenum type, const GLvoid * indirect);
+
+void glMultiDrawArrays(GLenum mode, const GLint * first, const GLint * count, GLsizei primcount);
+void glMultiDrawElements(GLenum mode, const GLint * count, GLenum type,const GLvoid * const * indices, GLsizei primcount);
+void glMultiDrawElementsBaseVertex(GLenum mode, const GLint * count,GLenum type,const GLvoid * const * indices, GLsizei primcount,const GLint * baseVertex);
+void glMultiDrawArraysIndirect(GLenum mode, const void * indirect,GLsizei drawcount, GLsizei stride);
+void glMultiDrawElementsIndirect(GLenum mode, GLenum type,const void * indirect, GLsizei drawcount, GLsizei stride);
+
+2. Restarting Primitives
 
 五、 Instanced Rendering
 
