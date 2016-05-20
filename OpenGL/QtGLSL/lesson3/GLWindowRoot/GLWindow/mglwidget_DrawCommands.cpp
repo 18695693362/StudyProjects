@@ -5,6 +5,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <QOpenGLDebugMessage>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ using namespace std;
 static const GLfloat vertex_positions[] = {
     -1.0f, -1.0f,  0.0f,  1.0f,
      1.0f, -1.0f,  0.0f,  1.0f,
+    //0.0f,  1.0f,  0.0f,  1.0f,
     -1.0f,  1.0f,  0.0f,  1.0f,
     -1.0f, -1.0f,  0.0f,  1.0f,
 };
@@ -66,13 +68,15 @@ GLint  program;
 
 bool g_isUseUniformBlock = false;
 
-MGLWidgetUniformBlock::MGLWidgetUniformBlock(QWidget *parent, const char* name, bool full_screen) :
-    QGLWidget(parent)
+MGLWidgetDrawCMD::MGLWidgetDrawCMD(QWidget *parent, const char* name, bool full_screen) :
+    QOpenGLWidget(parent)
 {
     setGeometry( kDefaultX, kDefaultY, kDesignSizeW, kDesignSizeH );
     setMinimumSize(kMinWidth, kMinHeight);
     window_width_ = kDesignSizeW;
     window_height_= kDesignSizeH;
+
+    gl_logger_ = NULL;
 
     setWindowTitle(name);
 
@@ -81,9 +85,81 @@ MGLWidgetUniformBlock::MGLWidgetUniformBlock(QWidget *parent, const char* name, 
         showFullScreen();
 }
 
-
-void MGLWidgetUniformBlock::initializeGL()
+void MGLWidgetDrawCMD::_InitOpenGLLogging()
 {
+    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+    gl_logger_ = new QOpenGLDebugLogger(this);
+    if(gl_logger_->initialize())
+    {
+        connect(gl_logger_, &QOpenGLDebugLogger::messageLogged, this, &MGLWidgetDrawCMD::messageLogged);
+        gl_logger_->startLogging();
+    }
+}
+
+void MGLWidgetDrawCMD::messageLogged(const QOpenGLDebugMessage &msg)
+{
+  QString error;
+
+  // Format based on severity
+  switch (msg.severity())
+  {
+  case QOpenGLDebugMessage::NotificationSeverity:
+    error += "--";
+    break;
+  case QOpenGLDebugMessage::HighSeverity:
+    error += "!!";
+    break;
+  case QOpenGLDebugMessage::MediumSeverity:
+    error += "!~";
+    break;
+  case QOpenGLDebugMessage::LowSeverity:
+    error += "~~";
+    break;
+  }
+
+  error += " (";
+
+  // Format based on source
+#define CASE(c) case QOpenGLDebugMessage::c: error += #c; break
+  switch (msg.source())
+  {
+    CASE(APISource);
+    CASE(WindowSystemSource);
+    CASE(ShaderCompilerSource);
+    CASE(ThirdPartySource);
+    CASE(ApplicationSource);
+    CASE(OtherSource);
+    CASE(InvalidSource);
+  }
+#undef CASE
+
+  error += " : ";
+
+  // Format based on type
+#define CASE(c) case QOpenGLDebugMessage::c: error += #c; break
+  switch (msg.type())
+  {
+    CASE(ErrorType);
+    CASE(DeprecatedBehaviorType);
+    CASE(UndefinedBehaviorType);
+    CASE(PortabilityType);
+    CASE(PerformanceType);
+    CASE(OtherType);
+    CASE(MarkerType);
+    CASE(GroupPushType);
+    CASE(GroupPopType);
+  }
+#undef CASE
+
+  error += ")";
+  qDebug() << qPrintable(error) << "\n" << qPrintable(msg.message()) << "\n";
+}
+
+void MGLWidgetDrawCMD::initializeGL()
+{
+    //initializeOpenGLFunctions();
+    //_InitOpenGLLogging();
+
     glClearColor(0.0f,0.0f,1.0f,1.0f);
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
@@ -152,7 +228,7 @@ void MGLWidgetUniformBlock::initializeGL()
     }
 }
 
-void MGLWidgetUniformBlock::paintGL()
+void MGLWidgetDrawCMD::paintGL()
 {
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
@@ -161,8 +237,10 @@ void MGLWidgetUniformBlock::paintGL()
     glUseProgram(program);
 
     glm::mat4 model_matrix;
-    //glm::mat4 projection_matrix = glm::perspective(45.0f, window_width_ / window_height_, 0.1f, 100.0f);
-    glm::mat4 projection_matrix = glm::ortho(0.0f, window_width_, 0.0f, window_height_);
+    GLfloat aspect = window_width_ / window_height_;
+    glm::mat4 projection_matrix = glm::frustum(-1.0f, 1.0f,-aspect, aspect, 1.0f, 500.0f);
+    //glm::mat4 projection_matrix = glm::perspective(45.0f, aspect, 1.0f, 500.0f);
+    //glm::mat4 projection_matrix = glm::ortho(0.0f, window_width_, 0.0f, window_height_);
     glUniformMatrix4fv(ubo_indices[Projection],1,GL_FALSE,glm::value_ptr(projection_matrix));
 
     // Draw arrays
@@ -216,7 +294,7 @@ void MGLWidgetUniformBlock::paintGL()
     glFlush();
 }
 
-void MGLWidgetUniformBlock::resizeGL(int w, int h)
+void MGLWidgetDrawCMD::resizeGL(int w, int h)
 {
     if(w < kMinWidth || h < kMinHeight)
     {
