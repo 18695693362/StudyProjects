@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     format.setProfile(QGLFormat::CoreProfile);
     QGLFormat::setDefaultFormat(format);
 
-    MGLWidgetUniformBlock widget(NULL,"UniformBlock",false);
+    MGLWidgetUniformBlock widget(NULL,"DrawCMD",false);
     widget.show();
     
     return a.exec();

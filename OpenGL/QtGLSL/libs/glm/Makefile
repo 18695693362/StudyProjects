@@ -45,10 +45,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = glm/detail/dummy.cpp \
-		glm/detail/glm.cpp 
-OBJECTS       = dummy.o \
-		glm.o
+SOURCES       =  
+OBJECTS       = 
 DIST          = /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/spec_pre.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/qdevice.pri \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/device_config.prf \
@@ -156,6 +154,7 @@ DIST          = /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/spec_pre.prf
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/qt_config.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/default_pre.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/mac/default_pre.prf \
@@ -313,8 +312,7 @@ DIST          = /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/spec_pre.prf
 		glm/vec2.hpp \
 		glm/vec3.hpp \
 		glm/vec4.hpp \
-		glm/vector_relational.hpp glm/detail/dummy.cpp \
-		glm/detail/glm.cpp
+		glm/vector_relational.hpp 
 QMAKE_TARGET  = glm
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = libglm.a
@@ -467,6 +465,7 @@ Makefile: glm.pro /Applications/Qt5.4.1/5.4/clang_64/mkspecs/macx-clang/qmake.co
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/qt_config.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/default_pre.prf \
 		/Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/mac/default_pre.prf \
@@ -592,6 +591,7 @@ Makefile: glm.pro /Applications/Qt5.4.1/5.4/clang_64/mkspecs/macx-clang/qmake.co
 /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/qt_config.prf:
 /Applications/Qt5.4.1/5.4/clang_64/mkspecs/macx-clang/qmake.conf:
 /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/exclusive_builds.prf:
 /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/default_pre.prf:
 /Applications/Qt5.4.1/5.4/clang_64/mkspecs/features/mac/default_pre.prf:
@@ -626,7 +626,6 @@ distdir: FORCE
 
 
 clean:compiler_clean 
-	-$(DEL_FILE) $(OBJECTS)
 	-$(DEL_FILE) *~ core *.core
 
 
@@ -654,330 +653,11 @@ compiler_clean:
 
 ####### Compile
 
-dummy.o: glm/detail/dummy.cpp glm/glm.hpp \
-		glm/detail/_fixes.hpp \
-		glm/fwd.hpp \
-		glm/detail/type_int.hpp \
-		glm/detail/setup.hpp \
-		glm/detail/type_float.hpp \
-		glm/detail/type_vec.hpp \
-		glm/detail/precision.hpp \
-		glm/detail/type_mat.hpp \
-		glm/vec2.hpp \
-		glm/detail/type_vec2.hpp \
-		glm/detail/_swizzle.hpp \
-		glm/detail/_swizzle_func.hpp \
-		glm/detail/type_vec2.inl \
-		glm/vec3.hpp \
-		glm/detail/type_vec3.hpp \
-		glm/detail/type_vec3.inl \
-		glm/vec4.hpp \
-		glm/detail/type_vec4.hpp \
-		glm/detail/type_vec4.inl \
-		glm/detail/type_vec4_sse2.inl \
-		glm/detail/type_vec4_avx.inl \
-		glm/detail/type_vec4_avx2.inl \
-		glm/mat2x2.hpp \
-		glm/detail/type_mat2x2.hpp \
-		glm/detail/type_mat2x2.inl \
-		glm/mat2x3.hpp \
-		glm/detail/type_mat2x3.hpp \
-		glm/detail/type_mat2x3.inl \
-		glm/mat2x4.hpp \
-		glm/detail/type_mat2x4.hpp \
-		glm/detail/type_mat2x4.inl \
-		glm/mat3x2.hpp \
-		glm/detail/type_mat3x2.hpp \
-		glm/detail/type_mat3x2.inl \
-		glm/mat3x3.hpp \
-		glm/detail/type_mat3x3.hpp \
-		glm/detail/type_mat3x3.inl \
-		glm/mat3x4.hpp \
-		glm/detail/type_mat3x4.hpp \
-		glm/detail/type_mat3x4.inl \
-		glm/mat4x2.hpp \
-		glm/detail/type_mat4x2.hpp \
-		glm/detail/type_mat4x2.inl \
-		glm/mat4x3.hpp \
-		glm/detail/type_mat4x3.hpp \
-		glm/detail/type_mat4x3.inl \
-		glm/mat4x4.hpp \
-		glm/detail/type_mat4x4.hpp \
-		glm/detail/type_mat4x4.inl \
-		glm/trigonometric.hpp \
-		glm/detail/func_trigonometric.hpp \
-		glm/detail/func_trigonometric.inl \
-		glm/detail/_vectorize.hpp \
-		glm/detail/type_vec1.hpp \
-		glm/detail/type_vec1.inl \
-		glm/exponential.hpp \
-		glm/detail/func_exponential.hpp \
-		glm/detail/func_exponential.inl \
-		glm/detail/func_vector_relational.hpp \
-		glm/detail/func_vector_relational.inl \
-		glm/common.hpp \
-		glm/detail/func_common.hpp \
-		glm/detail/func_common.inl \
-		glm/packing.hpp \
-		glm/detail/func_packing.hpp \
-		glm/detail/func_packing.inl \
-		glm/detail/type_half.hpp \
-		glm/detail/type_half.inl \
-		glm/geometric.hpp \
-		glm/detail/func_geometric.hpp \
-		glm/detail/func_geometric.inl \
-		glm/matrix.hpp \
-		glm/detail/func_matrix.hpp \
-		glm/detail/func_matrix.inl \
-		glm/vector_relational.hpp \
-		glm/integer.hpp \
-		glm/detail/func_integer.hpp \
-		glm/detail/func_integer.inl \
-		glm/ext.hpp \
-		glm/gtc/bitfield.hpp \
-		glm/gtc/bitfield.inl \
-		glm/gtc/constants.hpp \
-		glm/gtc/constants.inl \
-		glm/gtc/epsilon.hpp \
-		glm/gtc/epsilon.inl \
-		glm/gtc/quaternion.hpp \
-		glm/gtc/quaternion.inl \
-		glm/gtc/integer.hpp \
-		glm/gtc/integer.inl \
-		glm/gtc/matrix_access.hpp \
-		glm/gtc/matrix_access.inl \
-		glm/gtc/matrix_integer.hpp \
-		glm/gtc/matrix_inverse.hpp \
-		glm/gtc/matrix_inverse.inl \
-		glm/gtc/matrix_transform.hpp \
-		glm/gtc/matrix_transform.inl \
-		glm/gtc/noise.hpp \
-		glm/detail/_noise.hpp \
-		glm/gtc/noise.inl \
-		glm/gtc/packing.hpp \
-		glm/gtc/type_precision.hpp \
-		glm/gtc/vec1.hpp \
-		glm/gtc/vec1.inl \
-		glm/gtc/type_precision.inl \
-		glm/gtc/packing.inl \
-		glm/gtc/random.hpp \
-		glm/gtc/random.inl \
-		glm/gtc/reciprocal.hpp \
-		glm/gtc/reciprocal.inl \
-		glm/gtc/round.hpp \
-		glm/gtc/round.inl \
-		glm/gtc/type_ptr.hpp \
-		glm/gtc/type_ptr.inl \
-		glm/gtc/ulp.hpp \
-		glm/gtc/ulp.inl \
-		glm/gtx/associated_min_max.hpp \
-		glm/gtx/associated_min_max.inl \
-		glm/gtx/bit.hpp \
-		glm/gtx/bit.inl \
-		glm/gtx/closest_point.hpp \
-		glm/gtx/closest_point.inl \
-		glm/gtx/color_space.hpp \
-		glm/gtx/color_space.inl \
-		glm/gtx/color_space_YCoCg.hpp \
-		glm/gtx/color_space_YCoCg.inl \
-		glm/gtx/compatibility.hpp \
-		glm/gtx/compatibility.inl \
-		glm/gtx/component_wise.hpp \
-		glm/gtx/component_wise.inl \
-		glm/gtx/dual_quaternion.hpp \
-		glm/gtx/dual_quaternion.inl \
-		glm/gtx/euler_angles.hpp \
-		glm/gtx/euler_angles.inl \
-		glm/gtx/extend.hpp \
-		glm/gtx/extend.inl \
-		glm/gtx/extented_min_max.hpp \
-		glm/gtx/extented_min_max.inl \
-		glm/gtx/fast_exponential.hpp \
-		glm/gtx/fast_exponential.inl \
-		glm/gtx/fast_square_root.hpp \
-		glm/gtx/fast_square_root.inl \
-		glm/gtx/fast_trigonometry.hpp \
-		glm/gtx/fast_trigonometry.inl \
-		glm/gtx/gradient_paint.hpp \
-		glm/gtx/optimum_pow.hpp \
-		glm/gtx/optimum_pow.inl \
-		glm/gtx/gradient_paint.inl \
-		glm/gtx/handed_coordinate_space.hpp \
-		glm/gtx/handed_coordinate_space.inl \
-		glm/gtx/integer.hpp \
-		glm/gtx/intersect.hpp \
-		glm/gtx/vector_query.hpp \
-		glm/gtx/vector_query.inl \
-		glm/gtx/intersect.inl \
-		glm/gtx/log_base.hpp \
-		glm/gtx/log_base.inl \
-		glm/gtx/matrix_cross_product.hpp \
-		glm/gtx/matrix_cross_product.inl \
-		glm/gtx/matrix_interpolation.hpp \
-		glm/gtx/matrix_interpolation.inl \
-		glm/gtx/matrix_major_storage.hpp \
-		glm/gtx/matrix_major_storage.inl \
-		glm/gtx/matrix_operation.hpp \
-		glm/gtx/matrix_operation.inl \
-		glm/gtx/matrix_query.hpp \
-		glm/gtx/matrix_query.inl \
-		glm/gtx/mixed_product.hpp \
-		glm/gtx/mixed_product.inl \
-		glm/gtx/norm.hpp \
-		glm/gtx/quaternion.hpp \
-		glm/gtx/norm.inl \
-		glm/gtx/normal.hpp \
-		glm/gtx/normal.inl \
-		glm/gtx/normalize_dot.hpp \
-		glm/gtx/normalize_dot.inl \
-		glm/gtx/number_precision.hpp \
-		glm/gtx/number_precision.inl \
-		glm/gtx/orthonormalize.hpp \
-		glm/gtx/orthonormalize.inl \
-		glm/gtx/perpendicular.hpp \
-		glm/gtx/projection.hpp \
-		glm/gtx/projection.inl \
-		glm/gtx/perpendicular.inl \
-		glm/gtx/polar_coordinates.hpp \
-		glm/gtx/polar_coordinates.inl \
-		glm/gtx/raw_data.hpp \
-		glm/gtx/raw_data.inl \
-		glm/gtx/rotate_vector.hpp \
-		glm/gtx/transform.hpp \
-		glm/gtx/transform.inl \
-		glm/gtx/rotate_vector.inl \
-		glm/gtx/spline.hpp \
-		glm/gtx/spline.inl \
-		glm/gtx/std_based_type.hpp \
-		glm/gtx/std_based_type.inl \
-		glm/gtx/string_cast.hpp \
-		glm/gtx/string_cast.inl \
-		glm/gtx/transform2.hpp \
-		glm/gtx/transform2.inl \
-		glm/gtx/type_aligned.hpp \
-		glm/gtx/type_aligned.inl \
-		glm/gtx/vector_angle.hpp \
-		glm/gtx/vector_angle.inl \
-		glm/gtx/wrap.hpp \
-		glm/gtx/wrap.inl \
-		glm/gtx/scalar_multiplication.hpp \
-		glm/gtx/range.hpp \
-		glm/gtx/simd_vec4.hpp \
-		glm/detail/intrinsic_common.hpp \
-		glm/detail/intrinsic_common.inl \
-		glm/detail/intrinsic_geometric.hpp \
-		glm/detail/intrinsic_geometric.inl \
-		glm/detail/intrinsic_integer.hpp \
-		glm/detail/intrinsic_integer.inl \
-		glm/gtx/simd_vec4.inl \
-		glm/gtx/simd_mat4.hpp \
-		glm/detail/intrinsic_matrix.hpp \
-		glm/detail/intrinsic_matrix.inl \
-		glm/gtx/simd_mat4.inl
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dummy.o glm/detail/dummy.cpp
-
-glm.o: glm/detail/glm.cpp glm/glm.hpp \
-		glm/detail/_fixes.hpp \
-		glm/fwd.hpp \
-		glm/detail/type_int.hpp \
-		glm/detail/setup.hpp \
-		glm/detail/type_float.hpp \
-		glm/detail/type_vec.hpp \
-		glm/detail/precision.hpp \
-		glm/detail/type_mat.hpp \
-		glm/vec2.hpp \
-		glm/detail/type_vec2.hpp \
-		glm/detail/_swizzle.hpp \
-		glm/detail/_swizzle_func.hpp \
-		glm/detail/type_vec2.inl \
-		glm/vec3.hpp \
-		glm/detail/type_vec3.hpp \
-		glm/detail/type_vec3.inl \
-		glm/vec4.hpp \
-		glm/detail/type_vec4.hpp \
-		glm/detail/type_vec4.inl \
-		glm/detail/type_vec4_sse2.inl \
-		glm/detail/type_vec4_avx.inl \
-		glm/detail/type_vec4_avx2.inl \
-		glm/mat2x2.hpp \
-		glm/detail/type_mat2x2.hpp \
-		glm/detail/type_mat2x2.inl \
-		glm/mat2x3.hpp \
-		glm/detail/type_mat2x3.hpp \
-		glm/detail/type_mat2x3.inl \
-		glm/mat2x4.hpp \
-		glm/detail/type_mat2x4.hpp \
-		glm/detail/type_mat2x4.inl \
-		glm/mat3x2.hpp \
-		glm/detail/type_mat3x2.hpp \
-		glm/detail/type_mat3x2.inl \
-		glm/mat3x3.hpp \
-		glm/detail/type_mat3x3.hpp \
-		glm/detail/type_mat3x3.inl \
-		glm/mat3x4.hpp \
-		glm/detail/type_mat3x4.hpp \
-		glm/detail/type_mat3x4.inl \
-		glm/mat4x2.hpp \
-		glm/detail/type_mat4x2.hpp \
-		glm/detail/type_mat4x2.inl \
-		glm/mat4x3.hpp \
-		glm/detail/type_mat4x3.hpp \
-		glm/detail/type_mat4x3.inl \
-		glm/mat4x4.hpp \
-		glm/detail/type_mat4x4.hpp \
-		glm/detail/type_mat4x4.inl \
-		glm/trigonometric.hpp \
-		glm/detail/func_trigonometric.hpp \
-		glm/detail/func_trigonometric.inl \
-		glm/detail/_vectorize.hpp \
-		glm/detail/type_vec1.hpp \
-		glm/detail/type_vec1.inl \
-		glm/exponential.hpp \
-		glm/detail/func_exponential.hpp \
-		glm/detail/func_exponential.inl \
-		glm/detail/func_vector_relational.hpp \
-		glm/detail/func_vector_relational.inl \
-		glm/common.hpp \
-		glm/detail/func_common.hpp \
-		glm/detail/func_common.inl \
-		glm/packing.hpp \
-		glm/detail/func_packing.hpp \
-		glm/detail/func_packing.inl \
-		glm/detail/type_half.hpp \
-		glm/detail/type_half.inl \
-		glm/geometric.hpp \
-		glm/detail/func_geometric.hpp \
-		glm/detail/func_geometric.inl \
-		glm/matrix.hpp \
-		glm/detail/func_matrix.hpp \
-		glm/detail/func_matrix.inl \
-		glm/vector_relational.hpp \
-		glm/integer.hpp \
-		glm/detail/func_integer.hpp \
-		glm/detail/func_integer.inl \
-		glm/gtc/quaternion.hpp \
-		glm/gtc/constants.hpp \
-		glm/gtc/constants.inl \
-		glm/gtc/quaternion.inl \
-		glm/gtx/dual_quaternion.hpp \
-		glm/gtx/dual_quaternion.inl
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o glm.o glm/detail/glm.cpp
-
 ####### Install
 
-install_target: first FORCE
-	@test -d $(INSTALL_ROOT)/usr/lib || mkdir -p $(INSTALL_ROOT)/usr/lib
-	-$(INSTALL_FILE) "$(TARGET)" "$(INSTALL_ROOT)/usr/lib/$(TARGET)"
-	$(RANLIB) "$(INSTALL_ROOT)/usr/lib/$(TARGET)"
+install:   FORCE
 
-uninstall_target: FORCE
-	-$(DEL_FILE) "$(INSTALL_ROOT)/usr/lib/$(TARGET)"
-	-$(DEL_DIR) $(INSTALL_ROOT)/usr/lib/ 
-
-
-install:  install_target  FORCE
-
-uninstall: uninstall_target   FORCE
+uninstall:   FORCE
 
 FORCE:
 

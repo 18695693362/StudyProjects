@@ -3,6 +3,8 @@
 #include "../../../common/glhelper.h"
 #include "glm/glm.hpp"
 #include "glm/fwd.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace std;
 
@@ -38,14 +40,31 @@ enum VAO_IDs {
 enum Buffer_IDs {
     ArrayBuffer,
     ElemArrayBuffer,
+    UniformBuffer,
     NumBuffers
 };
 enum Attrib_IDs {
     vPos = 1
 };
+enum Uniforms{
+    Model,
+    Projection,
+    NumUniforms
+};
+
 GLuint VAOs[NumVAOs];
 GLuint Buffers[NumBuffers];
-const GLuint NumVertices = 6;
+const GLuint NumVertices = 3;
+GLuint ubo_index;
+GLint  ubo_data_source_size;
+GLvoid* ubo_data_source;
+GLuint ubo_indices[NumUniforms];
+GLint  ubo_size[NumUniforms];
+GLint  ubo_offset[NumUniforms];
+GLint  ubo_type[NumUniforms];
+GLint  program;
+
+bool g_isUseUniformBlock = false;
 
 MGLWidgetUniformBlock::MGLWidgetUniformBlock(QWidget *parent, const char* name, bool full_screen) :
     QGLWidget(parent)
@@ -74,7 +93,17 @@ void MGLWidgetUniformBlock::initializeGL()
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
 
-    GLint program = GLHelper::CreateShaderProgramWithFiles(":/vertex_UniformBlock.vert",":/fragment_UniformBlock.frag");
+    const char* vertex_shader_path = NULL;
+    if(g_isUseUniformBlock)
+    {
+        vertex_shader_path = ":/vertex_DrawCMD_UniformBlock.vert";
+
+    }
+    else
+    {
+        vertex_shader_path = ":/vertex_DrawCMD.vert";
+    }
+    program = GLHelper::CreateShaderProgramWithFiles(vertex_shader_path,":/fragment_DrawCMD.frag");
     glUseProgram(program);
 
     glGenBuffers(NumBuffers,Buffers);
@@ -88,15 +117,101 @@ void MGLWidgetUniformBlock::initializeGL()
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertex_positions)+sizeof(vertex_colors),NULL,GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertex_positions),vertex_positions);
     glBufferSubData(GL_ARRAY_BUFFER,sizeof(vertex_positions),sizeof(vertex_colors),vertex_colors);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, BUFF_OFFSET(sizeof(vertex_positions)));
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+
+    const char* names[NumUniforms] = {"model_matirx","projection_matrix"};
+    if(g_isUseUniformBlock)
+    {
+        ubo_index = glGetUniformBlockIndex(program,"Uniforms");
+        glGetActiveUniformBlockiv(program, ubo_index, GL_UNIFORM_BLOCK_DATA_SIZE, &ubo_data_source_size);
+        ubo_data_source = malloc(ubo_data_source_size);
+        if(ubo_data_source == NULL)
+        {
+            perror("error malloc failed!");
+        }
+        else
+        {
+            glGetUniformIndices(program,NumUniforms,names,ubo_indices);
+            glGetActiveUniformBlockiv(program,NumUniforms,GL_UNIFORM_OFFSET,ubo_offset);
+            glGetActiveUniformBlockiv(program,NumUniforms,GL_UNIFORM_SIZE,ubo_size);
+            glGetActiveUniformBlockiv(program,NumUniforms,GL_UNIFORM_TYPE,ubo_type);
+
+            glBindBuffer(GL_UNIFORM_BUFFER, Buffers[UniformBuffer]);
+            glBufferData(GL_UNIFORM_BUFFER,ubo_data_source_size,NULL,GL_DYNAMIC_DRAW);
+        }
+    }
+    else
+    {
+        for(int i=0; i<NumUniforms; i++)
+        {
+            ubo_indices[i] = glGetUniformLocation(program,names[i]);
+        }
+    }
 }
 
 void MGLWidgetUniformBlock::paintGL()
 {
+    glEnable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
-    glBindVertexArray(VAOs[Triangles]);
+    glUseProgram(program);
+
+    glm::mat4 model_matrix;
+    //glm::mat4 projection_matrix = glm::perspective(45.0f, window_width_ / window_height_, 0.1f, 100.0f);
+    glm::mat4 projection_matrix = glm::ortho(0.0f, window_width_, 0.0f, window_height_);
+    glUniformMatrix4fv(ubo_indices[Projection],1,GL_FALSE,glm::value_ptr(projection_matrix));
+
+    // Draw arrays
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
+    if(g_isUseUniformBlock)
+    {
+        memcpy((GLchar*)ubo_data_source+ubo_offset[Model],&model_matrix,ubo_size[Model]*GLHelper::TypeSize(ubo_type[Model]));
+        memcpy((GLchar*)ubo_data_source+ubo_offset[Projection],&projection_matrix,ubo_size[Projection]*GLHelper::TypeSize(ubo_type[Projection]));
+        glBindBuffer(GL_UNIFORM_BUFFER, Buffers[UniformBuffer]);
+        glBufferSubData(GL_UNIFORM_BUFFER,0,ubo_data_source_size,ubo_data_source);
+    }
+    else
+    {
+        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+    }
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+
+    //set up glDrawElements
+    glBindVertexArray(VAOs[Triangles]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElemArrayBuffer]);
+    // Draw elem
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -5.0f));
+    if(g_isUseUniformBlock)
+    {}
+    else
+    {
+        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+    }
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL);
+
+    // DrawElementsBaseVertex
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, -5.0f));
+    if(g_isUseUniformBlock)
+    {}
+    else
+    {
+        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+    }
+    glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 1);
+
+    // DrawArraysInstanced
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, -5.0f));
+    if(g_isUseUniformBlock)
+    {}
+    else
+    {
+        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+    }
+    glDrawArraysInstanced(GL_TRIANGLES, 0, 3, 1);
 
     glFlush();
 }

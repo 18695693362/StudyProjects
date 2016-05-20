@@ -11,8 +11,8 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 SOURCES += \
-    glm/detail/dummy.cpp \
-    glm/detail/glm.cpp
+    #glm/detail/dummy.cpp
+    #glm/detail/glm.cpp
 
 HEADERS += \
     glm/detail/_features.hpp \
@@ -157,7 +157,7 @@ HEADERS += \
     glm/vec3.hpp \
     glm/vec4.hpp \
     glm/vector_relational.hpp
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+#unix {
+#    target.path = /usr/lib
+#    INSTALLS += target
+#}

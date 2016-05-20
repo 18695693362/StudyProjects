@@ -28,15 +28,15 @@ OTHER_FILES += \
 RESOURCES += \
     shaders.qrc
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../libs/glm/release/ -lglm
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../libs/glm/debug/ -lglm
-else:unix: LIBS += -L$$OUT_PWD/../../../libs/glm/ -lglm
+#win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../libs/glm/release/ -lglm
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../libs/glm/debug/ -lglm
+#else:unix: LIBS += -L$$OUT_PWD/../../../libs/glm/ -lglm
 
 INCLUDEPATH += $$PWD/../../../libs/glm
 DEPENDPATH += $$PWD/../../../libs/glm
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/release/libglm.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/debug/libglm.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/release/glm.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/debug/glm.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/libglm.a
+#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/release/libglm.a
+#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/debug/libglm.a
+#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/release/glm.lib
+#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/debug/glm.lib
+#else:unix: PRE_TARGETDEPS += $$OUT_PWD/../../../libs/glm/libglm.a
