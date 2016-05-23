@@ -11,9 +11,9 @@ int main(int argc, char *argv[])
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setOption(QSurfaceFormat::DebugContext);
     format.setVersion(4,1);
+    QSurfaceFormat::setDefaultFormat(format);
 
     MGLWidgetDrawCMD widget(NULL,"DrawCMD",false);
-    widget.setFormat(format);
     widget.show();
     
     return a.exec();

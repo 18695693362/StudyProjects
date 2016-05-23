@@ -3,9 +3,10 @@
 #include "../../../common/glhelper.h"
 #include "glm/glm.hpp"
 #include "glm/fwd.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+//#include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <QOpenGLDebugMessage>
+#include <QDebug>
 
 using namespace std;
 
@@ -55,7 +56,7 @@ enum Uniforms{
 };
 
 GLuint VAOs[NumVAOs];
-GLuint Buffers[NumBuffers];
+GLuint MyBuffers[NumBuffers];
 const GLuint NumVertices = 3;
 GLuint ubo_index;
 GLint  ubo_data_source_size;
@@ -66,7 +67,8 @@ GLint  ubo_offset[NumUniforms];
 GLint  ubo_type[NumUniforms];
 GLint  program;
 
-bool g_isUseUniformBlock = false;
+//bool g_isUseUniformBlock = false;
+bool g_isUseUniformBlock = true;
 
 MGLWidgetDrawCMD::MGLWidgetDrawCMD(QWidget *parent, const char* name, bool full_screen) :
     QOpenGLWidget(parent)
@@ -87,12 +89,18 @@ MGLWidgetDrawCMD::MGLWidgetDrawCMD(QWidget *parent, const char* name, bool full_
 
 void MGLWidgetDrawCMD::_InitOpenGLLogging()
 {
-    QOpenGLContext *ctx = QOpenGLContext::currentContext();
+    //QOpenGLContext *ctx = QOpenGLContext::currentContext();
     gl_logger_ = new QOpenGLDebugLogger(this);
     if(gl_logger_->initialize())
     {
-        connect(gl_logger_, &QOpenGLDebugLogger::messageLogged, this, &MGLWidgetDrawCMD::messageLogged);
+        qDebug() << "GL_DEBUG Debug Logger" << gl_logger_ << "\n";
+
+        connect(gl_logger_, SIGNAL(messageLogged(QOpenGLDebugMessage)),this,SLOT(messageLogged(QOpenGLDebugMessage)));
         gl_logger_->startLogging();
+    }
+    else
+    {
+        qDebug() << "GL_DEBUG Debug Logger (NONE)\n";
     }
 }
 
@@ -157,8 +165,8 @@ void MGLWidgetDrawCMD::messageLogged(const QOpenGLDebugMessage &msg)
 
 void MGLWidgetDrawCMD::initializeGL()
 {
-    //initializeOpenGLFunctions();
-    //_InitOpenGLLogging();
+    initializeOpenGLFunctions();
+    _InitOpenGLLogging();
 
     glClearColor(0.0f,0.0f,1.0f,1.0f);
     glClearDepth(1.0f);
@@ -182,14 +190,14 @@ void MGLWidgetDrawCMD::initializeGL()
     program = GLHelper::CreateShaderProgramWithFiles(vertex_shader_path,":/fragment_DrawCMD.frag");
     glUseProgram(program);
 
-    glGenBuffers(NumBuffers,Buffers);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElemArrayBuffer]);
+    glGenBuffers(NumBuffers,MyBuffers);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, MyBuffers[ElemArrayBuffer]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(vertex_indices),vertex_indices,GL_STATIC_DRAW);
 
     glGenVertexArrays(NumVAOs,VAOs);
     glBindVertexArray(VAOs[Triangles]);
 
-    glBindBuffer(GL_ARRAY_BUFFER,Buffers[ArrayBuffer]);
+    glBindBuffer(GL_ARRAY_BUFFER,MyBuffers[ArrayBuffer]);
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertex_positions)+sizeof(vertex_colors),NULL,GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertex_positions),vertex_positions);
     glBufferSubData(GL_ARRAY_BUFFER,sizeof(vertex_positions),sizeof(vertex_colors),vertex_colors);
@@ -198,7 +206,7 @@ void MGLWidgetDrawCMD::initializeGL()
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
 
-    const char* names[NumUniforms] = {"model_matirx","projection_matrix"};
+    const char* names[NumUniforms] = {"model_matrix","projection_matrix"};
     if(g_isUseUniformBlock)
     {
         ubo_index = glGetUniformBlockIndex(program,"Uniforms");
@@ -211,11 +219,11 @@ void MGLWidgetDrawCMD::initializeGL()
         else
         {
             glGetUniformIndices(program,NumUniforms,names,ubo_indices);
-            glGetActiveUniformBlockiv(program,NumUniforms,GL_UNIFORM_OFFSET,ubo_offset);
-            glGetActiveUniformBlockiv(program,NumUniforms,GL_UNIFORM_SIZE,ubo_size);
-            glGetActiveUniformBlockiv(program,NumUniforms,GL_UNIFORM_TYPE,ubo_type);
+            glGetActiveUniformsiv(program,NumUniforms,ubo_indices,GL_UNIFORM_OFFSET,ubo_offset);
+            glGetActiveUniformsiv(program,NumUniforms,ubo_indices,GL_UNIFORM_SIZE,ubo_size);
+            glGetActiveUniformsiv(program,NumUniforms,ubo_indices,GL_UNIFORM_TYPE,ubo_type);
 
-            glBindBuffer(GL_UNIFORM_BUFFER, Buffers[UniformBuffer]);
+            glBindBuffer(GL_UNIFORM_BUFFER, MyBuffers[UniformBuffer]);
             glBufferData(GL_UNIFORM_BUFFER,ubo_data_source_size,NULL,GL_DYNAMIC_DRAW);
         }
     }
@@ -241,16 +249,21 @@ void MGLWidgetDrawCMD::paintGL()
     glm::mat4 projection_matrix = glm::frustum(-1.0f, 1.0f,-aspect, aspect, 1.0f, 500.0f);
     //glm::mat4 projection_matrix = glm::perspective(45.0f, aspect, 1.0f, 500.0f);
     //glm::mat4 projection_matrix = glm::ortho(0.0f, window_width_, 0.0f, window_height_);
-    glUniformMatrix4fv(ubo_indices[Projection],1,GL_FALSE,glm::value_ptr(projection_matrix));
-
-    // Draw arrays
-    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
     if(g_isUseUniformBlock)
     {
-        memcpy((GLchar*)ubo_data_source+ubo_offset[Model],&model_matrix,ubo_size[Model]*GLHelper::TypeSize(ubo_type[Model]));
-        memcpy((GLchar*)ubo_data_source+ubo_offset[Projection],&projection_matrix,ubo_size[Projection]*GLHelper::TypeSize(ubo_type[Projection]));
-        glBindBuffer(GL_UNIFORM_BUFFER, Buffers[UniformBuffer]);
-        glBufferSubData(GL_UNIFORM_BUFFER,0,ubo_data_source_size,ubo_data_source);
+        _UpdateTransformMatrix(Projection,projection_matrix);
+    }
+    else
+    {
+        glUniformMatrix4fv(ubo_indices[Projection],1,GL_FALSE,glm::value_ptr(projection_matrix));
+    }
+
+    // Draw arrays
+    //model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.1f, 0.0f, -5.0f));
+    if(g_isUseUniformBlock)
+    {
+        _UpdateTransformMatrix(Model,model_matrix);
     }
     else
     {
@@ -260,7 +273,7 @@ void MGLWidgetDrawCMD::paintGL()
 
     //set up glDrawElements
     glBindVertexArray(VAOs[Triangles]);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Buffers[ElemArrayBuffer]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, MyBuffers[ElemArrayBuffer]);
     // Draw elem
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -5.0f));
     if(g_isUseUniformBlock)
@@ -292,6 +305,13 @@ void MGLWidgetDrawCMD::paintGL()
     glDrawArraysInstanced(GL_TRIANGLES, 0, 3, 1);
 
     glFlush();
+}
+
+void MGLWidgetDrawCMD::_UpdateTransformMatrix(unsigned int type,glm::mat4 matrix)
+{
+    GLsizei data_size = ubo_size[type]*GLHelper::TypeSize(ubo_type[type]);
+    glBindBuffer(GL_UNIFORM_BUFFER, MyBuffers[type]);
+    glBufferSubData(GL_UNIFORM_BUFFER,ubo_offset[type],data_size,&matrix);
 }
 
 void MGLWidgetDrawCMD::resizeGL(int w, int h)

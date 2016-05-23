@@ -21,3 +21,4 @@ build-Release
 *.o
 libglm.a
 .qmake.stash
+*.pro.user

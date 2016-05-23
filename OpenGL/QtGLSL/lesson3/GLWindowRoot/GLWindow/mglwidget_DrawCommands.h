@@ -4,7 +4,9 @@
 #include <QOpenGLWidget>
 #include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
-class MGLWidgetDrawCMD : public QOpenGLWidget//, protected QOpenGLFunctions
+#include "glm/gtc/matrix_transform.hpp"
+
+class MGLWidgetDrawCMD : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
@@ -20,6 +22,7 @@ protected slots:
 
 private:
     void _InitOpenGLLogging();
+    void _UpdateTransformMatrix(unsigned int type,glm::mat4 matrix);
 
     QOpenGLDebugLogger* gl_logger_;
     bool    is_full_screen_;
