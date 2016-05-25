@@ -34,6 +34,7 @@ static const GLfloat vertex_colors[] = {
     0.0f, 1.0f,  1.0f,  1.0f,
 };
 
+//static const GLushort vertex_indices[] = {0,1,2};
 static const GLushort vertex_indices[] = {1,2,3};
 
 enum VAO_IDs {
@@ -67,8 +68,8 @@ GLint  ubo_offset[NumUniforms];
 GLint  ubo_type[NumUniforms];
 GLint  program;
 
-//bool g_isUseUniformBlock = false;
-bool g_isUseUniformBlock = true;
+bool g_isUseUniformBlock = false;
+//bool g_isUseUniformBlock = true;
 
 MGLWidgetDrawCMD::MGLWidgetDrawCMD(QWidget *parent, const char* name, bool full_screen) :
     QOpenGLWidget(parent)
@@ -201,7 +202,7 @@ void MGLWidgetDrawCMD::initializeGL()
     glBufferData(GL_ARRAY_BUFFER,sizeof(vertex_positions)+sizeof(vertex_colors),NULL,GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertex_positions),vertex_positions);
     glBufferSubData(GL_ARRAY_BUFFER,sizeof(vertex_positions),sizeof(vertex_colors),vertex_colors);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, BUFF_OFFSET(NULL));
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, BUFF_OFFSET(sizeof(vertex_positions)));
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
@@ -238,6 +239,14 @@ void MGLWidgetDrawCMD::initializeGL()
 
 void MGLWidgetDrawCMD::paintGL()
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glBindVertexArray(VAOs[Triangles]);
+    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+
+    glFlush();
+    return;
+
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -258,9 +267,14 @@ void MGLWidgetDrawCMD::paintGL()
         glUniformMatrix4fv(ubo_indices[Projection],1,GL_FALSE,glm::value_ptr(projection_matrix));
     }
 
+    //set up glDrawElements
+    glBindVertexArray(VAOs[Triangles]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, MyBuffers[ElemArrayBuffer]);
+
     // Draw arrays
     //model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.1f, 0.0f, -5.0f));
+    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
     {
         _UpdateTransformMatrix(Model,model_matrix);
@@ -270,12 +284,25 @@ void MGLWidgetDrawCMD::paintGL()
         glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
     }
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+    for(int i=0; i<3; i++)
+    {
+        glm::vec4 pos(vertex_positions[i*4+0], vertex_positions[i*4+1], vertex_positions[i*4+2], vertex_positions[i*4+3]);
+        glm::vec4 tempPos1 =  model_matrix*pos;
+        glm::vec4 tempPos2 =  projection_matrix*(model_matrix*pos);
+        glm::vec4 tempPos3;
+        tempPos3.x =  tempPos2.x / tempPos2.w;
+        tempPos3.y =  tempPos2.y / tempPos2.w;
+        tempPos3.z =  tempPos2.z / tempPos2.w;
+        tempPos3.w =  tempPos2.w / tempPos2.w;
 
-    //set up glDrawElements
-    glBindVertexArray(VAOs[Triangles]);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, MyBuffers[ElemArrayBuffer]);
+        //qDebug() << "tempPos1 x " << tempPos1.x << " y " << tempPos1.y << " z " << tempPos1.z << " w " << tempPos1.w << "\n";
+        //qDebug() << "tempPos2 x " << tempPos2.x << " y " << tempPos2.y << " z " << tempPos2.z << " w " << tempPos2.w << "\n";
+        qDebug() << "tempPos3 x " << tempPos3.x << " y " << tempPos3.y << " z " << tempPos3.z << " w " << tempPos3.w << "\n";
+    }
+
     // Draw elem
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -5.0f));
+    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
     {}
     else
@@ -286,6 +313,7 @@ void MGLWidgetDrawCMD::paintGL()
 
     // DrawElementsBaseVertex
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, -5.0f));
+    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
     {}
     else
@@ -296,6 +324,7 @@ void MGLWidgetDrawCMD::paintGL()
 
     // DrawArraysInstanced
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, -5.0f));
+    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
     {}
     else
