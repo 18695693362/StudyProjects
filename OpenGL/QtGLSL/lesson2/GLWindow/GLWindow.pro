@@ -21,6 +21,8 @@ HEADERS  += \
     ../../common/glhelper.h \
     mglwidget_UniformBlock.h
 
+CONFIG += c++11
+
 FORMS    +=
 
 OTHER_FILES += \
