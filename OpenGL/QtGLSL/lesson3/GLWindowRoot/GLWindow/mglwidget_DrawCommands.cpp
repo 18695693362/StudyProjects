@@ -68,8 +68,8 @@ GLint  ubo_offset[NumUniforms];
 GLint  ubo_type[NumUniforms];
 GLint  program;
 
-bool g_isUseUniformBlock = false;
-//bool g_isUseUniformBlock = true;
+//bool g_isUseUniformBlock = false;
+bool g_isUseUniformBlock = true;
 
 MGLWidgetDrawCMD::MGLWidgetDrawCMD(QWidget *parent, const char* name, bool full_screen) :
     QOpenGLWidget(parent)
@@ -232,21 +232,13 @@ void MGLWidgetDrawCMD::initializeGL()
     {
         for(int i=0; i<NumUniforms; i++)
         {
-            ubo_indices[i] = glGetUniformLocation(program,names[i]);
+            ubo_indices[i] = GLHelper::GetUniformLocal(program,names[i]);
         }
     }
 }
 
 void MGLWidgetDrawCMD::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glBindVertexArray(VAOs[Triangles]);
-    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
-
-    glFlush();
-    return;
-
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -255,9 +247,9 @@ void MGLWidgetDrawCMD::paintGL()
 
     glm::mat4 model_matrix;
     GLfloat aspect = window_width_ / window_height_;
-    glm::mat4 projection_matrix = glm::frustum(-1.0f, 1.0f,-aspect, aspect, 1.0f, 500.0f);
-    //glm::mat4 projection_matrix = glm::perspective(45.0f, aspect, 1.0f, 500.0f);
-    //glm::mat4 projection_matrix = glm::ortho(0.0f, window_width_, 0.0f, window_height_);
+    //glm::mat4 projection_matrix = glm::frustum(-1.0f, 1.0f,-aspect, aspect, 1.0f, 500.0f);
+    glm::mat4 projection_matrix = glm::perspective(45.0f, aspect, 1.0f, 500.0f);
+    //glm::mat4 projection_matrix = glm::ortho(0.0f, window_width_, window_height_, 0.0f);
     if(g_isUseUniformBlock)
     {
         _UpdateTransformMatrix(Projection,projection_matrix);
@@ -272,16 +264,16 @@ void MGLWidgetDrawCMD::paintGL()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, MyBuffers[ElemArrayBuffer]);
 
     // Draw arrays
-    //model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
-    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.1f, 0.0f, -5.0f));
-    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
+    model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, 0.0f, -5.0f));
+    //model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.1f, 0.0f, -5.0f));
+    //model_matrix = glm::scale(glm::mat4(1.0f),glm::vec3(0.3,0.3,0.3));
     if(g_isUseUniformBlock)
     {
         _UpdateTransformMatrix(Model,model_matrix);
     }
     else
     {
-        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+        glUniformMatrix4fv(ubo_indices[Model],1,GL_FALSE,glm::value_ptr(model_matrix));
     }
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
     for(int i=0; i<3; i++)
@@ -297,39 +289,45 @@ void MGLWidgetDrawCMD::paintGL()
 
         //qDebug() << "tempPos1 x " << tempPos1.x << " y " << tempPos1.y << " z " << tempPos1.z << " w " << tempPos1.w << "\n";
         //qDebug() << "tempPos2 x " << tempPos2.x << " y " << tempPos2.y << " z " << tempPos2.z << " w " << tempPos2.w << "\n";
-        qDebug() << "tempPos3 x " << tempPos3.x << " y " << tempPos3.y << " z " << tempPos3.z << " w " << tempPos3.w << "\n";
+        //qDebug() << "tempPos3 x " << tempPos3.x << " y " << tempPos3.y << " z " << tempPos3.z << " w " << tempPos3.w << "\n";
     }
 
     // Draw elem
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, -5.0f));
-    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
+    //model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
-    {}
+    {
+        _UpdateTransformMatrix(Model,model_matrix);
+    }
     else
     {
-        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+        glUniformMatrix4fv(ubo_indices[Model],1,GL_FALSE,glm::value_ptr(model_matrix));
     }
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL);
 
     // DrawElementsBaseVertex
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 0.0f, -5.0f));
-    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
+    //model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
-    {}
+    {
+        _UpdateTransformMatrix(Model,model_matrix);
+    }
     else
     {
-        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+        glUniformMatrix4fv(ubo_indices[Model],1,GL_FALSE,glm::value_ptr(model_matrix));
     }
-    glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 1);
+    glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 0);
 
     // DrawArraysInstanced
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, -5.0f));
-    model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
+    //model_matrix = glm::scale(model_matrix,glm::vec3(0.5,0.5,0.5));
     if(g_isUseUniformBlock)
-    {}
+    {
+        _UpdateTransformMatrix(Model,model_matrix);
+    }
     else
     {
-        glUniformMatrix4fv(ubo_indices[Model],4,GL_FALSE,glm::value_ptr(model_matrix));
+        glUniformMatrix4fv(ubo_indices[Model],1,GL_FALSE,glm::value_ptr(model_matrix));
     }
     glDrawArraysInstanced(GL_TRIANGLES, 0, 3, 1);
 
@@ -339,8 +337,9 @@ void MGLWidgetDrawCMD::paintGL()
 void MGLWidgetDrawCMD::_UpdateTransformMatrix(unsigned int type,glm::mat4 matrix)
 {
     GLsizei data_size = ubo_size[type]*GLHelper::TypeSize(ubo_type[type]);
-    glBindBuffer(GL_UNIFORM_BUFFER, MyBuffers[type]);
+    glBindBuffer(GL_UNIFORM_BUFFER, MyBuffers[UniformBuffer]);
     glBufferSubData(GL_UNIFORM_BUFFER,ubo_offset[type],data_size,&matrix);
+    glBindBufferRange(GL_UNIFORM_BUFFER,ubo_index,MyBuffers[UniformBuffer],ubo_offset[type],data_size);
 }
 
 void MGLWidgetDrawCMD::resizeGL(int w, int h)

@@ -140,6 +140,8 @@ void glMultiDrawArraysIndirect(GLenum mode, const void * indirect,GLsizei drawco
 void glMultiDrawElementsIndirect(GLenum mode, GLenum type,const void * indirect, GLsizei drawcount, GLsizei stride);
 
 2. Restarting Primitives
+void glPrimitiveRestartIndex(GLuint index);
+设置primitive_restart_index,使用glDrawElements系列的绘图命令时，当获取顶点的索引和primitive_restart_index相等时，会忽略当前索引，并且以下一个索引为新图元的第一个顶点。
 
 五、 Instanced Rendering
 

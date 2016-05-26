@@ -1,6 +1,7 @@
 #include "glhelper.h"
 #include <QFile>
 #include <iostream>
+#include <string>
 using namespace std;
 
 GLHelper::GLHelper()
@@ -94,6 +95,10 @@ GLuint GLHelper::CreateShaderProgramWithFiles(const QString& vert_path, const QS
         cout << "program link error!" << endl;
     }
     cout << "program = " << program << endl;
+    if(!glIsProgram(program))
+    {
+        cout << "ERROR: invalid program = " << program << endl;
+    }
     return program;
 }
 
@@ -148,9 +153,57 @@ size_t GLHelper::TypeSize(GLenum type)
     return size;
 }
 
+GLint GLHelper::GetUniformLocal(GLuint program, const char* uniform_name)
+{
+    GLint local = -1;
+    if(!glIsProgram(program))
+    {
+        Log(string("Error invalid program = ")+to_string(program));
+    }
+    else
+    {
+        if(uniform_name)
+        {
+            local = glGetUniformLocation(program,uniform_name);
+            if(IsGLError())
+            {
+               Log(string("Error glGetUniformLocation local = ")+to_string(local));
+            }
+        }
+        else
+        {
+            Log("Error invalid uniform_name = null");
+        }
+    }
+    return local;
+}
 
+void GLHelper::Log(const std::string log_str,LogType type)
+{
+    cout << log_str << endl;
+}
 
-
+bool  GLHelper::IsGLError()
+{
+    GLenum error = glGetError();
+    if(error!=GL_NO_ERROR)
+    {
+        if(GL_INVALID_OPERATION == error)
+        {
+            Log("error GL_INVALID_OPERATION = "+to_string(error));
+        }
+        else if(GL_INVALID_VALUE == error)
+        {
+            Log("error GL_INVALID_VALUE = "+to_string(error));
+        }
+        else
+        {
+            Log(string("error = ")+to_string(error));
+        }
+        return true;
+    }
+    return false;
+}
 
 
 

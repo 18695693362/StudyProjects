@@ -1,0 +1,25 @@
+    TIPS
+
+1. 设置缩放变换矩阵时需要将w设置为1，否则缩放无效
+e.g:
+mat4 scale = mat4x4(
+    vec4(0.1,   0,   0,   0),
+    vec4(  0, 0.1,   0,   0),
+    vec4(  0,   0, 0.1,   0),
+    vec4(  0,   0,   0,   1)
+    );
+
+2. shader中不使用的uniform会被自动移除
+下面的代码可以让 model_matrix uniform不被移除，而且可以通过颜色确定 model_matrix的值
+//vs_fs_color = model_matrix[2];
+vs_fs_color = color;
+
+
+3. Qt 开启c++11
+CONFIG += c++11
+
+4. glGetError glGetUniformLocation bug
+第一次调用glGetUniformLocation会报下面错误
+error GL_INVALID_OPERATION = 1282
+Error glGetUniformLocation local = 0
+
