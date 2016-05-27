@@ -2,6 +2,8 @@
 #define GLHELPER_H
 
 #include <QtOpenGL>
+#include "../libs/glm/glm/glm.hpp"
+#include "../libs/glm/glm/gtc/matrix_transform.hpp"
 
 enum LogType{
     kInfo,
@@ -25,6 +27,11 @@ public:
     static size_t TypeSize(GLenum type);
 
     static void Log(const std::string log_str,LogType type=LogType::kInfo);
+
+    static glm::mat4 GetScale(float x);
+    static glm::mat4 GetScale(float x,float y, float z);
+    static glm::mat4 GetRotate(float angle,float x,float y, float z);
+    static glm::mat4 GetTranslate(float x, float y, float z);
 };
 
 #endif // GLHELPER_H

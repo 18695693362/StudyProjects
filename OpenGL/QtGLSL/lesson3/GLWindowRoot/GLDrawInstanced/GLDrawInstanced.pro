@@ -14,16 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     ../../../common/glhelper.cpp \
-    mglwidget_DrawCommands.cpp
+    ../../../common/vbm.cpp \
+    mglwidget_DrawInstanced.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
-    mglwidget_DrawCommands.h
+    ../../../common/vbm.h \
+    mglwidget_DrawInstanced.h
 
 CONFIG += c++11
 
 FORMS    +=
-
 
 RESOURCES += \
     shaders.qrc

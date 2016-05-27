@@ -144,9 +144,15 @@ void glPrimitiveRestartIndex(GLuint index);
 设置primitive_restart_index,使用glDrawElements系列的绘图命令时，当获取顶点的索引和primitive_restart_index相等时，会忽略当前索引，并且以下一个索引为新图元的第一个顶点。
 
 五、 Instanced Rendering
+1. instanced draw
+void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei primCount);
+void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void* indices, GLsizei primCount);
+void glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type,const void* indices, GLsizei instanceCount, GLuint baseVertex);
 
-
-
+2. Instanced Vertex Attributes
+void glVertexAttribDivisor(GLuint index, GLuint divisor);
+index 指定顶点属性的索引
+divisor 指定顶点属性被更新的频率
 
 
 

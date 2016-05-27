@@ -205,9 +205,22 @@ bool  GLHelper::IsGLError()
     return false;
 }
 
-
-
-
+glm::mat4 GLHelper::GetScale(float x)
+{
+    return glm::scale(glm::mat4(1),glm::vec3(x,x,x));
+}
+glm::mat4 GLHelper::GetScale(float x,float y, float z)
+{
+    return glm::scale(glm::mat4(1),glm::vec3(x,y,z));
+}
+glm::mat4 GLHelper::GetRotate(float angle,float x,float y, float z)
+{
+    return glm::rotate(glm::mat4(1),angle,glm::vec3(x,y,z));
+}
+glm::mat4 GLHelper::GetTranslate(float x, float y, float z)
+{
+    return glm::translate(glm::mat4(1),glm::vec3(x,y,z));
+}
 
 
 
