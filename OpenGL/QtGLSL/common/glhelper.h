@@ -4,6 +4,7 @@
 #include <QtOpenGL>
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
+#include <string>
 
 enum LogType{
     kInfo,
@@ -15,6 +16,8 @@ class GLHelper
 public:
     GLHelper();
     ~GLHelper();
+
+    static void Init();
 
     static GLuint CompileShader(GLuint shader_type, const char* shader_str);
     static GLuint CreateShaderProgram(const char* vertex_shader_str, const char* fragment_shader_str);
@@ -32,6 +35,14 @@ public:
     static glm::mat4 GetScale(float x,float y, float z);
     static glm::mat4 GetRotate(float angle,float x,float y, float z);
     static glm::mat4 GetTranslate(float x, float y, float z);
+
+    static std::string GetGResAbsPath();
+    static std::string GetAbsPathRelativeGResPath(const std::string &relative_path);
+
+    static long GetTickCount();
+
+private:
+    static QElapsedTimer _start_timer;
 };
 
 #endif // GLHELPER_H

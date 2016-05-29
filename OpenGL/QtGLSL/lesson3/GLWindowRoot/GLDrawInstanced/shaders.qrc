@@ -2,6 +2,5 @@
     <qresource prefix="/">
         <file>fragment_DrawInstanced.frag</file>
         <file>vertex_DrawInstanced.vert</file>
-        <file>armadillo_low.vbm</file>
     </qresource>
 </RCC>

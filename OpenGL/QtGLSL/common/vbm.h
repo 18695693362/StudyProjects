@@ -1,7 +1,8 @@
 #ifndef __VBM_H__
 #define __VBM_H__
 
-#include "vgl.h"
+//#include "vgl.h"
+#include <QtGui/qopengl.h>
 
 typedef struct VBM_HEADER_t
 {

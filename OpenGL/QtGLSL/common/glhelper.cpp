@@ -2,6 +2,7 @@
 #include <QFile>
 #include <iostream>
 #include <string>
+#include <QElapsedTimer>
 using namespace std;
 
 GLHelper::GLHelper()
@@ -12,6 +13,12 @@ GLHelper::GLHelper()
 GLHelper::~GLHelper()
 {
 
+}
+
+QElapsedTimer GLHelper::_start_timer;
+void GLHelper::Init()
+{
+    _start_timer.start();
 }
 
 GLuint GLHelper::CompileShader(GLuint shader_type, const char* shader_str)
@@ -106,7 +113,10 @@ QString GLHelper::GetShaderTxt(const QString& filePath)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        Log(string("Error open file failed! file = ")+filePath.toStdString());
         return "";
+    }
 
     QTextStream in(&file);
     return in.readAll();
@@ -221,10 +231,47 @@ glm::mat4 GLHelper::GetTranslate(float x, float y, float z)
 {
     return glm::translate(glm::mat4(1),glm::vec3(x,y,z));
 }
+string GLHelper::GetGResAbsPath()
+{
+    QDir temp_dir;
+    const char* res_relative_path = "./../../../res";
+    if(temp_dir.exists(res_relative_path))
+    {
+        return temp_dir.absoluteFilePath(res_relative_path).toStdString();
+    }
+    else
+    {
+        Log("Error get GResPath failed!");
+        return "";
+    }
+}
+std::string GLHelper::GetAbsPathRelativeGResPath(const std::string& relative_path)
+{
+    QString res_abs_path = GetGResAbsPath().c_str();
+    if(!res_abs_path.isEmpty())
+    {
+        QDir temp_dir(res_abs_path);
+        if(!temp_dir.exists(relative_path.c_str()))
+        {
+            Log(string("Error relative_path not exist. path = ")+relative_path);
+            Log(string("full path = ")+temp_dir.absoluteFilePath(relative_path.c_str()).toStdString());
+        }
+        else
+        {
+            return temp_dir.absoluteFilePath(relative_path.c_str()).toStdString();
+        }
+    }
+    else
+    {
+        Log("Error GetAbsPathRelativeGResPath failed!");
+    }
+    return "";
+}
 
-
-
-
+long GLHelper::GetTickCount()
+{
+    return _start_timer.elapsed();
+}
 
 
 
