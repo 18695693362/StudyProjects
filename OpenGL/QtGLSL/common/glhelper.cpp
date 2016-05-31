@@ -274,6 +274,36 @@ long GLHelper::GetTickCount()
 }
 
 
+void GTriangle::Init(GLfloat *pos_data, int size, int count, attrib_local)
+{
+    GLfloat pos_data[] = {
+        -1.0, -1.0,  0.0,  1.0,
+         0.0,  1.0,  0.0,  1.0,
+         1.0, -1.0,  0.0,  1.0
+    };
+    _count = count;
+    int pos_component_count = size / count;
+    if(!vertex_data)
+    {
+        vertex_data = pos_data;
+        _count = 3;
+        pos_component_count = 4;
+    }
+
+    glGenVertexArrays(1,&_vaobject);
+    glBindVertexArray(_vaobject);
+    glGenBuffers(1,&_vabuffer);
+    glBindBuffer(GL_ARRAY_BUFFER,_vabuffer);
+    glBufferData(GL_ARRAY_BUFFER, size, pos_data, GL_STATIC_DRAW);
+    glVertexAttribPointer(attrib_local,pos_component_count,GL_FLOAT,GL_FALSE,0,pos_data);
+    glEnableVertexAttribArray(attrib_local);
+}
+
+void GTriangle::Draw()
+{
+    glBindVertexArray(vaobject);
+    glDrawArrays(GL_TRIANGLES,0,_count);
+}
 
 
 

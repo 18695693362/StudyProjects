@@ -29,6 +29,7 @@ private:
     float   window_width_;
     float   window_height_;
 
+    GLint  program;
     VBObject vbobject;
 };
 

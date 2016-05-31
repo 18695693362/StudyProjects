@@ -45,4 +45,16 @@ private:
     static QElapsedTimer _start_timer;
 };
 
+class GTriangle
+{
+public:
+    void Init(GLfloat* vertex_data, int size, int count, attrib_local);
+    void Draw();
+
+private:
+    int    _count;
+    GLuint _vaobject;
+    GLuint _vabuffer;
+};
+
 #endif // GLHELPER_H

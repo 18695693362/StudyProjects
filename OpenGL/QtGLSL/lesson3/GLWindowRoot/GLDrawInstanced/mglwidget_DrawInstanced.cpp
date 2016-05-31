@@ -3,7 +3,7 @@
 #include "../../../common/glhelper.h"
 #include "glm/glm.hpp"
 #include "glm/fwd.hpp"
-//#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <QOpenGLDebugMessage>
 #include <QDebug>
@@ -52,7 +52,6 @@ enum TBOType
     TBONum
 };
 
-GLint  program;
 GLint  uniform_var_locals[UniformNum];
 GLint  in_var_locals[InVarNum];
 GLuint buffers[BufferNum];
@@ -217,7 +216,7 @@ void MGLWidgetDrawInstanced::initializeGL()
 
 void MGLWidgetDrawInstanced::paintGL()
 {
-    float t = float(GLHelper::GetTickCount() & 0x1FFF) / float(0x1FFF);;
+    float t = float(GLHelper::GetTickCount() & 0x1FFF) / float(0x1FFF);
 
     glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
@@ -245,7 +244,7 @@ void MGLWidgetDrawInstanced::paintGL()
     glUniformMatrix4fv(uniform_var_locals[ViewMatrixUniform],1,GL_FALSE,glm::value_ptr(view_matrix));
     glUniformMatrix4fv(uniform_var_locals[ProjectionMatrixUniform],1,GL_FALSE,glm::value_ptr(projection_matrix));
 
-    vbobject.Render(0,kInstanceCount);
+    vbobject.Render(0,0);
     glFlush();
 }
 

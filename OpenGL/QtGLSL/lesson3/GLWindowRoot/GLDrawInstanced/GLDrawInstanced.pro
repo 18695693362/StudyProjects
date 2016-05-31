@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp \
     ../../../common/glhelper.cpp \
     ../../../common/vbm.cpp \
-    mglwidget_DrawInstanced.cpp
+    mglwidget_DrawInstanced.cpp \
+    testvbobject.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
     ../../../common/vbm.h \
-    mglwidget_DrawInstanced.h
+    mglwidget_DrawInstanced.h \
+    testvbobject.h
 
 CONFIG += c++11
 
