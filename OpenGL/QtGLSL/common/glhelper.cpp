@@ -305,11 +305,8 @@ void GTriangle::Init(GLfloat *pos_data, int size, int count)
             "uniform float scale;\n"
             "void main(void)\n"
             "{\n"
-            "    mat4 scale_mat = mat4("
-            "       scale,0,0,0,"
-            "       0,scale,0,0,"
-            "       0,0,scale,0,"
-            "       0,0,0,1);"
+            "    mat4 scale_mat = mat4(scale);"
+            "    scale_mat[3].w = 1.0f;"
             "    gl_Position = scale_mat*position;\n"
             "}\n";
     const char fs[] =
