@@ -6,7 +6,7 @@
 #include <QOpenGLFunctions>
 #include "../../../common/vbm.h"
 #include "../../../common/glhelper.h"
-
+#include "../../../common/gtriangle.h"
 class TestVBObject : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT

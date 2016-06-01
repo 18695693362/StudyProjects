@@ -16,13 +16,17 @@ SOURCES += main.cpp \
     ../../../common/glhelper.cpp \
     ../../../common/vbm.cpp \
     mglwidget_DrawInstanced.cpp \
-    testvbobject.cpp
+    testvbobject.cpp \
+    ../../../common/gtriangle.cpp \
+    ../../../common/gdebug.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
     ../../../common/vbm.h \
     mglwidget_DrawInstanced.h \
-    testvbobject.h
+    testvbobject.h \
+    ../../../common/gtriangle.h \
+    ../../../common/gdebug.h
 
 CONFIG += c++11
 

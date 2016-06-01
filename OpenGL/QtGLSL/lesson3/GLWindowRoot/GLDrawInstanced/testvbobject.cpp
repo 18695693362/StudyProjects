@@ -37,7 +37,7 @@ void TestVBObject::initializeGL()
 {
     initializeOpenGLFunctions();
 
-    glClearColor(0.0f,0.0f,0.0f,1.0f);
+    glClearColor(0.0f,0.0f,0.8f,1.0f);
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
@@ -50,7 +50,7 @@ void TestVBObject::initializeGL()
     glUseProgram(program);
 
     string vbm_path = GLHelper::GetAbsPathRelativeGResPath("armadillo_low.vbm");
-    vbobject.LoadFromVBM(vbm_path.c_str(),0,1,2);
+    //vbobject.LoadFromVBM(vbm_path.c_str(),0,1,2);
 
     _triangle.Init(NULL);
     _triangle.SetScale(0.3);
@@ -62,7 +62,7 @@ void TestVBObject::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(program);
-    vbobject.Render(0,0);
+    //vbobject.Render(0,0);
 
     _triangle.Draw();
 
