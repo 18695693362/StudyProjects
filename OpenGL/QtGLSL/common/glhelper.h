@@ -51,13 +51,15 @@ public:
     GTriangle();
     void Init(GLfloat* vertex_data, int size=0, int count=0);
     void Draw();
-
+    void SetScale(float scale);
 private:
     GLint  _kPosAttribLocal;
+    GLint  _scaleUniformLocal;
     int    _count;
     GLuint _vaobject;
     GLuint _vabuffer;
     GLuint _programe;
+    float  _scale;
 };
 
 #endif // GLHELPER_H

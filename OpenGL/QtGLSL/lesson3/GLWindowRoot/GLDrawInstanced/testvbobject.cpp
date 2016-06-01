@@ -53,6 +53,7 @@ void TestVBObject::initializeGL()
     vbobject.LoadFromVBM(vbm_path.c_str(),0,1,2);
 
     _triangle.Init(NULL);
+    _triangle.SetScale(0.3);
 }
 
 void TestVBObject::paintGL()
@@ -63,7 +64,7 @@ void TestVBObject::paintGL()
     glUseProgram(program);
     vbobject.Render(0,0);
 
-    //_triangle.Draw();
+    _triangle.Draw();
 
     glFlush();
 }
