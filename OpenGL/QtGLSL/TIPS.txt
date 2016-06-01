@@ -23,3 +23,8 @@ CONFIG += c++11
 error GL_INVALID_OPERATION = 1282
 Error glGetUniformLocation local = 0
 
+5. 绘制的物体没有显示出来
+（1）是否开启了深度测试，导致物体被剔除了
+（2）查看物体是否位于视野外，导致物体被剔除了
+（3）查看是否开启了glEnable(GL_CULL_FACE); 物体表面被当做背面了！
+

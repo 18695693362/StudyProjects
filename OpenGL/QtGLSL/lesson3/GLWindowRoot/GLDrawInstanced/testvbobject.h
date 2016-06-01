@@ -5,7 +5,7 @@
 #include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
 #include "../../../common/vbm.h"
-
+#include "../../../common/glhelper.h"
 
 class TestVBObject : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -25,24 +25,7 @@ private:
 
     GLint  program;
     VBObject vbobject;
-
-    enum ObjectType {
-        Triangle,
-        ObjectNum
-    };
-    GLuint vaoject[ObjectNum];
-    enum AttribLocal{
-        PosAttribLocal,
-        NormalAttribLocal,
-        ColorAtrribLocal,
-        AttribLocalNum
-    };
-    GLint attrib_locals[AttribLocalNum];
-    enum BufferType{
-        ArrayBuffer,
-        BufferNum
-    };
-    GLuint buffers[BufferNum];
+    GTriangle _triangle;
 };
 
 #endif // TESTVBOBJECT_H

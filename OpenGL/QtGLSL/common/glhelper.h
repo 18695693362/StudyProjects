@@ -48,13 +48,16 @@ private:
 class GTriangle
 {
 public:
-    void Init(GLfloat* vertex_data, int size, int count, attrib_local);
+    GTriangle();
+    void Init(GLfloat* vertex_data, int size=0, int count=0);
     void Draw();
 
 private:
+    GLint  _kPosAttribLocal;
     int    _count;
     GLuint _vaobject;
     GLuint _vabuffer;
+    GLuint _programe;
 };
 
 #endif // GLHELPER_H

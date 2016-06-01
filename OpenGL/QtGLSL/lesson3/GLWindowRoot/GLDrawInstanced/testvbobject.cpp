@@ -49,35 +49,21 @@ void TestVBObject::initializeGL()
     program = GLHelper::CreateShaderProgramWithFiles(":/vertex_TestVBObject.vert",":/fragment_TestVBObject.frag");
     glUseProgram(program);
 
-//    string vbm_path = GLHelper::GetAbsPathRelativeGResPath("armadillo_low.vbm");
-//    vbobject.LoadFromVBM(vbm_path.c_str(),0,1,2);
+    string vbm_path = GLHelper::GetAbsPathRelativeGResPath("armadillo_low.vbm");
+    vbobject.LoadFromVBM(vbm_path.c_str(),0,1,2);
 
-    glGenVertexArrays(ObjectNum,vaoject);
-    glBindVertexArray(vaoject[Triangle]);
-    GLfloat pos_data[] = {
-        -1.0, -1.0,  0.0,  1.0,
-         0.0,  1.0,  0.0,  1.0,
-         1.0, -1.0,  0.0,  1.0
-    };
-    glGenBuffers(BufferNum,buffers);
-    glBindBuffer(GL_ARRAY_BUFFER,buffers[ArrayBuffer]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(pos_data), pos_data, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(PosAttribLocal,4,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
-    glEnableVertexAttribArray(PosAttribLocal);
+    _triangle.Init(NULL);
 }
 
 void TestVBObject::paintGL()
 {
-    //glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(program);
-    //vbobject.Render(0,0);
+    vbobject.Render(0,0);
 
-    glBindVertexArray(vaoject[Triangle]);
-    glDrawArrays(GL_TRIANGLES,0,3);
+    //_triangle.Draw();
 
     glFlush();
 }
