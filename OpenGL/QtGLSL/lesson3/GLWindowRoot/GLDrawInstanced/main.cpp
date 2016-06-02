@@ -1,7 +1,8 @@
-#include "mglwidget_DrawInstanced.h"
 #include <QApplication>
 #include <QGLFormat>
+#include "mglwidget_DrawInstanced.h"
 #include "testvbobject.h"
+#include "ginstancearray.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,7 +15,8 @@ int main(int argc, char *argv[])
     format.setVersion(4,1);
     QSurfaceFormat::setDefaultFormat(format);
 
-    MGLWidgetDrawInstanced widget(NULL,"DrawCMD",false);
+    //MGLWidgetDrawInstanced widget(NULL,"DrawCMD",false);
+    GInstanceArray widget(NULL,"GInstanceArray",false);
     //TestVBObject widget(NULL,"TestVBObject",false);
     widget.show();
     

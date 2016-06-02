@@ -74,20 +74,7 @@ void MGLWidgetDrawInstanced::initializeGL()
         GetOffsetData(offset_data,offset_data_size);
         GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
         glUniform2fv(offset_uniform_local,_kInstanceCount,offset_data);
-
-//        GLfloat translations[200];
-//        int index = 0;
-//        GLfloat offset = 0.1f;
-//        for(GLint y = -10; y < 10; y += 2)
-//        {
-//            for(GLint x = -10; x < 10; x += 2)
-//            {
-//                translations[index++] = (GLfloat)x / 10.0f + offset;
-//                translations[index++] = (GLfloat)y / 10.0f + offset;
-//            }
-//        }
-//        GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
-//        glUniform2fv(offset_uniform_local,100,translations);
+        //glUniform1fv(offset_uniform_local,200,offset_data);
 
         glBindVertexArray(0);
     }
@@ -135,14 +122,14 @@ void MGLWidgetDrawInstanced::GetOffsetData(GLfloat*& offset_data,int& size)
     static bool is_init = false;
     float offset = 0.1;
     int index = 0;
-    if(is_init)
+    if(!is_init)
     {
         for(int y=-10; y<10; y+=2)
         {
             for(int x=-10; x<10; x+=2)
             {
-                translations[index++] = (float)x/10.0f + offset;
-                translations[index++] = (float)y/10.0f + offset;
+                translations[index++] = (GLfloat)x/10.0f + offset;
+                translations[index++] = (GLfloat)y/10.0f + offset;
             }
         }
         is_init = true;

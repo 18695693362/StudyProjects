@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     mglwidget_DrawInstanced.cpp \
     testvbobject.cpp \
     ../../../common/gtriangle.cpp \
-    ../../../common/gdebug.cpp
+    ../../../common/gdebug.cpp \
+    ginstancearray.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
@@ -26,7 +27,8 @@ HEADERS  += \
     mglwidget_DrawInstanced.h \
     testvbobject.h \
     ../../../common/gtriangle.h \
-    ../../../common/gdebug.h
+    ../../../common/gdebug.h \
+    ginstancearray.h
 
 CONFIG += c++11
 

@@ -4,5 +4,7 @@
         <file>vertex_DrawInstanced.vert</file>
         <file>fragment_TestVBObject.frag</file>
         <file>vertex_TestVBObject.vert</file>
+        <file>fragment_InstancedArray.frag</file>
+        <file>vertex_InstancedArray.vert</file>
     </qresource>
 </RCC>

@@ -62,6 +62,7 @@ const               标记变量为只读
 buffer              和App共享的读写内存
 shared              computer shader使用。
 初始化shader中uniform array数据的两种方法：
+uniform vec2 offsets[100];
 --方法1--
 for(GLuint i = 0; i < 100; i++)
 {
@@ -75,6 +76,8 @@ for(GLuint i = 0; i < 100; i++)
 --方法2--
 GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
 glUniform2fv(offset_uniform_local,100,translations);
+//注意：下面这种方法是不可用的
+glUniform1fv(offset_uniform_local,200,translations);
 
 ==6== Function
 returnType functionName([accessModifier] type1 variable1,[accessModifier] type2 variable2)
