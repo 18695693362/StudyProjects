@@ -46,11 +46,36 @@ void TestVBObject::initializeGL()
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
 
-    program = GLHelper::CreateShaderProgramWithFiles(":/vertex_TestVBObject.vert",":/fragment_TestVBObject.frag");
-    glUseProgram(program);
+    //program = GLHelper::CreateShaderProgramWithFiles(":/vertex_TestVBObject.vert",":/fragment_TestVBObject.frag");
+    //glUseProgram(program);
 
-    string vbm_path = GLHelper::GetAbsPathRelativeGResPath("armadillo_low.vbm");
+    //string vbm_path = GLHelper::GetAbsPathRelativeGResPath("armadillo_low.vbm");
     //vbobject.LoadFromVBM(vbm_path.c_str(),0,1,2);
+
+    program = GLHelper::CreateShaderProgramWithFiles(":/vertex_DrawInstanced.vert",":/fragment_DrawInstanced.frag");
+    glUseProgram(program);
+    {
+        glGenVertexArrays(1,&_vaobject_id);
+        glBindVertexArray(_vaobject_id);
+
+        glGenBuffers(1,&_vabuffer_id);
+        glBindBuffer(GL_ARRAY_BUFFER,_vabuffer_id);
+
+        static GLfloat vertex_data[] = {
+            -1.0, -1.0,  0.0,  1.0,
+             0.0,  1.0,  0.0,  1.0,
+             1.0, -1.0,  0.0,  1.0
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW);
+
+        //glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,vertex_data);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER,0);
+        glBindVertexArray(0);
+    }
+    glUseProgram(0);
 
     _triangle.Init(NULL);
     _triangle.SetScale(0.3);
@@ -62,6 +87,17 @@ void TestVBObject::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glUseProgram(program);
+    {
+        glBindVertexArray(_vaobject_id);
+        //glDrawArraysInstanced(GL_TRIANGLES,0,6,_kInstanceCount);
+        //glDrawArrays(GL_TRIANGLES,0,6);
+        glDrawArrays(GL_TRIANGLES,0,3);
+
+        glBindVertexArray(0);
+    }
+    glUseProgram(0);
+
+    //glUseProgram(program);
     //vbobject.Render(0,0);
 
     _triangle.Draw();

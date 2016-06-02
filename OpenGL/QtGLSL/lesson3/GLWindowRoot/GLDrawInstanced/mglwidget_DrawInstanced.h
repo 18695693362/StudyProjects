@@ -20,7 +20,7 @@ protected:
     virtual void resizeGL(int w, int h);
 
 private:
-    void GetVertexData(GLfloat *&vertex_data_ptr, int &size);
+    void GetVertexData(GLfloat *&vertex_data_ptr, int &size, int &vertex_count);
     void GetOffsetData(GLfloat *&offset_data, int &size);
 
     bool    is_full_screen_;

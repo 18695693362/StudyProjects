@@ -7,6 +7,8 @@
 #include <string>
 #include "gtriangle.h"
 
+#define BUFF_OFFSET(offset) ((void*)(offset))
+
 enum LogType{
     kInfo,
     kWarnning,

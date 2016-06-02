@@ -27,4 +27,47 @@ Error glGetUniformLocation local = 0
 （1）是否开启了深度测试，导致物体被剔除了
 （2）查看物体是否位于视野外，导致物体被剔除了
 （3）查看是否开启了glEnable(GL_CULL_FACE); 物体表面被当做背面了！
+（4）检查glBufferData是否使用了正确的参数
+下面的参数是错误的
+glBufferData(_vabuffer, vertex_data_size, vertex_data, GL_STATIC_DRAW);
+下面的参数是正确
+glBufferData(GL_ARRAY_BUFFER, vertex_data_size, vertex_data, GL_STATIC_DRAW);
+（5）检查glVertexAttribPointer是否使用了正确的参数
+static GLfloat vertex_data[] = {
+    -1.0, -1.0,  0.0,  -1.0,
+     0.0,  1.0,  0.0,  -1.0,
+     1.0, -1.0,  0.0,  -1.0
+};
+下面的参数是错误的
+glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,vertex_data);
+下面的参数是正确
+glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,4*sizeof(GLfloat),0);
+https://www.opengl.org/sdk/docs/man/html/glVertexAttribPointer.xhtml
+void glVertexAttribPointer(
+    GLuint index,               // 属性的索引
+    GLint size,                 // 属性数据包含多少个type的数据
+    GLenum type,                // 属性数据类型
+    GLboolean normalized,       // 是否标准化
+    GLsizei stride,             // 两个属性之间的间隔
+    const GLvoid * pointer);    // 第一个属性数据距离数据起始地址的偏移量
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,9 +1,13 @@
 #include "gtriangle.h"
 #include "glhelper.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+using namespace std;
 
 GTriangle::GTriangle()
 {
+    _is_inited = false;
+
     _kPosAttribLocal = 0;
     _scale = 1.0f;
     _color = glm::vec4(1.0,0.0,0.0,1.0);
@@ -23,6 +27,8 @@ void GTriangle::GetPosData(GLfloat*& pos_data,int& size, int& count)
 
 void GTriangle::Init(GLfloat *pos_data, int size, int count)
 {
+    _is_inited = true;
+
     int pos_component_count = 4;
     if(!pos_data)
     {
@@ -56,19 +62,23 @@ void GTriangle::Init(GLfloat *pos_data, int size, int count)
             "{\n"
             "    color = f_color;\n"
             "}\n";
-    _programe = GLHelper::CreateShaderProgram(vs,fs);
-    glUseProgram(_programe);
+    _program = GLHelper::CreateShaderProgram(vs,fs);
+    glUseProgram(_program);
     {
         glGenVertexArrays(1,&_vaobject);
         glBindVertexArray(_vaobject);
+
         glGenBuffers(1,&_vabuffer);
         glBindBuffer(GL_ARRAY_BUFFER,_vabuffer);
-        glBufferData(GL_ARRAY_BUFFER, size, pos_data, GL_STATIC_DRAW);
-        glVertexAttribPointer(_kPosAttribLocal,pos_component_count,GL_FLOAT,GL_FALSE,0,pos_data);
+        glBufferData(GL_ARRAY_BUFFER, _size, pos_data, GL_STATIC_DRAW);
+        glVertexAttribPointer(_kPosAttribLocal,pos_component_count,GL_FLOAT,GL_FALSE,pos_component_count*sizeof(GLfloat),BUFF_OFFSET(0));
         glEnableVertexAttribArray(_kPosAttribLocal);
 
-        _scaleUniformLocal = GLHelper::GetUniformLocal(_programe,"scale");
-        _colorUniformLocal = GLHelper::GetUniformLocal(_programe,"color");
+        _scaleUniformLocal = GLHelper::GetUniformLocal(_program,"scale");
+        _colorUniformLocal = GLHelper::GetUniformLocal(_program,"color");
+
+        glBindBuffer(GL_ARRAY_BUFFER,0);
+        glBindVertexArray(0);
     }
     glUseProgram(0);
 }
@@ -85,13 +95,17 @@ void GTriangle::SetColor(glm::vec4 color)
 
 void GTriangle::Draw()
 {
-    glUseProgram(_programe);
+    if(_is_inited)
     {
-        glUniform1f(_scaleUniformLocal,_scale);
-        glUniform4fv(_colorUniformLocal,1,glm::value_ptr(_color));
+        glUseProgram(_program);
+        {
+            glUniform1f(_scaleUniformLocal,_scale);
+            glUniform4fv(_colorUniformLocal,1,glm::value_ptr(_color));
 
-        glBindVertexArray(_vaobject);
-        glDrawArrays(GL_TRIANGLES,0,_count);
+            glBindVertexArray(_vaobject);
+            glDrawArrays(GL_TRIANGLES,0,_count);
+            glBindVertexArray(0);
+        }
+        glUseProgram(0);
     }
-    glUseProgram(0);
 }

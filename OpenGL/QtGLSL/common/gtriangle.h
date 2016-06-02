@@ -25,6 +25,8 @@ public:
     void GetPosData(GLfloat *&pos_data, int& size, int& count);
 
 private:
+    bool   _is_inited;
+
     GLint  _kPosAttribLocal;
     GLint  _scaleUniformLocal;
     GLint  _colorUniformLocal;
@@ -32,7 +34,7 @@ private:
     int    _count;  // pos count
     GLuint _vaobject;
     GLuint _vabuffer;
-    GLuint _programe;
+    GLuint _program;
     glm::vec4 _color;
     float     _scale;
 };

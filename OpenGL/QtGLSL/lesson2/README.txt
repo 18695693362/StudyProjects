@@ -61,6 +61,21 @@ const               标记变量为只读
 =uniform            从App传到shader的变量，shader中只读
 buffer              和App共享的读写内存
 shared              computer shader使用。
+初始化shader中uniform array数据的两种方法：
+--方法1--
+for(GLuint i = 0; i < 100; i++)
+{
+    stringstream ss;
+    string index;
+    ss << i;
+    index = ss.str();
+    GLint location = glGetUniformLocation(shader.Program, ("offsets[" + index + "]").c_str())
+    glUniform2f(location, translations[i].x, translations[i].y);
+}
+--方法2--
+GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
+glUniform2fv(offset_uniform_local,100,translations);
+
 ==6== Function
 returnType functionName([accessModifier] type1 variable1,[accessModifier] type2 variable2)
 {

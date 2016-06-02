@@ -5,6 +5,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <sstream>
 
 using namespace std;
 
@@ -37,54 +38,79 @@ void MGLWidgetDrawInstanced::initializeGL()
     initializeOpenGLFunctions();
     _gldebuger.Init();
 
-    glClearColor(0.0f,0.0f,1.0f,1.0f);
-    glClearDepth(1.0f);
-    glDepthFunc(GL_LEQUAL);
-    glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glClearColor(0.0f,0.3f,0.3f,1.0f);
+    //glClearDepth(1.0f);
+    //glDepthFunc(GL_LEQUAL);
+    //glEnable(GL_DEPTH_TEST);
+    //glShadeModel(GL_SMOOTH);
+    //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
 
+    //_triangle.Init(nullptr);
+    _triangle.SetScale(0.3);
+    _triangle.SetColor(glm::vec4(0.0,0.3,1.0,1.0));
+
     program = GLHelper::CreateShaderProgramWithFiles(":/vertex_DrawInstanced.vert",":/fragment_DrawInstanced.frag");
     glUseProgram(program);
+    {
+        glGenVertexArrays(1,&_vaobject);
+        glBindVertexArray(_vaobject);
 
-    glGenVertexArrays(1,&_vaobject);
-    glBindVertexArray(_vaobject);
-    glVertexAttribPointer(kPosAttribLocal,2,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
-    glVertexAttribPointer(kColorAttribLocal,3,GL_FLOAT,GL_FALSE,2*sizeof(GLfloat),BUFF_OFFSET(0));
-    glEnableVertexAttribArray(kPosAttribLocal);
-    glEnableVertexAttribArray(kColorAttribLocal);
+        glGenBuffers(1,&_vabuffer);
+        glBindBuffer(GL_ARRAY_BUFFER,_vabuffer);
+        GLfloat* vertex_data;
+        int vertex_data_size;
+        int vertex_count;
+        GetVertexData(vertex_data,vertex_data_size,vertex_count);
+        glBufferData(GL_ARRAY_BUFFER, vertex_data_size, vertex_data, GL_STATIC_DRAW);
+        glVertexAttribPointer(kPosAttribLocal,2,GL_FLOAT,GL_FALSE,5*sizeof(GLfloat),BUFF_OFFSET(0));
+        glEnableVertexAttribArray(kPosAttribLocal);
+        glVertexAttribPointer(kColorAttribLocal,3,GL_FLOAT,GL_FALSE,5*sizeof(GLfloat),BUFF_OFFSET(2*sizeof(GLfloat)));
+        glEnableVertexAttribArray(kColorAttribLocal);
 
-    glGenBuffers(1,&_vabuffer);
-    glBindBuffer(GL_ARRAY_BUFFER,_vabuffer);
-    GLfloat* vertex_data;
-    int vertex_data_size;
-    GetVertexData(vertex_data,vertex_data_size);
-    glBufferData(_vabuffer, vertex_data_size, vertex_data, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
+        GLfloat* offset_data;
+        int offset_data_size;
+        GetOffsetData(offset_data,offset_data_size);
+        GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
+        glUniform2fv(offset_uniform_local,_kInstanceCount,offset_data);
 
-    GLfloat* offset_data;
-    int offset_data_size;
-    GetOffsetData(offset_data,offset_data_size);
-    GLint offset_uniform_local = glGetUniformLocation(program, "offset");
-    glUniform1fv(offset_uniform_local,offset_data_size,offset_data);
+//        GLfloat translations[200];
+//        int index = 0;
+//        GLfloat offset = 0.1f;
+//        for(GLint y = -10; y < 10; y += 2)
+//        {
+//            for(GLint x = -10; x < 10; x += 2)
+//            {
+//                translations[index++] = (GLfloat)x / 10.0f + offset;
+//                translations[index++] = (GLfloat)y / 10.0f + offset;
+//            }
+//        }
+//        GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
+//        glUniform2fv(offset_uniform_local,100,translations);
 
-    _triangle.Init(nullptr);
-    _triangle.SetScale(0.3);
-    _triangle.SetColor(glm::vec4(0.3,0.3,0.0,0.3));
+        glBindVertexArray(0);
+    }
+    glUseProgram(0);
 }
 
 void MGLWidgetDrawInstanced::paintGL()
 {
-    float t = float(GLHelper::GetTickCount() & 0x1FFF) / float(0x1FFF);
+    //float t = float(GLHelper::GetTickCount() & 0x1FFF) / float(0x1FFF);
 
     glDisable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glBindVertexArray(_vaobject);
-    glDrawArraysInstanced(GL_TRIANGLES,0,6,_kInstanceCount);
+    glUseProgram(program);
+    {
+        glBindVertexArray(_vaobject);
+        glDrawArraysInstanced(GL_TRIANGLES,0,6,_kInstanceCount);
+        //glDrawArrays(GL_TRIANGLES,0,6);
+
+        glBindVertexArray(0);
+    }
+    glUseProgram(0);
 
     _triangle.Draw();
     glFlush();
@@ -105,9 +131,9 @@ void MGLWidgetDrawInstanced::resizeGL(int w, int h)
 
 void MGLWidgetDrawInstanced::GetOffsetData(GLfloat*& offset_data,int& size)
 {
-    static glm::vec2 translations[_kInstanceCount];
+    static GLfloat translations[_kInstanceCount*2];
     static bool is_init = false;
-    float offset;
+    float offset = 0.1;
     int index = 0;
     if(is_init)
     {
@@ -115,32 +141,30 @@ void MGLWidgetDrawInstanced::GetOffsetData(GLfloat*& offset_data,int& size)
         {
             for(int x=-10; x<10; x+=2)
             {
-                glm::vec2 translation;
-                translation.x = (float)x/10.0f + offset;
-                translation.y = (float)y/10.0f + offset;
-                translations[index++] = translation;
+                translations[index++] = (float)x/10.0f + offset;
+                translations[index++] = (float)y/10.0f + offset;
             }
         }
         is_init = true;
     }
-    offset_data = (GLfloat*)&translations[0];
+    offset_data = translations;
     size = sizeof(translations);
 }
 
-void MGLWidgetDrawInstanced::GetVertexData(GLfloat*& vertex_data_ptr,int& size)
+void MGLWidgetDrawInstanced::GetVertexData(GLfloat*& vertex_data_ptr,int& size,int& vertex_count)
 {
     static GLfloat vertex_data[] = {
         //  ---位置---   ------颜色-------
         -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
          0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
         -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
-
         -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
          0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
          0.05f,  0.05f,  0.0f, 1.0f, 1.0f
     };
     vertex_data_ptr = vertex_data;
     size = sizeof(vertex_data);
+    vertex_count = 6;
 }
 
 

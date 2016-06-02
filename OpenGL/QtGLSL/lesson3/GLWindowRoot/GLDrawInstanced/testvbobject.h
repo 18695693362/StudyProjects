@@ -24,6 +24,8 @@ private:
     float   window_height_;
 
     GLint  program;
+    GLuint   _vaobject_id;
+    GLuint   _vabuffer_id;
     VBObject vbobject;
     GTriangle _triangle;
 };
