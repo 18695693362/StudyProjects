@@ -11,3 +11,5 @@ res     XXX的res目录用来存放程序读取
 README.txt  每个lessonX下有一个README.txt，记录相关的笔记。
 TIPS.txt    根目录下有TIPS.txt，记录一些注意事项。
 
+三、内容说明
+该项目记录了《OpenGL Programming Guide,Eighth Edition》读书笔记，实现了书中的程序。项目使用了Qt5.
