@@ -59,7 +59,7 @@ void glStencilMaskSeparate(GLenum face, GLuint mask)
 vertexcolor.h
 vertexcolor.cpp
 4. Rasterization
-光栅化用来决定
+光栅化用来决定屏幕上的那些区域被特定的几何覆盖
 
 四、 Multisampling
 五、 Testing and Operating on Fragments
