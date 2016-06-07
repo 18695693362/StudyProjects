@@ -1,6 +1,7 @@
 #include "goglwidget.h"
 #include <QApplication>
 #include <QGLFormat>
+#include "vertexcolor.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,7 +14,8 @@ int main(int argc, char *argv[])
     format.setVersion(4,1);
     QSurfaceFormat::setDefaultFormat(format);
 
-    GOGLWidget widget(NULL,"DrawCMD",false);
+    //GOGLWidget widget(NULL,"DrawCMD",false);
+    VertexColor widget(NULL,"VertexColor",false);
     widget.show();
     
     return a.exec();
