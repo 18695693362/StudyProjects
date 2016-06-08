@@ -59,12 +59,90 @@ void glStencilMaskSeparate(GLenum face, GLuint mask)
 vertexcolor.h
 vertexcolor.cpp
 4. Rasterization
-光栅化用来决定屏幕上的那些区域被特定的几何覆盖
+光栅化用来决定屏幕上的哪些区域被特定的几何图元覆盖，其结合输入的顶点数据线性插值产生片段着色器中的每个变量。
+应用在颜色数据上的线性插值被称作Gouraud shading
 
 四、 Multisampling
+1. 简述
+多重采样是一种平滑化几何图元边缘的一种技术。通过对每个几何图元的每个像素进行多次采样，对每个像素保存多个样本，
+对所有样本进行处理来确定像素的最终颜色。
+glGetIntegerv(GL_SAMPLE_BUFFERS)用来检查是否支持多重采样。
+glEnable(GL_MULTISAMPLE)开启多重采样
+glGetIntegerv(GL_SAMPLES)获取样本的数量
+void glGetMultisamplefv(GL_SAMPLE_POSITION, GLuint index, GLfloat *val);
+获取索引值为index的样本的地址，该地址的范围为[0,1],表示了样本相对于像素左下角的偏移。与shader中gl_SamplePosition值相同。
+在着色器中的使用sample关键字，可以使被修饰的变量依据每个样本的不同地址有对应的细微差别。
+2. Sample Shading
+glEnable(GL_SAMPLE_SHADING) 可以使片段着色器中的in变量自动依据样本地址插值。
+void glMinSampleShading(GLfloat value)
+value的范围为[0,1]。1表示每个样本都需要独立被渲染，0表示忽略样本渲染率。
+
 五、 Testing and Operating on Fragments
+1. 简述
+片段着色器处理片段之后还会进过下面的处理：
+（1）Scissor test
+（2）Multisample fragment operations
+（3）Stencil test
+（4）Depth test
+（5）Blending
+（6）Dithering
+（7）Logical operations
+2. Scissor Test
+void glScissor(GLint x, GLint y, GLsizei width, GLsizei height);
+glEnable(GL_SCISSOR_TEST) glDisable(GL_SCISSOR_TEST) 裁剪测试开启控制
+3. Multisample Fragment Operations
+下面链接详细描述了多重采样的原理
+http://learnopengl.com/#!Advanced-OpenGL/Anti-Aliasing
+https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/11%20Anti%20Aliasing/
+4. Stencil Test
+模板测试需要模板缓冲区，如果不存在模板缓冲区，模板测试则总是通过。
+// TODO 实现一个描边效果
+5. Depth Test
+深度缓存区保存了视点到物体的距离。
+（1）Polygon Offset
+多边形偏移可用于 渲染固体的高亮边缘、表面贴花、隐藏线移除
+glEnable(GL_POLYGON_OFFSET_FILL)
+void glPolygonOffset(GLfloat factor, GLfloat units);
+开启多边形偏移后，在执行深度测试之前，每个片段的深度值会被添加一个偏移值。偏移值安装下面方法计算：
+offset = m * factor + r * units
+6. Blending
+（1）Blending Factors
+Sr,Sg,Sb,Sa表示源混合因子
+Dr,Dg,Db,Da表示目标混合因子
+Rs,Gs,Bs,As表示源颜色
+Rd,Gd,Bd,Ad表示目标颜色
+最终的颜色为 SrRs+DrRd, SgGs+DgGd, SbBs+DbBd, SaAs+DaAd
+7. Dithering
+抖动可以让系统表示更多的颜色。
+8. Logical Operations
+将输入的片段值（source）和已经存储在颜色缓存区中的片段值（destination）进行逻辑运算。
+9. Occlusion Query
+
+
 六、 Per-Primitive Antialiasing
 七、 Framebuffer Objects
 八、 Writing to Multiple Renderbuffers Simultaneously
 九、 Reading and Copying Pixel Data
 十、 Copying Pixel Rectangles
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
