@@ -117,9 +117,42 @@ Rd,Gd,Bd,Ad表示目标颜色
 8. Logical Operations
 将输入的片段值（source）和已经存储在颜色缓存区中的片段值（destination）进行逻辑运算。
 9. Occlusion Query
-
+深度缓冲区确定了每个像素的可见性。出于性能考虑，如果可以确定一个几何体在渲染之前可以确定它是否可见非常有意义。
+遮挡查询可以让你确定一个特定的几何在执行深度测试后是否可见。
+使用遮挡查询的步骤：
+（1）为你需要的每一个遮挡查询生成一个查询id。
+void glGenQueries(GLsizei n,GLuint* ids);
+（2）调用glBeginQuery()指定开始遮挡查询
+（3）渲染做遮挡测试的几何体
+（4）调用glEndQuery()指定遮挡查询完成
+（5）获取通过深度测试的片段数据
+void glGetQueryObjectiv(GLenum id,GLenum pname,GLint* params)
+void glGetQueryObjectuiv(GLenum id, GLenum pname, GLuint *params);
+（6）清除遮挡查询对象
+void glDeleteQueries(GLsizei n, const GLuint *ids);
+10. Conditional Rendering
+遮挡查询的一个问题是它需要OpenGL暂停处理几何体和片段，记录深度缓冲区中受影响的片段的数目，
+并将改值返回给应用程序。以这种方式停止图形硬件，在性能敏感的应用程序中，会影响到性能。
+为了消除暂停OpenGL的操作，条件渲染允许图形硬件来决定是否遮挡查询放弃任何片段，以及期间的渲染命令。
+void glBeginConditionalRender(GLuint id, GLenum mode);
+id 为遮挡查询对象id
+mode 为下列选项之一,用来指定GPU在继续渲染之前，是否等待遮挡查询结果
+GL_QUERY_WAIT
+GL_QUERY_NO_WAIT
+GL_QUERY_BY_REGION_WAIT
+GL_QUERY_BY_REGION_WAIT
+void glEndConditionalRender(void);
 
 六、 Per-Primitive Antialiasing
+1. 简述
+可以使用下面的方法来控制图片显示质量和速度的平衡。
+void glHint(GLenum target, GLenum hint);
+2. Antialiasing Lines
+glEnable(GL_LINE_SMOOTH);
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
+3. Antialiasing Polygon
 七、 Framebuffer Objects
 八、 Writing to Multiple Renderbuffers Simultaneously
 九、 Reading and Copying Pixel Data
