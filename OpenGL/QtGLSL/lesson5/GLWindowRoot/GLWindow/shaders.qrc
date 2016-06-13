@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fragment_DrawCMD.frag</file>
+        <file>vertex_DrawCMD_UniformBlock.vert</file>
+        <file>vertex_DrawCMD.vert</file>
+        <file>vertexcolor.frag</file>
+        <file>vertexcolor.vert</file>
+    </qresource>
+</RCC>
