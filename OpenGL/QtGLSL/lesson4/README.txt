@@ -106,6 +106,7 @@ void glPolygonOffset(GLfloat factor, GLfloat units);
 开启多边形偏移后，在执行深度测试之前，每个片段的深度值会被添加一个偏移值。偏移值安装下面方法计算：
 offset = m * factor + r * units
 6. Blending
+混合操作把源片段的RGB和alpha值与已经存储在这个位置的像素的对应值进行组合.
 （1）Blending Factors
 Sr,Sg,Sb,Sa表示源混合因子
 Dr,Dg,Db,Da表示目标混合因子
@@ -224,7 +225,7 @@ GLint x, GLint y,GLsizei width, GLsizei height);
 了光栅化相同的图元多次。
 
 1. 指定输出变量和附加点的对应关系
-通过在shader中用layout来指定输出变量和帧缓冲区对象附加点的对应关系。
+通过在片段着色器中用layout来指定输出变量和帧缓冲区对象附加点的对应关系。
 layout (location = 0) out vec4 color;
 layout (location = 1) out vec4 normal;
 
@@ -253,12 +254,28 @@ void glDisablei(GLenum capability, GLuint index);
 GLboolean glIsEnabledi(GLenum capability, GLuint index);
 
 3. Dual-Source Blending
+layout (location = 0, index = 0) out vec4 first_output;
+layout (location = 0, index = 1) out vec4 second_output;
+上面的第二个输出被用作一下面枚举为参数的混合
+GL_SRC1_COLOR
+GL_SRC1_ALPHA
+GL_ONE_MINUS_SRC1_COLOR
+GL_ONE_MINUS_SRC1_ALPHA
 
-
+若GL_MAX_DUAL_SOURCE_DRAW_BUFFERS值为1，则Dual source混合和渲染到多个缓冲区无法同时使用。
 九、 Reading and Copying Pixel Data
+void glReadBuffer()
+指定从什么缓冲区读取数据
+void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels);
+void glClampColor(GLenum target, GLenum clamp);
+
 十、 Copying Pixel Rectangles
-
-
+void glBlitFramebuffer(GLint srcX0, GLint srcY0,
+GLint srcX1, GLint srcY1,
+GLint dstX0, GLint dstY0,
+GLint dstX1, GLint dstY1,
+GLbitfield buffers, GLenum filter);
+上面函数可用于一个缓冲区的不同区域之间 或者 不同帧缓冲区之间copy像素
 
 
 
