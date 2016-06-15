@@ -1,6 +1,5 @@
 #include "gtriangle.h"
 #include "glhelper.h"
-#include "gimage.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <QImage>
@@ -117,8 +116,8 @@ void GTriangle::Init(GLfloat *pos_data, int size, int count)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        QImage temp(GLHelper::GetAbsPathRelativeGResPath("wall.jpg").c_str());
-        QImage image = temp.mirrored();
+        QImage image(GLHelper::GetAbsPathRelativeGResPath("wall.jpg").c_str());
+        //QImage image = temp.mirrored();
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width(), image.height(),
                      0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());
         glGenerateMipmap(GL_TEXTURE_2D);

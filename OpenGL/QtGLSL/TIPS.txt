@@ -56,6 +56,8 @@ void glVertexAttribPointer(
 INCLUDEPATH += $$PWD/../../../libs/glm
 DEPENDPATH += $$PWD/../../../libs/glm
 
+7. 不能讲build目录放在项目目录下，否则复制目录会递归死循环
+
 TODO
 lesson4
 实现一个描边效果
