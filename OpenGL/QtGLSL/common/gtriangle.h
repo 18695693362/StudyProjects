@@ -23,18 +23,24 @@ public:
         return _color;
     }
     void GetPosData(GLfloat *&pos_data, int& size, int& count);
+    void GetVertexData(GLfloat *&vertex_data, int &size, int &count, int &pos_comp_count, int &tex_coor_comp_count);
 
 private:
     bool   _is_inited;
 
     GLint  _kPosAttribLocal;
+    GLint  _kTexCoorAttribLocal;
+
     GLint  _scaleUniformLocal;
     GLint  _colorUniformLocal;
     int    _size;   // pos_data size
     int    _count;  // pos count
+
     GLuint _vaobject;
     GLuint _vabuffer;
+    GLuint _texture;
     GLuint _program;
+
     glm::vec4 _color;
     float     _scale;
 };
