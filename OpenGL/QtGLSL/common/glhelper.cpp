@@ -268,6 +268,26 @@ std::string GLHelper::GetAbsPathRelativeGResPath(const std::string& relative_pat
     return "";
 }
 
+void GLHelper::LoadTexture(GLuint &texture_obj,GLenum texture_target,GLenum* sampler_param_name,GLenum* sampler_param_value,
+                           int sampler_param_count,QImage::Format format,bool is_gen_mipmap,const char* image_path)
+{
+    glGenTextures(1,&texture_obj);
+    glBindTexture(texture_target, texture_obj);
+    for(int param_index=0; param_index<sampler_param_count; param_index++)
+    {
+        glTexParameteri(texture_target, sampler_param_name[param_index], sampler_param_value[param_index]);
+    }
+    QImage temp(GLHelper::GetAbsPathRelativeGResPath(image_path).c_str());
+    QImage image = temp.convertToFormat(format);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width(), image.height(),
+                 0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());
+    if(is_gen_mipmap)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    glBindTexture(texture_target, 0);
+}
+
 long GLHelper::GetTickCount()
 {
     return _start_timer.elapsed();

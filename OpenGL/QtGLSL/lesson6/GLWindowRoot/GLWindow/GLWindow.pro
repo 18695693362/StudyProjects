@@ -16,13 +16,15 @@ SOURCES += main.cpp \
     ../../../common/glhelper.cpp \
     ../../../common/gdebug.cpp \
     ../../../common/gtriangle.cpp \
-    goglwidget.cpp
+    goglwidget.cpp \
+    ../../../common/gcubemaptexture.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
     ../../../common/gdebug.h \
     ../../../common/gtriangle.h \
-    goglwidget.h
+    goglwidget.h \
+    ../../../common/gcubemaptexture.h
 
 CONFIG += c++11
 
