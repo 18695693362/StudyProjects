@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     GLWindow \
+    GTestCamera \
     ../../libs/glm
 
 OTHER_FILES += \

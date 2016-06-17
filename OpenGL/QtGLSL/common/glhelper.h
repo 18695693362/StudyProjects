@@ -43,7 +43,7 @@ public:
     static std::string GetGResAbsPath();
     static std::string GetAbsPathRelativeGResPath(const std::string &relative_path);
 
-    static void LoadTexture(GLuint& texture_obj, GLenum texture_target, GLenum *sampler_param_name, GLenum *sampler_param_value, int sampler_param_count, QImage::Format format, bool is_gen_mipmap);
+    static void LoadTexture(GLuint& texture_obj, GLenum texture_target, GLenum *sampler_param_name, GLenum *sampler_param_value, int sampler_param_count, QImage::Format format, bool is_gen_mipmap, const char *image_path);
 
     static long GetTickCount();
 

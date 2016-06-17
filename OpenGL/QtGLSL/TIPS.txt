@@ -50,6 +50,15 @@ void glVertexAttribPointer(
     GLboolean normalized,       // 是否标准化
     GLsizei stride,             // 两个属性之间的间隔
     const GLvoid * pointer);    // 第一个属性数据距离数据起始地址的偏移量
+（6）检查glBindBuffer和glBindVertexArray的位置
+下面的位置是错误的：
+glBindBuffer(GL_ARRAY_BUFFER,0);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+glBindVertexArray(0);
+下面的位置是正确的：
+glBindVertexArray(0);
+glBindBuffer(GL_ARRAY_BUFFER,0);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 
 6. Qt 包含库头文件
 在.pro文件中添加如下代码

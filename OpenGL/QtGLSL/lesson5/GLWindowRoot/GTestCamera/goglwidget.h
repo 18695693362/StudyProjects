@@ -5,7 +5,6 @@
 #include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
 #include "glm/gtc/matrix_transform.hpp"
-#include "../../common/gtriangle.h"
 #include "../../common/gcube.h"
 
 class GOGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
@@ -24,8 +23,7 @@ private:
     float   window_width_;
     float   window_height_;
 
-    GTriangle   _triangle;
-    GCube       _cube;
+    GCube   _cube;
 };
 
 #endif // GOGLWIDGET_H

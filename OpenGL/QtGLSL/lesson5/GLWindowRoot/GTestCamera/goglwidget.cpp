@@ -35,7 +35,6 @@ GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
 void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
-    //_triangle.Init(nullptr);
     _cube.Init();
 
     glClearColor(0.0f,0.0f,1.0f,1.0f);
@@ -53,8 +52,6 @@ void GOGLWidget::paintGL()
     //glEnable(GL_CULL_FACE);
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    _triangle.Draw();
     _cube.Draw();
 
     glFlush();
