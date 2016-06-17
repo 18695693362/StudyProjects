@@ -3,6 +3,7 @@
 #include <QtOpenGL>
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
+#include <functional>
 
 class GCube
 {
@@ -23,15 +24,21 @@ public:
     {
         return _color;
     }
+    void SetViewMatrixGetter(std::function<glm::mat4x4&(void)> getter)
+    {
+        _view_matrix_getter = getter;
+    }
 private:
     bool _is_inited;
 
     glm::vec4 _color;
     float     _scale;
+    std::function<glm::mat4x4&(void)> _view_matrix_getter;
 
     GLint  _kPosAttribLocal;
     GLint  _scaleUniformLocal;
     GLint  _colorUniformLocal;
+    GLint  _viewMatrixUniformLocal;
 
     GLuint _vertex_buffer;
     GLuint _vertex_arr_obj;

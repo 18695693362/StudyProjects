@@ -1,6 +1,7 @@
 #include "goglwidget.h"
 #include <iostream>
 #include "../../../common/glhelper.h"
+#include "../../../common/gtimermgr.h"
 #include "glm/glm.hpp"
 #include "glm/fwd.hpp"
 //#include "glm/gtc/matrix_transform.hpp"
@@ -30,6 +31,10 @@ GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
     is_full_screen_ = full_screen;
     if(is_full_screen_)
         showFullScreen();
+
+    GTimerMgr::GetInstance().Schedule(this,[](float delta){
+        GLHelper::Log(std::to_string(delta));
+    },10,500);
 }
 
 void GOGLWidget::initializeGL()

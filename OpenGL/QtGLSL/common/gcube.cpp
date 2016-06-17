@@ -18,8 +18,9 @@ void GCube::Init()
     const char vs[] =
             "#version 410\n"
             "layout (location = 0) in vec3 vi_position;\n"
-            "uniform float scale;\n"
-            "uniform vec4  color;\n"
+            "uniform float  scale;\n"
+            "uniform vec4   color;\n"
+            "uniform mat4x4 view_matrix;\n"
             "out vec4 vo_color;\n"
             "void main(void)\n"
             "{\n"
@@ -60,6 +61,7 @@ void GCube::Init()
 
         _scaleUniformLocal = GLHelper::GetUniformLocal(_program,"scale");
         _colorUniformLocal = GLHelper::GetUniformLocal(_program,"color");
+        _viewMatrixUniformLocal = GLHelper::GetUniformLocal(_program,"view_matrix");
 
         glVertexAttribPointer(_kPosAttribLocal,vertex_pos_comp_count,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
         glEnableVertexAttribArray(_kPosAttribLocal);
@@ -108,6 +110,10 @@ void GCube::Draw()
         {
             glUniform1f(_scaleUniformLocal,_scale);
             glUniform4fv(_colorUniformLocal,1,glm::value_ptr(_color));
+            if(_view_matrix_getter)
+            {
+                glUniform4fv(_viewMatrixUniformLocal,4,glm::value_ptr(_view_matrix_getter()));
+            }
 
             glBindVertexArray(_vertex_arr_obj);
             glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,BUFF_OFFSET(0));
