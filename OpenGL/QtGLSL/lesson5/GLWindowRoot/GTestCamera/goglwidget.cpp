@@ -16,10 +16,10 @@ using namespace std;
 #define kDefaultX   100.0f
 #define kDefaultY   100.0f
 #define kDesignSizeW    480.f
-#define kDesignSizeH    320.f
+#define kDesignSizeH    480.f
 
-GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
-    QOpenGLWidget(parent)
+GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen)
+    :QOpenGLWidget(parent)
 {
     setGeometry( kDefaultX, kDefaultY, kDesignSizeW, kDesignSizeH );
     setMinimumSize(kMinWidth, kMinHeight);
@@ -32,18 +32,30 @@ GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
     if(is_full_screen_)
         showFullScreen();
 
-    GTimerMgr::GetInstance().Schedule(this,[](float delta){
-        GLHelper::Log(std::to_string(delta));
-    },10,500);
+    GTimerMgr::GetInstance().Schedule(this,[this](float delta){
+        this->update();
+    },GTimerMgr::REPEAT_FOREVER,33);
+}
+
+GOGLWidget::~GOGLWidget()
+{
+    GTimerMgr::GetInstance().Unschedule(this);
 }
 
 void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
     _cube.Init();
+    _cube.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
+        this->_camera.GetViewMatrix(view_matrix);
+    });
+    _cube.SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
+        this->_camera.GetOrhtoMatrix(projection_matrix);
+    });
+    //_camera.Move(glm::vec3(0.5,0.5,0));
 
-    glClearColor(0.0f,0.0f,1.0f,1.0f);
-    glClearDepth(1.0f);
+    glClearColor(0.0f,0.0f,0.0f,1.0f);
+    glClearDepth(100.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
@@ -54,11 +66,13 @@ void GOGLWidget::initializeGL()
 
 void GOGLWidget::paintGL()
 {
+    static int counter = 0;
+    counter++;
     //glEnable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    _cube.Draw();
 
+    _cube.Draw();
+    //GLHelper::Log("counter = "+to_string(counter));
     glFlush();
 }
 
@@ -73,6 +87,59 @@ void GOGLWidget::resizeGL(int w, int h)
     window_height_= h;
 
     glViewport(0,0,window_width_,window_height_);
+}
+
+void GOGLWidget::keyPressEvent(QKeyEvent *event)
+{
+    static float step_value = 0.1;
+    glm::vec3 step(0);
+    switch (event->key())
+    {
+        case Qt::Key_0:
+        {
+            break;
+        }
+        case Qt::Key_Left:
+        {
+            step.x = -step_value;
+            break;
+        }
+        case Qt::Key_Right:
+        {
+            step.x = step_value;
+            break;
+        }
+        case Qt::Key_Up:
+        {
+            step.z = step_value;
+            break;
+        }
+        case Qt::Key_Down:
+        {
+            step.z = -step_value;
+            break;
+        }
+        default:
+            break;
+    }
+    GLHelper::Log("move key "+to_string(event->key()));
+    _camera.Move(step);
+    _camera.PrintCameraInfo(GCamera::InfoType::kPosTarget);
+    update();
+}
+
+void GOGLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_R:
+        {
+            _camera.RotateAroundTarget(false);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 

@@ -10,7 +10,7 @@ class GTriangle
 {
 public:
     GTriangle();
-    void Init(GLfloat* pos_data, int size=0, int count=0);
+    void Init(GLfloat* pos_data=nullptr, int size=0, int count=0);
     void Draw();
     void SetScale(float scale);
     float GetScale()

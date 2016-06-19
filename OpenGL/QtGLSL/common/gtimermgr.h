@@ -14,8 +14,8 @@ class GTimerMgr: public QObject
 public:
     static GTimerMgr& GetInstance();
 
-    void Schedule(QObject* target, std::function<void(float)> task, uint32_t count, float interval);
-    void Unschedule(QObject* target,std::function<void(float)> task=nullptr);
+    QTimer *Schedule(void *target, std::function<void(float)> task, uint32_t count, float interval);
+    void Unschedule(void *target, QTimer *timer=nullptr);
 
     void OnScheduleCompleted(QObject* target, const QTimer *timer);
 
@@ -23,8 +23,8 @@ public:
 private:
     typedef std::vector<GTimerInfo*> TimerInfoArr;
     typedef std::vector<GTimerInfo*>::iterator TimerInfoArrIter;
-    typedef std::unordered_map< QObject*, TimerInfoArr > TimerInfoArrMap;
-    typedef std::pair<QObject*,TimerInfoArr> TimerInfoArrPair;
+    typedef std::unordered_map< void*, TimerInfoArr > TimerInfoArrMap;
+    typedef std::pair<void*,TimerInfoArr> TimerInfoArrPair;
     typedef TimerInfoArrMap::iterator TimerInfoMapIter;
 
     TimerInfoArrMap _target_timer_map;

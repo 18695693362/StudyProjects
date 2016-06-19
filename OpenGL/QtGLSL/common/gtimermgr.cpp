@@ -1,6 +1,8 @@
 #include "gtimermgr.h"
 #include "glhelper.h"
 
+using namespace std;
+
 const uint32_t GTimerMgr::REPEAT_FOREVER = ~0;
 
 GTimerMgr &GTimerMgr::GetInstance()
@@ -9,7 +11,7 @@ GTimerMgr &GTimerMgr::GetInstance()
     return _timer_mgr;
 }
 
-void GTimerMgr::Schedule(QObject *target, std::function<void (float)> task, uint32_t count, float interval)
+QTimer* GTimerMgr::Schedule(void *target, std::function<void (float)> task, uint32_t count, float interval)
 {
     TimerInfoMapIter iter = _target_timer_map.find(target);
 
@@ -29,24 +31,26 @@ void GTimerMgr::Schedule(QObject *target, std::function<void (float)> task, uint
     timer_info->num  = count;
     connect(timer_info->timer, SIGNAL(timeout()), timer_info, SLOT(Update()));
     timer_info->timer->start(interval);
+    return timer_info->timer;
 }
 
-void GTimerMgr::Unschedule(QObject *target, std::function<void (float)> task)
+void GTimerMgr::Unschedule(void *target, QTimer* timer)
 {
     TimerInfoMapIter iter = _target_timer_map.find(target);
 
     if(iter != _target_timer_map.end())
     {
         TimerInfoArr& timer_info_arr = iter->second;
-        for(TimerInfoArrIter info_arr_iter=timer_info_arr.begin(); info_arr_iter!=timer_info_arr.end();
-            info_arr_iter++)
+        GLHelper::Log(string("size = ")+to_string(timer_info_arr.size()));
+        for(TimerInfoArrIter info_arr_iter=timer_info_arr.begin(); info_arr_iter!=timer_info_arr.end();)
         {
-            if(GLHelper::GetFuncAddr((*info_arr_iter)->task) == GLHelper::GetFuncAddr(task)
-                    && (*info_arr_iter)->target == target)
+            if( timer && timer != (*info_arr_iter)->timer )
             {
-                timer_info_arr.erase(info_arr_iter);
-                delete (*info_arr_iter);
+                info_arr_iter++;
+                continue;
             }
+            info_arr_iter = timer_info_arr.erase(info_arr_iter);
+            delete (*info_arr_iter);
         }
     }
 }
@@ -72,7 +76,8 @@ void GTimerMgr::OnScheduleCompleted(QObject* target,const QTimer* timer)
 }
 
 GTimerInfo::GTimerInfo()
-    :count(0)
+    :QObject()
+    ,count(0)
     ,num(0)
     ,target(nullptr)
     ,timer(nullptr)

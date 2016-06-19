@@ -46,14 +46,6 @@ public:
     static void LoadTexture(GLuint& texture_obj, GLenum texture_target, GLenum *sampler_param_name, GLenum *sampler_param_value, int sampler_param_count, QImage::Format format, bool is_gen_mipmap, const char *image_path);
 
     static long GetTickCount();
-
-    template<typename T, typename... U>
-    static size_t GetFuncAddr(std::function<T(U...)> f)
-    {
-        typedef T(fnType)(U...);
-        fnType ** fnPointer = f.template target<fnType*>();
-        return (size_t) *fnPointer;
-    }
 private:
     static QElapsedTimer _start_timer;
 };
