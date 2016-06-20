@@ -34,6 +34,17 @@ public:
     {
         _cur_projection_type = type;
     }
+    void GetCurProjectionMatrix(glm::mat4x4& matrix)
+    {
+        if(_cur_projection_type==kOrtho)
+        {
+            matrix = _ortho;
+        }
+        else
+        {
+            matrix = _perspective;
+        }
+    }
 
     void GetViewMatrix(glm::mat4x4& view_matrix);
     void GetProjectionMatrix();

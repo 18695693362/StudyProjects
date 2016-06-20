@@ -45,12 +45,13 @@ GOGLWidget::~GOGLWidget()
 void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
+    _camera.SetCurProjectionType(GCamera::kPerspective);
     _cube.Init();
     _cube.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
         this->_camera.GetViewMatrix(view_matrix);
     });
     _cube.SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
-        this->_camera.GetOrhtoMatrix(projection_matrix);
+        this->_camera.GetCurProjectionMatrix(projection_matrix);
     });
     //_camera.Move(glm::vec3(0.5,0.5,0));
 

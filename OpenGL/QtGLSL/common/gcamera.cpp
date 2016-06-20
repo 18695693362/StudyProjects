@@ -22,7 +22,7 @@ GCamera::GCamera(const glm::vec3 &pos, const glm::vec3 &target, const glm::vec3 
     //_ortho          = glm::ortho(0.0f, 400.0f, 0.0f, 400.0f, 0.1f, 100.0f);
     //_ortho          = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.1f,100.0f);
     _ortho          = glm::ortho(-4.0f,4.0f,-4.0f,4.0f,-100.0f,100.0f);
-    _perspective    = glm::perspective(45.0f,1.0f,0.1f,100.0f);
+    _perspective    = glm::perspective(45.0f,1.0f,-1.0f,8.0f);
 }
 
 void GCamera::SetOrthoMatrix(float left, float right, float bottom, float top, float near, float far, bool is_active)
