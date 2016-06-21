@@ -5,6 +5,7 @@
 #include <QImage>
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
+#include "../libs/glm/glm/gtc/quaternion.hpp"
 #include <string>
 #include "gtriangle.h"
 
@@ -39,6 +40,7 @@ public:
     static glm::mat4 GetScale(float x,float y, float z);
     static glm::mat4 GetRotate(float angle,float x,float y, float z);
     static glm::mat4 GetTranslate(float x, float y, float z);
+    static glm::quat GetRotateBetweenVec(const glm::vec3& start,const glm::vec3& end);
 
     static std::string GetGResAbsPath();
     static std::string GetAbsPathRelativeGResPath(const std::string &relative_path);

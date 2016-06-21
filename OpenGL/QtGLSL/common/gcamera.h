@@ -12,7 +12,7 @@ public:
     static const glm::vec3 LocalUp;
     static const glm::vec3 LocalRight;
 
-    GCamera();
+    GCamera(const glm::vec3& pos=glm::vec3(0.0f));
 
     enum ProjectionType{
         kOrtho,

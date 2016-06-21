@@ -45,6 +45,7 @@ GOGLWidget::~GOGLWidget()
 void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
+    _camera.Translate(0.0,0.0,5.0f);
     _camera.SetCurProjectionType(GCamera::kPerspective);
     _cube.Init();
     _cube.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
@@ -56,7 +57,7 @@ void GOGLWidget::initializeGL()
 
     glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClearDepth(100.0f);
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -134,7 +135,7 @@ void GOGLWidget::keyPressEvent(QKeyEvent *event)
     }
     GLHelper::Log("move key "+to_string(event->key()));
     _camera.Translate(step);
-    _camera.PrintCameraInfo(GCamera::InfoType::kPosTarget);
+
     update();
 }
 

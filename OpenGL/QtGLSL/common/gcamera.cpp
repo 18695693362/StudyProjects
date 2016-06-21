@@ -1,32 +1,37 @@
 #include "gcamera.h"
 #include "glhelper.h"
 #include "gtimermgr.h"
-
+#include "../libs/glm/glm/gtx/vector_angle.hpp"
 #include <string>
 using namespace std;
 
 #define CHANGE_POS(comp,value) do{\
-    _position.comp += (value);\
-    RotateAroundTarget(true);\
-    _is_pos_changed = true;\
+    if(value)\
+    {\
+        _position.comp += (value);\
+        RotateAroundTarget(true);\
+        _is_pos_changed = true;\
+    }\
 }while(0);
 
 const glm::vec3 GCamera::LocalForward(0.0f, 0.0f, -1.0f);
 const glm::vec3 GCamera::LocalUp(0.0f, 1.0f, 0.0f);
 const glm::vec3 GCamera::LocalRight(1.0f, 0.0f, 0.0f);
 
-GCamera::GCamera()
+GCamera::GCamera(const glm::vec3 &pos)
     :_is_camera_changed(true)
+    ,_is_pos_changed(true)
+    ,_is_orien_changed(true)
     ,_cur_projection_type(ProjectionType::kOrtho)
-    ,_position(0.0,0.0,0.0)
+    ,_position(pos)
     ,_U(LocalUp)
     ,_D(LocalForward)
     ,_R(LocalRight)
 {
     //_ortho          = glm::ortho(0.0f, 400.0f, 0.0f, 400.0f, 0.1f, 100.0f);
     //_ortho          = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.1f,100.0f);
-    _ortho          = glm::ortho(-4.0f,4.0f,-4.0f,4.0f,-100.0f,100.0f);
-    _perspective    = glm::perspective(45.0f,1.0f,-1.0f,8.0f);
+    _ortho          = glm::ortho(-4.0f,4.0f,-4.0f,4.0f,0.1f,100.0f);
+    _perspective    = glm::perspective(45.0f,1.0f,0.1f,100.0f);
 }
 
 void GCamera::SetOrthoMatrix(float left, float right, float bottom, float top, float near, float far, bool is_active)
@@ -138,14 +143,28 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
         if(!_is_rotate_by_target)
         {
             _is_rotate_by_target = true;
-            float angle = 180/4000*33;
-            GTimerMgr::GetInstance().Schedule(this,[this,angle,target_pos](float dt)
+            float radian = M_PI/8000.0f*33.0f;
+            float angle  = radian * 180.0f / M_PI;
+            GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos](float dt)
             {
-                glm::mat4x4 move_mat = GLHelper::GetTranslate(target_pos.x-this->_position.x,
-                                                              target_pos.y-this->_position.y,
-                                                              target_pos.z-this->_position.z);
+                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
+                float camera_target_radian = glm::orientedAngle(this->_D,dir_to_target,this->_U);
+                glm::mat4x4 move_to_target = GLHelper::GetTranslate(target_pos.x-this->_position.x,
+                                                                    target_pos.y-this->_position.y,
+                                                                    target_pos.z-this->_position.z);
+                glm::vec4 rotate_axis = move_to_target*glm::vec4(this->_U,1.0);
+                this->_position = glm::vec3(GLHelper::GetRotate(radian,
+                                                      rotate_axis.x,
+                                                      rotate_axis.y,
+                                                      rotate_axis.z)*glm::vec4(this->_position,1.0));
+
+                glm::mat4x4 move_mat = GLHelper::GetTranslate(target_pos.x,
+                                                              target_pos.y,
+                                                              target_pos.z);
                 glm::vec4 axis = move_mat*glm::vec4(this->_U,1.0);
-                this->Rotate(angle,axis.x,axis.y,axis.z);
+                this->_position = glm::vec3(GLHelper::GetRotate(radian,axis.x,axis.y,axis.z)*
+                                            glm::vec4(this->_position,1.0));
+                Rotate(angle,axis.x,axis.y,axis.z);
             },GTimerMgr::REPEAT_FOREVER,33);
         }
     }

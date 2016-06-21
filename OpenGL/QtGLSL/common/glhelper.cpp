@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <QElapsedTimer>
+#include "../libs/glm/glm/gtx/norm.hpp"
 using namespace std;
 
 GLHelper::GLHelper()
@@ -230,6 +231,41 @@ glm::mat4 GLHelper::GetRotate(float angle,float x,float y, float z)
 glm::mat4 GLHelper::GetTranslate(float x, float y, float z)
 {
     return glm::translate(glm::mat4(1),glm::vec3(x,y,z));
+}
+
+glm::quat GLHelper::GetRotateBetweenVec(const glm::vec3 &start, const glm::vec3 &end)
+{
+    glm::vec3 t_start = glm::normalize(start);
+    glm::vec3 t_end   = glm::normalize(end);
+
+    float cos_theta = glm::dot(t_start, t_end);
+    glm::vec3 rotation_axis;
+
+    if (cos_theta < -1 + 0.001f)
+    {
+        // special case when vectors in opposite directions:
+        // there is no "ideal" rotation axis
+        // So guess one; any will do as long as it's perpendicular to start
+        rotation_axis = glm::cross(glm::vec3(0.0f, 0.0f, 1.0f), t_start);
+        if(glm::length2(rotation_axis) < 0.01)
+        {
+            rotation_axis = cross(glm::vec3(1.0f, 0.0f, 1.0f), t_start);
+        }
+        rotation_axis = glm::normalize(rotation_axis);
+        return glm::angleAxis(180.0f, rotation_axis);
+    }
+
+    rotation_axis = glm::cross(t_start, t_end);
+
+    float s = sqrt( (1+cos_theta)*2 );
+    float invs = 1 / s;
+
+    return glm::quat(
+        s * 0.5f,
+        rotation_axis.x * invs,
+        rotation_axis.y * invs,
+        rotation_axis.z * invs
+    );
 }
 string GLHelper::GetGResAbsPath()
 {
