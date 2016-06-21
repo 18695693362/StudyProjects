@@ -53,7 +53,6 @@ void GOGLWidget::initializeGL()
     _cube.SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
         this->_camera.GetCurProjectionMatrix(projection_matrix);
     });
-    //_camera.Move(glm::vec3(0.5,0.5,0));
 
     glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClearDepth(100.0f);
@@ -100,22 +99,32 @@ void GOGLWidget::keyPressEvent(QKeyEvent *event)
         {
             break;
         }
-        case Qt::Key_Left:
+        case Qt::Key_A:
         {
             step.x = -step_value;
             break;
         }
-        case Qt::Key_Right:
+        case Qt::Key_D:
         {
             step.x = step_value;
             break;
         }
-        case Qt::Key_Up:
+        case Qt::Key_Q:
+        {
+            step.y = -step_value;
+            break;
+        }
+        case Qt::Key_E:
+        {
+            step.y = step_value;
+            break;
+        }
+        case Qt::Key_W:
         {
             step.z = step_value;
             break;
         }
-        case Qt::Key_Down:
+        case Qt::Key_S:
         {
             step.z = -step_value;
             break;
@@ -124,7 +133,7 @@ void GOGLWidget::keyPressEvent(QKeyEvent *event)
             break;
     }
     GLHelper::Log("move key "+to_string(event->key()));
-    _camera.Move(step);
+    _camera.Translate(step);
     _camera.PrintCameraInfo(GCamera::InfoType::kPosTarget);
     update();
 }

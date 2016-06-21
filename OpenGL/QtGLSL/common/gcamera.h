@@ -3,13 +3,16 @@
 
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
-
+#include "../libs/glm/glm/gtc/quaternion.hpp"
 class GCamera
 {
 public:
-    GCamera(const glm::vec3& pos=glm::vec3(0.0,0.0,1.0),
-            const glm::vec3& target=glm::vec3(0.0,0.0,0.0),
-            const glm::vec3& up=glm::vec3(0.0,1.0,0.0));
+    // Constants
+    static const glm::vec3 LocalForward;
+    static const glm::vec3 LocalUp;
+    static const glm::vec3 LocalRight;
+
+    GCamera();
 
     enum ProjectionType{
         kOrtho,
@@ -45,27 +48,23 @@ public:
             matrix = _perspective;
         }
     }
-
-    void GetViewMatrix(glm::mat4x4& view_matrix);
     void GetProjectionMatrix();
 
-    void Move(glm::vec3 step);
-    void MoveInX(float step);
-    void MoveInY(float step);
-    void MoveInZ(float step);
-    void MoveLeft(float step=1.0f);
-    void MoveRight(float step=1.0f);
-    void MoveForward(float step=1.0f);
-    void MoveBackward(float step=1.0f);
-    void MoveUp(float step=1.0f);
-    void MoveDown(float step=1.0f);
+    glm::vec3 GetForward() const;
+    glm::vec3 GetUp() const;
+    glm::vec3 GetRight() const;
 
-    void RotateAroundTarget(bool is_stop);
+    void Translate(const glm::vec3 &step);
+    void Translate(float dx, float dy, float dz);
+    void Rotate(const glm::quat &dr);
+    void Rotate(float angle, const glm::vec3 &axis);
+    void Rotate(float angle, float ax, float ay, float az);
+    void GetViewMatrix(glm::mat4x4& view_matrix);
 
+    void RotateAroundTarget(bool is_stop, const glm::vec3 &target_pos=glm::vec3(0.0f,0.0f,0.0f));
     enum InfoType{
         kAll,
-        kPos    = 1,
-        kTarget = 2,
+        kPos = 1,
         kPosTarget = 3,
         kR = 4,
         kU = 8,
@@ -74,22 +73,20 @@ public:
     };
     void PrintCameraInfo(unsigned int type);
 private:
-    void UpdateCamera();
-    bool  _is_camera_changed;
-    float _change_step;
+    bool _is_pos_changed;
+    bool _is_orien_changed;
+    bool _is_camera_changed;
 
-    bool    _is_rotate_by_target;
+    bool _is_rotate_by_target;
 
     ProjectionType  _cur_projection_type;
     glm::mat4x4     _ortho;
     glm::mat4x4     _perspective;
 
     glm::vec3 _position;
-    glm::vec3 _target;
-
-    glm::vec3 _R;
     glm::vec3 _U;
     glm::vec3 _D;
+    glm::vec3 _R;
 };
 
 #endif // GCAMERA_H
