@@ -34,6 +34,7 @@ void GetAddrInfo(const char* addr_str,const char* port_str)
     for (struct addrinfo* addr = addrlist; addr!=nullptr; addr=addr->ai_next)
     {
         GUtility::PrintSocketAddress(addr->ai_addr, stdout);
+        printf(" family=%d ",addr->ai_family);
         fputc('\n', stdout);
     }
     fputc('\n', stdout);
@@ -50,6 +51,7 @@ void Test02_GetAddrInfo(bool is_run)
     GetAddrInfo("www.baidu.com", "80");
     GetAddrInfo("www.google.com", "80");
     GetAddrInfo("www.qq.com", "whois");
+    GetAddrInfo(nullptr, "whois");
     
     exit(0);
 }
