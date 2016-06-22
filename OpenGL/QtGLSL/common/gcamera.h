@@ -50,6 +50,8 @@ public:
     }
     void GetProjectionMatrix();
 
+    void ResetPosAndOrient();
+
     glm::vec3 GetForward() const;
     glm::vec3 GetUp() const;
     glm::vec3 GetRight() const;
@@ -62,6 +64,7 @@ public:
     void GetViewMatrix(glm::mat4x4& view_matrix);
 
     void RotateAroundTarget(bool is_stop, const glm::vec3 &target_pos=glm::vec3(0.0f,0.0f,0.0f));
+    void FaceToTarget(bool is_stop, const glm::vec3 &target_pos=glm::vec3(0.0f,0.0f,0.0f));
     enum InfoType{
         kAll,
         kPos = 1,
@@ -78,11 +81,13 @@ private:
     bool _is_camera_changed;
 
     bool _is_rotate_by_target;
+    bool _is_face_to_target;
 
     ProjectionType  _cur_projection_type;
     glm::mat4x4     _ortho;
     glm::mat4x4     _perspective;
 
+    glm::vec3 _original_pos;
     glm::vec3 _position;
     glm::vec3 _U;
     glm::vec3 _D;

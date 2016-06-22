@@ -23,6 +23,7 @@ GCamera::GCamera(const glm::vec3 &pos)
     ,_is_pos_changed(true)
     ,_is_orien_changed(true)
     ,_cur_projection_type(ProjectionType::kOrtho)
+    ,_original_pos(pos)
     ,_position(pos)
     ,_U(LocalUp)
     ,_D(LocalForward)
@@ -52,6 +53,17 @@ void GCamera::SetPerspectiveMatrix(float fovy, float aspect, float zNear, float 
     {
         _cur_projection_type = ProjectionType::kPerspective;
     }
+}
+
+void GCamera::ResetPosAndOrient()
+{
+    _position = _original_pos;
+    _U = LocalUp;
+    _D = LocalForward;
+    _R = LocalRight;
+
+    _is_pos_changed = true;
+    _is_orien_changed = true;
 }
 
 void GCamera::GetViewMatrix(glm::mat4x4 &view_matrix)
@@ -100,16 +112,18 @@ void GCamera::Translate(float dx, float dy, float dz)
 void GCamera::Rotate(const glm::quat &dr)
 {
     glm::quat quat_D = glm::quat(0.0,_D.x,_D.y,_D.z);
-    quat_D = dr*quat_D*glm::inverse(dr);
+    quat_D = dr*quat_D*glm::conjugate(dr);
     _D.x = quat_D.x;
     _D.y = quat_D.y;
     _D.z = quat_D.z;
+    _D = glm::normalize(_D);
 
     glm::quat quat_U = glm::quat(0.0,_U.x,_U.y,_U.z);
-    quat_U = dr*quat_U*glm::inverse(dr);
+    quat_U = dr*quat_U*glm::conjugate(dr);
     _U.x = quat_U.x;
     _U.y = quat_U.y;
     _U.z = quat_U.z;
+    _U = glm::normalize(_U);
 
     _R = glm::cross(_U,_D);
 
@@ -149,6 +163,10 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
             {
                 glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
                 float camera_target_radian = glm::orientedAngle(this->_D,dir_to_target,this->_U);
+                if(fabs(camera_target_radian) <= radian)
+                {
+
+                }
                 glm::mat4x4 move_to_target = GLHelper::GetTranslate(target_pos.x-this->_position.x,
                                                                     target_pos.y-this->_position.y,
                                                                     target_pos.z-this->_position.z);
@@ -165,6 +183,54 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
                 this->_position = glm::vec3(GLHelper::GetRotate(radian,axis.x,axis.y,axis.z)*
                                             glm::vec4(this->_position,1.0));
                 Rotate(angle,axis.x,axis.y,axis.z);
+            },GTimerMgr::REPEAT_FOREVER,33);
+        }
+    }
+}
+
+void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos)
+{
+    if(is_stop)
+    {
+        _is_face_to_target = false;
+        GTimerMgr::GetInstance().Unschedule(this);
+    }
+    else
+    {
+        glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
+        glm::quat to_target = GLHelper::GetRotateBetweenVec(this->_D,dir_to_target);
+        this->Rotate(to_target);
+        return;
+
+        if(!_is_face_to_target)
+        {
+            _is_face_to_target = true;
+            float radian = M_PI/8000.0f*33.0f;
+            float angle  = radian * 180.0f / M_PI;
+            GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos](float dt)
+            {
+                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
+                float camera_target_radian = glm::orientedAngle(this->_D,dir_to_target,this->_U);
+                float step = 0.0f;
+                bool  is_need_stop = false;
+                if(fabs(camera_target_radian) <= radian)
+                {
+                    step = camera_target_radian;
+                    is_need_stop = true;
+                }
+                else
+                {
+                    step = radian;
+                }
+                if(camera_target_radian<0)
+                {
+                    step = -step;
+                }
+                this->Rotate(step,this->_U);
+                if(is_need_stop)
+                {
+                    GTimerMgr::GetInstance().Unschedule(this);
+                }
             },GTimerMgr::REPEAT_FOREVER,33);
         }
     }

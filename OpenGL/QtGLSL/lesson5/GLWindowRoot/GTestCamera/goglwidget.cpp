@@ -20,6 +20,7 @@ using namespace std;
 
 GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen)
     :QOpenGLWidget(parent)
+    ,_camera(glm::vec3(0.0,0.0,5.0f))
 {
     setGeometry( kDefaultX, kDefaultY, kDesignSizeW, kDesignSizeH );
     setMinimumSize(kMinWidth, kMinHeight);
@@ -45,7 +46,6 @@ GOGLWidget::~GOGLWidget()
 void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
-    _camera.Translate(0.0,0.0,5.0f);
     _camera.SetCurProjectionType(GCamera::kPerspective);
     _cube.Init();
     _cube.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
@@ -96,10 +96,6 @@ void GOGLWidget::keyPressEvent(QKeyEvent *event)
     glm::vec3 step(0);
     switch (event->key())
     {
-        case Qt::Key_0:
-        {
-            break;
-        }
         case Qt::Key_A:
         {
             step.x = -step_value;
@@ -146,6 +142,16 @@ void GOGLWidget::keyReleaseEvent(QKeyEvent *event)
         case Qt::Key_R:
         {
             _camera.RotateAroundTarget(false);
+            break;
+        }
+        case Qt::Key_F:
+        {
+            _camera.FaceToTarget(false);
+            break;
+        }
+        case Qt::Key_Escape:
+        {
+            _camera.ResetPosAndOrient();
             break;
         }
         default:

@@ -260,12 +260,12 @@ glm::quat GLHelper::GetRotateBetweenVec(const glm::vec3 &start, const glm::vec3 
     float s = sqrt( (1+cos_theta)*2 );
     float invs = 1 / s;
 
-    return glm::quat(
-        s * 0.5f,
-        rotation_axis.x * invs,
-        rotation_axis.y * invs,
-        rotation_axis.z * invs
-    );
+    return glm::normalize(glm::quat(
+                              s * 0.5f,
+                              rotation_axis.x * invs,
+                              rotation_axis.y * invs,
+                              rotation_axis.z * invs
+                          ));
 }
 string GLHelper::GetGResAbsPath()
 {
