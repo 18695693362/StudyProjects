@@ -16,12 +16,22 @@ public:
                        int &vertex_pos_comp_count, int &vertex_color_comp_count);
     void Draw();
 
-    void SetScale(float scale);
+    void SetTranslate(const glm::vec3& translate)
+    {
+        _translate = translate;
+    }
+    void SetScale(float scale)
+    {
+        _scale = scale;
+    }
     float GetScale()
     {
         return _scale;
     }
-    void SetColor(glm::vec4 color);
+    void SetColor(glm::vec4 color)
+    {
+        _color = color;
+    }
     glm::vec4 GetColor()
     {
         return _color;
@@ -37,7 +47,7 @@ public:
     }
 private:
     bool _is_inited;
-
+    glm::vec3 _translate;
     glm::vec4 _color;
     float     _scale;
     std::function<void(glm::mat4x4&)> _view_matrix_getter;
@@ -47,6 +57,7 @@ private:
     GLint  _kColorAttribLocal;
     GLint  _scaleUniformLocal;
     GLint  _colorUniformLocal;
+    GLint  _moveUniformLocal;
     GLint  _viewMatrixUniformLocal;
     GLint  _projectionMatrixUniformLocal;
 

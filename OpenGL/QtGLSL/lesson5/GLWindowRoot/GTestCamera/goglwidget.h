@@ -25,8 +25,9 @@ private:
     float   window_width_;
     float   window_height_;
 
-    GCamera     _camera;
-    GCube       _cube;
+    GCamera             _camera;
+    static const int    _kCubesCount = 5;
+    GCube               _cubes[_kCubesCount];
 };
 
 #endif // GOGLWIDGET_H

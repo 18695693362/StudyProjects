@@ -265,7 +265,50 @@ glm::quat GLHelper::GetRotateBetweenVec(const glm::vec3 &start, const glm::vec3 
                               rotation_axis.x * invs,
                               rotation_axis.y * invs,
                               rotation_axis.z * invs
-                          ));
+                              ));
+}
+
+glm::quat GLHelper::GetRotateBetweenVec(const glm::quat &start, const glm::quat &end, float max_angle)
+{
+    glm::quat t_start(start);
+    glm::quat t_end(end);
+
+    if( max_angle < 0.001f ){
+        // No rotation allowed. Prevent dividing by 0 later.
+        return t_start;
+    }
+
+    float cos_theta = glm::dot(start, end);
+
+    // q1 and q2 are already equal.
+    // Force q2 just to be sure
+    if(cos_theta > 0.9999f){
+        return t_end;
+    }
+
+    // Avoid taking the long path around the sphere
+    if (cos_theta < 0){
+        //start = start * -1.0f;
+        t_start = glm::inverse(t_start);
+
+        cos_theta *= -1.0f;
+    }
+
+    float angle = acos(cos_theta);
+
+    // If there is only a 2° difference, and we are allowed 5°,
+    // then we arrived.
+    if (angle < max_angle){
+        return t_end;
+    }
+
+    // This is just like slerp(), but with a custom t
+    float t = max_angle / angle;
+    angle = max_angle;
+
+    glm::quat res = (sin((1.0f - t) * angle) * t_start + sin(t * angle) * t_end) / sin(angle);
+    res = normalize(res);
+    return res;
 }
 string GLHelper::GetGResAbsPath()
 {

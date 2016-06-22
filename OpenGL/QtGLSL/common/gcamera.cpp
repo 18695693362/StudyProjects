@@ -9,7 +9,6 @@ using namespace std;
     if(value)\
     {\
         _position.comp += (value);\
-        RotateAroundTarget(true);\
         _is_pos_changed = true;\
     }\
 }while(0);
@@ -95,6 +94,13 @@ void GCamera::GetViewMatrix(glm::mat4x4 &view_matrix)
 #endif
 }
 
+void GCamera::StopAllMove()
+{
+    GTimerMgr::GetInstance().Unschedule(this);
+    _is_rotate_by_target = false;
+    _is_face_to_target = false;
+}
+
 void GCamera::Translate(const glm::vec3 &step)
 {
     CHANGE_POS(x,step.x);
@@ -156,17 +162,13 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
     {
         if(!_is_rotate_by_target)
         {
+            StopAllMove();
+
             _is_rotate_by_target = true;
             float radian = M_PI/8000.0f*33.0f;
             float angle  = radian * 180.0f / M_PI;
             GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos](float dt)
             {
-                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-                float camera_target_radian = glm::orientedAngle(this->_D,dir_to_target,this->_U);
-                if(fabs(camera_target_radian) <= radian)
-                {
-
-                }
                 glm::mat4x4 move_to_target = GLHelper::GetTranslate(target_pos.x-this->_position.x,
                                                                     target_pos.y-this->_position.y,
                                                                     target_pos.z-this->_position.z);
@@ -176,19 +178,15 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
                                                       rotate_axis.y,
                                                       rotate_axis.z)*glm::vec4(this->_position,1.0));
 
-                glm::mat4x4 move_mat = GLHelper::GetTranslate(target_pos.x,
-                                                              target_pos.y,
-                                                              target_pos.z);
-                glm::vec4 axis = move_mat*glm::vec4(this->_U,1.0);
-                this->_position = glm::vec3(GLHelper::GetRotate(radian,axis.x,axis.y,axis.z)*
-                                            glm::vec4(this->_position,1.0));
-                Rotate(angle,axis.x,axis.y,axis.z);
+                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
+                glm::quat to_target = GLHelper::GetRotateBetweenVec(this->_D,dir_to_target);
+                this->Rotate(to_target);
             },GTimerMgr::REPEAT_FOREVER,33);
         }
     }
 }
 
-void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos)
+void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos, std::function<void(void)> cb)
 {
     if(is_stop)
     {
@@ -197,39 +195,29 @@ void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos)
     }
     else
     {
-        glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-        glm::quat to_target = GLHelper::GetRotateBetweenVec(this->_D,dir_to_target);
-        this->Rotate(to_target);
-        return;
-
         if(!_is_face_to_target)
         {
+            StopAllMove();
+
             _is_face_to_target = true;
             float radian = M_PI/8000.0f*33.0f;
             float angle  = radian * 180.0f / M_PI;
-            GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos](float dt)
+            GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos,cb](float dt)
             {
                 glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-                float camera_target_radian = glm::orientedAngle(this->_D,dir_to_target,this->_U);
-                float step = 0.0f;
-                bool  is_need_stop = false;
-                if(fabs(camera_target_radian) <= radian)
+                glm::quat to_target = GLHelper::GetRotateBetweenVec(this->_D,dir_to_target);
+                glm::quat unit;
+                glm::quat to_temp = GLHelper::GetRotateBetweenVec(unit,to_target,radian);
+                this->Rotate(to_temp);
+
+                if(to_target == to_temp)
                 {
-                    step = camera_target_radian;
-                    is_need_stop = true;
-                }
-                else
-                {
-                    step = radian;
-                }
-                if(camera_target_radian<0)
-                {
-                    step = -step;
-                }
-                this->Rotate(step,this->_U);
-                if(is_need_stop)
-                {
+                    this->_is_face_to_target = false;
                     GTimerMgr::GetInstance().Unschedule(this);
+                    if(cb)
+                    {
+                        cb();
+                    }
                 }
             },GTimerMgr::REPEAT_FOREVER,33);
         }

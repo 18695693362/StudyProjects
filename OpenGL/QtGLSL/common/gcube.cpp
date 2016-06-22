@@ -9,6 +9,7 @@ GCube::GCube()
     _kColorAttribLocal = 1;
     _is_inited = false;
     _scale = 1.0f;
+    _translate = glm::vec3(0.0,0.0,0.0);
     _color = glm::vec4(1.0,0.0,0.0,1.0);
 }
 
@@ -20,6 +21,7 @@ void GCube::Init()
             "#version 410\n"
             "layout (location = 0) in vec3 vi_position;\n"
             "layout (location = 1) in vec3 vi_color;\n"
+            "uniform vec3   move;\n"
             "uniform float  scale;\n"
             "uniform vec4   color;\n"
             "uniform mat4x4 view_matrix;\n"
@@ -29,10 +31,10 @@ void GCube::Init()
             "{\n"
             "    mat4 scale_mat = mat4(scale);"
             "    scale_mat[3].w = 1.0f;"
-            "    //gl_Position = scale_mat*vec4(vi_position,1.0);\n"
-            "    //gl_Position = view_matrix*scale_mat*vec4(vi_position,1.0);\n"
-            "    //gl_Position = projection_matrix*scale_mat*vec4(vi_position,1.0);\n"
-            "    gl_Position = projection_matrix*view_matrix*scale_mat*vec4(vi_position,1.0);\n"
+            "    //gl_Position = scale_mat*vec4(vi_position+move,1.0);\n"
+            "    //gl_Position = view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
+            "    //gl_Position = projection_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
+            "    gl_Position = projection_matrix*view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
             "    //vo_color = color;\n"
             "    vo_color = vec4(vi_color,1.0);\n"
             "}\n";
@@ -75,6 +77,7 @@ void GCube::Init()
 
         _scaleUniformLocal = GLHelper::GetUniformLocal(_program,"scale");
         _colorUniformLocal = GLHelper::GetUniformLocal(_program,"color");
+        _moveUniformLocal  = GLHelper::GetUniformLocal(_program,"move");
         _viewMatrixUniformLocal = GLHelper::GetUniformLocal(_program,"view_matrix");
         _projectionMatrixUniformLocal = GLHelper::GetUniformLocal(_program,"projection_matrix");
 
@@ -97,14 +100,14 @@ void GCube::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data,GLflo
                           int& vertex_pos_comp_count,int& vertex_color_comp_count)
 {
     static GLfloat v_data[] = {
-        -0.5, -0.5,  0.0, //0 front-left-down
-        -0.5,  0.5,  0.0, //1 front-left-up
-         0.5,  0.5,  0.0, //2 front-right-up
-         0.5, -0.5,  0.0, //3 front-right-down
-        -0.5, -0.5, -1.0, //4 back-left-down
-        -0.5,  0.5, -1.0, //5 back-left-up
-         0.5,  0.5, -1.0, //6 back-right-up
-         0.5, -0.5, -1.0, //7 back-right-down
+        -0.5, -0.5,  0.5, //0 front-left-down
+        -0.5,  0.5,  0.5, //1 front-left-up
+         0.5,  0.5,  0.5, //2 front-right-up
+         0.5, -0.5,  0.5, //3 front-right-down
+        -0.5, -0.5, -0.5, //4 back-left-down
+        -0.5,  0.5, -0.5, //5 back-left-up
+         0.5,  0.5, -0.5, //6 back-right-up
+         0.5, -0.5, -0.5, //7 back-right-down
     };
     static GLfloat v_color[] = {
         1.0, 0.0, 0.0,
@@ -149,6 +152,7 @@ void GCube::Draw()
         {
             glUniform1f(_scaleUniformLocal,_scale);
             glUniform4fv(_colorUniformLocal,1,glm::value_ptr(_color));
+            glUniform3fv(_moveUniformLocal,1,glm::value_ptr(_translate));
             if(_view_matrix_getter && _viewMatrixUniformLocal!=-1)
             {
                 glm::mat4x4 view_matrix;

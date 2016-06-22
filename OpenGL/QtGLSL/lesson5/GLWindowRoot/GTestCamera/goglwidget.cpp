@@ -47,13 +47,18 @@ void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
     _camera.SetCurProjectionType(GCamera::kPerspective);
-    _cube.Init();
-    _cube.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
-        this->_camera.GetViewMatrix(view_matrix);
-    });
-    _cube.SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
-        this->_camera.GetCurProjectionMatrix(projection_matrix);
-    });
+    for(int i=0; i<_kCubesCount; i++)
+    {
+        _cubes[i].Init();
+        _cubes[i].SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
+            this->_camera.GetViewMatrix(view_matrix);
+        });
+        _cubes[i].SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
+            this->_camera.GetCurProjectionMatrix(projection_matrix);
+        });
+        _cubes[i].SetTranslate(glm::vec3(0.0,0.0,i*-1*2));
+    }
+    //_cubes[_kCubesCount-1].SetScale(2.f);
 
     glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClearDepth(100.0f);
@@ -72,7 +77,11 @@ void GOGLWidget::paintGL()
     //glEnable(GL_CULL_FACE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    _cube.Draw();
+    for(int i=0; i<_kCubesCount; i++)
+    {
+        _cubes[i].Draw();
+    }
+
     //GLHelper::Log("counter = "+to_string(counter));
     glFlush();
 }
@@ -146,12 +155,17 @@ void GOGLWidget::keyReleaseEvent(QKeyEvent *event)
         }
         case Qt::Key_F:
         {
-            _camera.FaceToTarget(false);
+            _camera.FaceToTarget(false,glm::vec3(0.0,0.0,-4.0));
             break;
         }
         case Qt::Key_Escape:
         {
             _camera.ResetPosAndOrient();
+            break;
+        }
+        case Qt::Key_Space:
+        {
+            _camera.StopAllMove();
             break;
         }
         default:

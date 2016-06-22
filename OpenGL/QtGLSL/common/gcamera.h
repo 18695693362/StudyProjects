@@ -4,6 +4,7 @@
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
 #include "../libs/glm/glm/gtc/quaternion.hpp"
+#include <functional>
 class GCamera
 {
 public:
@@ -63,8 +64,9 @@ public:
     void Rotate(float angle, float ax, float ay, float az);
     void GetViewMatrix(glm::mat4x4& view_matrix);
 
+    void StopAllMove();
     void RotateAroundTarget(bool is_stop, const glm::vec3 &target_pos=glm::vec3(0.0f,0.0f,0.0f));
-    void FaceToTarget(bool is_stop, const glm::vec3 &target_pos=glm::vec3(0.0f,0.0f,0.0f));
+    void FaceToTarget(bool is_stop, const glm::vec3 &target_pos=glm::vec3(0.0f,0.0f,0.0f), std::function<void(void)> cb=nullptr);
     enum InfoType{
         kAll,
         kPos = 1,
