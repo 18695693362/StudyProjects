@@ -13,10 +13,9 @@ using namespace std;
     }\
 }while(0);
 
-const glm::vec3 GCamera::LocalForward(0.0f, 0.0f, -1.0f);
-const glm::vec3 GCamera::LocalUp(0.0f, 1.0f, 0.0f);
-const glm::vec3 GCamera::LocalRight(1.0f, 0.0f, 0.0f);
-
+const glm::vec3 GCamera::LocalRight(  1.0f, 0.0f, 0.0f);
+const glm::vec3 GCamera::LocalUp(     0.0f, 1.0f, 0.0f);
+const glm::vec3 GCamera::LocalForward(0.0f, 0.0f, 1.0f);
 GCamera::GCamera(const glm::vec3 &pos)
     :_is_camera_changed(true)
     ,_is_pos_changed(true)
@@ -90,7 +89,7 @@ void GCamera::GetViewMatrix(glm::mat4x4 &view_matrix)
 
     view_matrix = w_to_v_matrix * move_matrix;
 #else
-    view_matrix = glm::lookAt(_position,_position+_D,_U);
+    view_matrix = glm::lookAt(_position,_position-_D,_U);
 #endif
 }
 
@@ -117,20 +116,28 @@ void GCamera::Translate(float dx, float dy, float dz)
 
 void GCamera::Rotate(const glm::quat &dr)
 {
+#define G_USE_SELF_ROTATE
+#ifdef G_USE_SELF_ROTATE
     glm::quat quat_D = glm::quat(0.0,_D.x,_D.y,_D.z);
     quat_D = dr*quat_D*glm::conjugate(dr);
     _D.x = quat_D.x;
     _D.y = quat_D.y;
     _D.z = quat_D.z;
     _D = glm::normalize(_D);
+#else
+    _D = glm::normalize(dr * _D);
+#endif
 
+#ifdef G_USE_SELF_ROTATE
     glm::quat quat_U = glm::quat(0.0,_U.x,_U.y,_U.z);
     quat_U = dr*quat_U*glm::conjugate(dr);
     _U.x = quat_U.x;
     _U.y = quat_U.y;
     _U.z = quat_U.z;
     _U = glm::normalize(_U);
-
+#else
+    _U = glm::normalize(dr * _U);
+#endif
     _R = glm::cross(_U,_D);
 
     _is_orien_changed = true;
