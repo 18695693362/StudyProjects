@@ -20,6 +20,8 @@ protected:
     virtual void resizeGL(int w, int h);
     virtual void keyPressEvent(QKeyEvent * event);
     virtual void keyReleaseEvent(QKeyEvent * event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
 private:
     bool    is_full_screen_;
     float   window_width_;
@@ -28,6 +30,9 @@ private:
     GCamera             _camera;
     static const int    _kCubesCount = 5;
     GCube               _cubes[_kCubesCount];
+
+    QTimer*             _mouse_timer;
+    QPoint              _mouse_pos;
 };
 
 #endif // GOGLWIDGET_H

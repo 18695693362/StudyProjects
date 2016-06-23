@@ -93,7 +93,7 @@ lesson6
 参考链接：
 Modern OpenGL Tutorials:            http://ogldev.atspace.co.uk/index.html
 learnopengl:                        https://learnopengl-cn.readthedocs.io/zh/latest/
-
+opengl-tutorial:                    http://www.opengl-tutorial.org/
 
 
 

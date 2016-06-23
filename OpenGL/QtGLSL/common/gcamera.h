@@ -53,9 +53,18 @@ public:
 
     void ResetPosAndOrient();
 
-    glm::vec3 GetForward() const;
-    glm::vec3 GetUp() const;
-    glm::vec3 GetRight() const;
+    glm::vec3 GetForward() const
+    {
+        return _D;
+    }
+    glm::vec3 GetUp() const
+    {
+        return _U;
+    }
+    glm::vec3 GetRight() const
+    {
+        return _R;
+    }
 
     void Translate(const glm::vec3 &step);
     void Translate(float dx, float dy, float dz);

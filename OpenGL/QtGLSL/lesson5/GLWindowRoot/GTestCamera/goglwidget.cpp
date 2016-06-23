@@ -173,7 +173,45 @@ void GOGLWidget::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
+void GOGLWidget::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::MouseButton::LeftButton)
+    {
+        static const float rotSpeed   = 0.5f;
+        this->_mouse_pos = QCursor::pos();
 
+        _mouse_timer = GTimerMgr::GetInstance().Schedule(this,[this](float dt){
+            QPoint delta = QCursor::pos() - this->_mouse_pos;
+            this->_mouse_pos = QCursor::pos();
+
+            this->_camera.Rotate(delta.x()*rotSpeed,_camera.GetUp());
+            this->_camera.Rotate(delta.y()*rotSpeed,_camera.GetRight());
+        },GTimerMgr::REPEAT_FOREVER,33);
+    }
+    else
+    {
+        this->_mouse_pos = QCursor::pos();
+
+        _mouse_timer = GTimerMgr::GetInstance().Schedule(this,[this](float dt){
+            QPoint delta = QCursor::pos() - this->_mouse_pos;
+            this->_mouse_pos = QCursor::pos();
+            GLHelper::Log(string("delta x = ")+to_string(delta.x()));
+            GLHelper::Log(string("delta y = ")+to_string(delta.y()));
+        },GTimerMgr::REPEAT_FOREVER,33);
+    }
+}
+
+void GOGLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::MouseButton::LeftButton)
+    {
+        GTimerMgr::GetInstance().Unschedule(this,_mouse_timer);
+    }
+    else
+    {
+        GTimerMgr::GetInstance().Unschedule(this,_mouse_timer);
+    }
+}
 
 
 
