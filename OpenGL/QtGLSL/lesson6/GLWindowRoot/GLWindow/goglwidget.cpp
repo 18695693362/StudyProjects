@@ -1,6 +1,7 @@
 #include "goglwidget.h"
 #include <iostream>
 #include "../../../common/glhelper.h"
+#include "../../../common/gtimermgr.h"
 #include "glm/glm.hpp"
 #include "glm/fwd.hpp"
 //#include "glm/gtc/matrix_transform.hpp"
@@ -15,7 +16,7 @@ using namespace std;
 #define kDefaultX   100.0f
 #define kDefaultY   100.0f
 #define kDesignSizeW    480.f
-#define kDesignSizeH    320.f
+#define kDesignSizeH    480.f
 
 GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
     QOpenGLWidget(parent)
@@ -35,11 +36,21 @@ GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
 void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
-    //_triangle.Init(nullptr);
-    _cube.Init();
+    _camera.SetCurProjectionType(GCamera::kPerspective);
+
+    _triangle.Init(nullptr);
+    //_cube.Init();
+    _skybox.Init("sp3right.jpg","sp3left.jpg","sp3top.jpg","sp3bot.jpg","sp3front.jpg","sp3back.jpg",QImage::Format::Format_RGB888);
+    _skybox.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
+        this->_camera.GetViewMatrix(view_matrix);
+    });
+    _skybox.SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
+        this->_camera.GetCurProjectionMatrix(projection_matrix);
+    });
+    //_skybox.SetScale(10);
 
     glClearColor(0.0f,0.0f,1.0f,1.0f);
-    glClearDepth(1.0f);
+    glClearDepth(100.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
@@ -54,8 +65,9 @@ void GOGLWidget::paintGL()
     glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    _triangle.Draw();
+    //_triangle.Draw();
     _cube.Draw();
+    _skybox.Draw();
 
     glFlush();
 }
@@ -71,6 +83,121 @@ void GOGLWidget::resizeGL(int w, int h)
     window_height_= h;
 
     glViewport(0,0,window_width_,window_height_);
+}
+
+
+void GOGLWidget::keyPressEvent(QKeyEvent *event)
+{
+    static float step_factor = 0.1;
+    glm::vec3 step(0);
+    switch (event->key())
+    {
+        case Qt::Key_A:
+        {
+            step = -_camera.GetRight();
+            break;
+        }
+        case Qt::Key_D:
+        {
+            step = _camera.GetRight();
+            break;
+        }
+        case Qt::Key_Q:
+        {
+            step = -_camera.GetUp();
+            break;
+        }
+        case Qt::Key_E:
+        {
+            step = _camera.GetUp();
+            break;
+        }
+        case Qt::Key_W:
+        {
+            step = -_camera.GetForward();
+            break;
+        }
+        case Qt::Key_S:
+        {
+            step = _camera.GetForward();
+            break;
+        }
+        default:
+            break;
+    }
+    GLHelper::Log("move key "+to_string(event->key()));
+    _camera.Translate(step*step_factor);
+
+    update();
+}
+
+void GOGLWidget::keyReleaseEvent(QKeyEvent *event)
+{
+    switch (event->key())
+    {
+        case Qt::Key_R:
+        {
+            _camera.RotateAroundTarget(false);
+            break;
+        }
+        case Qt::Key_F:
+        {
+            _camera.FaceToTarget(false,glm::vec3(0.0,0.0,-4.0));
+            break;
+        }
+        case Qt::Key_Escape:
+        {
+            _camera.ResetPosAndOrient();
+            break;
+        }
+        case Qt::Key_Space:
+        {
+            _camera.StopAllMove();
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+void GOGLWidget::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::MouseButton::LeftButton)
+    {
+        static const float rotSpeed   = 0.5f;
+        this->_mouse_pos = QCursor::pos();
+
+        _mouse_timer = GTimerMgr::GetInstance().Schedule(this,[this](float dt){
+            QPoint delta = QCursor::pos() - this->_mouse_pos;
+            this->_mouse_pos = QCursor::pos();
+
+            this->_camera.Rotate(delta.x()*-rotSpeed,_camera.GetUp());
+            this->_camera.Rotate(delta.y()*-rotSpeed,_camera.GetRight());
+        },GTimerMgr::REPEAT_FOREVER,33);
+    }
+    else
+    {
+        this->_mouse_pos = QCursor::pos();
+
+        _mouse_timer = GTimerMgr::GetInstance().Schedule(this,[this](float dt){
+            QPoint delta = QCursor::pos() - this->_mouse_pos;
+            this->_mouse_pos = QCursor::pos();
+            GLHelper::Log(string("delta x = ")+to_string(delta.x()));
+            GLHelper::Log(string("delta y = ")+to_string(delta.y()));
+        },GTimerMgr::REPEAT_FOREVER,33);
+    }
+}
+
+void GOGLWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::MouseButton::LeftButton)
+    {
+        GTimerMgr::GetInstance().Unschedule(this,_mouse_timer);
+    }
+    else
+    {
+        GTimerMgr::GetInstance().Unschedule(this,_mouse_timer);
+    }
 }
 
 

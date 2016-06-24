@@ -19,7 +19,9 @@ SOURCES += main.cpp \
     goglwidget.cpp \
     ../../../common/gcubemaptexture.cpp \
     ../../../common/gcube.cpp \
-    ../../../common/gcamera.cpp
+    ../../../common/gcamera.cpp \
+    ../../../common/gskybox.cpp \
+    ../../../common/gtimermgr.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
@@ -28,7 +30,9 @@ HEADERS  += \
     goglwidget.h \
     ../../../common/gcubemaptexture.h \
     ../../../common/gcube.h \
-    ../../../common/gcamera.h
+    ../../../common/gcamera.h \
+    ../../../common/gskybox.h \
+    ../../../common/gtimermgr.h
 
 CONFIG += c++11
 

@@ -7,11 +7,9 @@
 class GCubemapTexture
 {
 public:
-    GCubemapTexture(const char* pos_x, const char* neg_x, const char* pos_y, const char* neg_y,
-                    const char* pos_z, const char* neg_z, QImage::Format format);
-    ~GCubemapTexture();
+    bool Load(const char* pos_x, const char* neg_x, const char* pos_y, const char* neg_y,
+              const char* pos_z, const char* neg_z, QImage::Format format);
 
-    bool Load();
     void Bind(GLenum texture_unit);
 
     enum FaceType{
@@ -24,8 +22,10 @@ public:
         kFaceNums
     };
 private:
-    std::string     _files[kFaceNums];
+    bool            _is_loaded = false;
     GLuint          _texture_obj;
+
+    std::string     _files[kFaceNums];
     QImage::Format  _img_format;
 };
 

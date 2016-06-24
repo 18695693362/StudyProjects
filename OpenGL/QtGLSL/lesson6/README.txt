@@ -160,7 +160,7 @@ void glGenSamplers(GLsizei count, GLuint *samplers);
 void glBindSampler(GLuint unit, GLuint sampler);
 unit为sampler单元的索引。如果sampler为0，则清除sampler单元上绑定的所有sampler对象
 GLboolean glIsSampler(GLenum id);
-glBindTexture 和 glBindSampler的不同之处：
+glBindTexture 和 glBindSampler的不同之处： //void glBindTexture(GLenum target, GLuint texture);
 --1-- glBindSampler没有target参数。因为sampler对象没有维度一说，所以没必要区别不同类型的sampler对象类型。
 --2-- glBindSampler有unit参数，没有对应的glActiveSampler函数。glActiveTexture的参数为GL_TEXTURE0-GLTEXTURi的常数，i的最大值是由实现定义的。
 unit是一个无符号整数，允许任意数目的sampler单元。
@@ -171,7 +171,7 @@ void glDeleteSamplers(GLsizei count, const GLuint *samplers );
 void glSamplerParameter{fi}(GLuint sampler, GLenum pname, Type param );
 void glSamplerParameter{fi}v(GLuint sampler, GLenum pname, const Type* param );
 void glSamplerParameterI{i ui}v(GLuint sampler, GLenum pname,const Type* param );
-下面的函数用来设置贴图当前关联的sampler object的参数
+下面的函数用来设置贴图关联的默认的sampler object的参数
 void glTexParameter{fi}(GLenum target, GLenum pname, Type param );
 void glTexParameter{fi}v(GLenum target, GLenum pname, const Type *param );
 void glTexParameterI{i ui}v(GLenum target, GLenum pname, const Type *param );
@@ -274,7 +274,9 @@ Cube-Map贴图的贴图坐标为
 十四、 Rendering to Texture Maps
 
 
-
+Tips:
+1 关于 纹理对象、纹理单元、采样器变量、采样器对象、采样器单元的关系可参考一下文档描述。
+http://ogldev.atspace.co.uk/www/tutorial16/tutorial16.html
 
 
 
