@@ -101,45 +101,45 @@ void GOGLWidget::resizeGL(int w, int h)
 
 void GOGLWidget::keyPressEvent(QKeyEvent *event)
 {
-    static float step_value = 0.1;
+    static float step_factor = 0.1;
     glm::vec3 step(0);
     switch (event->key())
     {
         case Qt::Key_A:
         {
-            step.x = -step_value;
+            step = -_camera.GetRight();
             break;
         }
         case Qt::Key_D:
         {
-            step.x = step_value;
+            step = _camera.GetRight();
             break;
         }
         case Qt::Key_Q:
         {
-            step.y = -step_value;
+            step = -_camera.GetUp();
             break;
         }
         case Qt::Key_E:
         {
-            step.y = step_value;
+            step = _camera.GetUp();
             break;
         }
         case Qt::Key_W:
         {
-            step.z = step_value;
+            step = -_camera.GetForward();
             break;
         }
         case Qt::Key_S:
         {
-            step.z = -step_value;
+            step = _camera.GetForward();
             break;
         }
         default:
             break;
     }
     GLHelper::Log("move key "+to_string(event->key()));
-    _camera.Translate(step);
+    _camera.Translate(step*step_factor);
 
     update();
 }
@@ -184,8 +184,8 @@ void GOGLWidget::mousePressEvent(QMouseEvent *event)
             QPoint delta = QCursor::pos() - this->_mouse_pos;
             this->_mouse_pos = QCursor::pos();
 
-            this->_camera.Rotate(delta.x()*rotSpeed,_camera.GetUp());
-            this->_camera.Rotate(delta.y()*rotSpeed,_camera.GetRight());
+            this->_camera.Rotate(delta.x()*-rotSpeed,_camera.GetUp());
+            this->_camera.Rotate(delta.y()*-rotSpeed,_camera.GetRight());
         },GTimerMgr::REPEAT_FOREVER,33);
     }
     else

@@ -80,6 +80,10 @@ DEPENDPATH += $$PWD/../../../libs/glm
 9. 注意： vector遍历删除照成iterator实效的问题
 例如 GTimerMgr::Unschedule中
 
+10. 实现自定义的LookUp时，需要注意OpenGL中矩阵的存储是列主序的
+
+
+
 TODO
 lesson4
 实现一个描边效果

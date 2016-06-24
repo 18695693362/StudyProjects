@@ -77,14 +77,14 @@ void GCamera::GetViewMatrix(glm::mat4x4 &view_matrix)
         _is_orien_changed = false;
     }
 
-//#define G_USE_SELF_MATRIX
+#define G_USE_SELF_MATRIX
 #ifdef G_USE_SELF_MATRIX
     glm::mat4x4 move_matrix = GLHelper::GetTranslate(-_position.x,-_position.y,-_position.z);
     glm::mat4x4 w_to_v_matrix;
 
-    w_to_v_matrix[0][0] = _R.x; w_to_v_matrix[0][1] = _R.y; w_to_v_matrix[0][2] = _R.z; w_to_v_matrix[0][3] = 0.0;
-    w_to_v_matrix[1][0] = _U.x; w_to_v_matrix[1][1] = _U.y; w_to_v_matrix[1][2] = _U.z; w_to_v_matrix[1][3] = 0.0;
-    w_to_v_matrix[2][0] = _D.x; w_to_v_matrix[2][1] = _D.y; w_to_v_matrix[2][2] = _D.z; w_to_v_matrix[2][3] = 0.0;
+    w_to_v_matrix[0][0] = _R.x; w_to_v_matrix[1][0] = _R.y; w_to_v_matrix[2][0] = _R.z; w_to_v_matrix[3][0] = 0.0;
+    w_to_v_matrix[0][1] = _U.x; w_to_v_matrix[1][1] = _U.y; w_to_v_matrix[2][1] = _U.z; w_to_v_matrix[3][1] = 0.0;
+    w_to_v_matrix[0][2] = _D.x; w_to_v_matrix[1][2] = _D.y; w_to_v_matrix[2][2] = _D.z; w_to_v_matrix[3][2] = 0.0;
     w_to_v_matrix[3] = glm::vec4(0); w_to_v_matrix[3][3] = 1.0;
 
     view_matrix = w_to_v_matrix * move_matrix;
@@ -186,7 +186,7 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
                                                       rotate_axis.z)*glm::vec4(this->_position,1.0));
 
                 glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-                glm::quat to_target = GLHelper::GetRotateBetweenVec(this->_D,dir_to_target);
+                glm::quat to_target = GLHelper::GetRotateBetweenVec(-this->_D,dir_to_target);
                 this->Rotate(to_target);
             },GTimerMgr::REPEAT_FOREVER,33);
         }
@@ -212,7 +212,7 @@ void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos, std::funct
             GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos,cb](float dt)
             {
                 glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-                glm::quat to_target = GLHelper::GetRotateBetweenVec(this->_D,dir_to_target);
+                glm::quat to_target = GLHelper::GetRotateBetweenVec(-this->_D,dir_to_target);
                 glm::quat unit;
                 glm::quat to_temp = GLHelper::GetRotateBetweenVec(unit,to_target,radian);
                 this->Rotate(to_temp);
