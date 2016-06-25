@@ -91,7 +91,6 @@ lesson4
 实现一个描边效果
 lesson5
 裁剪平面例子实现
-实现一个摄像机类
 离子系统实现
 lesson6
 实现一个skybox
