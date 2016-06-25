@@ -37,6 +37,7 @@ void GSkybox::Init(const char *pos_x, const char *neg_x, const char *pos_y, cons
             "    //gl_Position = view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
             "    //gl_Position = projection_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
             "    gl_Position = projection_matrix*view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
+            "    gl_Position = gl_Position.xyww;\n"
             "    //vo_color = color;\n"
             "    vo_color = vec4(vi_color,1.0);\n"
             "    vo_tex_pos = vi_position;\n"
@@ -153,6 +154,11 @@ void GSkybox::Draw()
 {
     if(_is_inited)
     {
+        if(_camera_pos_getter)
+        {
+            SetTranslate(_camera_pos_getter());
+        }
+
         GLint OldCullFaceMode;
         glGetIntegerv(GL_CULL_FACE_MODE, &OldCullFaceMode);
         GLint OldDepthFuncMode;

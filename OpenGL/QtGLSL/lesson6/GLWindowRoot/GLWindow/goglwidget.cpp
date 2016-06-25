@@ -31,6 +31,10 @@ GOGLWidget::GOGLWidget(QWidget *parent, const char* name, bool full_screen) :
     is_full_screen_ = full_screen;
     if(is_full_screen_)
         showFullScreen();
+
+    GTimerMgr::GetInstance().Schedule(this,[this](float delta){
+        this->update();
+    },GTimerMgr::REPEAT_FOREVER,33);
 }
 
 void GOGLWidget::initializeGL()
@@ -38,15 +42,27 @@ void GOGLWidget::initializeGL()
     initializeOpenGLFunctions();
     _camera.SetCurProjectionType(GCamera::kPerspective);
 
-    _triangle.Init(nullptr);
-    //_cube.Init();
-    _skybox.Init("sp3right.jpg","sp3left.jpg","sp3top.jpg","sp3bot.jpg","sp3front.jpg","sp3back.jpg",QImage::Format::Format_RGB888);
-    _skybox.SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
-        this->_camera.GetViewMatrix(view_matrix);
-    });
-    _skybox.SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
-        this->_camera.GetCurProjectionMatrix(projection_matrix);
-    });
+    //_triangle.Init(nullptr);
+    _cube.Init();
+    _cube.SetScale(0.3);
+    GLHelper::Foreach([this](GModel* model){
+        model->SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
+            this->_camera.GetViewMatrix(view_matrix);
+        });
+        model->SetProjectionMatrixGetter([this](glm::mat4x4& projection_matrix){
+            this->_camera.GetCurProjectionMatrix(projection_matrix);
+        });
+        model->SetCameraPosGetter([this](){
+            return this->_camera.GetPosition();
+        });
+    },(GModel*)&_skybox,(GModel*)&_cube);
+    _skybox.Init("skybox_2/right.jpg",
+                 "skybox_2/left.jpg",
+                 "skybox_2/top.jpg",
+                 "skybox_2/bottom.jpg",
+                 "skybox_2/front.jpg",
+                 "skybox_2/back.jpg",
+                 QImage::Format::Format_RGB888);
     //_skybox.SetScale(10);
 
     glClearColor(0.0f,0.0f,1.0f,1.0f);
@@ -62,10 +78,9 @@ void GOGLWidget::initializeGL()
 void GOGLWidget::paintGL()
 {
     //glEnable(GL_CULL_FACE);
-    glDisable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //_triangle.Draw();
+    _triangle.Draw();
     _cube.Draw();
     _skybox.Draw();
 

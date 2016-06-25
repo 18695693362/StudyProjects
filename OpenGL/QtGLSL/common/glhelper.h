@@ -7,8 +7,11 @@
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
 #include "../libs/glm/glm/gtc/quaternion.hpp"
 #include <string>
+#include <functional>
 #include "gtriangle.h"
+#include "gmodel.h"
 
+#define ZERO_VEC_LEN2 0.001f
 #define BUFF_OFFSET(offset) ((void*)(offset))
 
 enum LogType{
@@ -49,6 +52,17 @@ public:
     static void LoadTexture(GLuint& texture_obj, GLenum texture_target, GLenum *sampler_param_name, GLenum *sampler_param_value, int sampler_param_count, QImage::Format format, bool is_gen_mipmap, const char *image_path);
 
     static long GetTickCount();
+
+    template<typename OptType,typename ArgType, typename ... Args>
+    static void Foreach(OptType opt, ArgType first_arg, Args ... rest_args)
+    {
+        opt(first_arg);
+        ArgType args_list[sizeof...(rest_args)] = {rest_args...};
+        for(size_t i=0; i<sizeof...(rest_args); i++)
+        {
+            opt(args_list[i]);
+        }
+    }
 private:
     static QElapsedTimer _start_timer;
 };

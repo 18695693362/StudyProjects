@@ -116,6 +116,10 @@ void GCamera::Translate(float dx, float dy, float dz)
 
 void GCamera::Rotate(const glm::quat &dr)
 {
+    if(glm::length2(dr) < ZERO_VEC_LEN2)
+    {
+        return;
+    }
 #define G_USE_SELF_ROTATE
 #ifdef G_USE_SELF_ROTATE
     glm::quat quat_D = glm::quat(0.0,_D.x,_D.y,_D.z);
@@ -145,6 +149,10 @@ void GCamera::Rotate(const glm::quat &dr)
 
 void GCamera::Rotate(float angle, const glm::vec3 &axis)
 {
+    if(glm::length2(axis)<ZERO_VEC_LEN2)
+    {
+        return;
+    }
     angle = (angle / 2.0f) * M_PI / 180.0f;
     float s = std::sin(angle);
     float c = std::cos(angle);
@@ -176,18 +184,25 @@ void GCamera::RotateAroundTarget(bool is_stop,const glm::vec3& target_pos)
             float angle  = radian * 180.0f / M_PI;
             GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos](float dt)
             {
-                glm::mat4x4 move_to_target = GLHelper::GetTranslate(target_pos.x-this->_position.x,
-                                                                    target_pos.y-this->_position.y,
-                                                                    target_pos.z-this->_position.z);
-                glm::vec4 rotate_axis = move_to_target*glm::vec4(this->_U,1.0);
-                this->_position = glm::vec3(GLHelper::GetRotate(radian,
-                                                      rotate_axis.x,
-                                                      rotate_axis.y,
-                                                      rotate_axis.z)*glm::vec4(this->_position,1.0));
+                if(glm::length2(target_pos-this->_position)<ZERO_VEC_LEN2)
+                {
+                    this->Rotate(angle,this->_U);
+                }
+                else
+                {
+                    glm::mat4x4 move_to_target = GLHelper::GetTranslate(target_pos.x-this->_position.x,
+                                                                        target_pos.y-this->_position.y,
+                                                                        target_pos.z-this->_position.z);
+                    glm::vec4 rotate_axis = move_to_target*glm::vec4(this->_U,1.0);
+                    this->_position = glm::vec3(GLHelper::GetRotate(radian,
+                                                          rotate_axis.x,
+                                                          rotate_axis.y,
+                                                          rotate_axis.z)*glm::vec4(this->_position,1.0));
 
-                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-                glm::quat to_target = GLHelper::GetRotateBetweenVec(-this->_D,dir_to_target);
-                this->Rotate(to_target);
+                    glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
+                    glm::quat to_target = GLHelper::GetRotateBetweenVec(-this->_D,dir_to_target);
+                    this->Rotate(to_target);
+                }
             },GTimerMgr::REPEAT_FOREVER,33);
         }
     }
@@ -211,13 +226,7 @@ void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos, std::funct
             float angle  = radian * 180.0f / M_PI;
             GTimerMgr::GetInstance().Schedule(this,[this,angle,radian,target_pos,cb](float dt)
             {
-                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
-                glm::quat to_target = GLHelper::GetRotateBetweenVec(-this->_D,dir_to_target);
-                glm::quat unit;
-                glm::quat to_temp = GLHelper::GetRotateBetweenVec(unit,to_target,radian);
-                this->Rotate(to_temp);
-
-                if(to_target == to_temp)
+                if(glm::length2(target_pos-this->_position) < ZERO_VEC_LEN2)
                 {
                     this->_is_face_to_target = false;
                     GTimerMgr::GetInstance().Unschedule(this);
@@ -225,7 +234,13 @@ void GCamera::FaceToTarget(bool is_stop, const glm::vec3 &target_pos, std::funct
                     {
                         cb();
                     }
+                    return;
                 }
+                glm::vec3 dir_to_target = glm::normalize(target_pos-this->_position);
+                glm::quat to_target = GLHelper::GetRotateBetweenVec(-this->_D,dir_to_target);
+                glm::quat unit;
+                glm::quat to_temp = GLHelper::GetRotateBetweenVec(unit,to_target,radian);
+                this->Rotate(to_temp);
             },GTimerMgr::REPEAT_FOREVER,33);
         }
     }

@@ -29,7 +29,7 @@ bool GCubemapTexture::Load(const char *pos_x, const char *neg_x, const char *pos
         {
             QImage temp(GLHelper::GetAbsPathRelativeGResPath(_files[face_index]).c_str());
             QImage image = temp.convertToFormat(_img_format);
-            glTexImage2D(texture_targets[face_index],0,GL_RGB,image.width(),image.height(),0,GL_RGBA,GL_UNSIGNED_BYTE,image.bits());
+            glTexImage2D(texture_targets[face_index],0,GL_RGB,image.width(),image.height(),0,GL_RGB,GL_UNSIGNED_BYTE,image.bits());
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

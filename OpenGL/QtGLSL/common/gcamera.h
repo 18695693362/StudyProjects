@@ -53,6 +53,10 @@ public:
 
     void ResetPosAndOrient();
 
+    const glm::vec3& GetPosition() const
+    {
+        return _position;
+    }
     glm::vec3 GetForward() const
     {
         return _D;

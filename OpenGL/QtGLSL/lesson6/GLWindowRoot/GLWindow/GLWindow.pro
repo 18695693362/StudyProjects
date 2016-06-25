@@ -32,7 +32,8 @@ HEADERS  += \
     ../../../common/gcube.h \
     ../../../common/gcamera.h \
     ../../../common/gskybox.h \
-    ../../../common/gtimermgr.h
+    ../../../common/gtimermgr.h \
+    ../../../common/gmodel.h
 
 CONFIG += c++11
 

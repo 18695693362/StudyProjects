@@ -82,7 +82,9 @@ DEPENDPATH += $$PWD/../../../libs/glm
 
 10. 实现自定义的LookUp时，需要注意OpenGL中矩阵的存储是列主序的
 
+11. 旋转摄像机画面没有变化：请检查一下QOpenGLWidget是否开启了每帧执行update的操作！
 
+12. 物体贴图为黑白颜色时，检查glTexImage2D的format参数是否正确。
 
 TODO
 lesson4
