@@ -94,6 +94,8 @@ lesson5
 离子系统实现
 lesson6
 实现一个skybox
+lesson7
+实现阴影贴图
 
 参考链接：
 Modern OpenGL Tutorials:            http://ogldev.atspace.co.uk/index.html
