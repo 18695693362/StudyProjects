@@ -414,8 +414,7 @@ OpenGL会保证支持两种家族格式。RGTC(Red-Green贴图压缩格式)和BP
 
 使用离线压缩图片时，可使用下面的方法指定可变的存储
 void glCompressedTexImage1D(GLenum target, GLint level, GLenum internalFormat,
-GLsizei width, GLint border, GLsizei imageSize,
-const void *data);
+GLsizei width, GLint border, GLsizei imageSize, const void *data);
 ......
 
 使用离线压缩图片时，更新压缩贴图的部分数据
@@ -424,6 +423,30 @@ GLenum format, GLsizei imageSize, const void *data);
 ......
 
 十一、 Filtering
+1. 简述
+贴图映射可以是直线、正方形、矩形甚至是3，贴图被映射到一个多边形或表面并且被转换为屏幕坐标后，贴图的每个独立的图元
+很少会直接对应屏幕图片的每个独立的像素。依赖于使用的变换以及应用的贴图映射，屏幕上的一个像素可能对应一个贴图图元的
+一小部分，或者一组图元的集合。
+
+2. Linear Filtering
+只要贴图的采样率相对于图片的尖峰数据足够高，线性重建的图片依然会有相当高的质量。
+OpenGL获得你传递给它的贴图坐标，并且查找两个最靠近的样本。依据到这两个点的距离为这两个样本创建权值，然后使用它们的
+权值来创建一个平均权值。
+线性过滤不仅可用于1D 2D 3D贴图，它还可用于邻接的mipmap。
+GL_TEXTURE_MAG_FILTER和GL_TEXTURE_MIN_FILTER这两个参数控制OpenGL如何过滤贴图。
+贴图被放大时使用GL_TEXTURE_MAG_FILTER参数的配置。需求的贴图分辨率比最高分辨率的mipmap(level0)高.
+贴图被缩小是使用GL_TEXTURE_MIN_FILTER参数的配置。
+
+3. Using and Generating Mipmaps
+GL_TEXTURE_MIN_FILTER参数控制着，当mipmap level比0大时，贴图图元如何创建。
+GL_NEAREST和GL_LINEAR设置会关闭mipmapping，OpenGL只会使用level0贴图。
+GL_NEAREST_MIPMAP_NEAREST、GL_NEAREST_MIPMAP_LINEAR、GL_LINEAR_MIPMAP_NEAREST、GL_LINEAR_MIPMAP_LINEAR设
+置会启用mipmapping。GL_A_MIPMAP_B,A控制如何创建每个level-mipmap的图元。NEAREST表示取最近的图元，LINEAR表示线性插值
+获得图元；B控制如何将这些样本混合。NEAREST表示只使用最近level的mipmap，LINEAR表示取两个最近的mipmap进行线性插值。
+
+为了使用mipmapping，你必须提供所有2的幂尺寸的贴图，这些2的幂尺寸的贴图尺寸范围为1x1到贴图最大尺寸。
+如果你不想使用mipmapping一直到1x1大小的贴图，你可以设置GL_TEXTURE_MAX_LEVEL来指定你提供的最大level。
+如果最高分辨率level的贴图不是正方形，一个维度将
 十二、 Advanced Texture Lookup Functions
 十三、 Point Sprites
 十四、 Rendering to Texture Maps
