@@ -1,5 +1,4 @@
 一、目录说明
-
 common 目录下放置公共代码
 libs   目录下放置用到的库
 
@@ -13,3 +12,15 @@ TIPS.txt    根目录下有TIPS.txt，记录一些注意事项。
 
 三、内容说明
 该项目记录了《OpenGL Programming Guide,Eighth Edition》读书笔记，实现了书中的程序。项目使用了Qt5.
+（一）  Introduction to OpenGL
+（二）  Shader Fundamentals
+（三）  Drawing with OpenGL
+（四）  Color,Pixels,and Framebuffers
+（五）  Viewing Transformations,Clipping,and Feedback
+（六）  Textures
+（七）  Light and Shadow
+（八）  Procedural Texturing
+（九）  Tessellation Shaders
+（十）  Geometry Shaders
+（十一）Memory
+（十二）Compute Shaders

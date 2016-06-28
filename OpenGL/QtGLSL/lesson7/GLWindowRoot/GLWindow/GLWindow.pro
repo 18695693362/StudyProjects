@@ -47,7 +47,8 @@ DEPENDPATH += $$PWD/../../../libs/glm
 
 DISTFILES += \
     ../../../TIPS.txt \
-    ../../README.txt
+    ../../README.txt \
+    ../../../Readme.txt
 
 RES_DIR = "res"
 G_SRC_DIR = $${PWD}/$${G_RES_DIR}
