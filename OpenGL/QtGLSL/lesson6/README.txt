@@ -443,13 +443,187 @@ GL_NEAREST和GL_LINEAR设置会关闭mipmapping，OpenGL只会使用level0贴图
 GL_NEAREST_MIPMAP_NEAREST、GL_NEAREST_MIPMAP_LINEAR、GL_LINEAR_MIPMAP_NEAREST、GL_LINEAR_MIPMAP_LINEAR设
 置会启用mipmapping。GL_A_MIPMAP_B,A控制如何创建每个level-mipmap的图元。NEAREST表示取最近的图元，LINEAR表示线性插值
 获得图元；B控制如何将这些样本混合。NEAREST表示只使用最近level的mipmap，LINEAR表示取两个最近的mipmap进行线性插值。
+Tips:
+GL_TEXTURE_MAG_FILTER的默认值为GL_LINEAR，GL_TEXTURE_MIN_FILTER的默认值为GL_LINEAR_MIPMAP_LINEAR。所以默认情况
+下回启用mipmapping。使用mipmapping要求完整的mipmap集合，即所有level的mipmap都必须存在，如果没有完整的mipmap，shader
+中会返回无用的贴图数据。
 
 为了使用mipmapping，你必须提供所有2的幂尺寸的贴图，这些2的幂尺寸的贴图尺寸范围为1x1到贴图最大尺寸。
 如果你不想使用mipmapping一直到1x1大小的贴图，你可以设置GL_TEXTURE_MAX_LEVEL来指定你提供的最大level。
-如果最高分辨率level的贴图不是正方形，一个维度将
+如果最高分辨率level的贴图不是正方形，在生成mipmap时，尺寸小的那个维度将比另一个维度在尺寸上先变为1.此时会继续生成mipmap，
+直到另一维度的尺寸也变为1.例如：最高分辨率的图片为64x16,会生成32x8,16x4,8x2,4x1,2x1,1x1尺寸的mipmap。
+
+OpenGL支持自动生成mipmap，但是该实现被设计为效率优先于质量，而且不同的实现之间有很大不同。所以当需要高质量，结果一致的时候
+最好自己生成mipmap。
+void glGenerateMipmap(GLenum target);
+
+4. Calculating the Mipmap Level
+
+λbase (x, y) = log2 [ρ (x, y)]
+λ′ (x, y) = λbase + clamp(biastexobj + biasshader)
+
+λ = lodmax,     λ′ > lodmax
+λ = λ′,         lodmin ≤ λ′ ≤ lodmax
+λ = lodmin,     λ′ < lodmin
+λ = undefined,  lodmin > lodmax
+
+lodmin 通过 GL_TEXTURE_MIN_LOD来设置
+lodmax 通过 GL_TEXTURE_MAX_LOD来设置
+
+5. Mipmap Level-of-Detail Control
+GL_TEXTURE_BASE_LEVEL指定mipmap的最低等级，即指定最高分辨率的mipmap等级
+GL_TEXTURE_MAX_LEVEL指定mipmap的最高等级，即指定最低分辨率的mipmap等级
+
+贴图流的使用：
+使用贴图流时，存储完整贴图对象的空间是通过glTexStorage2D()来申请的，但是初始化数据没有载入，当应用程序运行时，新的对象出现
+时，他的贴图数据以从最低分辨率mipmap到最高分辨率mipmap的顺序进行加载。GL_TEXTURE_BASE_LEVEL的值被设置为到目前为止载入的
+最高分辨率的mipmap的level。这样的话当越来越多的贴图数据载入，屏幕上的物体会越来越清晰。
+
 十二、 Advanced Texture Lookup Functions
+1. Explicit Level of Detial
+下面函数可以对指定level的texture进行采样
+gvec4 textureLod(gsampler1D tex, float P, float lod);
+gvec4 textureLod(gsampler2D tex, vec2 P, float lod);
+gvec4 textureLod(gsampler3D tex, vec3 P, float lod);
+gvec4 textureLod(gsamplerCube tex, vec3 P, float lod);
+gvec4 textureLod(gsampler1DArray tex, vec2 P, float lod);
+gvec4 textureLod(gsampler2DArray tex, vec3 P, float lod);
+gvec4 textureLod(gsampler2DRect tex, vec2 P, float lod);
+gvec4 textureLod(gsamplerCubeArray tex, vec4 P, float lod);
+
+2. Explicit Gradient Specification
+可以通过下面的函数，覆盖mipmapping的level-of-detail计算。
+gvec4 textureGrad(gsampler1D tex, float P,float dPdx, float dPdy);
+gvec4 textureGrad(gsampler2D tex, vec2 P,vec2 dPdx, vec2 dPdy);
+gvec4 textureGrad(gsampler3D tex, vec3 P,vec3 dPdx, vec3 dPdy);
+gvec4 textureGrad(gsamplerCube tex, vec3 P,vec3 dPdx,vec3 dPdy);
+gvec4 textureGrad(gsampler1DArray tex, vec2 P,float dPdx,float dPdy);
+gvec4 textureGrad(gsampler2DArray tex, vec3 P,vec2 dPdx,vec2 dPdy);
+gvec4 textureGrad(gsamplerCubeArray tex, vec4 P,vec3 dPdx,vec3 dPdy);
+
+3. Texture Fetch with Offsets
+gvec4 textureOffset(gsampler1D tex, float P, int offset, [float bias]);
+gvec4 textureOffset(gsampler2D tex, vec2 P, ivec2 offset, [float bias]);
+gvec4 textureOffset(gsampler3D tex, vec3 P, ivec3 offset, [float bias]);
+gvec4 textureOffset(gsampler1DArray tex, vec2 P, int offset, [float bias]);
+gvec4 textureOffset(gsampler2DArray tex, vec3 P, ivec2 offset, [float bias]);
+gvec4 textureOffset(gsampler2DRect tex, vec2 P, ivec2 offset, [float bias]);
+在执行获取图元之前会偏移offset个图元。
+
+4. Projective Texturing
+gvec4 textureProj(gsampler1D tex, vec2 P[, float bias);
+gvec4 textureProj(gsampler1D tex, vec4 P[, float bias);
+gvec4 textureProj(gsampler2D tex, vec3 P[, float bias);
+gvec4 textureProj(gsampler2D tex, vec4 P[, float bias);
+gvec4 txtureProj(gsampler3D tex, vec4 P[, float bias);
+gvec4 textureProj(gsamplerRect tex, vec3 P);
+gvec4 textureProj(gsamplerRect tex, vec4 P);
+
+5. Texture Queries in Shaders
+下面的函数返回mipmap信息，返回值为vec2类型，x中保存了被访问的mipmap数组。y返回了mipmap的基础level。
+vec2 textureQueryLod(gsampler1D sampler,float P);
+vec2 textureQueryLod(gsampler2D sampler,vec2 P);
+vec2 textureQueryLod(gsampler3D sampler,vec3 P);
+......
+下面的函数返回样本包含的mipmap等级数量
+int textureQueryLevels(gsampler1D tex);
+int textureQueryLevels(gsampler2D tex);
+int textureQueryLevels(gsampler3D tex);
+......
+下面的函数返回贴图的尺寸
+int textureSize(gsampler1D tex, int lod);
+ivec2 textureSize(gsampler2D tex, int lod);
+ivec3 textureSize(gsampler3D tex, int lod);
+......
+
+6. Gathering Texels
+gvec4 textureGather(gsampler2D tex, vec2 P[, int comp]);
+从贴图获取四个贴图图元，comp指定要获取的分量。0，1，2，3分别对应x,y,z,w
+textureGather的返回值:
+vec4(Sample_i0_j1(P, base).comp,
+     Sample_i1_j1(P, base).comp,
+     Sample_i1_j0(P, base).comp,
+     Sample_i0_j1(P, base).comp);
+
+7. Combining Special Functions
+组合多个特性的贴图函数
+textureProjLod
+textureProjGrad
+......
+
 十三、 Point Sprites
+点精灵本质上是使用片段着色器渲染OpenGL点，点中的片段坐标可以通过gl_PointCoord获取到。
+1. Texutred Point Sprites
+-- vertex shader --
+uniform mat4 model_matrix;
+uniform mat4 projection_matrix;
+layout (location = 0) in vec4 position;
+void main(void)
+{
+     vec4 pos = projection_matrix * (model_matrix * position);
+     gl_PointSize = (1.0 - pos.z / pos.w) * 64.0;
+     gl_Position = pos;
+}
+-- fragment shader --
+uniform sampler2D sprite_texture;
+out vec4 color;
+void main(void)
+{
+     color = texture(sprite_texture, gl_PointCoord);
+}
+
+2. Analytic Color and Shape
+out vec4 color;
+void main(void)
+{
+    const vec4 color1 = vec4(0.6, 0.0, 0.0, 1.0);
+    const vec4 color2 = vec4(0.9, 0.7, 1.0, 0.0);
+    vec2 temp = gl_PointCoord - vec2(0.5);
+    float f = dot(temp, temp);
+    if (f > 0.25) discard;
+    color = mix(color1, color2, smoothstep(0.1, 0.25, f));
+}
+3. Controlling the Appearance of Points
+可以通过下面的函数控制点的外观
+void glPointParameter{if}(GLenum pname, TYPE param);
+void glPointParameter{if}v(GLenum pname, const TYPE *param);
+pname                           param                               description
+GL_POINT_SPRITE_COORD_ORIGIN    GL_LOWER_LEFT GL_UPPER_LEFT         指定点的原点坐标
+GL_POINT_FADE_THRESHOLD_SIZE                                        指定fade门槛
+当点的尺寸低于门槛值时，OpenGL可以停止真正的反锯齿，而是使用混合将该点淡出为背景色。
+
 十四、 Rendering to Texture Maps
+1. 简述
+通过下面的方法可以将数据渲染到贴图
+void glFramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level);
+......
+对于三维或一维、二维贴图数组，可以通过下面函数将贴图的单层作为framebuffer附加点。
+void glFramebufferTextureLayer(GLenum target, GLenum attachment,
+GLuint texture, GLint level, GLint layer);
+
+2. Discading Rendered Data
+首要的规则：在开始渲染一帧之前，你必须清除framebuffer。
+忽略framebuffer要比清除它更加高效。
+如果你确定新的渲染将完全替换framebuffer的内容，你可以通过下面的函数忽略framebuffer中的数据：
+void glInvalidateFramebuffer(GLenum target,GLsizei numAttachments,const GLenum * attachments);
+void glInvalidateSubFramebuffer(GLenum target,GLsizei numAttachments, const GLenum * attachments,
+GLint x, GLint y, GLint width, GLint height);
+如果你只想忽略和framebuffer关联的texture的内容，可以使用下面的函数：
+void glInvalidateTexImage(GLuint texture, GLint level);
+void glInvalidateTexSubImage(GLuint texture, GLint level,GLint xoffset, GLint yoffset,
+GLint zoffset, GLint width, GLint height, GLint depth);
+
+
+十五、贴图最佳实践
+1. Immutable Texuture Storage
+尽量使用空间不变的贴图，对于空间不变的贴图，OpenGL实现可以对其有效性做一定假设。例如，空间不变的贴图总是完整的。
+
+2. Mipmaps
+为贴图创建并初始化mipmap链。允许硬件使用低分辨率的mipmap不仅可以提高程序渲染图片的质量，而且会让图形处理器的
+caches使用效率更高。贴图cache是一小片内存用来存储最近使用过的贴图数据。应用程序使用的贴图越小，放入贴图cache
+的图片就会越多，应用程序运行速度就越快。
+
+3. Integer Format Textures
 
 
 Tips:
