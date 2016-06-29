@@ -216,10 +216,128 @@ void main()
 }
 (5) Spotlights
 在剧场或影院，聚光灯投射一个巨大的光，照亮一个指定的区域。OpenGL限制产生一个在某个特定方向上的光锥来模拟聚光
-灯。
+灯。聚光灯的方向和聚光灯光锥对准的方向是不同的，除非你从聚光灯的中心看。
+Spotlight Lighting
+--------------------------- Vertex Shader -----------------------------
+// Vertex shader for spotlight computed in the fragment shader
+#version 330 core
+uniform mat4 MVPMatrix;
+uniform mat4 MVMatrix;
+uniform mat3 NormalMatrix;
+in vec4 VertexColor;
+in vec3 VertexNormal;
+in vec4 VertexPosition;
+out vec4 Color;
+out vec3 Normal;
+out vec4 Position;
+void main() {
+    Color = VertexColor;
+    Normal = normalize(NormalMatrix * VertexNormal);
+    Position = MVMatrix * VertexPosition;
+    gl_Position = MVPMatrix * VertexPosition;
+}
+-------------------------- Fragment Shader ----------------------------
+// Fragment shader computing a spotlight’s effect
+#version 330 core
+uniform vec3 Ambient;
+uniform vec3 LightColor;
+uniform vec3 LightPosition;
+uniform float Shininess;
+uniform float Strength;
+uniform vec3 EyeDirection;
+uniform float ConstantAttenuation;
+uniform float LinearAttenuation;
+uniform float QuadraticAttenuation;
+uniform vec3 ConeDirection;
+uniform float SpotCosCutoff;
+uniform float SpotExponent;
+in vec4 Color;
+in vec3 Normal;
+in vec4 Position;
+out vec4 FragColor;
+void main()
+{
+    // adding spotlight attributes
+    // how wide the spot is, as a cosine
+    // control light fall-off in the spot
+    vec3 lightDirection = LightPosition - vec3(Position);
+    float lightDistance = length(lightDirection);
+    lightDirection = lightDirection / lightDistance;
+    float attenuation = 1.0 / (ConstantAttenuation + LinearAttenuation * lightDistance +
+    QuadraticAttenuation * lightDistance * lightDistance);
+    // how close are we to being in the spot?
+    float spotCos = dot(lightDirection, -ConeDirection);
+    // attenuate more, based on spot-relative position
+    if (spotCos < SpotCosCutoff)
+    {
+        attenuation = 0.0;
+    }
+    else
+    {
+        attenuation *= pow(spotCos, SpotExponent);
+    }
 
+    vec3 halfVector = normalize(lightDirection + EyeDirection);
+    float diffuse = max(0.0, dot(Normal, lightDirection));
+    float specular = max(0.0, dot(Normal, halfVector));
+    if (diffuse == 0.0)
+    {
+        specular = 0.0;
+    }
+    else
+    {
+        specular = pow(specular, Shininess) * Strength;
+    }
+    vec3 scatteredLight = Ambient + LightColor * diffuse * attenuation;
+    vec3 reflectedLight = LightColor * specular * attenuation;
+    vec3 rgb = min(Color.rgb * scatteredLight + reflectedLight, vec3(1.0));
+    FragColor = vec4(rgb, Color.a);
+}
+
+3. Moving Calculations to the Vertex Shader
+没有关于在哪儿进行光照计算的规则。通过实验来发现对于你的物体表面的更好方式。极端情况下，颜色可以完全在顶点着色器中计算
+然后在插值。这本质上就是Gouraud渲染。尽管从计算角度来看是很节省，但是它会造成光照锯齿。
+
+4. Multiple Lights and Materials
+通常一个场景中有很多个光源，以及很多种材质。通常一次只会渲染一个材质，但是会有很多个光源照亮这个材质。
+（1）光照属性
+将光的特性组成一个结构体，创建一个结构体的数组进行处理。
+struct LightProperties {
+bool isEnabled; // true to apply this light in this invocation
+bool isLocal;   // true for a point light or a spotlight, false for a positional light
+bool isSpot;    // true if the light is a spotlight
+vec3 ambient;   // light’s contribution to ambient light
+vec3 color;     // color of light
+vec3 position;  // location of light, if is Local is true, otherwise the direction toward the light
+vec3 halfVector;        // direction of highlights for directional light vec3 coneDirection;
+float spotCosCutoff;    // spotlight attributes
+float spotExponent;
+float constantAttenuation; // local light attenuation coefficients
+float linearAttenuation;
+float quadraticAttenuation;
+// other properties you may desire
+};
+（2）材质的属性
+struct MaterialProperties {
+vec3 emission;  // light produced by the material
+vec3 ambient;   // what part of ambient light is reflected
+vec3 diffuse;   // what part of diffuse light is scattered
+vec3 specular;  // what part of specular light is scattered
+float shininess; // exponent for sharpening specular reflection
+// other properties you may desire
+};
+如果应用程序需要经常在不同的材质之间切换，可以使用同一个片段着色器来渲染不同的材质，这样就不需要切换shader或更新uniforms
+了。为了达到这样的目的，需要创建一个MaterialProperties数组，其中每个元素表示不同的材质。将材质的索引传入着色器，着色器
+会到数组中索引材质，然后对进行合适的渲染。
+（3）Two-Sided Lighting
+shader中的内置变量gl_FrontFacing用来标记当前正在从正面还是背面观察表面。该变量只能在片段着色器中使用。
+
+5. Lighting Coordinate Systems
+6. Limitations of the Classic Lighting Model
 二、 Advanced Lighting Models
-
+1. Hemisphere Lighting
+2. Image-Based Lighting
+3. Lighting with Spherical Harmonics
 
 三、 Shadow Mapping
 
