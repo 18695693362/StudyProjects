@@ -333,7 +333,16 @@ float shininess; // exponent for sharpening specular reflection
 shader中的内置变量gl_FrontFacing用来标记当前正在从正面还是背面观察表面。该变量只能在片段着色器中使用。
 
 5. Lighting Coordinate Systems
+所有光照计算用到的法线、方向、位置坐标必须来自同一个坐标系，这样光照计算才会有意义。通常会选择视觉坐标系为光照
+坐标系。也就是眼睛的坐标为(0,0,0)并且眼睛朝向z轴负方向。通常提供给光照方程的所有方向和位置都是视觉坐标系，而
+光栅化会使用齐次坐标系。
+
 6. Limitations of the Classic Lighting Model
+（1）经典光照模型没有考虑阴影
+（2）环境光的衰减不够真实。
+（3）一个发热或光亮的物体会有光晕环绕。
+（4）一个贴图的表面通常不是非常光滑的，光照必须考虑表面的凹凸，否则表面看起来会不自然的平整。
+
 二、 Advanced Lighting Models
 1. Hemisphere Lighting
 2. Image-Based Lighting
