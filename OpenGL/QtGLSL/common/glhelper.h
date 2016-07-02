@@ -19,6 +19,7 @@ enum LogType{
     kWarnning,
     kError,
 };
+
 class GLHelper
 {
 public:

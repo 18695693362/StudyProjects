@@ -41,7 +41,7 @@ void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
     _camera.SetCurProjectionType(GCamera::kPerspective);
-
+    _camera.Translate(0.0,0.0,3.0);
 //    _triangle.Init(nullptr);
 //    _cube.Init();
 //    _cube.SetScale(0.3);
@@ -53,9 +53,7 @@ void GOGLWidget::initializeGL()
 //                 "skybox_2/back.jpg",
 //                 QImage::Format::Format_RGB888);
     //_skybox.SetScale(10);
-    GUniformType uniform_types[] = {GUniformType::kViewMatrix,GUniformType::kProjectionMatrix};
-    _cube_for_light.Init(":0_no_light.vert",":0_no_light.frag",uniform_types,2);
-
+    InitCubeForLight();
     GLHelper::Foreach([this](GModel* model){
         model->SetViewMatrixGetter([this](glm::mat4x4& view_matrix){
             this->_camera.GetViewMatrix(view_matrix);
@@ -66,9 +64,12 @@ void GOGLWidget::initializeGL()
         model->SetCameraPosGetter([this](){
             return this->_camera.GetPosition();
         });
+        model->SetCameraGetter([this](){
+            return &(this->_camera);
+        });
     },(GModel*)&_skybox,(GModel*)&_cube,(GModel*)&_cube_for_light);
 
-    glClearColor(0.0f,0.0f,0.5f,1.0f);
+    glClearColor(0.0f,0.0f,0.0f,1.0f);
     glClearDepth(100.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
@@ -217,6 +218,46 @@ void GOGLWidget::mouseReleaseEvent(QMouseEvent *event)
     {
         GTimerMgr::GetInstance().Unschedule(this,_mouse_timer);
     }
+}
+
+void GOGLWidget::InitCubeForLight()
+{
+    GUniformType uniform_types[] = {
+        GUniformType::kViewMatrix,
+        GUniformType::kProjectionMatrix,
+        GUniformType::kNormalMatrix,
+        GUniformType::kAmbient,
+        GUniformType::kEyeDir,
+        GUniformType::kLight0_Color,
+        GUniformType::kLight0_Dir,
+        GUniformType::kLight0_Shininess,
+        GUniformType::kLight0_Strengthen
+    };
+    int uniform_count = sizeof(uniform_types) / sizeof(GUniformType);
+    _cube_for_light.Init(":0_dir_light.vert",
+                         ":0_dir_light.frag",
+                         uniform_types,
+                         uniform_count);
+
+    auto* ambient = new GUniformData<glm::vec4>();
+    ambient->SetData(new glm::vec4(0.1,0.1,0.1,1.0));
+    _cube_for_light.SetUniformData(GUniformType::kAmbient,ambient);
+
+    auto* light0_color = new GUniformData<glm::vec3>();
+    light0_color->SetData(new glm::vec3(1.0f, 1.0f, 1.0f));
+    _cube_for_light.SetUniformData(GUniformType::kLight0_Color,light0_color);
+
+    auto* light0_dir = new GUniformData<glm::vec3>();
+    light0_dir->SetData(new glm::vec3(-1.0f, -1.0f, -1.0f));
+    _cube_for_light.SetUniformData(GUniformType::kLight0_Dir,light0_dir);
+
+    auto* light0_shininess = new GUniformData<float>();
+    light0_shininess->SetData(new float(32.0f));
+    _cube_for_light.SetUniformData(GUniformType::kLight0_Shininess,light0_shininess);
+
+    auto* light0_strenghen = new GUniformData<float>();
+    light0_strenghen->SetData(new float(1.0f));
+    _cube_for_light.SetUniformData(GUniformType::kLight0_Strengthen,light0_strenghen);
 }
 
 

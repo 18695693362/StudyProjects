@@ -4,10 +4,105 @@
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
 #include <functional>
 #include <QtOpenGL>
+#include "gcamera.h"
+
+// shader helper
+enum GUniformType
+{
+    kViewMatrix,
+    kProjectionMatrix,
+    kNormalMatrix,
+    kAmbient,
+    kEyePos, //eye-coordinate eye-pos always (0,0,0)
+    kEyeDir,
+    kLight0_Color,
+    kLight0_Pos,
+    kLight0_Dir,
+    kLight0_Shininess,
+    kLight0_Strengthen,
+};
+
+class GUniformDataBase
+{
+public:
+    virtual ~GUniformDataBase(){}
+    virtual void* GetData() const = 0;
+    virtual void SetData(void* value) = 0;
+};
+
+template<typename DataType>
+class GUniformData: public GUniformDataBase
+{
+public:
+    GUniformData(){}
+    GUniformData(const GUniformData& src)
+    {
+        DataType* temp = (DataType*)src.GetData();
+        DataType* new_data = new DataType(*temp);
+        SetData(new_data);
+    }
+    GUniformData& operator=(const GUniformData& src)
+    {
+        DataType* temp = (DataType*)src.GetData();
+        DataType* new_data = new DataType(*temp);
+        SetData(new_data);
+    }
+    ~GUniformData()
+    {
+        if(data)
+        {
+            delete data;
+        }
+        data = nullptr;
+    }
+
+    void* GetData() const
+    {
+        return (void*)data;
+    }
+    void SetData(void* value)
+    {
+        if(data)
+        {
+            delete data;
+        }
+        data = (DataType*)value;
+    }
+private:
+    DataType* data = nullptr;
+};
+
+class GUniformInfo
+{
+public:
+    ~GUniformInfo()
+    {
+        if(data)
+        {
+            delete data;
+        }
+        data = nullptr;
+    }
+
+    GUniformType        type;
+    int                 local;
+    std::string         name;
+    GUniformDataBase*   data = nullptr;
+};
+
+enum GAttribType
+{
+    kPos = 0,
+    kColor,
+    kNormal,
+    kAttribNums
+};
 
 class GModel
 {
 public:
+    static std::string GetUniformName(GUniformType type);
+
     GModel(){}
     virtual ~GModel(){}
     virtual void Draw() = 0;
@@ -46,7 +141,26 @@ public:
     {
         _camera_pos_getter = getter;
     }
+
+    void SetCameraGetter(std::function<GCamera*(void)> getter)
+    {
+        _camera_getter = getter;
+    }
+
+    template<typename DataType>
+    void SetUniformData(GUniformType type, DataType* data)
+    {
+        GUniformInfo* info = GetUniformInfo(type);
+        if(info)
+        {
+            info->data = data;
+        }
+    }
 protected:
+    GUniformInfo* GetUniformInfo(GUniformType type);
+    GLint GetUniformLocal(GUniformType type);
+    std::vector<GUniformInfo> _uniform_infos;
+
     bool _is_inited = false;
     glm::vec3 _translate;
     glm::vec4 _color;
@@ -54,6 +168,7 @@ protected:
     std::function<void(glm::mat4x4&)> _view_matrix_getter;
     std::function<void(glm::mat4x4&)> _projection_matrix_getter;
     std::function<const glm::vec3&()> _camera_pos_getter;
+    std::function<GCamera*()>         _camera_getter;
 };
 
 #endif // GMODEL_H

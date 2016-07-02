@@ -41,7 +41,7 @@ void GOGLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
     _camera.SetCurProjectionType(GCamera::kPerspective);
-
+    _camera.Translate(0.0,0.0,3.0);
 //    _triangle.Init(nullptr);
 //    _cube.Init();
 //    _cube.SetScale(0.3);
@@ -53,8 +53,11 @@ void GOGLWidget::initializeGL()
 //                 "skybox_2/back.jpg",
 //                 QImage::Format::Format_RGB888);
     //_skybox.SetScale(10);
-    GUniformType uniform_types[] = {GUniformType::kViewMatrix,GUniformType::kProjectionMatrix};
-    _cube_for_light.Init(":0_no_light.vert",":0_no_light.frag",uniform_types,2);
+    GUniformType uniform_types[] = {GUniformType::kViewMatrix,GUniformType::kProjectionMatrix,GUniformType::kAmbient};
+    _cube_for_light.Init(":0_ambient.vert",":0_ambient.frag",uniform_types,3);
+    auto* ambient = new GUniformData<glm::vec4>();
+    ambient->SetData(new glm::vec4(0.1,0.1,0.1,1.0));
+    _cube_for_light.SetUniformData(GUniformType::kAmbient,ambient);
 
     GLHelper::Foreach([this](GModel* model){
         model->SetViewMatrixGetter([this](glm::mat4x4& view_matrix){

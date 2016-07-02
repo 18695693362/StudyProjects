@@ -38,8 +38,6 @@ static GLfloat vertex_data[] = {
      0.0,  1.0,  0.0,  -1.0,
      1.0, -1.0,  0.0,  -1.0
 };
-下面的参数是错误的
-glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,vertex_data);
 下面的参数是正确
 glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,4*sizeof(GLfloat),0);
 https://www.opengl.org/sdk/docs/man/html/glVertexAttribPointer.xhtml
@@ -50,6 +48,15 @@ void glVertexAttribPointer(
     GLboolean normalized,       // 是否标准化
     GLsizei stride,             // 两个属性之间的间隔
     const GLvoid * pointer);    // 第一个属性数据距离数据起始地址的偏移量
+下面的参数也是正确的
+glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,vertex_data);
+stride为0表示连续的属性之间是紧密排列的。
+下面的参数是错误的
+glVertexAttribPointer(0,sizeof(GLfloat)*4,GL_FLOAT,GL_FALSE,0,0);
+size表示包含多少个type的数据，不是数据占用的内存字节数
+下面的参数是错误的
+glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,0,vertex_data);
+pointer表示的是第一个属性数据距离数据其实地址的offset，而不是数据的真正地址。
 （6）检查glBindBuffer和glBindVertexArray的位置
 下面的位置是错误的：
 glBindBuffer(GL_ARRAY_BUFFER,0);
@@ -66,6 +73,8 @@ glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
 默认值为GL_LESS
 GL_LEQUAL表示如果输入的深度值小于或等于参考值，则通过
 深度值为摄像机到物体的距离
+（9）检查顶点数据的定义是否使用了static，该程序中顶点定义都作为函数的局部变量，若不是static，
+函数执行完毕，数据就被释放了。
 
 6. Qt 包含库头文件
 在.pro文件中添加如下代码

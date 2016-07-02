@@ -31,10 +31,10 @@ void GCube::Init()
             "{\n"
             "    mat4 scale_mat = mat4(scale);"
             "    scale_mat[3].w = 1.0f;"
-            "    //gl_Position = scale_mat*vec4(vi_position+move,1.0);\n"
+            "    gl_Position = scale_mat*vec4(vi_position+move,1.0);\n"
             "    //gl_Position = view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
             "    //gl_Position = projection_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
-            "    gl_Position = projection_matrix*view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
+            "    //gl_Position = projection_matrix*view_matrix*scale_mat*vec4(vi_position+move,1.0);\n"
             "    //vo_color = color;\n"
             "    vo_color = vec4(vi_color,1.0);\n"
             "}\n";
