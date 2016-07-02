@@ -5,6 +5,10 @@ string GModel::GetUniformName(GUniformType type)
 {
     switch (type)
     {
+    case GUniformType::kTranslate:
+    {
+        return "trans_vec";
+    }
     case GUniformType::kViewMatrix:
     {
         return "view_matrix";
@@ -29,6 +33,10 @@ string GModel::GetUniformName(GUniformType type)
     {
         return "ambient";
     }
+    case GUniformType::kLight0_Type:
+    {
+        return "light0_type";
+    }
     case GUniformType::kLight0_Color:
     {
         return "light0_color";
@@ -48,6 +56,18 @@ string GModel::GetUniformName(GUniformType type)
     case GUniformType::kLight0_Strengthen:
     {
         return "light0_strengthen";
+    }
+    case GUniformType::kLight0_Attenuation:
+    {
+        return "light0_attenuation";
+    }
+    case GUniformType::kLight0_LinearAttenuation:
+    {
+        return "light0_linear_attenuation";
+    }
+    case GUniformType::kLight0_QuadraticAttenuation:
+    {
+        return "light0_quadratic_attenuation";
     }
     default:
         break;

@@ -2,6 +2,7 @@
 #define GCUBEFORLIGHT_H
 #include "gmodel.h"
 #include "glhelper.h"
+#include "gcube.h"
 #include <string>
 #include <array>
 #include <vector>

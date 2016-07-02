@@ -114,26 +114,42 @@ void GCubeForLight::Draw()
             {
                 camera = _camera_getter();
             }
-            if(_view_matrix_getter)
+            auto local = GetUniformLocal(GUniformType::kTranslate);
+            if(local!=-1)
             {
-                auto local = GetUniformLocal(GUniformType::kViewMatrix);
-                if(local!=-1)
+                glm::vec3 transe = GetTranslate();
+                glUniform3fv(local,1,glm::value_ptr(transe));
+            }
+            local = GetUniformLocal(GUniformType::kViewMatrix);
+            if(local!=-1)
+            {
+                glm::mat4x4 view_matrix;
+                if(camera)
                 {
-                    glm::mat4x4 view_matrix;
+                    camera->GetViewMatrix(view_matrix);
+                }
+                else if(_view_matrix_getter)
+                {
                     _view_matrix_getter(view_matrix);
-                    glUniformMatrix4fv(local,1,GL_FALSE,glm::value_ptr(view_matrix));
                 }
+                glUniformMatrix4fv(local,1,GL_FALSE,glm::value_ptr(view_matrix));
             }
-            if(_projection_matrix_getter)
+
+            local = GetUniformLocal(GUniformType::kProjectionMatrix);
+            if(local!=-1)
             {
-                auto local = GetUniformLocal(GUniformType::kProjectionMatrix);
-                if(local!=-1)
+                glm::mat4x4 projection_matrix;
+                if(camera)
                 {
-                    glm::mat4x4 projection_matrix;
-                    _projection_matrix_getter(projection_matrix);
-                    glUniformMatrix4fv(local,1,GL_FALSE,glm::value_ptr(projection_matrix));
+                    camera->GetCurProjectionMatrix(projection_matrix);
                 }
+                else if(_projection_matrix_getter)
+                {
+                    _projection_matrix_getter(projection_matrix);
+                }
+                glUniformMatrix4fv(local,1,GL_FALSE,glm::value_ptr(projection_matrix));
             }
+
             auto info = GetUniformInfo(GUniformType::kNormalMatrix);
             if(info && camera)
             {
@@ -159,6 +175,13 @@ void GCubeForLight::Draw()
                 glm::vec3 dir = -camera->GetForward();
                 dir = glm::normalize(dir);
                 glUniform3fv(info->local,1,glm::value_ptr(dir));
+            }
+            auto light0_type_info = GetUniformInfo(GUniformType::kLight0_Type);
+            auto light0_type = GLightType::kDirectionLight;
+            if(light0_type_info)
+            {
+                light0_type = *((GLightType*)light0_type_info->data->GetData());
+                glUniform1i(light0_type_info->local,light0_type);
             }
             info = GetUniformInfo(GUniformType::kLight0_Color);
             if(info)
@@ -199,6 +222,24 @@ void GCubeForLight::Draw()
             {
                 float* light0_strenghten = (float*)info->data->GetData();
                 glUniform1f(info->local,*light0_strenghten);
+            }
+            info = GetUniformInfo(GUniformType::kLight0_Attenuation);
+            if(info)
+            {
+                float* light0_attenuation = (float*)info->data->GetData();
+                glUniform1f(info->local,*light0_attenuation);
+            }
+            info = GetUniformInfo(GUniformType::kLight0_LinearAttenuation);
+            if(info)
+            {
+                float* light0_linear_attenuation = (float*)info->data->GetData();
+                glUniform1f(info->local,*light0_linear_attenuation);
+            }
+            info = GetUniformInfo(GUniformType::kLight0_QuadraticAttenuation);
+            if(info)
+            {
+                float* light0_quadratic_attenuation = (float*)info->data->GetData();
+                glUniform1f(info->local,*light0_quadratic_attenuation);
             }
 
             glBindVertexArray(_vertex_arr_obj);

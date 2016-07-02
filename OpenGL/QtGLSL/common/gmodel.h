@@ -6,20 +6,32 @@
 #include <QtOpenGL>
 #include "gcamera.h"
 
+enum GLightType
+{
+    kDirectionLight,
+    kPointLight,
+    kSpotLight
+};
+
 // shader helper
 enum GUniformType
 {
+    kTranslate,
     kViewMatrix,
     kProjectionMatrix,
     kNormalMatrix,
     kAmbient,
     kEyePos, //eye-coordinate eye-pos always (0,0,0)
     kEyeDir,
+    kLight0_Type,
     kLight0_Color,
     kLight0_Pos,
     kLight0_Dir,
     kLight0_Shininess,
     kLight0_Strengthen,
+    kLight0_Attenuation,
+    kLight0_LinearAttenuation,
+    kLight0_QuadraticAttenuation,
 };
 
 class GUniformDataBase
@@ -110,6 +122,10 @@ public:
     void SetTranslate(const glm::vec3& translate)
     {
         _translate = translate;
+    }
+    glm::vec3 GetTranslate()
+    {
+        return _translate;
     }
     void SetScale(float scale)
     {

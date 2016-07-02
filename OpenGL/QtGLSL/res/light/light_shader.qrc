@@ -6,5 +6,7 @@
         <file>0_ambient.vert</file>
         <file>0_dir_light.frag</file>
         <file>0_dir_light.vert</file>
+        <file>0_point_light.frag</file>
+        <file>0_point_light.vert</file>
     </qresource>
 </RCC>

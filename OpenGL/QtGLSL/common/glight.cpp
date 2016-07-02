@@ -1,9 +1,9 @@
-#include "gcube.h"
+#include "glight.h"
 #include "glhelper.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-GCube::GCube()
+GPointLight::GPointLight()
 {
     _kPosAttribLocal = 0;
     _kColorAttribLocal = 1;
@@ -13,7 +13,7 @@ GCube::GCube()
     _color = glm::vec4(1.0,0.0,0.0,1.0);
 }
 
-void GCube::Init()
+void GPointLight::Init()
 {
     _is_inited = true;
 
@@ -34,8 +34,8 @@ void GCube::Init()
             "    vec4 temp_pos = scale_mat*vec4(vi_position,1.0);\n"
             "    temp_pos = temp_pos+vec4(move,0.0);\n"
             "    gl_Position = projection_matrix*view_matrix*temp_pos;\n"
-            "    //vo_color = color;\n"
-            "    vo_color = vec4(vi_color,1.0);\n"
+            "    vo_color = color;\n"
+            "    //vo_color = vec4(vi_color,1.0);\n"
             "}\n";
     const char fs[] =
             "#version 410\n"
@@ -94,7 +94,7 @@ void GCube::Init()
     glUseProgram(0);
 }
 
-void GCube::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data,GLfloat*& vertex_color_data,
+void GPointLight::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data,GLfloat*& vertex_color_data,
                           int& vertex_data_size,int& index_data_size,int& color_data_size,
                           int& vertex_pos_comp_count,int& vertex_color_comp_count)
 {
@@ -143,7 +143,7 @@ void GCube::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data,GLflo
     vertex_color_comp_count = 3;
 }
 
-void GCube::Draw()
+void GPointLight::Draw()
 {
     if(_is_inited)
     {
