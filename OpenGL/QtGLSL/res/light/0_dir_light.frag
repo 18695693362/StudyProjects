@@ -28,8 +28,9 @@ void main()
     vec3 rgb = min(vo_color.xyz*scatteredLight.xyz + reflectedLight ,vec3(1.0));
     fo_color = vec4(rgb,vo_color.a);
 
-    vec3 rgb_without_specular = min(vo_color.xyz*scatteredLight.xyz, vec3(1.0));
-    fo_color = vec4(rgb_without_specular,vo_color.a);
+    //vec3 rgb_without_specular = min(vo_color.xyz*scatteredLight.xyz, vec3(1.0));
+    //fo_color = vec4(rgb_without_specular,vo_color.a);
+
     //fo_color = vec4(light0_color,vo_color.a);
     //fo_color = vec4(-light0_dir,vo_color.a);
     //fo_color = vec4(ambient.xyz,vo_color.a);
