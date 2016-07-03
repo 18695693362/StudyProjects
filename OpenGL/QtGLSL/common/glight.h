@@ -2,6 +2,28 @@
 #define GPOINTLIGHT_H
 #include "gmodel.h"
 
+enum GLightType
+{
+    kDirectionLight,
+    kPointLight,
+    kSpotLight
+};
+
+struct GLightProp
+{
+    GLightType  type;
+    glm::vec3   color;
+    glm::vec3   pos;
+    float       shininess;
+    float       strengthen;
+    float       attenuation;
+    float       linear_attenuation;
+    float       quadratic_attenuation;
+    float       spot_inner_cutoff;
+    float       spot_outer_cutoff;
+    float       spot_exponent;
+};
+
 class GLightBase : public GModel
 {};
 

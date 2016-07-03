@@ -244,16 +244,20 @@ void GOGLWidget::InitCubeForLight(GCubeForLight& cube, int index, GLightBase& li
         GUniformType::kLight0_Type,
         GUniformType::kLight0_Color,
         GUniformType::kLight0_Pos,
-        //GUniformType::kLight0_Dir,
+        GUniformType::kLight0_Dir,
         GUniformType::kLight0_Shininess,
         GUniformType::kLight0_Strengthen,
         GUniformType::kLight0_Attenuation,
         GUniformType::kLight0_LinearAttenuation,
-        GUniformType::kLight0_QuadraticAttenuation
+        GUniformType::kLight0_QuadraticAttenuation,
+        GUniformType::kLight0_SpotInnerCutoff,
+        GUniformType::kLight0_SpotOuterCutoff,
+        GUniformType::kLight0_SpotExponent
     };
+
     int uniform_count = sizeof(uniform_types) / sizeof(GUniformType);
-    cube.Init(":0_point_light.vert",
-              ":0_point_light.frag",
+    cube.Init(":0_spot_light.vert",
+              ":0_spot_light.frag",
               uniform_types,
               uniform_count);
 
@@ -266,8 +270,8 @@ void GOGLWidget::InitCubeForLight(GCubeForLight& cube, int index, GLightBase& li
     ambient->SetData(new glm::vec4(0.1,0.1,0.1,1.0));
     cube.SetUniformData(GUniformType::kAmbient,ambient);
 
-    auto* light0_type = new GUniformData<glm::vec3>();
-    light0_type->SetData(new int(GLightType::kPointLight));
+    auto* light0_type = new GUniformData<GLightType>();
+    light0_type->SetData(new int(GLightType::kSpotLight));
     cube.SetUniformData(GUniformType::kLight0_Type,light0_type);
 
     auto* light0_color = new GUniformData<glm::vec3>();
@@ -278,9 +282,9 @@ void GOGLWidget::InitCubeForLight(GCubeForLight& cube, int index, GLightBase& li
     light0_pos->SetData(new glm::vec3(light.GetTranslate()));
     cube.SetUniformData(GUniformType::kLight0_Pos,light0_pos);
 
-//    auto* light0_dir = new GUniformData<glm::vec3>();
-//    light0_dir->SetData(new glm::vec3(-1.0f, -1.0f, -1.0f));
-//    _cube_for_light.SetUniformData(GUniformType::kLight0_Dir,light0_dir);
+    auto* light0_dir = new GUniformData<glm::vec3>();
+    light0_dir->SetData(new glm::vec3(-1.0f, -1.0f, -1.0f));
+    cube.SetUniformData(GUniformType::kLight0_Dir,light0_dir);
 
     auto* light0_shininess = new GUniformData<float>();
     light0_shininess->SetData(new float(32.0f));
@@ -301,6 +305,18 @@ void GOGLWidget::InitCubeForLight(GCubeForLight& cube, int index, GLightBase& li
     auto* light0_quadratic_attenuation = new GUniformData<float>();
     light0_quadratic_attenuation->SetData(new float(0.032f));
     cube.SetUniformData(GUniformType::kLight0_QuadraticAttenuation,light0_quadratic_attenuation);
+
+    auto* light0_spot_inner_cutoff = new GUniformData<float>();
+    light0_spot_inner_cutoff->SetData(new float(12.5f));
+    cube.SetUniformData(GUniformType::kLight0_SpotInnerCutoff,light0_spot_inner_cutoff);
+
+    auto* light0_spot_outer_cutoff = new GUniformData<float>();
+    light0_spot_outer_cutoff->SetData(new float(30.0f));
+    cube.SetUniformData(GUniformType::kLight0_SpotOuterCutoff,light0_spot_outer_cutoff);
+
+    auto* light0_spot_exponent = new GUniformData<float>();
+    light0_spot_exponent->SetData(new float(32));
+    cube.SetUniformData(GUniformType::kLight0_SpotExponent,light0_spot_exponent);
 
     cube.SetCameraGetter([this](){
         return &(this->_camera);

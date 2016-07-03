@@ -69,6 +69,18 @@ string GModel::GetUniformName(GUniformType type)
     {
         return "light0_quadratic_attenuation";
     }
+    case GUniformType::kLight0_SpotInnerCutoff:
+    {
+        return "light0_spot_inner_cutoff";
+    }
+    case GUniformType::kLight0_SpotOuterCutoff:
+    {
+        return "light0_spot_outer_cutoff";
+    }
+    case GUniformType::kLight0_SpotExponent:
+    {
+        return "light0_spot_exponent";
+    }
     default:
         break;
     }

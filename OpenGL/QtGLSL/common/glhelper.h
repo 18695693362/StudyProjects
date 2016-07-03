@@ -8,8 +8,6 @@
 #include "../libs/glm/glm/gtc/quaternion.hpp"
 #include <string>
 #include <functional>
-#include "gtriangle.h"
-#include "gmodel.h"
 
 #define ZERO_VEC_LEN2 0.001f
 #define BUFF_OFFSET(offset) ((void*)(offset))

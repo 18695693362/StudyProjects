@@ -1,6 +1,7 @@
 #include "gcubeforlight.h"
 #include "glhelper.h"
 #include <glm/gtc/type_ptr.hpp>
+#include "glight.h"
 
 GCubeForLight::GCubeForLight()
 {
@@ -37,6 +38,13 @@ void GCubeForLight::Init(const char *v_shader, const char *f_shader, GUniformTyp
                     info.name = GModel::GetUniformName(info.type);
                     info.local = GLHelper::GetUniformLocal(_program,info.name.c_str());
                     _uniform_infos.push_back(info);
+                }
+            }
+            else
+            {
+                for(auto iter=_uniform_infos.begin(); iter!=_uniform_infos.end(); iter++)
+                {
+                    iter->local = GLHelper::GetUniformLocal(_program,iter->name.c_str());
                 }
             }
 
@@ -240,6 +248,26 @@ void GCubeForLight::Draw()
             {
                 float* light0_quadratic_attenuation = (float*)info->data->GetData();
                 glUniform1f(info->local,*light0_quadratic_attenuation);
+            }
+            info = GetUniformInfo(GUniformType::kLight0_SpotInnerCutoff);
+            if(info)
+            {
+                float* cutoff_degree = (float*)info->data->GetData();
+                float light0_spot_cos_cutoff = glm::cos(glm::radians(*cutoff_degree));
+                glUniform1f(info->local,light0_spot_cos_cutoff);
+            }
+            info = GetUniformInfo(GUniformType::kLight0_SpotOuterCutoff);
+            if(info)
+            {
+                float* out_cutoff_degree = (float*)info->data->GetData();
+                float light0_spot_outer_cutoff = glm::cos(glm::radians(*out_cutoff_degree));
+                glUniform1f(info->local,light0_spot_outer_cutoff);
+            }
+            info = GetUniformInfo(GUniformType::kLight0_SpotExponent);
+            if(info)
+            {
+                float* light0_spot_exponent = (float*)info->data->GetData();
+                glUniform1f(info->local,*light0_spot_exponent);
             }
 
             glBindVertexArray(_vertex_arr_obj);

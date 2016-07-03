@@ -1,17 +1,11 @@
 #ifndef GMODEL_H
 #define GMODEL_H
+#include "glhelper.h"
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
 #include <functional>
 #include <QtOpenGL>
 #include "gcamera.h"
-
-enum GLightType
-{
-    kDirectionLight,
-    kPointLight,
-    kSpotLight
-};
 
 // shader helper
 enum GUniformType
@@ -32,6 +26,9 @@ enum GUniformType
     kLight0_Attenuation,
     kLight0_LinearAttenuation,
     kLight0_QuadraticAttenuation,
+    kLight0_SpotInnerCutoff,
+    kLight0_SpotOuterCutoff,
+    kLight0_SpotExponent
 };
 
 class GUniformDataBase
@@ -164,12 +161,36 @@ public:
     }
 
     template<typename DataType>
+    void AddUniformData(GUniformType type, DataType* data)
+    {
+        GUniformInfo* info_ptr = GetUniformInfo(type);
+        if(info_ptr)
+        {
+            GLHelper::Log(std::string("Error: exist uniform type = ")+GModel::GetUniformName(type));
+            return;
+        }
+        else
+        {
+            do
+            {
+                GUniformInfo info;
+                info.type = type;
+                _uniform_infos.push_back(info);
+            }while(0);
+            SetUniformData(type,data);
+        }
+    }
+    template<typename DataType>
     void SetUniformData(GUniformType type, DataType* data)
     {
         GUniformInfo* info = GetUniformInfo(type);
         if(info)
         {
             info->data = data;
+        }
+        else
+        {
+            GLHelper::Log(std::string("Error: not exist uniform type = ")+GetUniformName(type));
         }
     }
 protected:

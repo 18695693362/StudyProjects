@@ -266,7 +266,7 @@ void GOGLWidget::InitCubeForLight(GCubeForLight& cube, int index, GLightBase& li
     ambient->SetData(new glm::vec4(0.1,0.1,0.1,1.0));
     cube.SetUniformData(GUniformType::kAmbient,ambient);
 
-    auto* light0_type = new GUniformData<glm::vec3>();
+    auto* light0_type = new GUniformData<GLightType>();
     light0_type->SetData(new int(GLightType::kPointLight));
     cube.SetUniformData(GUniformType::kLight0_Type,light0_type);
 
