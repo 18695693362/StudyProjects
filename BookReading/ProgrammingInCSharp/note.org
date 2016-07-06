@@ -1,0 +1,556 @@
+#+TITLE: Programming C#
+
+* C#语言基础
+C#有两种类型内置类型和用户自定义类型。
+C#还可以分为值类型和引用类型。这两种类型的区别为值在内存中的存储方式不同。
+值类型在栈分配的内存中保存其实际值（或者作为更大的引用类型对象的一部分分配）。
+引用类型变量的地址保存在栈中，但实际对象存在堆中。
+C#还支持 C++风格的指针。
+** 内置类型
+C#中内置类型符合.Net CLS 规范。
+| 类型    | 大小/字节 | .Net 类型 | 说明                                |
+|---------+-----------+----------+-------------------------------------|
+| byte    |         1 | Byte     | 无符号（0~255）                     |
+| char    |         2 | Char     | Unicode 字符                         |
+| bool    |         1 | Boolean  | true 或者 false                       |
+| sbyte   |         1 | Sbyte    | 有符号（-128~127）                  |
+| short   |         2 | Int16    | 有符号 short（-32768~32767）         |
+| ushort  |         2 | Uint16   | 无符号 short（0~65535）              |
+| int     |         4 | Int32    | 有符号 int（-2147483648~2147483647） |
+| uint    |         4 | Uint32   | 无符号 int（0~4294967295）           |
+| float   |         4 | Single   | 浮点数                              |
+| double  |         8 | Double   | 双精度浮点数                        |
+| decimal |        12 | Decimal  | 固定精度                            |
+| long    |         8 | Int64    |                                     |
+| ulong   |         8 | Uint64   |                                     |
+** 变量初始化 赋值
+C#要求变量在使用前必须初始化或者赋值。
+const 为编译期常量 ，readonly 为运行时常量
+** 枚举类型
+每个枚举类型都有底层类型，可以是任意整数类型（integer，short，long），但 char 除外。默认情况下枚举类型的底层类型为 int。
+[性质][修饰符] enum 标识符 [:基础类型]
+{枚举列表};
+#+BEGIN_SRC c#
+enum SomeValues
+{
+  Value_0,
+  Value_1,
+  Value_20 = 20,
+  Value_21
+}
+#+END_SRC
+** 条件分支语句
+C/C++中条件语句中可以使用任意表达式，C#要求所有条件表达式都必须为布尔值.这是为了避免 if(a=10) 这样的错误的！
+
+switch 语句可以对字符串进行跳转。
+#+BEGIN_SRC c#
+switch(name)
+{
+case "Mr.A":
+	DoSomething();
+	break;
+case "Mr.B":
+	DoOtherthing();
+	break;
+default:
+	break;
+}
+#+END_SRC
+** 预处理指令
+C#预处理器只实现了 C++预处理器的一个子集，不支持宏。
+#region [comment context]- #endregion 使用注释来标记一段代码.
+#+BEGIN_SRC c#
+#region test region
+//test region
+//a define is here
+int a = 10;
+#endregion
+
+#+END_SRC
+* 类与对象 
+** 定义类
+[attribue 性质][访问修饰符]class 标识符[:基类]
+{类主体}
+C#类定义后不需要分号,加分号也不会报错。
+
+*** 访问修饰符
+| 访问修饰符         | 限制                                                                    |
+|--------------------+-------------------------------------------------------------------------|
+| public             | 无限制。标记为 public 成员，任何类的任何方法都可以访问                  |
+| private            | 标记为 private 的类 A 的成员，只有类 A 的方法可以访问                   |
+| protected          | 标记为 protected 的类 A 的成员，类 A 和从类 A 派生的类的方法可以访问    |
+| internal           | 标记为 internal 的类 A 的成员，A 所处的程序集中的任何类的方法都可以访问 |
+| protected internal | protected 或 internal 的意思。（没有 protected 且 internal 的概念）     |
+
+** 创建对象
+对象是引用类型，创建于堆中，需要使用关键字 new。
+*** 构造方法
+未定义构造函数时，编译器会提供一个默认构造函数。
+未显式初始化的成员变量会按照下表的值初始化。
+用户实现任何构造函数后，编译器将不会提供默认构造函数。
+| 类型                 | 默认值 |
+|----------------------+--------|
+| numeric(int long 等) | 0      |
+| bool                 | false  |
+| char                 | \0     |
+| enum                 | 0      |
+| reference            | null   |
+*** 初始化语句
+可以在初始化语句中初始化成员变量的值，而不需要都在构造函数中进行。
+#+BEGIN_SRC c#
+public class Person 
+{
+	// 下面的初始化语句中初始化了成员变量的值为 "Unknown"
+	private string name = "Unknown";
+  public Person(string name)
+  {
+  	this.name = name;
+  }
+}
+#+END_SRC
+*** TODO ICloneable 接口
+
+C#中没有复制构造函数。
+#+BEGIN_SRC C#
+public class Person: ICloneable
+{
+	private string name = "Unknown";
+	public Person(string name)
+	{
+  	this.name = name;
+  }
+  public Object Clone()
+	{
+  }
+}
+#+END_SRC
+** 使用静态成员
+*** 静态成员方法
+C#中不可以通过对象来访问类的静态成员方法和变量。
+CLR 保证在类的其他操作之前运行静态构造方法。静态构造方法通常用于初始化语句无法完成或者仅需一次的设置工作。
+*** 静态类
+C#中没有全局方法或全局变量、常量。可以创建静态类来封装全局方法和全局变量、常量。
+静态类无法实例化，静态类不能被派生，静态类不可含非静态成员。
+** 销毁对象
+C#提供了垃圾回收器，因此不需要显式地销毁对象。但如果对象要控制非托管的资源，用完后显式地释放还是需要的。
+**** 析构函数
+对非托管资源的隐式控制是通过析构方法来提供的，它会在对象销毁时有垃圾回收器调用。
+#+BEGIN_SRC c#
+~MyClass(){}
+// 上面的代码会被编译器翻译为
+protected override void Finalize()
+{
+	try
+  {}
+  finally
+  {
+		base.Finalize();
+  }
+}
+#+END_SRC
+**** Dispose 方法
+显式调用析构方法是不合法的。如果需要处理昂贵的非托管资源，需要尽快关闭和清除他们，应该实现 IDisposable 接口。
+IDisosable 接口要求实现者定义一个名为 Dispose()的方法，清除我们认为重要的一切。
+如果提供了 Dispose()方法，应该停止垃圾回收器调用对象的析构方法，这样保证只进行一次资源释放。
+#+BEGIN_SRC c#
+public class TestDispose:IDisposable
+{
+  bool is_disposed = false;
+  public TestDispose ()
+  {
+  }
+  protected virtual void Dispose(bool disposing)
+  {
+    if(!is_disposed)
+    {
+      if(disposing)
+      {
+        Console.WriteLine("Not in destructor,Ok to reference other objects");
+      }
+      Console.WriteLine("Disposing ... ");
+    }
+    is_disposed = true;
+  }
+  public void Dispose()
+  {
+    Dispose(true);
+    GC.SuppressFinalize(this);
+  }
+  ~TestDispose()
+  {
+    Dispose(false);
+    Console.WriteLine("In destructor");
+  }
+}
+#+END_SRC
+**** using 语句
+using 语句用于保证 Dispose 会尽可能最早的时刻调用。
+#+BEGIN_SRC c#
+//方法 1
+using (Font theFont = new Font("Arial",10.0f))
+{
+	// 使用 theFont
+	// 编译器会调用 theFont 的 Dispose
+}
+//方法 2
+Font anotherFont = new Font("Arial",10.0f);
+using (anotherFont)
+{
+	// 使用 anotherFont
+  // 编译器会调用 anotherFont 的 Dispose
+}
+#+END_SRC
+方法 2 存在风险。
+首先：如果在创建对象后，进入 using 语句之前发生异常，对象将不会被清除。
+其次：变量在 using 语句块结束后仍然在作用域中，但是其资源已经释放了，所以再次使用它时可能会有错误。
+** 参数传递
+默认情况下值类型是按值传递给方法的。
+通过 ref 可以实现按照引用传递值类型的参数。
+通过 out 可以克服明确赋值问题。
+** 通过属性封装数据
+通过属性客户代码可以访问类的状态，就像直接访问成员字段一样，而实际上这是通过类方法访问才实现的。
+通过 public private protected internal 实现属性访问控制
+使用属性要小心，属性本身实际上是成员方法，在初始化所有成员变量之前不能调用成员方法。
+#+BEGIN_SRC c#
+public class Person{
+	private string name;
+	public string Name
+  {
+  	get 
+    {
+    	return name;
+    }
+    set 
+    {
+    	name = value;
+    }
+  }
+  private int age;
+	public int Age
+  {
+		protected get
+    {
+    	return age;
+    }
+    set
+    {
+    	age = value;
+    }
+  }
+}
+#+END_SRC
+* 继承和多态
+** 多态
+必须显式用关键词 override 标记重新定义了虚方法的方法声明。否则通过基类多态调用该方法时不会调用子类的方法。此时编译器会有警告。
+函数前加 new 关键词，可以取消上述编译器的警告，注意此时多态调用依然只会调用基类的方法。
+*** 调用基类构造方法
+可以通过 base 来调用基类构造方法
+#+BEGIN_SRC c#
+public class Button: Control
+{
+  private int id = 0;
+  public Button(int id)
+  {
+    this.id = id;
+  }
+  public override void DrawWindow()
+  {
+    Console.WriteLine("Button DrawWindow");
+  }
+}
+
+public class LabelButton:Button
+{
+  private string label;
+  public LabelButton(int id,string label)
+    :base(id)
+  {
+    this.label = label;
+  }
+  public override	void DrawWindow()
+  {
+    Console.WriteLine("LabelButton DrawWindow");
+  }
+}
+#+END_SRC
+** 抽象类
+将方法指定为抽象方法可以强制子类实现基类的该抽象方法。
+抽象方法没有实现。
+使类的一个或多个方法为抽象方法，会使类变为抽象类。
+抽象类无法实例化。
+抽象类代表了一种抽象的理念，要为所有派生类创建一个“合同（contract）”。也就是说，抽象类描述了要实现该抽象的所有类的公共方法。
+** 密封类
+抽象类是用来派生的，与抽象相对的设计概念是密封。sealed 置于类声明之前用来阻止派生。
+** 万类之根：Object
+所有 C#类，无论是何类型，都可以看成是从 System.Object 派生而来的。值类型也包括在内。
+类不需要声明从 Ojbect 派生，继承是隐含的。
+** 类型的装箱和拆箱
+装箱和拆箱是使值类型能够被当成引用类型（对象）的处理过程。值被装箱到一个 Object 里然后拆箱回一个值类型。
+装箱是一种隐含的转换。
+拆箱必须是显式的。
+#+BEGIN_SRC c#
+int i = 123;
+Object obj = i;   // 装箱
+int j = (int)obj; // 拆箱
+#+END_SRC
+** 嵌套类
+嵌套类的方法可以访问外层类的私有成员。
+#+BEGIN_SRC c#
+public class OuterClass
+{
+  private static int outer_obj_count = 0;
+  public OuterClass()
+  {
+    outer_obj_count++;
+  }
+  public class NestedClass
+  {
+    private static int nested_obj_count = 0;
+    public void PrintOuterObjCount()
+    {
+      Console.WriteLine(outer_obj_count);
+    }
+    public void PrintNestedObjCount()
+    {
+      Console.WriteLine(nested_obj_count);
+    }
+  }
+}
+#+END_SRC
+* 操作符重载
+c#中，操作符都是一些静态方法，其返回值表示操作结果，其参数是操作数。
+C#要求必须成对重载操作符。例如 ==与!= <与> <=与>=
+implicit 关键字用于转换肯定成功，不会丢失信息的时候；否则就用关键字 explicit。
+* 结构体
+结构体不支持继承和析构函数。结构体是值类型。(所以函数的结构体类型的参数是按值传递的)
+结构体数组在内存使用方面效率相对更好。结构体集合的效率就不行了。集合的元素必须是引用类型，所以结构体必须进行装箱处理。
+结构体不能通过初始化语句初始化结构体的实例字段。
+#+BEGIN_SRC c#
+public struct Student
+{
+  public string name = "hi"; // this is error
+  public int age;
+}
+#+END_SRC
+结构体成员默认的访问权限也为 private。
+** 定义结构体
+[attribue 性质][访问修饰符]struct 标识符[:接口列表]
+{结构体成员}
+** 创建结构对象
+#+BEGIN_SRC c#
+// 方法 1
+Student stu1 = new Student();
+// 方法 2
+Student stu2;
+stu2.name = "";
+stu2.age = 0;
+#+END_SRC
+方法 2 需要手动初始化所有成员的初始值。当结构体内有私有成员变量时，方法 2 将无法使用，因为无法初始化私有成员变量。
+* 接口 
+接口是向客户保证类或结构体行为方式的一种协定。定义接口是可以定义实现该接口的类需要实现的方法、属性、索引器和事件。
+继承抽象类描述了 is-a 的关系，类实现接口描述了 implement 的关系。
+** 定义接口
+[attribue 性质][访问修饰符]interface 标识符[:基列表]
+{接口主体}
+interface 后的标识符通常会以 I 开头，不过不是必须的。
+基列表列出了此接口扩展的接口。
+接口中属性的声明并没有实现 get\set 方法。
+接口中的方法声明没有访问修饰符，接口的方法隐含就是 public 的，因为接口是要其他类使用的协定。
+#+BEGIN_SRC c#
+public interface IStorable
+{
+  void Read ();
+
+  void Write (Object obj);
+
+  int Status {
+    get;
+    set;
+  }
+}
+
+public class GDoc : IStorable
+{
+  public void Read ()
+  {
+    Console.WriteLine ("GDoc read ...");
+  }
+
+  public void Write (Object obj)
+  {
+    Console.WriteLine ("GDoc write ...");
+  }
+
+  private int status;
+
+  public int Status {
+    get;
+    set;
+  }
+}
+#+END_SRC
+** 类可以实现多个接口
+#+BEGIN_SRC c#
+public class GDoc : IStorable, ICompressible
+{ ... }
+#+END_SRC
+** 扩展接口
+#+BEGIN_SRC c#
+public interface ILoggedCompressible : ICompressible
+{
+	void LogSavedBytes();
+}
+#+END_SRC
+** 组合接口
+#+BEGIN_SRC c#
+public interface IStorableCompressible: IStorable,ICompressible
+{
+}
+#+END_SRC
+** 转换为接口
+#+BEGIN_SRC c#
+IStorable iObj = doc as IStorable;
+if(iObj != null)
+{
+	iObj.Read();
+}
+#+END_SRC
+** is 和 as 操作符
+is 可用来判断某个对象是否为某个类型。也可以判断某个对象是否实现了某个接口。
+表达式 is 类型 // is 返回 true 或 false
+as 是将 is 和转换操作结合起来。首先测试转换是否合法，如果是就进行转换。如果转换不合法就返回 null。
+表达式 as 类型 // as 返回转换后的对象 或 null
+** 接口和抽象类比较 
+若要创建一个会被许多人服用的类库，最好使用抽象基类；这样当你需要增加一个新的方法时，只需要在抽象基类中添加一个虚方法，然后配一个默认实现就好了。
+若只是为单个项目创建类，则使用接口更好，因为接口更加灵活且具有弹性。
+** 重定义接口的实现
+实现类可以自由地将任何或全部实现接口的方法标记为虚。派生类可以重定义或提供新的实现。
+#+BEGIN_SRC c#
+public interface IStorable
+{
+  void Read ();
+
+  void Write (Object obj);
+
+  int Status {
+    get;
+    set;
+  }
+}
+
+public class GDoc : IStorable
+{
+  public virtual void Read ()
+  {
+    Console.WriteLine ("GDoc read ...");
+  }
+
+  virtual public void Write (Object obj)
+  {
+    Console.WriteLine ("GDoc write ...");
+  }
+
+  private int status;
+
+  public int Status {
+    get;
+    set;
+  }
+}
+
+public class GNote : GDoc
+{
+  public override void Read ()
+  {
+    Console.WriteLine ("GNote read ...");
+  }
+
+  public override void Write (Object obj)
+  {
+    Console.WriteLine ("GNote write ...");
+  }
+}
+#+END_SRC
+** 显式接口实现 
+当需要实现的两个接口有相同的方法时，其中一个接口的方法需要显式实现。
+显式实现声明的方法不能用访问修饰符，该方法隐含为公共的。
+显式实现声明的方法不能用 abstract\virtual\override\new 修饰符声明。
+将接口方法通过显式实现，可以一定程度的隐藏接口方法，从而达到有选择公开接口方法的目的。
+#+BEGIN_SRC c#
+public class GDoc : IStorable,ITalk
+{
+  public virtual void Read ()
+  {
+    Console.WriteLine ("GDoc read ...");
+  }
+
+  virtual public void Write (Object obj)
+  {
+    Console.WriteLine ("GDoc write ...");
+  }
+
+  public void Talk ()
+  {
+  	Console.WriteLine("IStorable Talk implement");
+  }
+
+  void ITalk.Talk ()
+  {
+  	Console.WriteLine("ITalk Talk implement");
+  }
+
+  private int status;
+
+  public int Status {
+    get;
+    set;
+  }
+}
+#+END_SRC
+** 隐藏接口成员
+#+BEGIN_SRC c#
+public interface IGBase
+{
+  int P {
+    get;
+    set;
+  }
+}
+
+public interface IGDerived:IGBase
+{
+  new int P {
+    get;
+    set;
+  }
+}
+
+public class GMyClass:IGDerived
+{
+  int IGBase_P;
+
+  int IGBase.P {
+    get {
+      return IGBase_P;
+    }
+    set { 
+      IGBase_P = value;
+    }
+  }
+
+  int p = 10;
+
+  public int P {
+    get {
+      return p;
+    }
+    set { 
+      p = value;
+    }
+  }
+}
+#+END_SRC
+** 访问密封类和结构体
+使用值类型实现接口时，一定要通过对象访问接口成员，而不要通过接口引用。因为将值类型对象转换为接口引用时会对值类型对象进行装箱操作，
+通过接口引用调用接口方法是在装箱后的引用对象上进行的。
+
