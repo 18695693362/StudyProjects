@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>0_light_obj.frag</file>
+        <file>0_light_obj.vert</file>
+    </qresource>
+</RCC>

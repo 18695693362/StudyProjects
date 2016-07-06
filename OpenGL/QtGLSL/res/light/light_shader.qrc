@@ -2,13 +2,15 @@
     <qresource prefix="/">
         <file>0_no_light.frag</file>
         <file>0_no_light.vert</file>
-        <file>0_ambient.frag</file>
-        <file>0_ambient.vert</file>
-        <file>0_dir_light.frag</file>
-        <file>0_dir_light.vert</file>
-        <file>0_point_light.frag</file>
-        <file>0_point_light.vert</file>
-        <file>0_spot_light.frag</file>
-        <file>0_spot_light.vert</file>
+        <file>1_ambient.frag</file>
+        <file>1_ambient.vert</file>
+        <file>2_dir_light.frag</file>
+        <file>2_dir_light.vert</file>
+        <file>3_point_light.frag</file>
+        <file>3_point_light.vert</file>
+        <file>4_spot_light.frag</file>
+        <file>4_spot_light.vert</file>
+        <file>5_multi_light.frag</file>
+        <file>5_multi_light.vert</file>
     </qresource>
 </RCC>

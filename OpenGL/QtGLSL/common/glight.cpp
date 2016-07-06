@@ -2,99 +2,252 @@
 #include "glhelper.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include <QOpenGLFunctions>
+#include <string>
 
-GPointLight::GPointLight()
+using namespace std;
+
+GLightBase::GLightBase()
 {
-    _kPosAttribLocal = 0;
-    _kColorAttribLocal = 1;
-    _is_inited = false;
-    _scale = 1.0f;
-    _translate = glm::vec3(0.0,0.0,0.0);
-    _color = glm::vec4(1.0,0.0,0.0,1.0);
+    memset(_property_local,-1,sizeof(_property_local));
 }
 
-void GPointLight::Init()
+const std::string GLightBase::GetLightTypeName(GLightType type)
 {
-    _is_inited = true;
-
-    const char vs[] =
-            "#version 410\n"
-            "layout (location = 0) in vec3 vi_position;\n"
-            "layout (location = 1) in vec3 vi_color;\n"
-            "uniform vec3   move;\n"
-            "uniform float  scale;\n"
-            "uniform vec4   color;\n"
-            "uniform mat4x4 view_matrix;\n"
-            "uniform mat4x4 projection_matrix;\n"
-            "out vec4 vo_color;\n"
-            "void main(void)\n"
-            "{\n"
-            "    mat4 scale_mat = mat4(scale);\n"
-            "    scale_mat[3].w = 1.0f;\n"
-            "    vec4 temp_pos = scale_mat*vec4(vi_position,1.0);\n"
-            "    temp_pos = temp_pos+vec4(move,0.0);\n"
-            "    gl_Position = projection_matrix*view_matrix*temp_pos;\n"
-            "    vo_color = color;\n"
-            "    //vo_color = vec4(vi_color,1.0);\n"
-            "}\n";
-    const char fs[] =
-            "#version 410\n"
-            "in vec4 vo_color;\n"
-            "out vec4 fo_color;\n"
-            "void main(void)\n"
-            "{\n"
-            "    fo_color = vo_color;\n"
-            "}\n";
-    _program = GLHelper::CreateShaderProgram(vs,fs);
-    glUseProgram(_program);
+    switch(type)
     {
-        glGenVertexArrays(1,&_vertex_arr_obj);
-        glBindVertexArray(_vertex_arr_obj);
-
-        GLfloat* vertex_data = NULL;
-        GLint    vertex_data_size;
-        GLfloat* vertex_color_data = NULL;
-        GLint    vertex_color_data_size;
-        GLuint*  vertex_index_data = NULL;
-        GLint    vertex_index_data_size;
-        GLint    vertex_pos_comp_count;
-        GLint    vertex_color_comp_count;
-
-        GetVertexData(vertex_data,vertex_index_data,vertex_color_data,
-                      vertex_data_size,vertex_index_data_size,vertex_color_data_size,
-                      vertex_pos_comp_count,vertex_color_comp_count);
-
-        glGenBuffers(1,&_vertex_buffer);
-        glBindBuffer(GL_ARRAY_BUFFER,_vertex_buffer);
-        glBufferData(GL_ARRAY_BUFFER,vertex_data_size+vertex_color_data_size,NULL,GL_STATIC_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER,0,vertex_data_size,vertex_data);
-        glBufferSubData(GL_ARRAY_BUFFER,vertex_data_size,vertex_color_data_size,vertex_color_data);
-
-        glGenBuffers(1,&_vertex_index_buffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,_vertex_index_buffer);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,vertex_index_data_size,vertex_index_data,GL_STATIC_DRAW);
-
-        _scaleUniformLocal = GLHelper::GetUniformLocal(_program,"scale");
-        _colorUniformLocal = GLHelper::GetUniformLocal(_program,"color");
-        _moveUniformLocal  = GLHelper::GetUniformLocal(_program,"move");
-        _viewMatrixUniformLocal = GLHelper::GetUniformLocal(_program,"view_matrix");
-        _projectionMatrixUniformLocal = GLHelper::GetUniformLocal(_program,"projection_matrix");
-
-        glVertexAttribPointer(_kPosAttribLocal,vertex_pos_comp_count,GL_FLOAT,GL_FALSE,
-                              0,BUFF_OFFSET(0));
-        glEnableVertexAttribArray(_kPosAttribLocal);
-        glVertexAttribPointer(_kColorAttribLocal,vertex_color_comp_count,GL_FLOAT,GL_FALSE,
-                              0,BUFF_OFFSET(vertex_data_size));
-        glEnableVertexAttribArray(_kColorAttribLocal);
-
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER,0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+    case GLightType::kDirectionLight:
+        return "dir_light";
+    case GLightType::kPointLight:
+        return "point_light";
+    case GLightType::kSpotLight:
+        return "spot_light";
+    default:
+        break;
     }
-    glUseProgram(0);
+    return "error_light";
 }
 
-void GPointLight::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data,GLfloat*& vertex_color_data,
+const std::string GLightBase::GetLightPropName(GLightPropType type)
+{
+    if(type >= 0 && type < GLightPropType::kLightPropType_TypeNumbs)
+    {
+        const char** names = GetLightPropNameArr();
+        return names[type];
+    }
+    return "error_type";
+}
+
+const char **GLightBase::GetLightPropNameArr()
+{
+    static const char* names[] = {
+        "enable",
+        "type",
+        "color",
+        "dir",
+        "pos",
+        "ambient",
+        "shininess",
+        "strengthen",
+        "attenuation",
+        "linear_attenuation",
+        "quadratic_attenuation",
+        "spot_inner_cutoff",
+        "spot_outer_cutoff"
+    };
+    return names;
+}
+
+void GLightBase::SetPropertyLocal(GLightPropType type, GLint local)
+{
+    if(type >= 0 && type < GLightPropType::kLightPropType_TypeNumbs)
+    {
+        _property_local[type] = local;
+    }
+}
+
+GLint GLightBase::GetPropertyLocal(GLightPropType type)
+{
+    if(type >= 0 && type < GLightPropType::kLightPropType_TypeNumbs)
+    {
+        return _property_local[type];
+    }
+    return -1;
+}
+
+void GLightBase::UploadProperty(GLightPropType type, GCamera *camera)
+{
+    GLint local = GetPropertyLocal(type);
+    if(local > -1)
+    {
+        switch (type)
+        {
+        case kLightPropType_Enable:
+        {
+            int enable = (int)property.enable;
+            glUniform1i(local,enable);
+            break;
+        }
+        case kLightPropType_Type:
+        {
+            glUniform1i(local,property.type);
+            break;
+        }
+        case kLightPropType_Color:
+        {
+            glUniform3fv(local,1,glm::value_ptr(property.color));
+            break;
+        }
+        case kLightPropType_Dir:
+        {
+            if(camera)
+            {
+                glm::mat4x4 view_matrix;
+                camera->GetViewMatrix(view_matrix);
+                glm::mat3x3 normal_mat = glm::transpose(glm::inverse(glm::mat3x3(view_matrix)));
+                glm::vec3 dir = normal_mat * (property.dir);
+                dir = glm::normalize(dir);
+                glUniform3fv(local,1,glm::value_ptr(dir));
+            }
+            //glUniform3fv(local,1,glm::value_ptr(property.dir));
+            break;
+        }
+        case kLightPropType_Pos:
+        {
+            if(camera)
+            {
+                property.pos = GetTranslate();
+
+                glm::mat4x4 view_matrix;
+                camera->GetViewMatrix(view_matrix);
+                glm::vec4 pos = glm::vec4(property.pos,1.0);
+                pos = view_matrix * pos;
+                glm::vec3 final_pos = glm::vec3(pos.x,pos.y,pos.z);
+                glUniform3fv(local,1,glm::value_ptr(final_pos));
+            }
+            //glUniform3fv(local,1,glm::value_ptr(property.pos));
+            break;
+        }
+        case kLightPropType_Ambient:
+        {
+            glUniform3fv(local,1,glm::value_ptr(property.ambient));
+            break;
+        }
+        case kLightPropType_Shininess:
+        {
+            glUniform1f(local,property.shininess);
+            break;
+        }
+        case kLightPropType_Strengthen:
+        {
+            glUniform1f(local,property.strengthen);
+            break;
+        }
+        case kLightPropType_Attenuation:
+        {
+            glUniform1f(local,property.attenuation);
+            break;
+        }
+        case kLightPropType_Linear_attenuation:
+        {
+            glUniform1f(local,property.linear_attenuation);
+            break;
+        }
+        case kLightPropType_Quadratic_attenuation:
+        {
+            glUniform1f(local,property.linear_attenuation);
+            break;
+        }
+        case kLightPropType_Spot_inner_cutoff:
+        {
+            glUniform1f(local,property.spot_inner_cutoff);
+            break;
+        }
+        case kLightPropType_Spot_outer_cutoff:
+        {
+            glUniform1f(local,property.spot_outer_cutoff);
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    else
+    {
+        GLHelper::Log(string("Error GLightBase::UploadProperty type = ")+GetLightPropName(type));
+    }
+}
+
+void GCubeLight::Init(const char *v_shader, const char *f_shader, GUniformType* uniform_types, int count)
+{
+    if(!_is_inited)
+    {
+        _is_inited = true;
+
+        _program = GLHelper::CreateShaderProgramWithFiles(v_shader,f_shader);
+        glUseProgram(_program);
+        {
+            glGenVertexArrays(1,&_vertex_arr_obj);
+            glBindVertexArray(_vertex_arr_obj);
+
+            GLfloat* vertex_data = NULL;
+            GLint    vertex_data_size;
+            GLfloat* vertex_color_data = NULL;
+            GLint    vertex_color_data_size;
+            GLuint*  vertex_index_data = NULL;
+            GLint    vertex_index_data_size;
+            GLint    vertex_pos_comp_count;
+            GLint    vertex_color_comp_count;
+
+            GetVertexData(vertex_data,vertex_index_data,vertex_color_data,
+                          vertex_data_size,vertex_index_data_size,vertex_color_data_size,
+                          vertex_pos_comp_count,vertex_color_comp_count);
+
+            glGenBuffers(1,&_vertex_buffer);
+            glBindBuffer(GL_ARRAY_BUFFER,_vertex_buffer);
+            glBufferData(GL_ARRAY_BUFFER,vertex_data_size+vertex_color_data_size,NULL,GL_STATIC_DRAW);
+            glBufferSubData(GL_ARRAY_BUFFER,0,vertex_data_size,vertex_data);
+            glBufferSubData(GL_ARRAY_BUFFER,vertex_data_size,vertex_color_data_size,vertex_color_data);
+
+            glGenBuffers(1,&_vertex_index_buffer);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,_vertex_index_buffer);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER,vertex_index_data_size,vertex_index_data,GL_STATIC_DRAW);
+
+            if(uniform_types)
+            {
+                for(auto iter=0; iter<count; iter++)
+                {
+                    GUniformInfo info;
+                    info.type = uniform_types[iter];
+                    info.name = GModel::GetUniformName(info.type);
+                    info.local = GLHelper::GetUniformLocal(_program,info.name.c_str());
+                    _uniform_infos.push_back(info);
+                }
+            }
+            else
+            {
+                for(auto iter=_uniform_infos.begin(); iter!=_uniform_infos.end(); iter++)
+                {
+                    iter->local = GLHelper::GetUniformLocal(_program,iter->name.c_str());
+                }
+            }
+
+            glVertexAttribPointer(GAttribType::kAttribType_Pos,vertex_pos_comp_count,GL_FLOAT,GL_FALSE,
+                                  0,BUFF_OFFSET(0));
+            glVertexAttribPointer(GAttribType::kAttribType_Color,vertex_color_comp_count,GL_FLOAT,GL_FALSE,
+                                  0,BUFF_OFFSET(vertex_data_size));
+            glEnableVertexAttribArray(GAttribType::kAttribType_Pos);
+            glEnableVertexAttribArray(GAttribType::kAttribType_Color);
+
+            glBindVertexArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER,0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+        }
+        glUseProgram(0);
+    }
+}
+
+void GCubeLight::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data,GLfloat*& vertex_color_data,
                           int& vertex_data_size,int& index_data_size,int& color_data_size,
                           int& vertex_pos_comp_count,int& vertex_color_comp_count)
 {
@@ -119,12 +272,6 @@ void GPointLight::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data
         0.0, 1.0, 0.0,
     };
     static GLuint v_index_data[] = {
-//        0,1,2,  2,3,0, // front
-//        0,4,7,  7,3,0, // down
-//        0,4,1,  1,4,5, // left
-//        5,4,7,  7,6,5, // back
-//        5,6,2,  2,1,5, // up
-//        2,6,7,  7,3,2  // right
         0, 1, 3, 2, 7, 6, 4, 5,
         0xFFFF,
         2, 6, 1, 5, 0, 4, 3, 7
@@ -143,53 +290,15 @@ void GPointLight::GetVertexData(GLfloat*& vertex_data,GLuint*& vertex_index_data
     vertex_color_comp_count = 3;
 }
 
-void GPointLight::Draw()
+void GCubeLight::Draw()
 {
     if(_is_inited)
     {
         glUseProgram(_program);
         {
-            glUniform1f(_scaleUniformLocal,_scale);
-            glUniform4fv(_colorUniformLocal,1,glm::value_ptr(_color));
-            glUniform3fv(_moveUniformLocal,1,glm::value_ptr(_translate));
-            GCamera* camera = nullptr;
-            if(_camera_getter)
-            {
-                camera = _camera_getter();
-            }
-            if(camera)
-            {
-                if(_viewMatrixUniformLocal!=-1)
-                {
-                    glm::mat4x4 view_matrix;
-                    camera->GetViewMatrix(view_matrix);
-                    glUniformMatrix4fv(_viewMatrixUniformLocal,1,GL_FALSE,glm::value_ptr(view_matrix));
-                }
-                if(_projectionMatrixUniformLocal!=-1)
-                {
-                    glm::mat4x4 projection_matrix;
-                    camera->GetCurProjectionMatrix(projection_matrix);
-                    glUniformMatrix4fv(_projectionMatrixUniformLocal,1,GL_FALSE,glm::value_ptr(projection_matrix));
-                }
-            }
-            else
-            {
-                if(_view_matrix_getter && _viewMatrixUniformLocal!=-1)
-                {
-                    glm::mat4x4 view_matrix;
-                    _view_matrix_getter(view_matrix);
-                    glUniformMatrix4fv(_viewMatrixUniformLocal,1,GL_FALSE,glm::value_ptr(view_matrix));
-                }
-                if(_projection_matrix_getter && _projectionMatrixUniformLocal!=-1)
-                {
-                    glm::mat4x4 projection_matrix;
-                    _projection_matrix_getter(projection_matrix);
-                    glUniformMatrix4fv(_projectionMatrixUniformLocal,1,GL_FALSE,glm::value_ptr(projection_matrix));
-                }
-            }
+            SetUniformInDraw();
 
             glBindVertexArray(_vertex_arr_obj);
-            //glDrawElements(GL_TRIANGLES,16,GL_UNSIGNED_INT,BUFF_OFFSET(0));
             glDrawElements(GL_TRIANGLE_STRIP,8,GL_UNSIGNED_INT,BUFF_OFFSET(0));
             glDrawElements(GL_TRIANGLE_STRIP,8,GL_UNSIGNED_INT,BUFF_OFFSET(9*sizeof(GLuint)));
             glBindVertexArray(0);

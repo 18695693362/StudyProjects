@@ -11,6 +11,8 @@
 enum GUniformType
 {
     kTranslate,
+    kScale,
+    kColor,
     kViewMatrix,
     kProjectionMatrix,
     kNormalMatrix,
@@ -28,7 +30,7 @@ enum GUniformType
     kLight0_QuadraticAttenuation,
     kLight0_SpotInnerCutoff,
     kLight0_SpotOuterCutoff,
-    kLight0_SpotExponent
+    kLight0_SpotExponent,
 };
 
 class GUniformDataBase
@@ -101,12 +103,18 @@ public:
 
 enum GAttribType
 {
-    kPos = 0,
-    kColor,
-    kNormal,
-    kAttribNums
+    kAttribType_Pos = 0,
+    kAttribType_Color,
+    kAttribType_Normal,
+    kAttribType_Nums
 };
 
+struct GMaterialProp
+{
+
+};
+
+class GLightBase;
 class GModel
 {
 public:
@@ -193,10 +201,17 @@ public:
             GLHelper::Log(std::string("Error: not exist uniform type = ")+GetUniformName(type));
         }
     }
+
+    void AddLight(GLightBase* light);
+    void RemoveLight(GLightBase* light);
 protected:
+    void SetUniformInDraw();
     GUniformInfo* GetUniformInfo(GUniformType type);
     GLint GetUniformLocal(GUniformType type);
-    std::vector<GUniformInfo> _uniform_infos;
+    std::vector<GUniformInfo>           _uniform_infos;
+
+    virtual void SetLightInDraw() {}
+    std::vector<GLightBase*>            _lights;
 
     bool _is_inited = false;
     glm::vec3 _translate;

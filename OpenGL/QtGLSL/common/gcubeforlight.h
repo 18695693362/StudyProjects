@@ -15,7 +15,9 @@ public:
 
     void GetVertexData(GLfloat *&vertex_data, int &data_size, int& pos_comp_count, int& color_comp_count, int& normal_comp_count);
     void Draw();
+
 private:
+    void SetLightInDraw();
 
     GLuint _vertex_buffer;
     GLuint _vertex_arr_obj;

@@ -347,7 +347,19 @@ Tips:
 
 二、 Advanced Lighting Models
 1. Hemisphere Lighting
+半球光照背后的理念是使用两个半球来模拟光照。上面的半球代表天空，下面的半球表示地面。物体法线直接指向上方的表面，其所有光
+照都来自上半球，物体法线直接指向下方的表面，其所有光照都来自下半球。为两个半球指定合适的颜色，可以让球体上法线指向上方的
+被照亮，法线指向下方的在影音中。
+计算表面任何一点的光照：
+Color = a * SkyColor + (1 - a) GroundColor
+_
+| a = 1.0 - (0.5 * sin(x))    x<=90degree
+| a = 0.5 * sin(x)            x>90degree
+-
+or a = 0.5 + 0.5*cos(x)
+
 2. Image-Based Lighting
+
 3. Lighting with Spherical Harmonics
 
 三、 Shadow Mapping
