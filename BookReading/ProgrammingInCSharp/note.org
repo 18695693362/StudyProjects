@@ -211,6 +211,7 @@ using (anotherFont)
 通过属性客户代码可以访问类的状态，就像直接访问成员字段一样，而实际上这是通过类方法访问才实现的。
 通过 public private protected internal 实现属性访问控制
 使用属性要小心，属性本身实际上是成员方法，在初始化所有成员变量之前不能调用成员方法。
+只定义 set 时，属性只可写不可读。只定义 get 时，属性只可读不可写。
 #+BEGIN_SRC c#
 public class Person{
 	private string name;
@@ -236,6 +237,11 @@ public class Person{
     {
     	age = value;
     }
+  }
+	private string tel;
+  public string Tel
+	{
+  	set{ tel = value; }
   }
 }
 #+END_SRC
@@ -553,4 +559,418 @@ public class GMyClass:IGDerived
 ** 访问密封类和结构体
 使用值类型实现接口时，一定要通过对象访问接口成员，而不要通过接口引用。因为将值类型对象转换为接口引用时会对值类型对象进行装箱操作，
 通过接口引用调用接口方法是在装箱后的引用对象上进行的。
+* 数组索引器与集合 
+C#中数组为对象，数组可以有自己的方法和属性。
+** 声明数组
+类型[] 数组名;
+C#数组为引用类型，所以其在堆中分配，数组内的元素如何分配要看他们自己的类型。如果数组元素为值类型，则所有元素在为数组分配的内存块中创建。
+如果数组元素为引用类型，分配给数组的内存将用来存放对实际元素的引用。实际元素本身是在堆中分配的，所占内存和分配给数组的内存是不同的。
+** 默认值
+创建值类型数组时，每个元素最初都存放着数组所存类型的默认值。
+创建引用类型数组时，每个元素被初始化为 null。
+** 遍历数组
+foreach(类型 标识符 in 表达式)语句
+for(int i=0; i<arr.Length; i++)语句
+** 初始化数组元素
+#+BEGIN_SRC c#
+Employee[] empArr = new Employee[3] {
+  new Employee (110),
+  new Employee (111),
+  new Employee (112)
+};
+Employee[] empArr = {
+  new Employee (110),
+  new Employee (111),
+  new Employee (112)
+};
+#+END_SRC
+** params 关键字
+params 可用于可变数目的数组函数参数。
+#+BEGIN_SRC c#
+public static void PrintIntArray (params int[] intArr)
+{
+  foreach (int value in intArr) {
+    Console.WriteLine (value);
+  }
+}
+int[] intArr = { 11111, 11112, 11113, 11114 };
+PrintIntArray (intArr);
+PrintIntArray (1111, 1112, 1113);
+#+END_SRC
+** 多维数组
+数组可分为规则数组和不规则数组。规则数组每行长度是相同的，不规则数组是数组组成的数组。
+*** 规则数组 
+二维数组 类型[,]数组名;   
+三维数组 类型[,,]数组名;  
+#+BEGIN_SRC c#
+int[2,3]arr;     //2 行 3 列的二维数组
+int[2,3,4]arr;   //三维数组
+int[,] arr = {
+	{0,1,2},
+	{3,4,5},
+	{6,7,8},
+  {9,10,11}
+};   				     //4 行 3 列的二维数组
+arr[1,1];				 //访问第二行第二列的元素，该值为 4
+#+END_SRC
+*** 不规则数组 
+类型[][]...数组名;
+#+BEGIN_SRC c#
+int[3][]arr;      //二维整型不规则数组
+arr[0] = new int[4];
+arr[1] = new int[2];
+arr[2] = {0,2,4,6,8};
+arr[2][3];        //访问第三行第四列的元素，该值为 8
+#+END_SRC
+** 数组转换
+如果维数相同，且引用元素类型可以转换，那么可以进行数组间的转换。如果元素类型可以隐式转换，则可以进行隐式转换，否则必须进行显式转换。
+Tips: 值类型元素的数组不可以转换。
+#+BEGIN_SRC c#
+ImgButton[] imgBtnArr = { new ImgButton (10, "10"), new ImgButton (11, "11") };
+PrintControl (imgBtnArr);
+Control[] tmpCtrlArr = imgBtnArr;
+PrintControl (tmpCtrlArr);
+ImgButton[] tmpImgBtnArr = (ImgButton[])tmpCtrlArr;
+PrintControl (tmpImgBtnArr);
 
+public static void PrintControl (Control[] controlArr)
+{
+  foreach (Control ctr in controlArr) {
+    Console.WriteLine ("controlId = {0}", ctr.Id);
+  }
+}
+// 下面的代码编译会出错
+float[] floatArr = { 1.0f, 1.1f, 1.2f };
+double[] doubleArr = { 2.0, 2.1, 2.2 };
+doubleArr = (double[])floatArr;
+#+END_SRC
+** 数组排序
+Array.Sort    可用来排序数组。
+Array.Reverse 可用来将数组元素顺序反转。
+** 索引器
+索引器是一种特殊的属性，可以通过 get set 方法来指定其行为。
+(返回)类型 this[(索引)类型 参数]{get;set}
+索引类型
+索引操作符在 C#中不能重载，所以提供了索引器。
+#+BEGIN_SRC c#
+public class ListBox:IEnumerable<string>
+{
+  public ListBox (params string[] init_strs)
+  {
+    strings = new string[256];
+    foreach (string str in init_strs) {
+      strings [count++] = str;
+    }
+  }
+
+  public IEnumerator<string> GetEnumerator ()
+  {
+    foreach (string s in strings) {
+      yield return s;
+    }
+  }
+
+  IEnumerator IEnumerable.GetEnumerator ()
+  {
+    return GetEnumerator ();
+  }
+
+  public void Add (string item)
+  {
+    if (count >= strings.Length) {
+      //
+    } else {
+      strings [count++] = item;
+    }
+  }
+
+  public string this [int index] {
+    get {
+      if (index >= count) {
+        return "";
+      } else {
+        return strings [index];
+      }
+    }
+    set {
+      if (index >= strings.Length) {
+        //
+      } else {
+        if (index >= count) {
+          count = index + 1;
+        }
+        strings [index] = value;
+      }
+    }
+  }
+
+  public string this [string index] {
+    get {
+      int idx = findString (index);
+      if (idx != -1) {
+        return strings [idx];
+      } else {
+        return "";
+      }
+    }
+    set {
+      int idx = findString (index);
+      if (idx != -1) {
+        strings [idx] = value;
+      } else {
+        //
+      }
+    }
+  }
+
+  private int findString (string str)
+  {
+    for (int i = 0; i < count; i++) {
+      if (strings [i].StartsWith (str)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  public int Count {
+    get {
+      return count;
+    }
+    //private set;
+  }
+
+  private string[] strings;
+  private int count;
+}
+
+#+END_SRC
+** 集合接口
+| 接口                          | 目的                                                                               |
+|-------------------------------+------------------------------------------------------------------------------------|
+| ICollection<T>                | 泛型集合的基接口                                                                   |
+| IEnumerator<T> IEnumerable<T> | 用 foreach 语句枚举集合                                                            |
+| ICollection<T>                | 所有集合都要实现，以提供 CopyTo()方法，以及 Count、IsSynchronized 和 SyncRoot 属性 |
+| IComparer<T> IComparable<T>   | 比较集合中的两个对象以对集合排序                                                   |
+| IList<T>                      | 用于数组可索引的集合                                                               |
+| IDictionary<K,V>              | 用于基于键值对的集合，如 Dictionary                                                |
+** 约束
+通过关键字 where 指定约束。
+public class Node<T>:IComparable<Node<T>> where T : IComparable<T> // 指定约束 T 需要实现 IComparable<T>接口
+#+BEGIN_SRC c#
+public class Node<T>:IComparable<Node<T>> where T : IComparable<T>
+{
+  private T data;
+  private Node<T> prev;
+  private Node<T> next;
+
+  public Node (T data)
+  {
+    this.data = data;
+  }
+
+  public T Data{ get { return data; } }
+
+  public Node<T> Next { get { return next; } }
+
+  public int CompareTo (Node<T> rhs)
+  {
+    return data.CompareTo (rhs.Data);
+  }
+
+  public bool Equals (Node<T> rhs)
+  {
+    return data.Equals (rhs.Data);
+  }
+
+  public Node<T> Add (Node<T> newNode)
+  {
+    if (this.CompareTo (newNode) > 0) {
+      newNode.next = this;
+      if (this.prev != null) {
+        this.prev.next = newNode;
+        newNode.prev = this.prev;
+      }
+      this.prev = newNode;
+
+      return newNode;
+    } else {
+      if (this.next != null) {
+        this.next.Add (newNode);
+      } else {
+        this.next = newNode;
+        newNode.prev = this;
+      }
+      return this;
+    }
+  }
+
+  public override string ToString ()
+  {
+    string output = data.ToString ();
+    if (next != null) {
+      output += ", "	+ next.ToString ();
+    }
+    return output;
+  }
+}
+
+public class LinkedList<T> where T : IComparable<T>
+{
+  private Node<T> headNode = null;
+
+  public T this [int index] {
+    get {
+      int count = 0;
+      Node<T> node = headNode;
+      while (node != null && count <= index) {
+        if (count == index) {
+          return node.Data;
+        } else {
+          count++;
+          node = node.Next;
+        }
+      }
+      throw new ArgumentOutOfRangeException ();
+    }
+  }
+
+  public void Add (T data)
+  {
+    if (headNode == null) {
+      headNode = new Node<T> (data);
+    } else {
+      headNode.Add (new Node<T> (data));
+    }
+  }
+
+  public override string ToString ()
+  {
+    if (headNode == null) {
+      return string.Empty;
+    } else {
+      return this.headNode.ToString ();
+    }
+  }
+}
+#+END_SRC
+** 实现 IComparer IComparable
+#+BEGIN_SRC c#
+public class Employee:IComparable<Employee>
+{
+  private int empID;
+  private int yearsOfSvr = 1;
+
+  public int EmpID {
+    get{ return empID; }
+    set{ empID = value; }
+  }
+
+  public int YearsOfSvr {
+    get{ return yearsOfSvr; }
+    set{ yearsOfSvr = value; }
+  }
+
+  public Employee (int empID)
+  {
+    this.empID = empID;
+  }
+
+  public Employee (int empID, int yearsOfSvr)
+  {
+    this.empID = empID;
+    this.yearsOfSvr = yearsOfSvr;
+  }
+
+  public static EmployeeComparer GetComparer ()
+  {
+    return new EmployeeComparer ();
+  }
+
+  public int CompareTo (Employee rhs)
+  {
+    return this.empID.CompareTo (rhs.EmpID);
+  }
+
+  public int CompareTo (Employee rhs, EmployeeComparer.ComparerType cmpType)
+  {
+    switch (cmpType) {
+    case EmployeeComparer.ComparerType.EmpID:
+      return this.empID.CompareTo (rhs.EmpID);
+    case EmployeeComparer.ComparerType.YearOfSvr:
+      return this.yearsOfSvr.CompareTo (rhs.yearsOfSvr);
+    }
+    return 0;
+  }
+
+  public override string ToString ()
+  {
+    return string.Format ("EmpID={0}, SvrYears={1}", empID, yearsOfSvr);
+  }
+
+  public class EmployeeComparer:IComparer<Employee>
+  {
+    public enum ComparerType
+    {
+      EmpID,
+      YearOfSvr
+    }
+
+    private ComparerType compType;
+
+    public ComparerType CompType {
+      get{ return compType; }
+      set{ compType = value; }
+    }
+
+    public bool Equals (Employee lhs, Employee rhs)
+    {
+      return lhs.CompareTo (rhs) == 0;
+    }
+
+    public int GetHashCode (Employee e)
+    {
+      return e.GetHashCode ();
+    }
+
+    public int Compare (Employee lhs, Employee rhs)
+    {
+      return lhs.CompareTo (rhs, compType);
+    }
+  }
+}
+#+END_SRC
+* 字符串与正则表达式
+
+** string
+C#中 string 是一种正常的类型，而不是字符数组。
+string 类的声明为：
+#+BEGIN_SRC 
+public sealed class String:IComparable<T>,ICloneable,IConvertible,IEnumerable<T>
+#+END_SRC
+每个 string 对象都是一个不变的 unicode 字符序列。string 不变这一事实意味着看似要改变字符串的方法实际上返回的是一个修改后的副本，
+原字符串在内存中是不变的，直至被垃圾回收。这可能会带来性能问题，所以如果需要频繁修改字符串，应该使用 StringBuilder。
+#+BEGIN_SRC c#
+//修改 string
+string line = "My name is God!";
+char[] lineCharArr = line.ToCharArray ();
+lineCharArr [0] = 'm';
+line = new string (lineCharArr);
+#+END_SRC
+#+BEGIN_SRC c#
+// @ 符号会告知字符串构造函数忽略转义符和分行符。因此，以下两个字符串是完全相同的：
+string p1 = "\\\\My Documents\\My Files\\";
+string p2 = @"\\My Documents\My Files\";
+#+END_SRC
+** StringBuilder
+System.Text.StringBuilder 的作用是用来创建和修改字符串的。
+#+BEGIN_SRC c#
+StringBuilder mutableStr = new StringBuilder ("My name is God!");
+mutableStr [0] = 'm';
+Console.WriteLine (mutableStr);
+#+END_SRC
+** TODO 正则表达式
+名字空间 System.Text.RegularExpressions 是所以与正则表达式相关的.NET 框架对象的大本营。
+* TODO 异常处理
+* 委托和事件
+委托是一种引用类型，用来封装带有特定签名和返回类型的方法。委托可用来封装静态成员方法、实例方法、匿名方法等。

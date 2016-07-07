@@ -22,3 +22,6 @@ build-Release
 libglm.a
 .qmake.stash
 *.pro.user
+BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/bin
+BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/obj
+BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/Properties
