@@ -973,4 +973,44 @@ Console.WriteLine (mutableStr);
 名字空间 System.Text.RegularExpressions 是所以与正则表达式相关的.NET 框架对象的大本营。
 * TODO 异常处理
 * 委托和事件
+** 委托
 委托是一种引用类型，用来封装带有特定签名和返回类型的方法。委托可用来封装静态成员方法、实例方法、匿名方法等。
+** 多重委托
+委托可以通过+、+=形成多重委托，委托也可以通过-、-=移除多重委托中的委托.
+#+BEGIN_SRC 
+MultiDelegate.MyClassWithDelegate.StringDelegate writer, logger, transmiter;
+writer = new MultiDelegate.MyClassWithDelegate.StringDelegate (
+  MultiDelegate.MyImplClass.WriteStr);
+logger = new MultiDelegate.MyClassWithDelegate.StringDelegate (
+  MultiDelegate.MyImplClass.LogStr);
+transmiter = new MultiDelegate.MyClassWithDelegate.StringDelegate (
+  MultiDelegate.MyImplClass.TransmitStr);
+
+writer ("str pass to writer");
+logger ("str pass to logger");
+
+MultiDelegate.MyClassWithDelegate.StringDelegate multiDelegate = writer + transmiter;
+multiDelegate ("str pass to writer+transmiter");
+multiDelegate += logger; 
+multiDelegate ("str pass to writer+transmiter+loger");
+multiDelegate -= transmiter; 
+multiDelegate ("str pass to writer+transmiter+loger-transmiter");
+multiDelegate += logger; 
+multiDelegate ("str pass to writer+loger+loger");
+///////////////////////////////////
+//下面为输出
+// Write String     -- str pass to writer
+// Log String       -- str pass to logger
+// Write String     -- str pass to writer+transmiter
+// Transimit String -- str pass to writer+transmiter
+// Write String     -- str pass to writer+transmiter+loger
+// Transimit String -- str pass to writer+transmiter+loger
+// Log String       -- str pass to writer+transmiter+loger
+// Write String     -- str pass to writer+transmiter+loger-transmiter
+// Log String       -- str pass to writer+transmiter+loger-transmiter
+// Write String     -- str pass to writer+loger+loger
+// Log String       -- str pass to writer+loger+loger
+// Log String       -- str pass to writer+loger+loger
+#+END_SRC
+** 事件
+event 关键字能够告诉编译器委托只能由定义类调用，其他类只能分别使用相应的+=和-=操作符订阅和退订委托。
