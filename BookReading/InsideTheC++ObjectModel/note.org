@@ -1,0 +1,23 @@
+#+TITLE: Inside The C++ Object Model
+* Object Lessons
+** 内置类型变量在内存中如何布局？
+和 C 语言一样，在内存中连续地址中存放。
+** 类（类的静态成员变量、类的成员变量、类的静态成员函数、类的成员函数、类的虚函数，基类的相关内容，虚基类的相关内容）在内存中的布局是怎样的？
+类的静态成员变量、静态成员函数、成员函数，非静态成员函数会有隐含的 this 指针参数。这些函数和 C 语言一样。
+类的虚函数地址会被组织到一个虚函数表中。
+类、基类、虚基类都一样。
+** 对象在内存中的布局是怎样的？
+按照继承顺序布局类中的成员变量。
+对于有虚函数的会在对象末尾添加_vptr__X 指针，该指针指向虚函数表。
+对于有虚继承的会在对象末尾添加 bptr 指针，该指针指向虚基类对象地址表。
+
+* The Semantics of Constructors
+* The Semantics of Data
+* The Semantics of FUnction
+* Semantics of Construction,Destruction,and Copy
+* Runtime Semantics
+* On the Cusp of the Object Model
+
+
+
+
