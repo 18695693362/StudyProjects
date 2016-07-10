@@ -1,12 +1,12 @@
 #+TITLE: Programming C#
-
-* C#语言基础
+* The C# Language
+** C#语言基础
 C#有两种类型内置类型和用户自定义类型。
 C#还可以分为值类型和引用类型。这两种类型的区别为值在内存中的存储方式不同。
 值类型在栈分配的内存中保存其实际值（或者作为更大的引用类型对象的一部分分配）。
 引用类型变量的地址保存在栈中，但实际对象存在堆中。
 C#还支持 C++风格的指针。
-** 内置类型
+*** 内置类型
 C#中内置类型符合.Net CLS 规范。
 | 类型    | 大小/字节 | .Net 类型 | 说明                                |
 |---------+-----------+----------+-------------------------------------|
@@ -23,10 +23,10 @@ C#中内置类型符合.Net CLS 规范。
 | decimal |        12 | Decimal  | 固定精度                            |
 | long    |         8 | Int64    |                                     |
 | ulong   |         8 | Uint64   |                                     |
-** 变量初始化 赋值
+*** 变量初始化 赋值
 C#要求变量在使用前必须初始化或者赋值。
 const 为编译期常量 ，readonly 为运行时常量
-** 枚举类型
+*** 枚举类型
 每个枚举类型都有底层类型，可以是任意整数类型（integer，short，long），但 char 除外。默认情况下枚举类型的底层类型为 int。
 [性质][修饰符] enum 标识符 [:基础类型]
 {枚举列表};
@@ -39,7 +39,7 @@ enum SomeValues
   Value_21
 }
 #+END_SRC
-** 条件分支语句
+*** 条件分支语句
 C/C++中条件语句中可以使用任意表达式，C#要求所有条件表达式都必须为布尔值.这是为了避免 if(a=10) 这样的错误的！
 
 switch 语句可以对字符串进行跳转。
@@ -56,7 +56,7 @@ default:
 	break;
 }
 #+END_SRC
-** 预处理指令
+*** 预处理指令
 C#预处理器只实现了 C++预处理器的一个子集，不支持宏。
 #region [comment context]- #endregion 使用注释来标记一段代码.
 #+BEGIN_SRC c#
@@ -67,13 +67,13 @@ int a = 10;
 #endregion
 
 #+END_SRC
-* 类与对象 
-** 定义类
+** 类与对象 
+*** 定义类
 [attribue 性质][访问修饰符]class 标识符[:基类]
 {类主体}
 C#类定义后不需要分号,加分号也不会报错。
 
-*** 访问修饰符
+**** 访问修饰符
 | 访问修饰符         | 限制                                                                    |
 |--------------------+-------------------------------------------------------------------------|
 | public             | 无限制。标记为 public 成员，任何类的任何方法都可以访问                  |
@@ -82,9 +82,9 @@ C#类定义后不需要分号,加分号也不会报错。
 | internal           | 标记为 internal 的类 A 的成员，A 所处的程序集中的任何类的方法都可以访问 |
 | protected internal | protected 或 internal 的意思。（没有 protected 且 internal 的概念）     |
 
-** 创建对象
+*** 创建对象
 对象是引用类型，创建于堆中，需要使用关键字 new。
-*** 构造方法
+**** 构造方法
 未定义构造函数时，编译器会提供一个默认构造函数。
 未显式初始化的成员变量会按照下表的值初始化。
 用户实现任何构造函数后，编译器将不会提供默认构造函数。
@@ -95,7 +95,7 @@ C#类定义后不需要分号,加分号也不会报错。
 | char                 | \0     |
 | enum                 | 0      |
 | reference            | null   |
-*** 初始化语句
+**** 初始化语句
 可以在初始化语句中初始化成员变量的值，而不需要都在构造函数中进行。
 #+BEGIN_SRC c#
 public class Person 
@@ -108,7 +108,7 @@ public class Person
   }
 }
 #+END_SRC
-*** TODO ICloneable 接口
+**** TODO ICloneable 接口
 
 C#中没有复制构造函数。
 #+BEGIN_SRC C#
@@ -124,16 +124,16 @@ public class Person: ICloneable
   }
 }
 #+END_SRC
-** 使用静态成员
-*** 静态成员方法
+*** 使用静态成员
+**** 静态成员方法
 C#中不可以通过对象来访问类的静态成员方法和变量。
 CLR 保证在类的其他操作之前运行静态构造方法。静态构造方法通常用于初始化语句无法完成或者仅需一次的设置工作。
-*** 静态类
+**** 静态类
 C#中没有全局方法或全局变量、常量。可以创建静态类来封装全局方法和全局变量、常量。
 静态类无法实例化，静态类不能被派生，静态类不可含非静态成员。
-** 销毁对象
+*** 销毁对象
 C#提供了垃圾回收器，因此不需要显式地销毁对象。但如果对象要控制非托管的资源，用完后显式地释放还是需要的。
-**** 析构函数
+***** 析构函数
 对非托管资源的隐式控制是通过析构方法来提供的，它会在对象销毁时有垃圾回收器调用。
 #+BEGIN_SRC c#
 ~MyClass(){}
@@ -148,7 +148,7 @@ protected override void Finalize()
   }
 }
 #+END_SRC
-**** Dispose 方法
+***** Dispose 方法
 显式调用析构方法是不合法的。如果需要处理昂贵的非托管资源，需要尽快关闭和清除他们，应该实现 IDisposable 接口。
 IDisosable 接口要求实现者定义一个名为 Dispose()的方法，清除我们认为重要的一切。
 如果提供了 Dispose()方法，应该停止垃圾回收器调用对象的析构方法，这样保证只进行一次资源释放。
@@ -183,7 +183,7 @@ public class TestDispose:IDisposable
   }
 }
 #+END_SRC
-**** using 语句
+***** using 语句
 using 语句用于保证 Dispose 会尽可能最早的时刻调用。
 #+BEGIN_SRC c#
 //方法 1
@@ -203,11 +203,11 @@ using (anotherFont)
 方法 2 存在风险。
 首先：如果在创建对象后，进入 using 语句之前发生异常，对象将不会被清除。
 其次：变量在 using 语句块结束后仍然在作用域中，但是其资源已经释放了，所以再次使用它时可能会有错误。
-** 参数传递
+*** 参数传递
 默认情况下值类型是按值传递给方法的。
 通过 ref 可以实现按照引用传递值类型的参数。
 通过 out 可以克服明确赋值问题。
-** 通过属性封装数据
+*** 通过属性封装数据
 通过属性客户代码可以访问类的状态，就像直接访问成员字段一样，而实际上这是通过类方法访问才实现的。
 通过 public private protected internal 实现属性访问控制
 使用属性要小心，属性本身实际上是成员方法，在初始化所有成员变量之前不能调用成员方法。
@@ -245,11 +245,11 @@ public class Person{
   }
 }
 #+END_SRC
-* 继承和多态
-** 多态
+** 继承和多态
+*** 多态
 必须显式用关键词 override 标记重新定义了虚方法的方法声明。否则通过基类多态调用该方法时不会调用子类的方法。此时编译器会有警告。
 函数前加 new 关键词，可以取消上述编译器的警告，注意此时多态调用依然只会调用基类的方法。
-*** 调用基类构造方法
+**** 调用基类构造方法
 可以通过 base 来调用基类构造方法
 #+BEGIN_SRC c#
 public class Button: Control
@@ -279,18 +279,18 @@ public class LabelButton:Button
   }
 }
 #+END_SRC
-** 抽象类
+*** 抽象类
 将方法指定为抽象方法可以强制子类实现基类的该抽象方法。
 抽象方法没有实现。
 使类的一个或多个方法为抽象方法，会使类变为抽象类。
 抽象类无法实例化。
 抽象类代表了一种抽象的理念，要为所有派生类创建一个“合同（contract）”。也就是说，抽象类描述了要实现该抽象的所有类的公共方法。
-** 密封类
+*** 密封类
 抽象类是用来派生的，与抽象相对的设计概念是密封。sealed 置于类声明之前用来阻止派生。
-** 万类之根：Object
+*** 万类之根：Object
 所有 C#类，无论是何类型，都可以看成是从 System.Object 派生而来的。值类型也包括在内。
 类不需要声明从 Ojbect 派生，继承是隐含的。
-** 类型的装箱和拆箱
+*** 类型的装箱和拆箱
 装箱和拆箱是使值类型能够被当成引用类型（对象）的处理过程。值被装箱到一个 Object 里然后拆箱回一个值类型。
 装箱是一种隐含的转换。
 拆箱必须是显式的。
@@ -299,7 +299,7 @@ int i = 123;
 Object obj = i;   // 装箱
 int j = (int)obj; // 拆箱
 #+END_SRC
-** 嵌套类
+*** 嵌套类
 嵌套类的方法可以访问外层类的私有成员。
 #+BEGIN_SRC c#
 public class OuterClass
@@ -323,11 +323,11 @@ public class OuterClass
   }
 }
 #+END_SRC
-* 操作符重载
+** 操作符重载
 c#中，操作符都是一些静态方法，其返回值表示操作结果，其参数是操作数。
 C#要求必须成对重载操作符。例如 ==与!= <与> <=与>=
 implicit 关键字用于转换肯定成功，不会丢失信息的时候；否则就用关键字 explicit。
-* 结构体
+** 结构体
 结构体不支持继承和析构函数。结构体是值类型。(所以函数的结构体类型的参数是按值传递的)
 结构体数组在内存使用方面效率相对更好。结构体集合的效率就不行了。集合的元素必须是引用类型，所以结构体必须进行装箱处理。
 结构体不能通过初始化语句初始化结构体的实例字段。
@@ -339,10 +339,10 @@ public struct Student
 }
 #+END_SRC
 结构体成员默认的访问权限也为 private。
-** 定义结构体
+*** 定义结构体
 [attribue 性质][访问修饰符]struct 标识符[:接口列表]
 {结构体成员}
-** 创建结构对象
+*** 创建结构对象
 #+BEGIN_SRC c#
 // 方法 1
 Student stu1 = new Student();
@@ -352,10 +352,10 @@ stu2.name = "";
 stu2.age = 0;
 #+END_SRC
 方法 2 需要手动初始化所有成员的初始值。当结构体内有私有成员变量时，方法 2 将无法使用，因为无法初始化私有成员变量。
-* 接口 
+** 接口 
 接口是向客户保证类或结构体行为方式的一种协定。定义接口是可以定义实现该接口的类需要实现的方法、属性、索引器和事件。
 继承抽象类描述了 is-a 的关系，类实现接口描述了 implement 的关系。
-** 定义接口
+*** 定义接口
 [attribue 性质][访问修饰符]interface 标识符[:基列表]
 {接口主体}
 interface 后的标识符通常会以 I 开头，不过不是必须的。
@@ -395,25 +395,25 @@ public class GDoc : IStorable
   }
 }
 #+END_SRC
-** 类可以实现多个接口
+*** 类可以实现多个接口
 #+BEGIN_SRC c#
 public class GDoc : IStorable, ICompressible
 { ... }
 #+END_SRC
-** 扩展接口
+*** 扩展接口
 #+BEGIN_SRC c#
 public interface ILoggedCompressible : ICompressible
 {
 	void LogSavedBytes();
 }
 #+END_SRC
-** 组合接口
+*** 组合接口
 #+BEGIN_SRC c#
 public interface IStorableCompressible: IStorable,ICompressible
 {
 }
 #+END_SRC
-** 转换为接口
+*** 转换为接口
 #+BEGIN_SRC c#
 IStorable iObj = doc as IStorable;
 if(iObj != null)
@@ -421,15 +421,15 @@ if(iObj != null)
 	iObj.Read();
 }
 #+END_SRC
-** is 和 as 操作符
+*** is 和 as 操作符
 is 可用来判断某个对象是否为某个类型。也可以判断某个对象是否实现了某个接口。
 表达式 is 类型 // is 返回 true 或 false
 as 是将 is 和转换操作结合起来。首先测试转换是否合法，如果是就进行转换。如果转换不合法就返回 null。
 表达式 as 类型 // as 返回转换后的对象 或 null
-** 接口和抽象类比较 
+*** 接口和抽象类比较 
 若要创建一个会被许多人服用的类库，最好使用抽象基类；这样当你需要增加一个新的方法时，只需要在抽象基类中添加一个虚方法，然后配一个默认实现就好了。
 若只是为单个项目创建类，则使用接口更好，因为接口更加灵活且具有弹性。
-** 重定义接口的实现
+*** 重定义接口的实现
 实现类可以自由地将任何或全部实现接口的方法标记为虚。派生类可以重定义或提供新的实现。
 #+BEGIN_SRC c#
 public interface IStorable
@@ -477,7 +477,7 @@ public class GNote : GDoc
   }
 }
 #+END_SRC
-** 显式接口实现 
+*** 显式接口实现 
 当需要实现的两个接口有相同的方法时，其中一个接口的方法需要显式实现。
 显式实现声明的方法不能用访问修饰符，该方法隐含为公共的。
 显式实现声明的方法不能用 abstract\virtual\override\new 修饰符声明。
@@ -513,7 +513,7 @@ public class GDoc : IStorable,ITalk
   }
 }
 #+END_SRC
-** 隐藏接口成员
+*** 隐藏接口成员
 #+BEGIN_SRC c#
 public interface IGBase
 {
@@ -556,22 +556,22 @@ public class GMyClass:IGDerived
   }
 }
 #+END_SRC
-** 访问密封类和结构体
+*** 访问密封类和结构体
 使用值类型实现接口时，一定要通过对象访问接口成员，而不要通过接口引用。因为将值类型对象转换为接口引用时会对值类型对象进行装箱操作，
 通过接口引用调用接口方法是在装箱后的引用对象上进行的。
-* 数组索引器与集合 
+** 数组索引器与集合 
 C#中数组为对象，数组可以有自己的方法和属性。
-** 声明数组
+*** 声明数组
 类型[] 数组名;
 C#数组为引用类型，所以其在堆中分配，数组内的元素如何分配要看他们自己的类型。如果数组元素为值类型，则所有元素在为数组分配的内存块中创建。
 如果数组元素为引用类型，分配给数组的内存将用来存放对实际元素的引用。实际元素本身是在堆中分配的，所占内存和分配给数组的内存是不同的。
-** 默认值
+*** 默认值
 创建值类型数组时，每个元素最初都存放着数组所存类型的默认值。
 创建引用类型数组时，每个元素被初始化为 null。
-** 遍历数组
+*** 遍历数组
 foreach(类型 标识符 in 表达式)语句
 for(int i=0; i<arr.Length; i++)语句
-** 初始化数组元素
+*** 初始化数组元素
 #+BEGIN_SRC c#
 Employee[] empArr = new Employee[3] {
   new Employee (110),
@@ -584,7 +584,7 @@ Employee[] empArr = {
   new Employee (112)
 };
 #+END_SRC
-** params 关键字
+*** params 关键字
 params 可用于可变数目的数组函数参数。
 #+BEGIN_SRC c#
 public static void PrintIntArray (params int[] intArr)
@@ -597,9 +597,9 @@ int[] intArr = { 11111, 11112, 11113, 11114 };
 PrintIntArray (intArr);
 PrintIntArray (1111, 1112, 1113);
 #+END_SRC
-** 多维数组
+*** 多维数组
 数组可分为规则数组和不规则数组。规则数组每行长度是相同的，不规则数组是数组组成的数组。
-*** 规则数组 
+**** 规则数组 
 二维数组 类型[,]数组名;   
 三维数组 类型[,,]数组名;  
 #+BEGIN_SRC c#
@@ -613,7 +613,7 @@ int[,] arr = {
 };   				     //4 行 3 列的二维数组
 arr[1,1];				 //访问第二行第二列的元素，该值为 4
 #+END_SRC
-*** 不规则数组 
+**** 不规则数组 
 类型[][]...数组名;
 #+BEGIN_SRC c#
 int[3][]arr;      //二维整型不规则数组
@@ -622,7 +622,7 @@ arr[1] = new int[2];
 arr[2] = {0,2,4,6,8};
 arr[2][3];        //访问第三行第四列的元素，该值为 8
 #+END_SRC
-** 数组转换
+*** 数组转换
 如果维数相同，且引用元素类型可以转换，那么可以进行数组间的转换。如果元素类型可以隐式转换，则可以进行隐式转换，否则必须进行显式转换。
 Tips: 值类型元素的数组不可以转换。
 #+BEGIN_SRC c#
@@ -644,10 +644,10 @@ float[] floatArr = { 1.0f, 1.1f, 1.2f };
 double[] doubleArr = { 2.0, 2.1, 2.2 };
 doubleArr = (double[])floatArr;
 #+END_SRC
-** 数组排序
+*** 数组排序
 Array.Sort    可用来排序数组。
 Array.Reverse 可用来将数组元素顺序反转。
-** 索引器
+*** 索引器
 索引器是一种特殊的属性，可以通过 get set 方法来指定其行为。
 (返回)类型 this[(索引)类型 参数]{get;set}
 索引类型
@@ -745,7 +745,7 @@ public class ListBox:IEnumerable<string>
 }
 
 #+END_SRC
-** 集合接口
+*** 集合接口
 | 接口                          | 目的                                                                               |
 |-------------------------------+------------------------------------------------------------------------------------|
 | ICollection<T>                | 泛型集合的基接口                                                                   |
@@ -754,7 +754,7 @@ public class ListBox:IEnumerable<string>
 | IComparer<T> IComparable<T>   | 比较集合中的两个对象以对集合排序                                                   |
 | IList<T>                      | 用于数组可索引的集合                                                               |
 | IDictionary<K,V>              | 用于基于键值对的集合，如 Dictionary                                                |
-** 约束
+*** 约束
 通过关键字 where 指定约束。
 public class Node<T>:IComparable<Node<T>> where T : IComparable<T> // 指定约束 T 需要实现 IComparable<T>接口
 #+BEGIN_SRC c#
@@ -854,7 +854,7 @@ public class LinkedList<T> where T : IComparable<T>
   }
 }
 #+END_SRC
-** 实现 IComparer IComparable
+*** 实现 IComparer IComparable
 #+BEGIN_SRC c#
 public class Employee:IComparable<Employee>
 {
@@ -940,9 +940,9 @@ public class Employee:IComparable<Employee>
   }
 }
 #+END_SRC
-* 字符串与正则表达式
+** 字符串与正则表达式
 
-** string
+*** string
 C#中 string 是一种正常的类型，而不是字符数组。
 string 类的声明为：
 #+BEGIN_SRC 
@@ -962,20 +962,20 @@ line = new string (lineCharArr);
 string p1 = "\\\\My Documents\\My Files\\";
 string p2 = @"\\My Documents\My Files\";
 #+END_SRC
-** StringBuilder
+*** StringBuilder
 System.Text.StringBuilder 的作用是用来创建和修改字符串的。
 #+BEGIN_SRC c#
 StringBuilder mutableStr = new StringBuilder ("My name is God!");
 mutableStr [0] = 'm';
 Console.WriteLine (mutableStr);
 #+END_SRC
-** TODO 正则表达式
+*** TODO 正则表达式
 名字空间 System.Text.RegularExpressions 是所以与正则表达式相关的.NET 框架对象的大本营。
-* TODO 异常处理
-* 委托和事件
-** 委托
+** TODO 异常处理
+** 委托和事件
+*** 委托
 委托是一种引用类型，用来封装带有特定签名和返回类型的方法。委托可用来封装静态成员方法、实例方法、匿名方法等。
-** 多重委托
+*** 多重委托
 委托可以通过+、+=形成多重委托，委托也可以通过-、-=移除多重委托中的委托.
 #+BEGIN_SRC 
 MultiDelegate.MyClassWithDelegate.StringDelegate writer, logger, transmiter;
@@ -1012,5 +1012,117 @@ multiDelegate ("str pass to writer+loger+loger");
 // Log String       -- str pass to writer+loger+loger
 // Log String       -- str pass to writer+loger+loger
 #+END_SRC
-** 事件
+*** 事件
+可以通过多重委托来实现事件。
 event 关键字能够告诉编译器委托只能由定义类调用，其他类只能分别使用相应的+=和-=操作符订阅和退订委托。
+*** 异步调用委托
+#+BEGIN_SRC 
+subDelegate.BeginInvoke (new AsyncCallback (ResultsReturned), subDelegate);
+private void ResultsReturned (IAsyncResult iar)
+{
+  DelegateReturnInt subDelegate = (DelegateReturnInt)iar.AsyncState;
+  int result = subDelegate.EndInvoke (iar);
+  Console.WriteLine ("result = {0}", result);
+}
+#+END_SRC
+* The CLR and .NET framework
+** Programming .NET and COM
+*** 程序集和版本控制
+1 程序集是一种 Portable Executable 可移植可执行文件。物理上，程序集可以包括一个或多个模块。一个程序集的全部内容
+会被作为一个部署和重用的单元。一个程序集只会在被调用的时候才会被导入，不被需要时就暂时不会被导入。
+2 元数据是一种二进制信息，它被存储在程序集中，用来对程序集中的类型和方法进行描述，并提供其他的一些关于程序集的有用信息。
+3 程序集形成安全边界及类型边界。即一个程序集构成了它其中类型定义的作用域范围，类型定义的作用域不能跨越多个程序集。每一类型
+的标识均包括该类型所驻留的程序集的名称。
+4 作为元数据的一部分，每个程序集都有一个清单。它描述着程序集的内容：程序集的标识信息（名称、版本号等），程序集包含的类型
+和资源列表，程序集包含的模块的列表，描述如何在引用公共类型时映射到包含其声明和实现的代码的信息，以及程序集所依赖的其他
+程序集的列表。清单就像描述着程序集内容的一份自述地图。
+**** 多模块程序集
+1 一个包含单一模块的程序集只有一个文件，或者是 EXE 或者是 DLL 文件。这个单一模块包含着程序的所有类型说明和实现代码。程序集的
+清单也内嵌在这个模块中。
+2 一个多模块程序集可能包含多个文件（零个或一个 EXE 文件及零个或多个 DLL 文件，至少一个 EXE 或 DLL 文件）。程序集清单这时
+可以作为单独的一个文件出现，也可以嵌在某一个模块中。当多模块程序集被引用的时候，运行环境将会先导入包含程序集清单的文件，然后根
+据清单导入需要的模块。
+3 每个模块都有自己的清单，该清单独立于程序集的清单。模块的清单列着这个模块自身对其他程序集的引用。并且任何在这个模块中声明的类型，
+都会被列在这个和现实代码一道存放的清单中。一个模块还可能包含资源，如一些该模块需要的图片。
+**** 共享程序集
+共享程序集必须满足一些严格的要求：
+1 程序集必须有一个强名称。强名称是全局唯一的。任何人都不会生成和你相同的程序集名称，这是由于用一个私钥生成的程序集的名称和用其他私钥生成的程序集
+名称不相同。
+2 共享程序集必须防止比它更新的版本被错误地当做这个程序集被引用，因此共享程序集的每个新版本在发布的时候都要带一个新的版本号。
+3 为了共享该程序集，需要将它放入全局程序集缓存(Global Assembly Cache)中。这是通用语言运行时在文件系统中指定的一块区域，专门用来保存共享
+程序集。
+**** 最终解决 DLL 冲突 - 版本控制
+在.NET 编程环境中的共享程序集可以由名称和版本号唯一地标识。GAC 允许同一程序集的不同版本“并行执行”，即同一程序集的较老版本和较新版本在 GAC 中
+可以同时存在。
+*** 性质
+性质是一种生成元数据的机制。性质是一个对象，它代表着与你的程序中的一个元素相关的数据。而这个有性质的元素被称为性质的目标元素。
+#+BEGIN_SRC 
+// 下面是一个类或者一个接口的性质，表示目标类在被导出给 COM 时应该继承自 IUnknown 类而不是 IDispatch 类。(类或接口为目标元素)
+[NoIDispatch]
+
+// 下面的性质将元数据插入到程序集中，指定该程序的强名称.(程序集为目标元素)
+[assembly: AssemblyKeyFile("c:\\myStrongName.key")]
+#+END_SRC
+**** 性质目标
+性质的目标可以是程序集、类、接口、类成员等等。
+| 名称        | 用途                                                                                                           |
+|-------------+----------------------------------------------------------------------------------------------------------------|
+| All         | 适用于以下任意中元素：程序集、类、构造函数、委托、枚举、事件、域、接口、方法、模块、参数、特性、返回值或者结构 |
+| Assembly    | 适用于程序集自身                                                                                               |
+| Class       | 适用于类                                                                                                       |
+| Constructor | 适用于给定的构造函数                                                                                           |
+| Delegate    | 适用于委托                                                                                                     |
+| Enum        | 适用于枚举类型                                                                                                 |
+| Event       | 适用于事件                                                                                                     |
+| Field       | 适用于域                                                                                                       |
+| Interface   | 适用于接口                                                                                                     |
+| Method      | 适用于方法                                                                                                     |
+| Module      | 适用于单个模块                                                                                                 |
+| Parameter   | 适用于方法的参数                                                                                               |
+| Property    | 适用于属性                                                                                                     |
+| ReturnValue | 适用于返回值                                                                                                   |
+| Struct      | 适用于结构                                                                                                     |
+**** 性质的使用
+性质的使用是通过把它们放在方括号里并且紧放在它们的目标元素之前。（目标是程序集的情况除外，在这种情况下需要把它们放在文件的最头部。）
+Tips: 必须把程序集属性放在所有 using 语句之后并且在其他任意代码之前。
+**** 自定义性质
+通过继承 System.Attribute 来实现自定义性质。
+*** 反射
+反射是指一个程序读取其自身的或其他程序的元数据的过程。一个程序被称为在反射它自身或另一个程序，是指该程序提取被反射程序集的元数据用来提交给用户或
+改变自身程序行为的过程。
+在 Reflection 命名空间的类，以及 System.Type 中的类，提供了对元数据进行检查和交互的支持。
+反射一般用于以下四种任务：
+**** 查看元数据 
+工具或使用程序可以使用它来显示元数据。
+#+BEGIN_SRC 
+System.Reflection.MemberInfo info = typeof(MyMath);
+object[] attri_arr = info.GetCustomAttributes (typeof(BugFixAttribute), false);
+foreach (object attri in attri_arr) {
+  BugFixAttribute pAttri = (BugFixAttribute)attri;
+  Console.WriteLine ("\nBugID:      {0}", pAttri.BugID);
+  Console.WriteLine ("Programmer: {0}", pAttri.Programmer);
+  Console.WriteLine ("Date:       {0}", pAttri.Date);
+  Console.WriteLine ("Comment:    {0}", pAttri.Comment);
+}
+#+END_SRC
+**** 进行类型发现
+这允许你检查程序集中的类型，以及跟这些类型交互或对类型进行实例化。这在创建自定义脚本的时候有用，例如你可能希望允许你的用户使用脚本语言和你的程序
+交互。
+#+BEGIN_SRC 
+Assembly a = Assembly.Load ("mscorlib");
+Type[] types = a.GetTypes ();
+foreach (Type t in types) {
+  Console.WriteLine ("Type is {0}", t);
+}
+Console.WriteLine ("{0} types found", types.Length);
+#+END_SRC
+**** 对方法和特性的迟绑定
+这允许程序员可以调用动态实例化的对象的特性和方法，这也称为动态激活。
+**** 运行期创建类型（反射输出）
+对反射的终极使用是在运行期创建新的类型，然后使用这些类型执行任务。
+* Tips
+** Tools
+*** mono 版 ILDASM 为 monodis
+http://stackoverflow.com/questions/1655767/does-mono-have-the-equivalent-of-ildasm
+http://www.mono-project.com/docs/tools+libraries/tools/monodis/
+

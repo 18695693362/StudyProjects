@@ -46,6 +46,7 @@
     <Compile Include="TestArray.cs" />
     <Compile Include="TestString.cs" />
     <Compile Include="TestDelegateEvent.cs" />
+    <Compile Include="TestAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

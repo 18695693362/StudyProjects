@@ -16,7 +16,7 @@ namespace TestCSharp
 	{
 		#region test region
 
-		//test region
+		//a test region
 		//a define is here
 		int a = 10;
 
@@ -32,6 +32,7 @@ namespace TestCSharp
 
 		public static void Main (string[] args)
 		{
+
 			Console.WriteLine ("Hello World!");
 
 			TestInheritance.RunTest (false);
@@ -61,7 +62,8 @@ namespace TestCSharp
 			TestArray.RunTest (false);
 
 			TestString.RunTest (false);
-			TestDelegateEvent.RunTest (true);
+			TestDelegateEvent.RunTest (false);
+			TestAttribute.RunTest (true);
 		}
 	}
 
@@ -89,5 +91,13 @@ namespace TestCSharp
 		{
 			Console.WriteLine (Person.ClassName);
 		}
+	}
+}
+
+class Test
+{
+	public static void Run ()
+	{
+		Console.WriteLine ("Test.Run");
 	}
 }

@@ -88,6 +88,23 @@ namespace TestCSharp
 			tmpClass.Run ();
 		}
 
+		static void RunAsyncDelegate ()
+		{
+			AsyncDelegate tmpClass = new AsyncDelegate ();
+			AsyncDelegate.FirstSubscriber fst = new AsyncDelegate.FirstSubscriber ();
+			fst.Subscribe (tmpClass);
+			AsyncDelegate.SecondSubscriber scd = new AsyncDelegate.SecondSubscriber ();
+			//scd.Subscribe (tmpClass);
+			int result = tmpClass.returnIntDelegate ();
+			Console.WriteLine ("result = {0}", result);
+			result = tmpClass.returnIntDelegate ();
+			Console.WriteLine ("result = {0}", result);
+			result = tmpClass.returnIntDelegate ();
+			Console.WriteLine ("result = {0}", result);
+
+			tmpClass.Run ();
+		}
+
 		public static void RunTest (bool isRun)
 		{
 			if (!isRun)
@@ -95,7 +112,8 @@ namespace TestCSharp
 			
 			//RunMultiDelegate ();
 			//RunEventTest ();
-			RunDelegateReturnInt ();
+			//RunDelegateReturnInt ();
+			RunAsyncDelegate ();
 		}
 	}
 
@@ -366,5 +384,60 @@ namespace TestCSharp
 			}
 		}
 	}
+
+	public class AsyncDelegate
+	{
+		public delegate int DelegateReturnInt ();
+
+		public DelegateReturnInt returnIntDelegate;
+
+		public void Run ()
+		{
+			while (true) {
+				Thread.Sleep (1000);
+
+				foreach (DelegateReturnInt subDelegate in returnIntDelegate.GetInvocationList()) {
+					//int result = subDelegate ();
+					//Console.WriteLine ("result = {0}", result);
+
+					subDelegate.BeginInvoke (new AsyncCallback (ResultsReturned), subDelegate);
+				}
+				Console.WriteLine ();
+			}
+		}
+
+		private void ResultsReturned (IAsyncResult iar)
+		{
+			DelegateReturnInt subDelegate = (DelegateReturnInt)iar.AsyncState;
+			int result = subDelegate.EndInvoke (iar);
+			Console.WriteLine ("result = {0}", result);
+		}
+
+		public class FirstSubscriber
+		{
+			private int myCounter = 0;
+
+			public void Subscribe (AsyncDelegate theClass)
+			{
+				theClass.returnIntDelegate += delegate {
+					Thread.Sleep (1000);
+					return ++myCounter;
+				};
+			}
+		}
+
+		public class SecondSubscriber
+		{
+			private int myCounter = 0;
+
+			public void Subscribe (AsyncDelegate theClass)
+			{
+				theClass.returnIntDelegate += delegate {
+					return myCounter += 2;
+				};
+			}
+		}
+	}
+
 }
 
