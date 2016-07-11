@@ -37,15 +37,19 @@ namespace TestCSharp
 
 			TestInheritance.RunTest (false);
 		
-			Person person = new Person ("God");
+			Person person1 = new Person ("God1");
 			//person.Print();
-			Console.WriteLine (person.ToString ());
+			Person person2 = person1.Clone () as Person;
+			person2.Name = "God2";
+			Console.WriteLine (person1.Name);
+			Console.WriteLine (person2.Name);
 			//person.PrintClassName();
 			//Person.PrintClassName();
 
 			//Global.PrintClassName();
 
-			SomeValues tmp = SomeValues.Value_0;
+			SomeValues
+			tmp = SomeValues.Value_0;
 			Console.WriteLine (tmp.ToString ());
 			Console.WriteLine (10.GetType ());
 
@@ -58,19 +62,24 @@ namespace TestCSharp
 			TestFraction.RunTest (false);
 			TestStruct.RunTest (false);
 
-			TestInterface.RunTest (false);
+			TestInterface.RunTest (true);
 			TestArray.RunTest (false);
 
 			TestString.RunTest (false);
 			TestDelegateEvent.RunTest (false);
-			TestAttribute.RunTest (true);
+			//TestAttribute.RunTest (true);
 		}
 	}
 
-	class Person
+	class Person:ICloneable
 	{
 		public static string ClassName = "Person";
 		private string name = "Unknown";
+
+		public string Name {
+			set{ name = value; }
+			get{ return name; }
+		}
 
 		static Person ()
 		{
@@ -90,6 +99,12 @@ namespace TestCSharp
 		public static void PrintClassName ()
 		{
 			Console.WriteLine (Person.ClassName);
+		}
+
+		public object Clone ()
+		{
+			Person newObj = new Person (name);
+			return newObj;
 		}
 	}
 }

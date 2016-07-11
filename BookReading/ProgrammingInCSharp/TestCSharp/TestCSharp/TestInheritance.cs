@@ -36,6 +36,8 @@ namespace TestCSharp
 		}
 	}
 
+	// 类内部有抽象方法时，必须将类声明为抽象类
+	//public class Control
 	abstract public class Control
 	{
 		private int id = 0;
@@ -49,7 +51,24 @@ namespace TestCSharp
 			}
 		}
 
+		// 可以将函数指定为virtual 提供默认实现
+		//		public virtual void DrawWindow ()
+		//		{
+		//		}
+
+		// error 抽象方法不能有实现
+		//		abstract public void DrawWindow ()
+		//		{
+		//		}
+
+		// 可以将函数指定为abstract 如果子类没有实现abstract方法则子类也需要标记为抽象类
 		abstract public void DrawWindow ();
+	}
+
+	abstract public class ConrolX : Control
+	{
+		// 不需要重新声明抽象方法，否则会隐藏Control中的声明
+		//abstract public void DrawWindow ();
 	}
 
 	public class Button: Control

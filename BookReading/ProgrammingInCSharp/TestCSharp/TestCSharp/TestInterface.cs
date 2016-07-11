@@ -26,6 +26,30 @@ namespace TestCSharp
 
 			GMyClass myClass = new GMyClass ();
 			Console.WriteLine ("my class P = {0}", myClass.P);
+
+			int iValue = 10;
+			Console.WriteLine ("iValue is object = {0}", iValue is object);
+			Console.WriteLine ("iValue as object = {0}", iValue as object);
+			Console.WriteLine ("iValue is int    = {0}", iValue is int);
+
+			//Console.WriteLine ("iValue as int    = {0}", iValue as int);
+
+			RunStructTest ();
+		}
+
+		static public void RunStructTest ()
+		{
+			GStudentA stu1 = new GStudentA ("God1");
+			IChangeName iCN = stu1;
+			iCN.Name = "God2";
+			Console.WriteLine ("stu1 name = {0}", stu1.Name);
+			Console.WriteLine ("iCN  name = {0}", iCN.Name);
+
+			GStudentB stu2 = new GStudentB ("Dog1"); // GStudentB is a sealed class
+			IChangeName iCN2 = stu2;
+			iCN2.Name = "Dog2";
+			Console.WriteLine ("stu2 name = {0}", stu2.Name);
+			Console.WriteLine ("iCN2 name = {0}", iCN2.Name);
 		}
 	}
 
@@ -127,6 +151,44 @@ namespace TestCSharp
 			set { 
 				p = value;
 			}
+		}
+	}
+
+	public interface IChangeName
+	{
+		string Name {
+			set;
+			get;
+		}
+	}
+
+	public struct GStudentA:IChangeName
+	{
+		private string name;
+
+		public string Name {
+			set{ name = value; }
+			get{ return name; }
+		}
+
+		public GStudentA (string name)
+		{
+			this.name = name;
+		}
+	}
+
+	public sealed class GStudentB:IChangeName
+	{
+		private string name;
+
+		public string Name {
+			set{ name = value; }
+			get{ return name; }
+		}
+
+		public GStudentB (string name)
+		{
+			this.name = name;
 		}
 	}
 }

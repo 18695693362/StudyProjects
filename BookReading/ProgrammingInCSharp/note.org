@@ -23,6 +23,30 @@ C#中内置类型符合.Net CLS 规范。
 | decimal |        12 | Decimal  | 固定精度                            |
 | long    |         8 | Int64    |                                     |
 | ulong   |         8 | Uint64   |                                     |
+**** 指针类型
+为了保持类型安全，默认情况下，C# 不支持指针运算。不过，通过使用 unsafe 关键字，可以定义可使用指针的不安全上下文。
+#+BEGIN_SRC 
+using System;
+struct Point
+{
+    public int x, y; 
+}
+
+class MainClass
+{
+    unsafe static void Main() 
+    {
+        Point pt = new Point();
+        Point* pp = &pt;
+        pp->x = 123;
+        pp->y = 456;
+        Console.WriteLine ( "{0} {1}", pt.x, pt.y );
+    }
+}
+#+END_SRC
+**** 可以为 null 的值类型
+普通的值类型不能有 null 值。 但是，可以通过在类型后面附加 ? 来创建可以为 null 值的类型。
+
 *** 变量初始化 赋值
 C#要求变量在使用前必须初始化或者赋值。
 const 为编译期常量 ，readonly 为运行时常量
@@ -39,6 +63,8 @@ enum SomeValues
   Value_21
 }
 #+END_SRC
+*** 运算符
+?? 如果 ?? 运算符的左操作数非空，该运算符将返回左操作数，否则返回右操作数。
 *** 条件分支语句
 C/C++中条件语句中可以使用任意表达式，C#要求所有条件表达式都必须为布尔值.这是为了避免 if(a=10) 这样的错误的！
 
@@ -108,8 +134,7 @@ public class Person
   }
 }
 #+END_SRC
-**** TODO ICloneable 接口
-
+**** ICloneable 接口
 C#中没有复制构造函数。
 #+BEGIN_SRC C#
 public class Person: ICloneable
@@ -121,6 +146,8 @@ public class Person: ICloneable
   }
   public Object Clone()
 	{
+  	Person newObj = new Person (name);
+		return newObj;
   }
 }
 #+END_SRC
@@ -282,14 +309,64 @@ public class LabelButton:Button
 *** 抽象类
 将方法指定为抽象方法可以强制子类实现基类的该抽象方法。
 抽象方法没有实现。
-使类的一个或多个方法为抽象方法，会使类变为抽象类。
+使类的一个或多个方法为抽象方法，会使类变为抽象类，而且必须在类定义前加 abatract 修饰符。
 抽象类无法实例化。
 抽象类代表了一种抽象的理念，要为所有派生类创建一个“合同（contract）”。也就是说，抽象类描述了要实现该抽象的所有类的公共方法。
+#+BEGIN_SRC 
+// 类内部有抽象方法时，必须将类声明为抽象类
+//public class Control
+abstract public class Control
+{
+  private int id = 0;
+
+  public int Id {	
+    get { 
+      return id;			
+    }
+    set {
+      id = value;
+    }
+  }
+
+  // 可以将函数指定为 virtual 提供默认实现
+  //		public virtual void DrawWindow ()
+  //		{
+  //		}
+
+  // error 抽象方法不能有实现
+  //		abstract public void DrawWindow ()
+  //		{
+  //		}
+
+  // 可以将函数指定为 abstract 如果子类没有实现 abstract 方法则子类也需要标记为抽象类
+  abstract public void DrawWindow ();
+}
+
+abstract public class ConrolX : Control
+{
+  // 不需要重新声明抽象方法，否则会隐藏 Control 中的声明
+  //abstract public void DrawWindow ();
+}
+
+public class Button: Control
+{
+  public Button (int id)
+  {
+    this.Id = id;
+  }
+
+  public override void DrawWindow ()
+  {
+    Console.WriteLine ("Button DrawWindow");
+  }
+}
+#+END_SRC
 *** 密封类
 抽象类是用来派生的，与抽象相对的设计概念是密封。sealed 置于类声明之前用来阻止派生。
 *** 万类之根：Object
 所有 C#类，无论是何类型，都可以看成是从 System.Object 派生而来的。值类型也包括在内。
 类不需要声明从 Ojbect 派生，继承是隐含的。
+所有的值类型均隐式派生自 System.ValueType。
 *** 类型的装箱和拆箱
 装箱和拆箱是使值类型能够被当成引用类型（对象）的处理过程。值被装箱到一个 Object 里然后拆箱回一个值类型。
 装箱是一种隐含的转换。
@@ -326,7 +403,7 @@ public class OuterClass
 ** 操作符重载
 c#中，操作符都是一些静态方法，其返回值表示操作结果，其参数是操作数。
 C#要求必须成对重载操作符。例如 ==与!= <与> <=与>=
-implicit 关键字用于转换肯定成功，不会丢失信息的时候；否则就用关键字 explicit。
+转换操作符重载中，implicit 关键字用于转换肯定成功，不会丢失信息的时候；否则就用关键字 explicit。
 ** 结构体
 结构体不支持继承和析构函数。结构体是值类型。(所以函数的结构体类型的参数是按值传递的)
 结构体数组在内存使用方面效率相对更好。结构体集合的效率就不行了。集合的元素必须是引用类型，所以结构体必须进行装箱处理。
@@ -424,8 +501,23 @@ if(iObj != null)
 *** is 和 as 操作符
 is 可用来判断某个对象是否为某个类型。也可以判断某个对象是否实现了某个接口。
 表达式 is 类型 // is 返回 true 或 false
+is 运算符只考虑引用转换、装箱转换和取消装箱转换。不考虑其他转换，如用户定义的转换。
 as 是将 is 和转换操作结合起来。首先测试转换是否合法，如果是就进行转换。如果转换不合法就返回 null。
 表达式 as 类型 // as 返回转换后的对象 或 null
+as 用于在兼容的引用类型之间执行转换.as 运算符只执行引用转换和装箱转换。as 运算符无法执行其他转换，如用户定义的转换。
+#+BEGIN_SRC 
+int iValue = 10;
+Console.WriteLine ("iValue is object = {0}", iValue is object);
+Console.WriteLine ("iValue is int    = {0}", iValue is int);
+Console.WriteLine ("iValue as object = {0}", iValue as object);
+// output
+// iValue is object = True
+// iValue is int    = True
+// iValue as object = 10
+
+// 下面的代码编译会出错
+Console.WriteLine ("iValue as int    = {0}", iValue as int);
+#+END_SRC
 *** 接口和抽象类比较 
 若要创建一个会被许多人服用的类库，最好使用抽象基类；这样当你需要增加一个新的方法时，只需要在抽象基类中添加一个虚方法，然后配一个默认实现就好了。
 若只是为单个项目创建类，则使用接口更好，因为接口更加灵活且具有弹性。
@@ -559,6 +651,25 @@ public class GMyClass:IGDerived
 *** 访问密封类和结构体
 使用值类型实现接口时，一定要通过对象访问接口成员，而不要通过接口引用。因为将值类型对象转换为接口引用时会对值类型对象进行装箱操作，
 通过接口引用调用接口方法是在装箱后的引用对象上进行的。
+#+BEGIN_SRC 
+GStudentA stu1 = new GStudentA ("God1"); //GStudentA is a struct
+IChangeName iCN = stu1;
+iCN.Name = "God2";
+Console.WriteLine ("stu1 name = {0}", stu1.Name);
+Console.WriteLine ("iCN  name = {0}", iCN.Name);
+// output
+stu1 name = God1
+iCN  name = God2
+
+GStudentB stu2 = new GStudentB ("Dog1"); // GStudentB is a sealed class
+IChangeName iCN2 = stu2;
+iCN2.Name = "Dog2";
+Console.WriteLine ("stu2 name = {0}", stu2.Name);
+Console.WriteLine ("iCN2 name = {0}", iCN2.Name);
+// output
+stu2 name = Dog2
+iCN2 name = Dog2
+#+END_SRC
 ** 数组索引器与集合 
 C#中数组为对象，数组可以有自己的方法和属性。
 *** 声明数组
@@ -1026,8 +1137,7 @@ private void ResultsReturned (IAsyncResult iar)
 }
 #+END_SRC
 * The CLR and .NET framework
-** Programming .NET and COM
-*** 程序集和版本控制
+** 程序集和版本控制
 1 程序集是一种 Portable Executable 可移植可执行文件。物理上，程序集可以包括一个或多个模块。一个程序集的全部内容
 会被作为一个部署和重用的单元。一个程序集只会在被调用的时候才会被导入，不被需要时就暂时不会被导入。
 2 元数据是一种二进制信息，它被存储在程序集中，用来对程序集中的类型和方法进行描述，并提供其他的一些关于程序集的有用信息。
@@ -1036,7 +1146,7 @@ private void ResultsReturned (IAsyncResult iar)
 4 作为元数据的一部分，每个程序集都有一个清单。它描述着程序集的内容：程序集的标识信息（名称、版本号等），程序集包含的类型
 和资源列表，程序集包含的模块的列表，描述如何在引用公共类型时映射到包含其声明和实现的代码的信息，以及程序集所依赖的其他
 程序集的列表。清单就像描述着程序集内容的一份自述地图。
-**** 多模块程序集
+*** 多模块程序集
 1 一个包含单一模块的程序集只有一个文件，或者是 EXE 或者是 DLL 文件。这个单一模块包含着程序的所有类型说明和实现代码。程序集的
 清单也内嵌在这个模块中。
 2 一个多模块程序集可能包含多个文件（零个或一个 EXE 文件及零个或多个 DLL 文件，至少一个 EXE 或 DLL 文件）。程序集清单这时
@@ -1044,17 +1154,17 @@ private void ResultsReturned (IAsyncResult iar)
 据清单导入需要的模块。
 3 每个模块都有自己的清单，该清单独立于程序集的清单。模块的清单列着这个模块自身对其他程序集的引用。并且任何在这个模块中声明的类型，
 都会被列在这个和现实代码一道存放的清单中。一个模块还可能包含资源，如一些该模块需要的图片。
-**** 共享程序集
+*** 共享程序集
 共享程序集必须满足一些严格的要求：
 1 程序集必须有一个强名称。强名称是全局唯一的。任何人都不会生成和你相同的程序集名称，这是由于用一个私钥生成的程序集的名称和用其他私钥生成的程序集
 名称不相同。
 2 共享程序集必须防止比它更新的版本被错误地当做这个程序集被引用，因此共享程序集的每个新版本在发布的时候都要带一个新的版本号。
 3 为了共享该程序集，需要将它放入全局程序集缓存(Global Assembly Cache)中。这是通用语言运行时在文件系统中指定的一块区域，专门用来保存共享
 程序集。
-**** 最终解决 DLL 冲突 - 版本控制
+*** 最终解决 DLL 冲突 - 版本控制
 在.NET 编程环境中的共享程序集可以由名称和版本号唯一地标识。GAC 允许同一程序集的不同版本“并行执行”，即同一程序集的较老版本和较新版本在 GAC 中
 可以同时存在。
-*** 性质
+** 性质
 性质是一种生成元数据的机制。性质是一个对象，它代表着与你的程序中的一个元素相关的数据。而这个有性质的元素被称为性质的目标元素。
 #+BEGIN_SRC 
 // 下面是一个类或者一个接口的性质，表示目标类在被导出给 COM 时应该继承自 IUnknown 类而不是 IDispatch 类。(类或接口为目标元素)
@@ -1063,7 +1173,7 @@ private void ResultsReturned (IAsyncResult iar)
 // 下面的性质将元数据插入到程序集中，指定该程序的强名称.(程序集为目标元素)
 [assembly: AssemblyKeyFile("c:\\myStrongName.key")]
 #+END_SRC
-**** 性质目标
+*** 性质目标
 性质的目标可以是程序集、类、接口、类成员等等。
 | 名称        | 用途                                                                                                           |
 |-------------+----------------------------------------------------------------------------------------------------------------|
@@ -1082,17 +1192,54 @@ private void ResultsReturned (IAsyncResult iar)
 | Property    | 适用于属性                                                                                                     |
 | ReturnValue | 适用于返回值                                                                                                   |
 | Struct      | 适用于结构                                                                                                     |
-**** 性质的使用
+*** 性质的使用
 性质的使用是通过把它们放在方括号里并且紧放在它们的目标元素之前。（目标是程序集的情况除外，在这种情况下需要把它们放在文件的最头部。）
 Tips: 必须把程序集属性放在所有 using 语句之后并且在其他任意代码之前。
-**** 自定义性质
+*** 自定义性质
 通过继承 System.Attribute 来实现自定义性质。
-*** 反射
+#+BEGIN_SRC 
+[AttributeUsage (AttributeTargets.Class |
+AttributeTargets.Constructor |
+AttributeTargets.Delegate |
+AttributeTargets.Field |
+AttributeTargets.Method |
+AttributeTargets.Property,
+  AllowMultiple = true)]
+public class BugFixAttribute : System.Attribute
+{
+  public BugFixAttribute (int bugID, string programmer, string date)
+  {
+    this.bugID = bugID;
+    this.programmer = programmer;
+    this.date = date;
+  }
+
+  private string comment;
+
+  public string Comment {
+    get{ return comment; }
+    set{ comment = value; }
+  }
+
+  private int bugID;
+
+  public int BugID{ get { return bugID; } }
+
+  private string programmer;
+
+  public string Programmer{ get { return programmer; } }
+
+  private string date;
+
+  public string Date{ get { return date; } }
+}
+#+END_SRC
+** 反射
 反射是指一个程序读取其自身的或其他程序的元数据的过程。一个程序被称为在反射它自身或另一个程序，是指该程序提取被反射程序集的元数据用来提交给用户或
 改变自身程序行为的过程。
 在 Reflection 命名空间的类，以及 System.Type 中的类，提供了对元数据进行检查和交互的支持。
 反射一般用于以下四种任务：
-**** 查看元数据 
+*** 查看元数据 
 工具或使用程序可以使用它来显示元数据。
 #+BEGIN_SRC 
 System.Reflection.MemberInfo info = typeof(MyMath);
@@ -1105,7 +1252,7 @@ foreach (object attri in attri_arr) {
   Console.WriteLine ("Comment:    {0}", pAttri.Comment);
 }
 #+END_SRC
-**** 进行类型发现
+*** 进行类型发现
 这允许你检查程序集中的类型，以及跟这些类型交互或对类型进行实例化。这在创建自定义脚本的时候有用，例如你可能希望允许你的用户使用脚本语言和你的程序
 交互。
 #+BEGIN_SRC 
@@ -1116,11 +1263,15 @@ foreach (Type t in types) {
 }
 Console.WriteLine ("{0} types found", types.Length);
 #+END_SRC
-**** 对方法和特性的迟绑定
+*** 对方法和特性的迟绑定
 这允许程序员可以调用动态实例化的对象的特性和方法，这也称为动态激活。
-**** 运行期创建类型（反射输出）
+*** 运行期创建类型（反射输出）
 对反射的终极使用是在运行期创建新的类型，然后使用这些类型执行任务。
 * Tips
+** 类型转换
+类型 https://msdn.microsoft.com/zh-cn/library/ms173104.aspx
+如何将字符串转换为数字 https://msdn.microsoft.com/zh-cn/library/bb397679.aspx
+类型转换相关文档 https://msdn.microsoft.com/zh-cn/library/ms173105.aspx
 ** Tools
 *** mono 版 ILDASM 为 monodis
 http://stackoverflow.com/questions/1655767/does-mono-have-the-equivalent-of-ildasm
