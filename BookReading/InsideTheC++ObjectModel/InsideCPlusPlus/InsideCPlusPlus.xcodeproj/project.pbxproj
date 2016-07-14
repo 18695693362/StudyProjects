@@ -8,8 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		46A58D8B1D30A584002E8426 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A58D8A1D30A584002E8426 /* main.cpp */; };
-		46A58D9A1D30A5BF002E8426 /* gvfunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A58D921D30A5BF002E8426 /* gvfunc.cpp */; };
-		46A58DA11D30F8F6002E8426 /* GHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46A58D9F1D30F8F6002E8426 /* GHelper.cpp */; };
+		46F54A321D34A42B00649212 /* GHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A171D34A42B00649212 /* GHelper.cpp */; };
+		46F54A331D34A42B00649212 /* 00_1test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A1A1D34A42B00649212 /* 00_1test.cpp */; };
+		46F54A341D34A42B00649212 /* gvfunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A1C1D34A42B00649212 /* gvfunc.cpp */; };
+		46F54A351D34A42B00649212 /* 00_2test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A1F1D34A42B00649212 /* 00_2test.cpp */; };
+		46F54A361D34A42B00649212 /* 00_3test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A221D34A42B00649212 /* 00_3test.cpp */; };
+		46F54A371D34A42B00649212 /* 00_4test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A251D34A42B00649212 /* 00_4test.cpp */; };
+		46F54A381D34A42B00649212 /* 00_5test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A281D34A42B00649212 /* 00_5test.cpp */; };
+		46F54A391D34A42B00649212 /* 01_GPureVirtualFunc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A2A1D34A42B00649212 /* 01_GPureVirtualFunc.cpp */; };
+		46F54A3A1D34A42B00649212 /* 00_6test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A2D1D34A42B00649212 /* 00_6test.cpp */; };
+		46F54A3B1D34A42B00649212 /* 00_7test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46F54A301D34A42B00649212 /* 00_7test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,10 +35,26 @@
 /* Begin PBXFileReference section */
 		46A58D871D30A584002E8426 /* InsideCPlusPlus */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = InsideCPlusPlus; sourceTree = BUILT_PRODUCTS_DIR; };
 		46A58D8A1D30A584002E8426 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		46A58D921D30A5BF002E8426 /* gvfunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gvfunc.cpp; sourceTree = "<group>"; };
-		46A58D931D30A5BF002E8426 /* gvfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gvfunc.h; sourceTree = "<group>"; };
-		46A58D9F1D30F8F6002E8426 /* GHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GHelper.cpp; sourceTree = "<group>"; };
-		46A58DA01D30F8F6002E8426 /* GHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHelper.h; sourceTree = "<group>"; };
+		46F54A171D34A42B00649212 /* GHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GHelper.cpp; sourceTree = "<group>"; };
+		46F54A181D34A42B00649212 /* GHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHelper.h; sourceTree = "<group>"; };
+		46F54A1A1D34A42B00649212 /* 00_1test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_1test.cpp; sourceTree = "<group>"; };
+		46F54A1B1D34A42B00649212 /* 00_1test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_1test.h; sourceTree = "<group>"; };
+		46F54A1C1D34A42B00649212 /* gvfunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gvfunc.cpp; sourceTree = "<group>"; };
+		46F54A1D1D34A42B00649212 /* gvfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gvfunc.h; sourceTree = "<group>"; };
+		46F54A1F1D34A42B00649212 /* 00_2test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_2test.cpp; sourceTree = "<group>"; };
+		46F54A201D34A42B00649212 /* 00_2test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_2test.h; sourceTree = "<group>"; };
+		46F54A221D34A42B00649212 /* 00_3test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_3test.cpp; sourceTree = "<group>"; };
+		46F54A231D34A42B00649212 /* 00_3test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_3test.h; sourceTree = "<group>"; };
+		46F54A251D34A42B00649212 /* 00_4test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_4test.cpp; sourceTree = "<group>"; };
+		46F54A261D34A42B00649212 /* 00_4test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_4test.h; sourceTree = "<group>"; };
+		46F54A281D34A42B00649212 /* 00_5test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_5test.cpp; sourceTree = "<group>"; };
+		46F54A291D34A42B00649212 /* 00_5test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_5test.h; sourceTree = "<group>"; };
+		46F54A2A1D34A42B00649212 /* 01_GPureVirtualFunc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 01_GPureVirtualFunc.cpp; sourceTree = "<group>"; };
+		46F54A2B1D34A42B00649212 /* 01_GPureVirtualFunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 01_GPureVirtualFunc.h; sourceTree = "<group>"; };
+		46F54A2D1D34A42B00649212 /* 00_6test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_6test.cpp; sourceTree = "<group>"; };
+		46F54A2E1D34A42B00649212 /* 00_6test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_6test.h; sourceTree = "<group>"; };
+		46F54A301D34A42B00649212 /* 00_7test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 00_7test.cpp; sourceTree = "<group>"; };
+		46F54A311D34A42B00649212 /* 00_7test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 00_7test.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,77 +87,93 @@
 		46A58D891D30A584002E8426 /* InsideCPlusPlus */ = {
 			isa = PBXGroup;
 			children = (
-				46A58D9E1D30F8F6002E8426 /* common */,
-				46A58D911D30A5BF002E8426 /* lesson1 */,
-				46A58D941D30A5BF002E8426 /* lesson2 */,
-				46A58D951D30A5BF002E8426 /* lesson3 */,
-				46A58D961D30A5BF002E8426 /* lesson4 */,
-				46A58D971D30A5BF002E8426 /* lesson5 */,
-				46A58D981D30A5BF002E8426 /* lesson6 */,
-				46A58D991D30A5BF002E8426 /* lesson7 */,
+				46F54A161D34A42B00649212 /* common */,
+				46F54A191D34A42B00649212 /* lesson1 */,
+				46F54A1E1D34A42B00649212 /* lesson2 */,
+				46F54A211D34A42B00649212 /* lesson3 */,
+				46F54A241D34A42B00649212 /* lesson4 */,
+				46F54A271D34A42B00649212 /* lesson5 */,
+				46F54A2C1D34A42B00649212 /* lesson6 */,
+				46F54A2F1D34A42B00649212 /* lesson7 */,
 				46A58D8A1D30A584002E8426 /* main.cpp */,
 			);
 			path = InsideCPlusPlus;
 			sourceTree = "<group>";
 		};
-		46A58D911D30A5BF002E8426 /* lesson1 */ = {
+		46F54A161D34A42B00649212 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				46A58D921D30A5BF002E8426 /* gvfunc.cpp */,
-				46A58D931D30A5BF002E8426 /* gvfunc.h */,
+				46F54A171D34A42B00649212 /* GHelper.cpp */,
+				46F54A181D34A42B00649212 /* GHelper.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		46F54A191D34A42B00649212 /* lesson1 */ = {
+			isa = PBXGroup;
+			children = (
+				46F54A1A1D34A42B00649212 /* 00_1test.cpp */,
+				46F54A1B1D34A42B00649212 /* 00_1test.h */,
+				46F54A1C1D34A42B00649212 /* gvfunc.cpp */,
+				46F54A1D1D34A42B00649212 /* gvfunc.h */,
 			);
 			path = lesson1;
 			sourceTree = "<group>";
 		};
-		46A58D941D30A5BF002E8426 /* lesson2 */ = {
+		46F54A1E1D34A42B00649212 /* lesson2 */ = {
 			isa = PBXGroup;
 			children = (
+				46F54A1F1D34A42B00649212 /* 00_2test.cpp */,
+				46F54A201D34A42B00649212 /* 00_2test.h */,
 			);
 			path = lesson2;
 			sourceTree = "<group>";
 		};
-		46A58D951D30A5BF002E8426 /* lesson3 */ = {
+		46F54A211D34A42B00649212 /* lesson3 */ = {
 			isa = PBXGroup;
 			children = (
+				46F54A221D34A42B00649212 /* 00_3test.cpp */,
+				46F54A231D34A42B00649212 /* 00_3test.h */,
 			);
 			path = lesson3;
 			sourceTree = "<group>";
 		};
-		46A58D961D30A5BF002E8426 /* lesson4 */ = {
+		46F54A241D34A42B00649212 /* lesson4 */ = {
 			isa = PBXGroup;
 			children = (
+				46F54A251D34A42B00649212 /* 00_4test.cpp */,
+				46F54A261D34A42B00649212 /* 00_4test.h */,
 			);
 			path = lesson4;
 			sourceTree = "<group>";
 		};
-		46A58D971D30A5BF002E8426 /* lesson5 */ = {
+		46F54A271D34A42B00649212 /* lesson5 */ = {
 			isa = PBXGroup;
 			children = (
+				46F54A281D34A42B00649212 /* 00_5test.cpp */,
+				46F54A291D34A42B00649212 /* 00_5test.h */,
+				46F54A2A1D34A42B00649212 /* 01_GPureVirtualFunc.cpp */,
+				46F54A2B1D34A42B00649212 /* 01_GPureVirtualFunc.h */,
 			);
 			path = lesson5;
 			sourceTree = "<group>";
 		};
-		46A58D981D30A5BF002E8426 /* lesson6 */ = {
+		46F54A2C1D34A42B00649212 /* lesson6 */ = {
 			isa = PBXGroup;
 			children = (
+				46F54A2D1D34A42B00649212 /* 00_6test.cpp */,
+				46F54A2E1D34A42B00649212 /* 00_6test.h */,
 			);
 			path = lesson6;
 			sourceTree = "<group>";
 		};
-		46A58D991D30A5BF002E8426 /* lesson7 */ = {
+		46F54A2F1D34A42B00649212 /* lesson7 */ = {
 			isa = PBXGroup;
 			children = (
+				46F54A301D34A42B00649212 /* 00_7test.cpp */,
+				46F54A311D34A42B00649212 /* 00_7test.h */,
 			);
 			path = lesson7;
-			sourceTree = "<group>";
-		};
-		46A58D9E1D30F8F6002E8426 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				46A58D9F1D30F8F6002E8426 /* GHelper.cpp */,
-				46A58DA01D30F8F6002E8426 /* GHelper.h */,
-			);
-			path = common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,9 +232,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46A58D9A1D30A5BF002E8426 /* gvfunc.cpp in Sources */,
+				46F54A3A1D34A42B00649212 /* 00_6test.cpp in Sources */,
+				46F54A341D34A42B00649212 /* gvfunc.cpp in Sources */,
+				46F54A381D34A42B00649212 /* 00_5test.cpp in Sources */,
 				46A58D8B1D30A584002E8426 /* main.cpp in Sources */,
-				46A58DA11D30F8F6002E8426 /* GHelper.cpp in Sources */,
+				46F54A331D34A42B00649212 /* 00_1test.cpp in Sources */,
+				46F54A321D34A42B00649212 /* GHelper.cpp in Sources */,
+				46F54A351D34A42B00649212 /* 00_2test.cpp in Sources */,
+				46F54A3B1D34A42B00649212 /* 00_7test.cpp in Sources */,
+				46F54A391D34A42B00649212 /* 01_GPureVirtualFunc.cpp in Sources */,
+				46F54A361D34A42B00649212 /* 00_3test.cpp in Sources */,
+				46F54A371D34A42B00649212 /* 00_4test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +363,7 @@
 				46A58D901D30A584002E8426 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -15,11 +15,31 @@
 #include <utility>
 #include <iomanip>
 #include <sstream>
+#include <chrono>
+class GCodeTimer
+{
+public:
+    static GCodeTimer& GetInstance();
+    typedef std::chrono::high_resolution_clock Clock;
+    typedef Clock::time_point TimePoint;
+    
+    GCodeTimer(const char* name="UnKnown")
+    :pre_record_time_(Clock::now())
+    ,name_(name)
+    {}
+    
+    void Record(const char* info);
+    void Reset();
+
+private:
+    std::string name_;
+    TimePoint pre_record_time_;
+};
 
 class GHelper
 {
 public:
-    
+    static void PrintLocalTime();
     
     template<typename R, typename T, typename... Args>
     static std::string MemberFuncToString(R (T::*func)(Args...))

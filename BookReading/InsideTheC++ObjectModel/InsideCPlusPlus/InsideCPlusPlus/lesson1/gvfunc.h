@@ -39,6 +39,4 @@ public:
     int value;
 };
 
-extern void TestLesson1(bool isRun);
-
 #endif // GVFUNC_H
