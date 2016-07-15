@@ -12,6 +12,12 @@ namespace TestCSharp
 		}
 	}
 
+	class GStaticMember
+	{
+		public const int const_imember_0 = 10;
+		public static int static_imember_0 = 10;
+	}
+
 	class MainClass
 	{
 		#region test region
@@ -28,6 +34,15 @@ namespace TestCSharp
 			Value_1,
 			Value_20 = 20,
 			Value_21
+		}
+
+		public static void TestStaticMember (bool isRun)
+		{
+			if (!isRun)
+				return;
+			GStaticMember member = new GStaticMember ();
+			Console.WriteLine ("const_imember_0 = {0}", GStaticMember.const_imember_0);
+			//Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);
 		}
 
 		public static void Main (string[] args)
@@ -59,10 +74,12 @@ namespace TestCSharp
 			nested_class.PrintOuterObjCount ();
 			nested_class.PrintNestedObjCount ();
 
+			TestStaticMember (true);
+
 			TestFraction.RunTest (false);
 			TestStruct.RunTest (false);
 
-			TestInterface.RunTest (true);
+			TestInterface.RunTest (false);
 			TestArray.RunTest (false);
 
 			TestString.RunTest (false);

@@ -1,0 +1,2448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-07-16 Sat 03:21 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<title>Programming C#</title>
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Dong Guo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Programming C#</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgheadline75">1. The C# Language</a>
+<ul>
+<li><a href="#orgheadline9">1.1. C#语言基础</a>
+<ul>
+<li><a href="#orgheadline3">1.1.1. 内置类型</a></li>
+<li><a href="#orgheadline4">1.1.2. 变量初始化 赋值</a></li>
+<li><a href="#orgheadline5">1.1.3. 枚举类型</a></li>
+<li><a href="#orgheadline6">1.1.4. 运算符</a></li>
+<li><a href="#orgheadline7">1.1.5. 条件分支语句</a></li>
+<li><a href="#orgheadline8">1.1.6. 预处理指令</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline25">1.2. 类与对象</a>
+<ul>
+<li><a href="#orgheadline11">1.2.1. 定义类</a></li>
+<li><a href="#orgheadline15">1.2.2. 创建对象</a></li>
+<li><a href="#orgheadline18">1.2.3. 使用静态成员</a></li>
+<li><a href="#orgheadline22">1.2.4. 销毁对象</a></li>
+<li><a href="#orgheadline23">1.2.5. 参数传递</a></li>
+<li><a href="#orgheadline24">1.2.6. 通过属性封装数据</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline33">1.3. 继承和多态</a>
+<ul>
+<li><a href="#orgheadline27">1.3.1. 多态</a></li>
+<li><a href="#orgheadline28">1.3.2. 抽象类</a></li>
+<li><a href="#orgheadline29">1.3.3. 密封类</a></li>
+<li><a href="#orgheadline30">1.3.4. 万类之根：Object</a></li>
+<li><a href="#orgheadline31">1.3.5. 类型的装箱和拆箱</a></li>
+<li><a href="#orgheadline32">1.3.6. 嵌套类</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline34">1.4. 操作符重载</a></li>
+<li><a href="#orgheadline37">1.5. 结构体</a>
+<ul>
+<li><a href="#orgheadline35">1.5.1. 定义结构体</a></li>
+<li><a href="#orgheadline36">1.5.2. 创建结构对象</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline49">1.6. 接口</a>
+<ul>
+<li><a href="#orgheadline38">1.6.1. 定义接口</a></li>
+<li><a href="#orgheadline39">1.6.2. 类可以实现多个接口</a></li>
+<li><a href="#orgheadline40">1.6.3. 扩展接口</a></li>
+<li><a href="#orgheadline41">1.6.4. 组合接口</a></li>
+<li><a href="#orgheadline42">1.6.5. 转换为接口</a></li>
+<li><a href="#orgheadline43">1.6.6. is 和 as 操作符</a></li>
+<li><a href="#orgheadline44">1.6.7. 接口和抽象类比较</a></li>
+<li><a href="#orgheadline45">1.6.8. 重定义接口的实现</a></li>
+<li><a href="#orgheadline46">1.6.9. 显式接口实现</a></li>
+<li><a href="#orgheadline47">1.6.10. 隐藏接口成员</a></li>
+<li><a href="#orgheadline48">1.6.11. 访问密封类和结构体</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline64">1.7. 数组索引器与集合</a>
+<ul>
+<li><a href="#orgheadline50">1.7.1. 声明数组</a></li>
+<li><a href="#orgheadline51">1.7.2. 默认值</a></li>
+<li><a href="#orgheadline52">1.7.3. 遍历数组</a></li>
+<li><a href="#orgheadline53">1.7.4. 初始化数组元素</a></li>
+<li><a href="#orgheadline54">1.7.5. params 关键字</a></li>
+<li><a href="#orgheadline57">1.7.6. 多维数组</a></li>
+<li><a href="#orgheadline58">1.7.7. 数组转换</a></li>
+<li><a href="#orgheadline59">1.7.8. 数组排序</a></li>
+<li><a href="#orgheadline60">1.7.9. 索引器</a></li>
+<li><a href="#orgheadline61">1.7.10. 集合接口</a></li>
+<li><a href="#orgheadline62">1.7.11. 约束</a></li>
+<li><a href="#orgheadline63">1.7.12. 实现 IComparer IComparable</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline68">1.8. 字符串与正则表达式</a>
+<ul>
+<li><a href="#orgheadline65">1.8.1. string</a></li>
+<li><a href="#orgheadline66">1.8.2. StringBuilder</a></li>
+<li><a href="#orgheadline67">1.8.3. <span class="todo TODO">TODO</span> 正则表达式</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline69">1.9. <span class="todo TODO">TODO</span> 异常处理</a></li>
+<li><a href="#orgheadline74">1.10. 委托和事件</a>
+<ul>
+<li><a href="#orgheadline70">1.10.1. 委托</a></li>
+<li><a href="#orgheadline71">1.10.2. 多重委托</a></li>
+<li><a href="#orgheadline72">1.10.3. 事件</a></li>
+<li><a href="#orgheadline73">1.10.4. 异步调用委托</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgheadline89">2. The CLR and .NET framework</a>
+<ul>
+<li><a href="#orgheadline79">2.1. 程序集和版本控制</a>
+<ul>
+<li><a href="#orgheadline76">2.1.1. 多模块程序集</a></li>
+<li><a href="#orgheadline77">2.1.2. 共享程序集</a></li>
+<li><a href="#orgheadline78">2.1.3. 最终解决 DLL 冲突 - 版本控制</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline83">2.2. 性质</a>
+<ul>
+<li><a href="#orgheadline80">2.2.1. 性质目标</a></li>
+<li><a href="#orgheadline81">2.2.2. 性质的使用</a></li>
+<li><a href="#orgheadline82">2.2.3. 自定义性质</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline88">2.3. 反射</a>
+<ul>
+<li><a href="#orgheadline84">2.3.1. 查看元数据</a></li>
+<li><a href="#orgheadline85">2.3.2. 进行类型发现</a></li>
+<li><a href="#orgheadline86">2.3.3. 对方法和特性的迟绑定</a></li>
+<li><a href="#orgheadline87">2.3.4. 运行期创建类型（反射输出）</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgheadline94">3. Tips</a>
+<ul>
+<li><a href="#orgheadline90">3.1. 类型转换</a></li>
+<li><a href="#orgheadline91">3.2. static const readonly</a></li>
+<li><a href="#orgheadline93">3.3. Tools</a>
+<ul>
+<li><a href="#orgheadline92">3.3.1. mono 版 ILDASM 为 monodis</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline75" class="outline-2">
+<h2 id="orgheadline75"><span class="section-number-2">1</span> The C# Language</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="orgheadline9"><span class="section-number-3">1.1</span> C#语言基础</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+C#有两种类型内置类型和用户自定义类型。<br  />
+C#还可以分为值类型和引用类型。这两种类型的区别为值在内存中的存储方式不同。<br  />
+值类型在栈分配的内存中保存其实际值（或者作为更大的引用类型对象的一部分分配）。<br  />
+引用类型变量的地址保存在栈中，但实际对象存在堆中。<br  />
+C#还支持 C++风格的指针。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline3" class="outline-4">
+<h4 id="orgheadline3"><span class="section-number-4">1.1.1</span> 内置类型</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+C#中内置类型符合.Net CLS 规范。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-right" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">类型</th>
+<th scope="col" class="org-right">大小/字节</th>
+<th scope="col" class="org-left">.Net 类型</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">byte</td>
+<td class="org-right">1</td>
+<td class="org-left">Byte</td>
+<td class="org-left">无符号（0~255）</td>
+</tr>
+
+<tr>
+<td class="org-left">char</td>
+<td class="org-right">2</td>
+<td class="org-left">Char</td>
+<td class="org-left">Unicode 字符</td>
+</tr>
+
+<tr>
+<td class="org-left">bool</td>
+<td class="org-right">1</td>
+<td class="org-left">Boolean</td>
+<td class="org-left">true 或者 false</td>
+</tr>
+
+<tr>
+<td class="org-left">sbyte</td>
+<td class="org-right">1</td>
+<td class="org-left">Sbyte</td>
+<td class="org-left">有符号（-128~127）</td>
+</tr>
+
+<tr>
+<td class="org-left">short</td>
+<td class="org-right">2</td>
+<td class="org-left">Int16</td>
+<td class="org-left">有符号 short（-32768~32767）</td>
+</tr>
+
+<tr>
+<td class="org-left">ushort</td>
+<td class="org-right">2</td>
+<td class="org-left">Uint16</td>
+<td class="org-left">无符号 short（0~65535）</td>
+</tr>
+
+<tr>
+<td class="org-left">int</td>
+<td class="org-right">4</td>
+<td class="org-left">Int32</td>
+<td class="org-left">有符号 int（-2147483648~2147483647）</td>
+</tr>
+
+<tr>
+<td class="org-left">uint</td>
+<td class="org-right">4</td>
+<td class="org-left">Uint32</td>
+<td class="org-left">无符号 int（0~4294967295）</td>
+</tr>
+
+<tr>
+<td class="org-left">float</td>
+<td class="org-right">4</td>
+<td class="org-left">Single</td>
+<td class="org-left">浮点数</td>
+</tr>
+
+<tr>
+<td class="org-left">double</td>
+<td class="org-right">8</td>
+<td class="org-left">Double</td>
+<td class="org-left">双精度浮点数</td>
+</tr>
+
+<tr>
+<td class="org-left">decimal</td>
+<td class="org-right">12</td>
+<td class="org-left">Decimal</td>
+<td class="org-left">固定精度</td>
+</tr>
+
+<tr>
+<td class="org-left">long</td>
+<td class="org-right">8</td>
+<td class="org-left">Int64</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">ulong</td>
+<td class="org-right">8</td>
+<td class="org-left">Uint64</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol class="org-ol"><li><a id="orgheadline1"></a>指针类型<br  /><div class="outline-text-5" id="text-1-1-1-1">
+<p>
+为了保持类型安全，默认情况下，C# 不支持指针运算。不过，通过使用 unsafe 关键字，可以定义可使用指针的不安全上下文。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">using System;
+struct Point
+{
+    public int x, y; 
+}
+
+class MainClass
+{
+    unsafe static void Main() 
+    {
+        Point pt = new Point();
+        Point* pp = &amp;pt;
+        pp-&gt;x = 123;
+        pp-&gt;y = 456;
+        Console.WriteLine ( "{0} {1}", pt.x, pt.y );
+    }
+}
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline2"></a>可以为 null 的值类型<br  /><div class="outline-text-5" id="text-1-1-1-2">
+<p>
+普通的值类型不能有 null 值。 但是，可以通过在类型后面附加 ? 来创建可以为 null 值的类型。<br  />
+</p>
+</div></li></ol>
+</div>
+
+<div id="outline-container-orgheadline4" class="outline-4">
+<h4 id="orgheadline4"><span class="section-number-4">1.1.2</span> 变量初始化 赋值</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+C#要求变量在使用前必须初始化或者赋值。<br  />
+const 为编译期常量 ，readonly 为运行时常量<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline5" class="outline-4">
+<h4 id="orgheadline5"><span class="section-number-4">1.1.3</span> 枚举类型</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+每个枚举类型都有底层类型，可以是任意整数类型（integer，short，long），但 char 除外。默认情况下枚举类型的底层类型为 int。<br  />
+[性质][修饰符] enum 标识符 [:基础类型]<br  />
+{枚举列表};<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">enum SomeValues
+{
+  Value_0,
+  Value_1,
+  Value_20 = 20,
+  Value_21
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline6" class="outline-4">
+<h4 id="orgheadline6"><span class="section-number-4">1.1.4</span> 运算符</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+?? 如果 ?? 运算符的左操作数非空，该运算符将返回左操作数，否则返回右操作数。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline7" class="outline-4">
+<h4 id="orgheadline7"><span class="section-number-4">1.1.5</span> 条件分支语句</h4>
+<div class="outline-text-4" id="text-1-1-5">
+<p>
+C/C++中条件语句中可以使用任意表达式，C#要求所有条件表达式都必须为布尔值.这是为了避免 if(a=10) 这样的错误的！<br  />
+</p>
+
+<p>
+switch 语句可以对字符串进行跳转。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">switch(name)
+{
+case "Mr.A":
+  DoSomething();
+  break;
+case "Mr.B":
+  DoOtherthing();
+  break;
+default:
+  break;
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline8" class="outline-4">
+<h4 id="orgheadline8"><span class="section-number-4">1.1.6</span> 预处理指令</h4>
+<div class="outline-text-4" id="text-1-1-6">
+<p>
+C#预处理器只实现了 C++预处理器的一个子集，不支持宏。<br  />
+#region [comment context]- #endregion 使用注释来标记一段代码.<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">#region test region
+//test region
+//a define is here
+int a = 10;
+#endregion
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline25" class="outline-3">
+<h3 id="orgheadline25"><span class="section-number-3">1.2</span> 类与对象</h3>
+<div class="outline-text-3" id="text-1-2">
+</div><div id="outline-container-orgheadline11" class="outline-4">
+<h4 id="orgheadline11"><span class="section-number-4">1.2.1</span> 定义类</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+[attribue 性质][访问修饰符]class 标识符[:基类]<br  />
+{类主体}<br  />
+C#类定义后不需要分号,加分号也不会报错。<br  />
+</p>
+</div>
+
+<ol class="org-ol"><li><a id="orgheadline10"></a>访问修饰符<br  /><div class="outline-text-5" id="text-1-2-1-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">访问修饰符</th>
+<th scope="col" class="org-left">限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">public</td>
+<td class="org-left">无限制。标记为 public 成员，任何类的任何方法都可以访问</td>
+</tr>
+
+<tr>
+<td class="org-left">private</td>
+<td class="org-left">标记为 private 的类 A 的成员，只有类 A 的方法可以访问</td>
+</tr>
+
+<tr>
+<td class="org-left">protected</td>
+<td class="org-left">标记为 protected 的类 A 的成员，类 A 和从类 A 派生的类的方法可以访问</td>
+</tr>
+
+<tr>
+<td class="org-left">internal</td>
+<td class="org-left">标记为 internal 的类 A 的成员，A 所处的程序集中的任何类的方法都可以访问</td>
+</tr>
+
+<tr>
+<td class="org-left">protected internal</td>
+<td class="org-left">protected 或 internal 的意思。（没有 protected 且 internal 的概念）</td>
+</tr>
+</tbody>
+</table>
+</div></li></ol>
+</div>
+
+<div id="outline-container-orgheadline15" class="outline-4">
+<h4 id="orgheadline15"><span class="section-number-4">1.2.2</span> 创建对象</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+对象是引用类型，创建于堆中，需要使用关键字 new。<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline12"></a>构造方法<br  /><div class="outline-text-5" id="text-1-2-2-1">
+<p>
+未定义构造函数时，编译器会提供一个默认构造函数。<br  />
+未显式初始化的成员变量会按照下表的值初始化。<br  />
+用户实现任何构造函数后，编译器将不会提供默认构造函数。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">类型</th>
+<th scope="col" class="org-left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">numeric(int long 等)</td>
+<td class="org-left">0</td>
+</tr>
+
+<tr>
+<td class="org-left">bool</td>
+<td class="org-left">false</td>
+</tr>
+
+<tr>
+<td class="org-left">char</td>
+<td class="org-left">\0</td>
+</tr>
+
+<tr>
+<td class="org-left">enum</td>
+<td class="org-left">0</td>
+</tr>
+
+<tr>
+<td class="org-left">reference</td>
+<td class="org-left">null</td>
+</tr>
+</tbody>
+</table>
+</div></li>
+<li><a id="orgheadline13"></a>初始化语句<br  /><div class="outline-text-5" id="text-1-2-2-2">
+<p>
+可以在初始化语句中初始化成员变量的值，而不需要都在构造函数中进行。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class Person 
+{
+  // 下面的初始化语句中初始化了成员变量的值为 "Unknown"
+  private string name = "Unknown";
+  public Person(string name)
+  {
+    this.name = name;
+  }
+}
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline14"></a>ICloneable 接口<br  /><div class="outline-text-5" id="text-1-2-2-3">
+<p>
+C#中没有复制构造函数。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-C#">public class Person: ICloneable
+{
+  private string name = "Unknown";
+  public Person(string name)
+  {
+    this.name = name;
+  }
+  public Object Clone()
+  {
+    Person newObj = new Person (name);
+    return newObj;
+  }
+}
+</pre>
+</div>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline18" class="outline-4">
+<h4 id="orgheadline18"><span class="section-number-4">1.2.3</span> 使用静态成员</h4>
+<div class="outline-text-4" id="text-1-2-3">
+</div><ol class="org-ol"><li><a id="orgheadline16"></a>静态成员方法<br  /><div class="outline-text-5" id="text-1-2-3-1">
+<p>
+C#中不可以通过对象来访问类的静态成员方法和变量。<br  />
+CLR 保证在类的其他操作之前运行静态构造方法。静态构造方法通常用于初始化语句无法完成或者仅需一次的设置工作。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline17"></a>静态类<br  /><div class="outline-text-5" id="text-1-2-3-2">
+<p>
+C#中没有全局方法或全局变量、常量。可以创建静态类来封装全局方法和全局变量、常量。<br  />
+静态类无法实例化，静态类不能被派生，静态类不可含非静态成员。<br  />
+</p>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline22" class="outline-4">
+<h4 id="orgheadline22"><span class="section-number-4">1.2.4</span> 销毁对象</h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+C#提供了垃圾回收器，因此不需要显式地销毁对象。但如果对象要控制非托管的资源，用完后显式地释放还是需要的。<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline19"></a>析构函数<br  /><div class="outline-text-6" id="text-1-2-4-0-1">
+<p>
+对非托管资源的隐式控制是通过析构方法来提供的，它会在对象销毁时有垃圾回收器调用。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">~MyClass(){}
+// 上面的代码会被编译器翻译为
+protected override void Finalize()
+{
+  try
+  {}
+  finally
+  {
+    base.Finalize();
+  }
+}
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline20"></a>Dispose 方法<br  /><div class="outline-text-6" id="text-1-2-4-0-2">
+<p>
+显式调用析构方法是不合法的。如果需要处理昂贵的非托管资源，需要尽快关闭和清除他们，应该实现 IDisposable 接口。<br  />
+IDisosable 接口要求实现者定义一个名为 Dispose()的方法，清除我们认为重要的一切。<br  />
+如果提供了 Dispose()方法，应该停止垃圾回收器调用对象的析构方法，这样保证只进行一次资源释放。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class TestDispose:IDisposable
+{
+  bool is_disposed = false;
+  public TestDispose ()
+  {
+  }
+  protected virtual void Dispose(bool disposing)
+  {
+    if(!is_disposed)
+    {
+      if(disposing)
+      {
+        Console.WriteLine("Not in destructor,Ok to reference other objects");
+      }
+      Console.WriteLine("Disposing ... ");
+    }
+    is_disposed = true;
+  }
+  public void Dispose()
+  {
+    Dispose(true);
+    GC.SuppressFinalize(this);
+  }
+  ~TestDispose()
+  {
+    Dispose(false);
+    Console.WriteLine("In destructor");
+  }
+}
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline21"></a>using 语句<br  /><div class="outline-text-6" id="text-1-2-4-0-3">
+<p>
+using 语句用于保证 Dispose 会尽可能最早的时刻调用。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">//方法 1
+using (Font theFont = new Font("Arial",10.0f))
+{
+  // 使用 theFont
+  // 编译器会调用 theFont 的 Dispose
+}
+//方法 2
+Font anotherFont = new Font("Arial",10.0f);
+using (anotherFont)
+{
+  // 使用 anotherFont
+  // 编译器会调用 anotherFont 的 Dispose
+}
+</pre>
+</div>
+<p>
+方法 2 存在风险。<br  />
+首先：如果在创建对象后，进入 using 语句之前发生异常，对象将不会被清除。<br  />
+其次：变量在 using 语句块结束后仍然在作用域中，但是其资源已经释放了，所以再次使用它时可能会有错误。<br  />
+</p>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline23" class="outline-4">
+<h4 id="orgheadline23"><span class="section-number-4">1.2.5</span> 参数传递</h4>
+<div class="outline-text-4" id="text-1-2-5">
+<p>
+默认情况下值类型是按值传递给方法的。<br  />
+通过 ref 可以实现按照引用传递值类型的参数。<br  />
+通过 out 可以克服明确赋值问题。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline24" class="outline-4">
+<h4 id="orgheadline24"><span class="section-number-4">1.2.6</span> 通过属性封装数据</h4>
+<div class="outline-text-4" id="text-1-2-6">
+<p>
+通过属性客户代码可以访问类的状态，就像直接访问成员字段一样，而实际上这是通过类方法访问才实现的。<br  />
+通过 public private protected internal 实现属性访问控制<br  />
+使用属性要小心，属性本身实际上是成员方法，在初始化所有成员变量之前不能调用成员方法。<br  />
+只定义 set 时，属性只可写不可读。只定义 get 时，属性只可读不可写。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class Person{
+  private string name;
+  public string Name
+  {
+    get 
+    {
+      return name;
+    }
+    set 
+    {
+      name = value;
+    }
+  }
+  private int age;
+  public int Age
+  {
+    protected get
+    {
+      return age;
+    }
+    set
+    {
+      age = value;
+    }
+  }
+  private string tel;
+  public string Tel
+  {
+    set{ tel = value; }
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline33" class="outline-3">
+<h3 id="orgheadline33"><span class="section-number-3">1.3</span> 继承和多态</h3>
+<div class="outline-text-3" id="text-1-3">
+</div><div id="outline-container-orgheadline27" class="outline-4">
+<h4 id="orgheadline27"><span class="section-number-4">1.3.1</span> 多态</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+必须显式用关键词 override 标记重新定义了虚方法的方法声明。否则通过基类多态调用该方法时不会调用子类的方法。此时编译器会有警告。<br  />
+函数前加 new 关键词，可以取消上述编译器的警告，注意此时多态调用依然只会调用基类的方法。<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline26"></a>调用基类构造方法<br  /><div class="outline-text-5" id="text-1-3-1-1">
+<p>
+可以通过 base 来调用基类构造方法<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class Button: Control
+{
+  private int id = 0;
+  public Button(int id)
+  {
+    this.id = id;
+  }
+  public override void DrawWindow()
+  {
+    Console.WriteLine("Button DrawWindow");
+  }
+}
+
+public class LabelButton:Button
+{
+  private string label;
+  public LabelButton(int id,string label)
+    :base(id)
+  {
+    this.label = label;
+  }
+  public override void DrawWindow()
+  {
+    Console.WriteLine("LabelButton DrawWindow");
+  }
+}
+</pre>
+</div>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline28" class="outline-4">
+<h4 id="orgheadline28"><span class="section-number-4">1.3.2</span> 抽象类</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+将方法指定为抽象方法可以强制子类实现基类的该抽象方法。<br  />
+抽象方法没有实现。<br  />
+使类的一个或多个方法为抽象方法，会使类变为抽象类，而且必须在类定义前加 abatract 修饰符。<br  />
+抽象类无法实例化。<br  />
+抽象类代表了一种抽象的理念，要为所有派生类创建一个“合同（contract）”。也就是说，抽象类描述了要实现该抽象的所有类的公共方法。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">// 类内部有抽象方法时，必须将类声明为抽象类
+//public class Control
+abstract public class Control
+{
+  private int id = 0;
+
+  public int Id { 
+    get { 
+      return id;      
+    }
+    set {
+      id = value;
+    }
+  }
+
+  // 可以将函数指定为 virtual 提供默认实现
+  //    public virtual void DrawWindow ()
+  //    {
+  //    }
+
+  // error 抽象方法不能有实现
+  //    abstract public void DrawWindow ()
+  //    {
+  //    }
+
+  // 可以将函数指定为 abstract 如果子类没有实现 abstract 方法则子类也需要标记为抽象类
+  abstract public void DrawWindow ();
+}
+
+abstract public class ConrolX : Control
+{
+  // 不需要重新声明抽象方法，否则会隐藏 Control 中的声明
+  //abstract public void DrawWindow ();
+}
+
+public class Button: Control
+{
+  public Button (int id)
+  {
+    this.Id = id;
+  }
+
+  public override void DrawWindow ()
+  {
+    Console.WriteLine ("Button DrawWindow");
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline29" class="outline-4">
+<h4 id="orgheadline29"><span class="section-number-4">1.3.3</span> 密封类</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+抽象类是用来派生的，与抽象相对的设计概念是密封。sealed 置于类声明之前用来阻止派生。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline30" class="outline-4">
+<h4 id="orgheadline30"><span class="section-number-4">1.3.4</span> 万类之根：Object</h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+所有 C#类，无论是何类型，都可以看成是从 System.Object 派生而来的。值类型也包括在内。<br  />
+类不需要声明从 Ojbect 派生，继承是隐含的。<br  />
+所有的值类型均隐式派生自 System.ValueType。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline31" class="outline-4">
+<h4 id="orgheadline31"><span class="section-number-4">1.3.5</span> 类型的装箱和拆箱</h4>
+<div class="outline-text-4" id="text-1-3-5">
+<p>
+装箱和拆箱是使值类型能够被当成引用类型（对象）的处理过程。值被装箱到一个 Object 里然后拆箱回一个值类型。<br  />
+装箱是一种隐含的转换。<br  />
+拆箱必须是显式的。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">int i = 123;
+Object obj = i;   // 装箱
+int j = (int)obj; // 拆箱
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline32" class="outline-4">
+<h4 id="orgheadline32"><span class="section-number-4">1.3.6</span> 嵌套类</h4>
+<div class="outline-text-4" id="text-1-3-6">
+<p>
+嵌套类的方法可以访问外层类的私有成员。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class OuterClass
+{
+  private static int outer_obj_count = 0;
+  public OuterClass()
+  {
+    outer_obj_count++;
+  }
+  public class NestedClass
+  {
+    private static int nested_obj_count = 0;
+    public void PrintOuterObjCount()
+    {
+      Console.WriteLine(outer_obj_count);
+    }
+    public void PrintNestedObjCount()
+    {
+      Console.WriteLine(nested_obj_count);
+    }
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline34" class="outline-3">
+<h3 id="orgheadline34"><span class="section-number-3">1.4</span> 操作符重载</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+c#中，操作符都是一些静态方法，其返回值表示操作结果，其参数是操作数。<br  />
+C#要求必须成对重载操作符。例如 <code>=与!</code> &lt;与&gt; &lt;=与&gt;=<br  />
+转换操作符重载中，implicit 关键字用于转换肯定成功，不会丢失信息的时候；否则就用关键字 explicit。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline37" class="outline-3">
+<h3 id="orgheadline37"><span class="section-number-3">1.5</span> 结构体</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+结构体不支持继承和析构函数。结构体是值类型。(所以函数的结构体类型的参数是按值传递的)<br  />
+结构体数组在内存使用方面效率相对更好。结构体集合的效率就不行了。集合的元素必须是引用类型，所以结构体必须进行装箱处理。<br  />
+结构体不能通过初始化语句初始化结构体的实例字段。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public struct Student
+{
+  public string name = "hi"; // this is error
+  public int age;
+}
+</pre>
+</div>
+<p>
+结构体成员默认的访问权限也为 private。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline35" class="outline-4">
+<h4 id="orgheadline35"><span class="section-number-4">1.5.1</span> 定义结构体</h4>
+<div class="outline-text-4" id="text-1-5-1">
+<p>
+[attribue 性质][访问修饰符]struct 标识符[:接口列表]<br  />
+{结构体成员}<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline36" class="outline-4">
+<h4 id="orgheadline36"><span class="section-number-4">1.5.2</span> 创建结构对象</h4>
+<div class="outline-text-4" id="text-1-5-2">
+<div class="org-src-container">
+
+<pre class="src src-c#">// 方法 1
+Student stu1 = new Student();
+// 方法 2
+Student stu2;
+stu2.name = "";
+stu2.age = 0;
+</pre>
+</div>
+<p>
+方法 2 需要手动初始化所有成员的初始值。当结构体内有私有成员变量时，方法 2 将无法使用，因为无法初始化私有成员变量。<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline49" class="outline-3">
+<h3 id="orgheadline49"><span class="section-number-3">1.6</span> 接口</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+接口是向客户保证类或结构体行为方式的一种协定。定义接口是可以定义实现该接口的类需要实现的方法、属性、索引器和事件。<br  />
+继承抽象类描述了 is-a 的关系，类实现接口描述了 implement 的关系。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline38" class="outline-4">
+<h4 id="orgheadline38"><span class="section-number-4">1.6.1</span> 定义接口</h4>
+<div class="outline-text-4" id="text-1-6-1">
+<p>
+[attribue 性质][访问修饰符]interface 标识符[:基列表]<br  />
+{接口主体}<br  />
+interface 后的标识符通常会以 I 开头，不过不是必须的。<br  />
+基列表列出了此接口扩展的接口。<br  />
+接口中属性的声明并没有实现 get\set 方法。<br  />
+接口中的方法声明没有访问修饰符，接口的方法隐含就是 public 的，因为接口是要其他类使用的协定。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public interface IStorable
+{
+  void Read ();
+
+  void Write (Object obj);
+
+  int Status {
+    get;
+    set;
+  }
+}
+
+public class GDoc : IStorable
+{
+  public void Read ()
+  {
+    Console.WriteLine ("GDoc read ...");
+  }
+
+  public void Write (Object obj)
+  {
+    Console.WriteLine ("GDoc write ...");
+  }
+
+  private int status;
+
+  public int Status {
+    get;
+    set;
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline39" class="outline-4">
+<h4 id="orgheadline39"><span class="section-number-4">1.6.2</span> 类可以实现多个接口</h4>
+<div class="outline-text-4" id="text-1-6-2">
+<div class="org-src-container">
+
+<pre class="src src-c#">public class GDoc : IStorable, ICompressible
+{ ... }
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline40" class="outline-4">
+<h4 id="orgheadline40"><span class="section-number-4">1.6.3</span> 扩展接口</h4>
+<div class="outline-text-4" id="text-1-6-3">
+<div class="org-src-container">
+
+<pre class="src src-c#">public interface ILoggedCompressible : ICompressible
+{
+  void LogSavedBytes();
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline41" class="outline-4">
+<h4 id="orgheadline41"><span class="section-number-4">1.6.4</span> 组合接口</h4>
+<div class="outline-text-4" id="text-1-6-4">
+<div class="org-src-container">
+
+<pre class="src src-c#">public interface IStorableCompressible: IStorable,ICompressible
+{
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline42" class="outline-4">
+<h4 id="orgheadline42"><span class="section-number-4">1.6.5</span> 转换为接口</h4>
+<div class="outline-text-4" id="text-1-6-5">
+<div class="org-src-container">
+
+<pre class="src src-c#">IStorable iObj = doc as IStorable;
+if(iObj != null)
+{
+  iObj.Read();
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline43" class="outline-4">
+<h4 id="orgheadline43"><span class="section-number-4">1.6.6</span> is 和 as 操作符</h4>
+<div class="outline-text-4" id="text-1-6-6">
+<p>
+is 可用来判断某个对象是否为某个类型。也可以判断某个对象是否实现了某个接口。<br  />
+表达式 is 类型 // is 返回 true 或 false<br  />
+is 运算符只考虑引用转换、装箱转换和取消装箱转换。不考虑其他转换，如用户定义的转换。<br  />
+as 是将 is 和转换操作结合起来。首先测试转换是否合法，如果是就进行转换。如果转换不合法就返回 null。<br  />
+表达式 as 类型 // as 返回转换后的对象 或 null<br  />
+as 用于在兼容的引用类型之间执行转换.as 运算符只执行引用转换和装箱转换。as 运算符无法执行其他转换，如用户定义的转换。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">int iValue = 10;
+Console.WriteLine ("iValue is object = {0}", iValue is object);
+Console.WriteLine ("iValue is int    = {0}", iValue is int);
+Console.WriteLine ("iValue as object = {0}", iValue as object);
+// output
+// iValue is object = True
+// iValue is int    = True
+// iValue as object = 10
+
+// 下面的代码编译会出错
+Console.WriteLine ("iValue as int    = {0}", iValue as int);
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline44" class="outline-4">
+<h4 id="orgheadline44"><span class="section-number-4">1.6.7</span> 接口和抽象类比较</h4>
+<div class="outline-text-4" id="text-1-6-7">
+<p>
+若要创建一个会被许多人服用的类库，最好使用抽象基类；这样当你需要增加一个新的方法时，只需要在抽象基类中添加一个虚方法，然后配一个默认实现就好了。<br  />
+若只是为单个项目创建类，则使用接口更好，因为接口更加灵活且具有弹性。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline45" class="outline-4">
+<h4 id="orgheadline45"><span class="section-number-4">1.6.8</span> 重定义接口的实现</h4>
+<div class="outline-text-4" id="text-1-6-8">
+<p>
+实现类可以自由地将任何或全部实现接口的方法标记为虚。派生类可以重定义或提供新的实现。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public interface IStorable
+{
+  void Read ();
+
+  void Write (Object obj);
+
+  int Status {
+    get;
+    set;
+  }
+}
+
+public class GDoc : IStorable
+{
+  public virtual void Read ()
+  {
+    Console.WriteLine ("GDoc read ...");
+  }
+
+  virtual public void Write (Object obj)
+  {
+    Console.WriteLine ("GDoc write ...");
+  }
+
+  private int status;
+
+  public int Status {
+    get;
+    set;
+  }
+}
+
+public class GNote : GDoc
+{
+  public override void Read ()
+  {
+    Console.WriteLine ("GNote read ...");
+  }
+
+  public override void Write (Object obj)
+  {
+    Console.WriteLine ("GNote write ...");
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline46" class="outline-4">
+<h4 id="orgheadline46"><span class="section-number-4">1.6.9</span> 显式接口实现</h4>
+<div class="outline-text-4" id="text-1-6-9">
+<p>
+当需要实现的两个接口有相同的方法时，其中一个接口的方法需要显式实现。<br  />
+显式实现声明的方法不能用访问修饰符，该方法隐含为公共的。<br  />
+显式实现声明的方法不能用 abstract\virtual\override\new 修饰符声明。<br  />
+将接口方法通过显式实现，可以一定程度的隐藏接口方法，从而达到有选择公开接口方法的目的。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class GDoc : IStorable,ITalk
+{
+  public virtual void Read ()
+  {
+    Console.WriteLine ("GDoc read ...");
+  }
+
+  virtual public void Write (Object obj)
+  {
+    Console.WriteLine ("GDoc write ...");
+  }
+
+  public void Talk ()
+  {
+    Console.WriteLine("IStorable Talk implement");
+  }
+
+  void ITalk.Talk ()
+  {
+    Console.WriteLine("ITalk Talk implement");
+  }
+
+  private int status;
+
+  public int Status {
+    get;
+    set;
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline47" class="outline-4">
+<h4 id="orgheadline47"><span class="section-number-4">1.6.10</span> 隐藏接口成员</h4>
+<div class="outline-text-4" id="text-1-6-10">
+<div class="org-src-container">
+
+<pre class="src src-c#">public interface IGBase
+{
+  int P {
+    get;
+    set;
+  }
+}
+
+public interface IGDerived:IGBase
+{
+  new int P {
+    get;
+    set;
+  }
+}
+
+public class GMyClass:IGDerived
+{
+  int IGBase_P;
+
+  int IGBase.P {
+    get {
+      return IGBase_P;
+    }
+    set { 
+      IGBase_P = value;
+    }
+  }
+
+  int p = 10;
+
+  public int P {
+    get {
+      return p;
+    }
+    set { 
+      p = value;
+    }
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline48" class="outline-4">
+<h4 id="orgheadline48"><span class="section-number-4">1.6.11</span> 访问密封类和结构体</h4>
+<div class="outline-text-4" id="text-1-6-11">
+<p>
+使用值类型实现接口时，一定要通过对象访问接口成员，而不要通过接口引用。因为将值类型对象转换为接口引用时会对值类型对象进行装箱操作，<br  />
+通过接口引用调用接口方法是在装箱后的引用对象上进行的。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">GStudentA stu1 = new GStudentA ("God1"); //GStudentA is a struct
+IChangeName iCN = stu1;
+iCN.Name = "God2";
+Console.WriteLine ("stu1 name = {0}", stu1.Name);
+Console.WriteLine ("iCN  name = {0}", iCN.Name);
+// output
+stu1 name = God1
+iCN  name = God2
+
+GStudentB stu2 = new GStudentB ("Dog1"); // GStudentB is a sealed class
+IChangeName iCN2 = stu2;
+iCN2.Name = "Dog2";
+Console.WriteLine ("stu2 name = {0}", stu2.Name);
+Console.WriteLine ("iCN2 name = {0}", iCN2.Name);
+// output
+stu2 name = Dog2
+iCN2 name = Dog2
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline64" class="outline-3">
+<h3 id="orgheadline64"><span class="section-number-3">1.7</span> 数组索引器与集合</h3>
+<div class="outline-text-3" id="text-1-7">
+<p>
+C#中数组为对象，数组可以有自己的方法和属性。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline50" class="outline-4">
+<h4 id="orgheadline50"><span class="section-number-4">1.7.1</span> 声明数组</h4>
+<div class="outline-text-4" id="text-1-7-1">
+<p>
+类型[] 数组名;<br  />
+C#数组为引用类型，所以其在堆中分配，数组内的元素如何分配要看他们自己的类型。如果数组元素为值类型，则所有元素在为数组分配的内存块中创建。<br  />
+如果数组元素为引用类型，分配给数组的内存将用来存放对实际元素的引用。实际元素本身是在堆中分配的，所占内存和分配给数组的内存是不同的。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline51" class="outline-4">
+<h4 id="orgheadline51"><span class="section-number-4">1.7.2</span> 默认值</h4>
+<div class="outline-text-4" id="text-1-7-2">
+<p>
+创建值类型数组时，每个元素最初都存放着数组所存类型的默认值。<br  />
+创建引用类型数组时，每个元素被初始化为 null。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline52" class="outline-4">
+<h4 id="orgheadline52"><span class="section-number-4">1.7.3</span> 遍历数组</h4>
+<div class="outline-text-4" id="text-1-7-3">
+<p>
+foreach(类型 标识符 in 表达式)语句<br  />
+for(int i=0; i&lt;arr.Length; i++)语句<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline53" class="outline-4">
+<h4 id="orgheadline53"><span class="section-number-4">1.7.4</span> 初始化数组元素</h4>
+<div class="outline-text-4" id="text-1-7-4">
+<div class="org-src-container">
+
+<pre class="src src-c#">Employee[] empArr = new Employee[3] {
+  new Employee (110),
+  new Employee (111),
+  new Employee (112)
+};
+Employee[] empArr = {
+  new Employee (110),
+  new Employee (111),
+  new Employee (112)
+};
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline54" class="outline-4">
+<h4 id="orgheadline54"><span class="section-number-4">1.7.5</span> params 关键字</h4>
+<div class="outline-text-4" id="text-1-7-5">
+<p>
+params 可用于可变数目的数组函数参数。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public static void PrintIntArray (params int[] intArr)
+{
+  foreach (int value in intArr) {
+    Console.WriteLine (value);
+  }
+}
+int[] intArr = { 11111, 11112, 11113, 11114 };
+PrintIntArray (intArr);
+PrintIntArray (1111, 1112, 1113);
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline57" class="outline-4">
+<h4 id="orgheadline57"><span class="section-number-4">1.7.6</span> 多维数组</h4>
+<div class="outline-text-4" id="text-1-7-6">
+<p>
+数组可分为规则数组和不规则数组。规则数组每行长度是相同的，不规则数组是数组组成的数组。<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline55"></a>规则数组<br  /><div class="outline-text-5" id="text-1-7-6-1">
+<p>
+二维数组 类型[,]数组名;<br  />
+三维数组 类型[,,]数组名;<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">int[2,3]arr;     //2 行 3 列的二维数组
+int[2,3,4]arr;   //三维数组
+int[,] arr = {
+  {0,1,2},
+  {3,4,5},
+  {6,7,8},
+  {9,10,11}
+};               //4 行 3 列的二维数组
+arr[1,1];        //访问第二行第二列的元素，该值为 4
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline56"></a>不规则数组<br  /><div class="outline-text-5" id="text-1-7-6-2">
+<p>
+类型[][]&#x2026;数组名;<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">int[3][]arr;      //二维整型不规则数组
+arr[0] = new int[4];
+arr[1] = new int[2];
+arr[2] = {0,2,4,6,8};
+arr[2][3];        //访问第三行第四列的元素，该值为 8
+</pre>
+</div>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline58" class="outline-4">
+<h4 id="orgheadline58"><span class="section-number-4">1.7.7</span> 数组转换</h4>
+<div class="outline-text-4" id="text-1-7-7">
+<p>
+如果维数相同，且引用元素类型可以转换，那么可以进行数组间的转换。如果元素类型可以隐式转换，则可以进行隐式转换，否则必须进行显式转换。<br  />
+Tips: 值类型元素的数组不可以转换。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">ImgButton[] imgBtnArr = { new ImgButton (10, "10"), new ImgButton (11, "11") };
+PrintControl (imgBtnArr);
+Control[] tmpCtrlArr = imgBtnArr;
+PrintControl (tmpCtrlArr);
+ImgButton[] tmpImgBtnArr = (ImgButton[])tmpCtrlArr;
+PrintControl (tmpImgBtnArr);
+
+public static void PrintControl (Control[] controlArr)
+{
+  foreach (Control ctr in controlArr) {
+    Console.WriteLine ("controlId = {0}", ctr.Id);
+  }
+}
+// 下面的代码编译会出错
+float[] floatArr = { 1.0f, 1.1f, 1.2f };
+double[] doubleArr = { 2.0, 2.1, 2.2 };
+doubleArr = (double[])floatArr;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline59" class="outline-4">
+<h4 id="orgheadline59"><span class="section-number-4">1.7.8</span> 数组排序</h4>
+<div class="outline-text-4" id="text-1-7-8">
+<p>
+Array.Sort    可用来排序数组。<br  />
+Array.Reverse 可用来将数组元素顺序反转。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline60" class="outline-4">
+<h4 id="orgheadline60"><span class="section-number-4">1.7.9</span> 索引器</h4>
+<div class="outline-text-4" id="text-1-7-9">
+<p>
+索引器是一种特殊的属性，可以通过 get set 方法来指定其行为。<br  />
+(返回)类型 this[(索引)类型 参数]{get;set}<br  />
+索引类型<br  />
+索引操作符在 C#中不能重载，所以提供了索引器。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class ListBox:IEnumerable&lt;string&gt;
+{
+  public ListBox (params string[] init_strs)
+  {
+    strings = new string[256];
+    foreach (string str in init_strs) {
+      strings [count++] = str;
+    }
+  }
+
+  public IEnumerator&lt;string&gt; GetEnumerator ()
+  {
+    foreach (string s in strings) {
+      yield return s;
+    }
+  }
+
+  IEnumerator IEnumerable.GetEnumerator ()
+  {
+    return GetEnumerator ();
+  }
+
+  public void Add (string item)
+  {
+    if (count &gt;= strings.Length) {
+      //
+    } else {
+      strings [count++] = item;
+    }
+  }
+
+  public string this [int index] {
+    get {
+      if (index &gt;= count) {
+        return "";
+      } else {
+        return strings [index];
+      }
+    }
+    set {
+      if (index &gt;= strings.Length) {
+        //
+      } else {
+        if (index &gt;= count) {
+          count = index + 1;
+        }
+        strings [index] = value;
+      }
+    }
+  }
+
+  public string this [string index] {
+    get {
+      int idx = findString (index);
+      if (idx != -1) {
+        return strings [idx];
+      } else {
+        return "";
+      }
+    }
+    set {
+      int idx = findString (index);
+      if (idx != -1) {
+        strings [idx] = value;
+      } else {
+        //
+      }
+    }
+  }
+
+  private int findString (string str)
+  {
+    for (int i = 0; i &lt; count; i++) {
+      if (strings [i].StartsWith (str)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  public int Count {
+    get {
+      return count;
+    }
+    //private set;
+  }
+
+  private string[] strings;
+  private int count;
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline61" class="outline-4">
+<h4 id="orgheadline61"><span class="section-number-4">1.7.10</span> 集合接口</h4>
+<div class="outline-text-4" id="text-1-7-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">接口</th>
+<th scope="col" class="org-left">目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ICollection&lt;T&gt;</td>
+<td class="org-left">泛型集合的基接口</td>
+</tr>
+
+<tr>
+<td class="org-left">IEnumerator&lt;T&gt; IEnumerable&lt;T&gt;</td>
+<td class="org-left">用 foreach 语句枚举集合</td>
+</tr>
+
+<tr>
+<td class="org-left">ICollection&lt;T&gt;</td>
+<td class="org-left">所有集合都要实现，以提供 CopyTo()方法，以及 Count、IsSynchronized 和 SyncRoot 属性</td>
+</tr>
+
+<tr>
+<td class="org-left">IComparer&lt;T&gt; IComparable&lt;T&gt;</td>
+<td class="org-left">比较集合中的两个对象以对集合排序</td>
+</tr>
+
+<tr>
+<td class="org-left">IList&lt;T&gt;</td>
+<td class="org-left">用于数组可索引的集合</td>
+</tr>
+
+<tr>
+<td class="org-left">IDictionary&lt;K,V&gt;</td>
+<td class="org-left">用于基于键值对的集合，如 Dictionary</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-orgheadline62" class="outline-4">
+<h4 id="orgheadline62"><span class="section-number-4">1.7.11</span> 约束</h4>
+<div class="outline-text-4" id="text-1-7-11">
+<p>
+通过关键字 where 指定约束。<br  />
+public class Node&lt;T&gt;:IComparable&lt;Node&lt;T&gt;&gt; where T : IComparable&lt;T&gt; // 指定约束 T 需要实现 IComparable&lt;T&gt;接口<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class Node&lt;T&gt;:IComparable&lt;Node&lt;T&gt;&gt; where T : IComparable&lt;T&gt;
+{
+  private T data;
+  private Node&lt;T&gt; prev;
+  private Node&lt;T&gt; next;
+
+  public Node (T data)
+  {
+    this.data = data;
+  }
+
+  public T Data{ get { return data; } }
+
+  public Node&lt;T&gt; Next { get { return next; } }
+
+  public int CompareTo (Node&lt;T&gt; rhs)
+  {
+    return data.CompareTo (rhs.Data);
+  }
+
+  public bool Equals (Node&lt;T&gt; rhs)
+  {
+    return data.Equals (rhs.Data);
+  }
+
+  public Node&lt;T&gt; Add (Node&lt;T&gt; newNode)
+  {
+    if (this.CompareTo (newNode) &gt; 0) {
+      newNode.next = this;
+      if (this.prev != null) {
+        this.prev.next = newNode;
+        newNode.prev = this.prev;
+      }
+      this.prev = newNode;
+
+      return newNode;
+    } else {
+      if (this.next != null) {
+        this.next.Add (newNode);
+      } else {
+        this.next = newNode;
+        newNode.prev = this;
+      }
+      return this;
+    }
+  }
+
+  public override string ToString ()
+  {
+    string output = data.ToString ();
+    if (next != null) {
+      output += ", "  + next.ToString ();
+    }
+    return output;
+  }
+}
+
+public class LinkedList&lt;T&gt; where T : IComparable&lt;T&gt;
+{
+  private Node&lt;T&gt; headNode = null;
+
+  public T this [int index] {
+    get {
+      int count = 0;
+      Node&lt;T&gt; node = headNode;
+      while (node != null &amp;&amp; count &lt;= index) {
+        if (count == index) {
+          return node.Data;
+        } else {
+          count++;
+          node = node.Next;
+        }
+      }
+      throw new ArgumentOutOfRangeException ();
+    }
+  }
+
+  public void Add (T data)
+  {
+    if (headNode == null) {
+      headNode = new Node&lt;T&gt; (data);
+    } else {
+      headNode.Add (new Node&lt;T&gt; (data));
+    }
+  }
+
+  public override string ToString ()
+  {
+    if (headNode == null) {
+      return string.Empty;
+    } else {
+      return this.headNode.ToString ();
+    }
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline63" class="outline-4">
+<h4 id="orgheadline63"><span class="section-number-4">1.7.12</span> 实现 IComparer IComparable</h4>
+<div class="outline-text-4" id="text-1-7-12">
+<div class="org-src-container">
+
+<pre class="src src-c#">public class Employee:IComparable&lt;Employee&gt;
+{
+  private int empID;
+  private int yearsOfSvr = 1;
+
+  public int EmpID {
+    get{ return empID; }
+    set{ empID = value; }
+  }
+
+  public int YearsOfSvr {
+    get{ return yearsOfSvr; }
+    set{ yearsOfSvr = value; }
+  }
+
+  public Employee (int empID)
+  {
+    this.empID = empID;
+  }
+
+  public Employee (int empID, int yearsOfSvr)
+  {
+    this.empID = empID;
+    this.yearsOfSvr = yearsOfSvr;
+  }
+
+  public static EmployeeComparer GetComparer ()
+  {
+    return new EmployeeComparer ();
+  }
+
+  public int CompareTo (Employee rhs)
+  {
+    return this.empID.CompareTo (rhs.EmpID);
+  }
+
+  public int CompareTo (Employee rhs, EmployeeComparer.ComparerType cmpType)
+  {
+    switch (cmpType) {
+    case EmployeeComparer.ComparerType.EmpID:
+      return this.empID.CompareTo (rhs.EmpID);
+    case EmployeeComparer.ComparerType.YearOfSvr:
+      return this.yearsOfSvr.CompareTo (rhs.yearsOfSvr);
+    }
+    return 0;
+  }
+
+  public override string ToString ()
+  {
+    return string.Format ("EmpID={0}, SvrYears={1}", empID, yearsOfSvr);
+  }
+
+  public class EmployeeComparer:IComparer&lt;Employee&gt;
+  {
+    public enum ComparerType
+    {
+      EmpID,
+      YearOfSvr
+    }
+
+    private ComparerType compType;
+
+    public ComparerType CompType {
+      get{ return compType; }
+      set{ compType = value; }
+    }
+
+    public bool Equals (Employee lhs, Employee rhs)
+    {
+      return lhs.CompareTo (rhs) == 0;
+    }
+
+    public int GetHashCode (Employee e)
+    {
+      return e.GetHashCode ();
+    }
+
+    public int Compare (Employee lhs, Employee rhs)
+    {
+      return lhs.CompareTo (rhs, compType);
+    }
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline68" class="outline-3">
+<h3 id="orgheadline68"><span class="section-number-3">1.8</span> 字符串与正则表达式</h3>
+<div class="outline-text-3" id="text-1-8">
+</div><div id="outline-container-orgheadline65" class="outline-4">
+<h4 id="orgheadline65"><span class="section-number-4">1.8.1</span> string</h4>
+<div class="outline-text-4" id="text-1-8-1">
+<p>
+C#中 string 是一种正常的类型，而不是字符数组。<br  />
+string 类的声明为：<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public sealed class String:IComparable&lt;T&gt;,ICloneable,IConvertible,IEnumerable&lt;T&gt;
+</pre>
+</div>
+<p>
+每个 string 对象都是一个不变的 unicode 字符序列。string 不变这一事实意味着看似要改变字符串的方法实际上返回的是一个修改后的副本，<br  />
+原字符串在内存中是不变的，直至被垃圾回收。这可能会带来性能问题，所以如果需要频繁修改字符串，应该使用 StringBuilder。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">//修改 string
+string line = "My name is God!";
+char[] lineCharArr = line.ToCharArray ();
+lineCharArr [0] = 'm';
+line = new string (lineCharArr);
+</pre>
+</div>
+<div class="org-src-container">
+
+<pre class="src src-c#">// @ 符号会告知字符串构造函数忽略转义符和分行符。因此，以下两个字符串是完全相同的：
+string p1 = "\\\\My Documents\\My Files\\";
+string p2 = @"\\My Documents\My Files\";
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline66" class="outline-4">
+<h4 id="orgheadline66"><span class="section-number-4">1.8.2</span> StringBuilder</h4>
+<div class="outline-text-4" id="text-1-8-2">
+<p>
+System.Text.StringBuilder 的作用是用来创建和修改字符串的。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">StringBuilder mutableStr = new StringBuilder ("My name is God!");
+mutableStr [0] = 'm';
+Console.WriteLine (mutableStr);
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline67" class="outline-4">
+<h4 id="orgheadline67"><span class="section-number-4">1.8.3</span> <span class="todo TODO">TODO</span> 正则表达式</h4>
+<div class="outline-text-4" id="text-1-8-3">
+<p>
+名字空间 System.Text.RegularExpressions 是所以与正则表达式相关的.NET 框架对象的大本营。<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline69" class="outline-3">
+<h3 id="orgheadline69"><span class="section-number-3">1.9</span> <span class="todo TODO">TODO</span> 异常处理</h3>
+</div>
+<div id="outline-container-orgheadline74" class="outline-3">
+<h3 id="orgheadline74"><span class="section-number-3">1.10</span> 委托和事件</h3>
+<div class="outline-text-3" id="text-1-10">
+</div><div id="outline-container-orgheadline70" class="outline-4">
+<h4 id="orgheadline70"><span class="section-number-4">1.10.1</span> 委托</h4>
+<div class="outline-text-4" id="text-1-10-1">
+<p>
+委托是一种引用类型，用来封装带有特定签名和返回类型的方法。委托可用来封装静态成员方法、实例方法、匿名方法等。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline71" class="outline-4">
+<h4 id="orgheadline71"><span class="section-number-4">1.10.2</span> 多重委托</h4>
+<div class="outline-text-4" id="text-1-10-2">
+<p>
+委托可以通过+、+=形成多重委托，委托也可以通过-、-=移除多重委托中的委托.<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">MultiDelegate.MyClassWithDelegate.StringDelegate writer, logger, transmiter;
+writer = new MultiDelegate.MyClassWithDelegate.StringDelegate (
+  MultiDelegate.MyImplClass.WriteStr);
+logger = new MultiDelegate.MyClassWithDelegate.StringDelegate (
+  MultiDelegate.MyImplClass.LogStr);
+transmiter = new MultiDelegate.MyClassWithDelegate.StringDelegate (
+  MultiDelegate.MyImplClass.TransmitStr);
+
+writer ("str pass to writer");
+logger ("str pass to logger");
+
+MultiDelegate.MyClassWithDelegate.StringDelegate multiDelegate = writer + transmiter;
+multiDelegate ("str pass to writer+transmiter");
+multiDelegate += logger; 
+multiDelegate ("str pass to writer+transmiter+loger");
+multiDelegate -= transmiter; 
+multiDelegate ("str pass to writer+transmiter+loger-transmiter");
+multiDelegate += logger; 
+multiDelegate ("str pass to writer+loger+loger");
+///////////////////////////////////
+//下面为输出
+// Write String     -- str pass to writer
+// Log String       -- str pass to logger
+// Write String     -- str pass to writer+transmiter
+// Transimit String -- str pass to writer+transmiter
+// Write String     -- str pass to writer+transmiter+loger
+// Transimit String -- str pass to writer+transmiter+loger
+// Log String       -- str pass to writer+transmiter+loger
+// Write String     -- str pass to writer+transmiter+loger-transmiter
+// Log String       -- str pass to writer+transmiter+loger-transmiter
+// Write String     -- str pass to writer+loger+loger
+// Log String       -- str pass to writer+loger+loger
+// Log String       -- str pass to writer+loger+loger
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline72" class="outline-4">
+<h4 id="orgheadline72"><span class="section-number-4">1.10.3</span> 事件</h4>
+<div class="outline-text-4" id="text-1-10-3">
+<p>
+可以通过多重委托来实现事件。<br  />
+event 关键字能够告诉编译器委托只能由定义类调用，其他类只能分别使用相应的+=和-=操作符订阅和退订委托。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline73" class="outline-4">
+<h4 id="orgheadline73"><span class="section-number-4">1.10.4</span> 异步调用委托</h4>
+<div class="outline-text-4" id="text-1-10-4">
+<div class="org-src-container">
+
+<pre class="src src-c#">subDelegate.BeginInvoke (new AsyncCallback (ResultsReturned), subDelegate);
+private void ResultsReturned (IAsyncResult iar)
+{
+  DelegateReturnInt subDelegate = (DelegateReturnInt)iar.AsyncState;
+  int result = subDelegate.EndInvoke (iar);
+  Console.WriteLine ("result = {0}", result);
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline89" class="outline-2">
+<h2 id="orgheadline89"><span class="section-number-2">2</span> The CLR and .NET framework</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgheadline79" class="outline-3">
+<h3 id="orgheadline79"><span class="section-number-3">2.1</span> 程序集和版本控制</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+1 程序集是一种 Portable Executable 可移植可执行文件。物理上，程序集可以包括一个或多个模块。一个程序集的全部内容<br  />
+会被作为一个部署和重用的单元。一个程序集只会在被调用的时候才会被导入，不被需要时就暂时不会被导入。<br  />
+2 元数据是一种二进制信息，它被存储在程序集中，用来对程序集中的类型和方法进行描述，并提供其他的一些关于程序集的有用信息。<br  />
+3 程序集形成安全边界及类型边界。即一个程序集构成了它其中类型定义的作用域范围，类型定义的作用域不能跨越多个程序集。每一类型<br  />
+的标识均包括该类型所驻留的程序集的名称。<br  />
+4 作为元数据的一部分，每个程序集都有一个清单。它描述着程序集的内容：程序集的标识信息（名称、版本号等），程序集包含的类型<br  />
+和资源列表，程序集包含的模块的列表，描述如何在引用公共类型时映射到包含其声明和实现的代码的信息，以及程序集所依赖的其他<br  />
+程序集的列表。清单就像描述着程序集内容的一份自述地图。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline76" class="outline-4">
+<h4 id="orgheadline76"><span class="section-number-4">2.1.1</span> 多模块程序集</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+1 一个包含单一模块的程序集只有一个文件，或者是 EXE 或者是 DLL 文件。这个单一模块包含着程序的所有类型说明和实现代码。程序集的<br  />
+清单也内嵌在这个模块中。<br  />
+2 一个多模块程序集可能包含多个文件（零个或一个 EXE 文件及零个或多个 DLL 文件，至少一个 EXE 或 DLL 文件）。程序集清单这时<br  />
+可以作为单独的一个文件出现，也可以嵌在某一个模块中。当多模块程序集被引用的时候，运行环境将会先导入包含程序集清单的文件，然后根<br  />
+据清单导入需要的模块。<br  />
+3 每个模块都有自己的清单，该清单独立于程序集的清单。模块的清单列着这个模块自身对其他程序集的引用。并且任何在这个模块中声明的类型，<br  />
+都会被列在这个和现实代码一道存放的清单中。一个模块还可能包含资源，如一些该模块需要的图片。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline77" class="outline-4">
+<h4 id="orgheadline77"><span class="section-number-4">2.1.2</span> 共享程序集</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+共享程序集必须满足一些严格的要求：<br  />
+1 程序集必须有一个强名称。强名称是全局唯一的。任何人都不会生成和你相同的程序集名称，这是由于用一个私钥生成的程序集的名称和用其他私钥生成的程序集<br  />
+名称不相同。<br  />
+2 共享程序集必须防止比它更新的版本被错误地当做这个程序集被引用，因此共享程序集的每个新版本在发布的时候都要带一个新的版本号。<br  />
+3 为了共享该程序集，需要将它放入全局程序集缓存(Global Assembly Cache)中。这是通用语言运行时在文件系统中指定的一块区域，专门用来保存共享<br  />
+程序集。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline78" class="outline-4">
+<h4 id="orgheadline78"><span class="section-number-4">2.1.3</span> 最终解决 DLL 冲突 - 版本控制</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<p>
+在.NET 编程环境中的共享程序集可以由名称和版本号唯一地标识。GAC 允许同一程序集的不同版本“并行执行”，即同一程序集的较老版本和较新版本在 GAC 中<br  />
+可以同时存在。<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline83" class="outline-3">
+<h3 id="orgheadline83"><span class="section-number-3">2.2</span> 性质</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+性质是一种生成元数据的机制。性质是一个对象，它代表着与你的程序中的一个元素相关的数据。而这个有性质的元素被称为性质的目标元素。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">// 下面是一个类或者一个接口的性质，表示目标类在被导出给 COM 时应该继承自 IUnknown 类而不是 IDispatch 类。(类或接口为目标元素)
+[NoIDispatch]
+
+// 下面的性质将元数据插入到程序集中，指定该程序的强名称.(程序集为目标元素)
+[assembly: AssemblyKeyFile("c:\\myStrongName.key")]
+</pre>
+</div>
+</div>
+<div id="outline-container-orgheadline80" class="outline-4">
+<h4 id="orgheadline80"><span class="section-number-4">2.2.1</span> 性质目标</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<p>
+性质的目标可以是程序集、类、接口、类成员等等。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">名称</th>
+<th scope="col" class="org-left">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">All</td>
+<td class="org-left">适用于以下任意中元素：程序集、类、构造函数、委托、枚举、事件、域、接口、方法、模块、参数、特性、返回值或者结构</td>
+</tr>
+
+<tr>
+<td class="org-left">Assembly</td>
+<td class="org-left">适用于程序集自身</td>
+</tr>
+
+<tr>
+<td class="org-left">Class</td>
+<td class="org-left">适用于类</td>
+</tr>
+
+<tr>
+<td class="org-left">Constructor</td>
+<td class="org-left">适用于给定的构造函数</td>
+</tr>
+
+<tr>
+<td class="org-left">Delegate</td>
+<td class="org-left">适用于委托</td>
+</tr>
+
+<tr>
+<td class="org-left">Enum</td>
+<td class="org-left">适用于枚举类型</td>
+</tr>
+
+<tr>
+<td class="org-left">Event</td>
+<td class="org-left">适用于事件</td>
+</tr>
+
+<tr>
+<td class="org-left">Field</td>
+<td class="org-left">适用于域</td>
+</tr>
+
+<tr>
+<td class="org-left">Interface</td>
+<td class="org-left">适用于接口</td>
+</tr>
+
+<tr>
+<td class="org-left">Method</td>
+<td class="org-left">适用于方法</td>
+</tr>
+
+<tr>
+<td class="org-left">Module</td>
+<td class="org-left">适用于单个模块</td>
+</tr>
+
+<tr>
+<td class="org-left">Parameter</td>
+<td class="org-left">适用于方法的参数</td>
+</tr>
+
+<tr>
+<td class="org-left">Property</td>
+<td class="org-left">适用于属性</td>
+</tr>
+
+<tr>
+<td class="org-left">ReturnValue</td>
+<td class="org-left">适用于返回值</td>
+</tr>
+
+<tr>
+<td class="org-left">Struct</td>
+<td class="org-left">适用于结构</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-orgheadline81" class="outline-4">
+<h4 id="orgheadline81"><span class="section-number-4">2.2.2</span> 性质的使用</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+性质的使用是通过把它们放在方括号里并且紧放在它们的目标元素之前。（目标是程序集的情况除外，在这种情况下需要把它们放在文件的最头部。）<br  />
+Tips: 必须把程序集属性放在所有 using 语句之后并且在其他任意代码之前。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline82" class="outline-4">
+<h4 id="orgheadline82"><span class="section-number-4">2.2.3</span> 自定义性质</h4>
+<div class="outline-text-4" id="text-2-2-3">
+<p>
+通过继承 System.Attribute 来实现自定义性质。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">[AttributeUsage (AttributeTargets.Class |
+AttributeTargets.Constructor |
+AttributeTargets.Delegate |
+AttributeTargets.Field |
+AttributeTargets.Method |
+AttributeTargets.Property,
+  AllowMultiple = true)]
+public class BugFixAttribute : System.Attribute
+{
+  public BugFixAttribute (int bugID, string programmer, string date)
+  {
+    this.bugID = bugID;
+    this.programmer = programmer;
+    this.date = date;
+  }
+
+  private string comment;
+
+  public string Comment {
+    get{ return comment; }
+    set{ comment = value; }
+  }
+
+  private int bugID;
+
+  public int BugID{ get { return bugID; } }
+
+  private string programmer;
+
+  public string Programmer{ get { return programmer; } }
+
+  private string date;
+
+  public string Date{ get { return date; } }
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline88" class="outline-3">
+<h3 id="orgheadline88"><span class="section-number-3">2.3</span> 反射</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+反射是指一个程序读取其自身的或其他程序的元数据的过程。一个程序被称为在反射它自身或另一个程序，是指该程序提取被反射程序集的元数据用来提交给用户或<br  />
+改变自身程序行为的过程。<br  />
+在 Reflection 命名空间的类，以及 System.Type 中的类，提供了对元数据进行检查和交互的支持。<br  />
+反射一般用于以下四种任务：<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline84" class="outline-4">
+<h4 id="orgheadline84"><span class="section-number-4">2.3.1</span> 查看元数据</h4>
+<div class="outline-text-4" id="text-2-3-1">
+<p>
+工具或使用程序可以使用它来显示元数据。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">System.Reflection.MemberInfo info = typeof(MyMath);
+object[] attri_arr = info.GetCustomAttributes (typeof(BugFixAttribute), false);
+foreach (object attri in attri_arr) {
+  BugFixAttribute pAttri = (BugFixAttribute)attri;
+  Console.WriteLine ("\nBugID:      {0}", pAttri.BugID);
+  Console.WriteLine ("Programmer: {0}", pAttri.Programmer);
+  Console.WriteLine ("Date:       {0}", pAttri.Date);
+  Console.WriteLine ("Comment:    {0}", pAttri.Comment);
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline85" class="outline-4">
+<h4 id="orgheadline85"><span class="section-number-4">2.3.2</span> 进行类型发现</h4>
+<div class="outline-text-4" id="text-2-3-2">
+<p>
+这允许你检查程序集中的类型，以及跟这些类型交互或对类型进行实例化。这在创建自定义脚本的时候有用，例如你可能希望允许你的用户使用脚本语言和你的程序<br  />
+交互。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">Assembly a = Assembly.Load ("mscorlib");
+Type[] types = a.GetTypes ();
+foreach (Type t in types) {
+  Console.WriteLine ("Type is {0}", t);
+}
+Console.WriteLine ("{0} types found", types.Length);
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline86" class="outline-4">
+<h4 id="orgheadline86"><span class="section-number-4">2.3.3</span> 对方法和特性的迟绑定</h4>
+<div class="outline-text-4" id="text-2-3-3">
+<p>
+这允许程序员可以调用动态实例化的对象的特性和方法，这也称为动态激活。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline87" class="outline-4">
+<h4 id="orgheadline87"><span class="section-number-4">2.3.4</span> 运行期创建类型（反射输出）</h4>
+<div class="outline-text-4" id="text-2-3-4">
+<p>
+对反射的终极使用是在运行期创建新的类型，然后使用这些类型执行任务。<br  />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline94" class="outline-2">
+<h2 id="orgheadline94"><span class="section-number-2">3</span> Tips</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-orgheadline90" class="outline-3">
+<h3 id="orgheadline90"><span class="section-number-3">3.1</span> 类型转换</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+类型 <a href="https://msdn.microsoft.com/zh-cn/library/ms173104.aspx">https://msdn.microsoft.com/zh-cn/library/ms173104.aspx</a><br  />
+如何将字符串转换为数字 <a href="https://msdn.microsoft.com/zh-cn/library/bb397679.aspx">https://msdn.microsoft.com/zh-cn/library/bb397679.aspx</a><br  />
+类型转换相关文档 <a href="https://msdn.microsoft.com/zh-cn/library/ms173105.aspx">https://msdn.microsoft.com/zh-cn/library/ms173105.aspx</a><br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline91" class="outline-3">
+<h3 id="orgheadline91"><span class="section-number-3">3.2</span> static const readonly</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+static 修饰符可用于类、字段、方法、属性、运算符、事件和构造函数，但不能用于索引器、析构函数或类以外的类型。<br  />
+const 指定字段或局部变量的值是常数，不能被修改。被指定为 const 的变量，其初始值是在编译期计算的。<br  />
+readonly 指定字段或局部变量的值为常数，不能被修改。被指定为 readonly 的变量，其初始值是在运行时计算的。<br  />
+Tips：<br  />
+const 字段只能在该字段的声明中初始化。<br  />
+readonly 字段可以在声明或构造函数中初始化。因此，根据所使用的构造函数，readonly 字段可能具有不同的值。<br  />
+const 字段会被当做静态成员变量，所以不必要也不允许为该字段添加 static 修饰符。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">class GStaticMember
+{
+  public const int const_imember_0 = 10;
+}
+GStaticMember member = new GStaticMember ();
+//Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);       // 编译错误，不允许通过对象访问静态字段
+Console.WriteLine ("const_imember_0 = {0}", GStaticMember.const_imember_0);
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline93" class="outline-3">
+<h3 id="orgheadline93"><span class="section-number-3">3.3</span> Tools</h3>
+<div class="outline-text-3" id="text-3-3">
+</div><div id="outline-container-orgheadline92" class="outline-4">
+<h4 id="orgheadline92"><span class="section-number-4">3.3.1</span> mono 版 ILDASM 为 monodis</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+<a href="http://stackoverflow.com/questions/1655767/does-mono-have-the-equivalent-of-ildasm">http://stackoverflow.com/questions/1655767/does-mono-have-the-equivalent-of-ildasm</a><br  />
+<a href="http://www.mono-project.com/docs/tools+libraries/tools/monodis/">http://www.mono-project.com/docs/tools+libraries/tools/monodis/</a><br  />
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Dong Guo</p>
+<p class="date">Created: 2016-07-16 Sat 03:21</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

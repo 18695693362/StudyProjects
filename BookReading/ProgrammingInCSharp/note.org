@@ -1,4 +1,8 @@
 #+TITLE: Programming C#
+#+OPTIONS: ^:{}
+#+OPTIONS: \n:t 
+#+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
+
 * The C# Language
 ** C#语言基础
 C#有两种类型内置类型和用户自定义类型。
@@ -25,7 +29,7 @@ C#中内置类型符合.Net CLS 规范。
 | ulong   |         8 | Uint64   |                                     |
 **** 指针类型
 为了保持类型安全，默认情况下，C# 不支持指针运算。不过，通过使用 unsafe 关键字，可以定义可使用指针的不安全上下文。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 using System;
 struct Point
 {
@@ -312,7 +316,7 @@ public class LabelButton:Button
 使类的一个或多个方法为抽象方法，会使类变为抽象类，而且必须在类定义前加 abatract 修饰符。
 抽象类无法实例化。
 抽象类代表了一种抽象的理念，要为所有派生类创建一个“合同（contract）”。也就是说，抽象类描述了要实现该抽象的所有类的公共方法。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 // 类内部有抽象方法时，必须将类声明为抽象类
 //public class Control
 abstract public class Control
@@ -505,7 +509,7 @@ is 运算符只考虑引用转换、装箱转换和取消装箱转换。不考�
 as 是将 is 和转换操作结合起来。首先测试转换是否合法，如果是就进行转换。如果转换不合法就返回 null。
 表达式 as 类型 // as 返回转换后的对象 或 null
 as 用于在兼容的引用类型之间执行转换.as 运算符只执行引用转换和装箱转换。as 运算符无法执行其他转换，如用户定义的转换。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 int iValue = 10;
 Console.WriteLine ("iValue is object = {0}", iValue is object);
 Console.WriteLine ("iValue is int    = {0}", iValue is int);
@@ -651,7 +655,7 @@ public class GMyClass:IGDerived
 *** 访问密封类和结构体
 使用值类型实现接口时，一定要通过对象访问接口成员，而不要通过接口引用。因为将值类型对象转换为接口引用时会对值类型对象进行装箱操作，
 通过接口引用调用接口方法是在装箱后的引用对象上进行的。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 GStudentA stu1 = new GStudentA ("God1"); //GStudentA is a struct
 IChangeName iCN = stu1;
 iCN.Name = "God2";
@@ -1056,7 +1060,7 @@ public class Employee:IComparable<Employee>
 *** string
 C#中 string 是一种正常的类型，而不是字符数组。
 string 类的声明为：
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 public sealed class String:IComparable<T>,ICloneable,IConvertible,IEnumerable<T>
 #+END_SRC
 每个 string 对象都是一个不变的 unicode 字符序列。string 不变这一事实意味着看似要改变字符串的方法实际上返回的是一个修改后的副本，
@@ -1088,7 +1092,7 @@ Console.WriteLine (mutableStr);
 委托是一种引用类型，用来封装带有特定签名和返回类型的方法。委托可用来封装静态成员方法、实例方法、匿名方法等。
 *** 多重委托
 委托可以通过+、+=形成多重委托，委托也可以通过-、-=移除多重委托中的委托.
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 MultiDelegate.MyClassWithDelegate.StringDelegate writer, logger, transmiter;
 writer = new MultiDelegate.MyClassWithDelegate.StringDelegate (
   MultiDelegate.MyImplClass.WriteStr);
@@ -1127,7 +1131,7 @@ multiDelegate ("str pass to writer+loger+loger");
 可以通过多重委托来实现事件。
 event 关键字能够告诉编译器委托只能由定义类调用，其他类只能分别使用相应的+=和-=操作符订阅和退订委托。
 *** 异步调用委托
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 subDelegate.BeginInvoke (new AsyncCallback (ResultsReturned), subDelegate);
 private void ResultsReturned (IAsyncResult iar)
 {
@@ -1166,7 +1170,7 @@ private void ResultsReturned (IAsyncResult iar)
 可以同时存在。
 ** 性质
 性质是一种生成元数据的机制。性质是一个对象，它代表着与你的程序中的一个元素相关的数据。而这个有性质的元素被称为性质的目标元素。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 // 下面是一个类或者一个接口的性质，表示目标类在被导出给 COM 时应该继承自 IUnknown 类而不是 IDispatch 类。(类或接口为目标元素)
 [NoIDispatch]
 
@@ -1197,7 +1201,7 @@ private void ResultsReturned (IAsyncResult iar)
 Tips: 必须把程序集属性放在所有 using 语句之后并且在其他任意代码之前。
 *** 自定义性质
 通过继承 System.Attribute 来实现自定义性质。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 [AttributeUsage (AttributeTargets.Class |
 AttributeTargets.Constructor |
 AttributeTargets.Delegate |
@@ -1241,7 +1245,7 @@ public class BugFixAttribute : System.Attribute
 反射一般用于以下四种任务：
 *** 查看元数据 
 工具或使用程序可以使用它来显示元数据。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 System.Reflection.MemberInfo info = typeof(MyMath);
 object[] attri_arr = info.GetCustomAttributes (typeof(BugFixAttribute), false);
 foreach (object attri in attri_arr) {
@@ -1255,7 +1259,7 @@ foreach (object attri in attri_arr) {
 *** 进行类型发现
 这允许你检查程序集中的类型，以及跟这些类型交互或对类型进行实例化。这在创建自定义脚本的时候有用，例如你可能希望允许你的用户使用脚本语言和你的程序
 交互。
-#+BEGIN_SRC 
+#+BEGIN_SRC c#
 Assembly a = Assembly.Load ("mscorlib");
 Type[] types = a.GetTypes ();
 foreach (Type t in types) {
@@ -1272,6 +1276,23 @@ Console.WriteLine ("{0} types found", types.Length);
 类型 https://msdn.microsoft.com/zh-cn/library/ms173104.aspx
 如何将字符串转换为数字 https://msdn.microsoft.com/zh-cn/library/bb397679.aspx
 类型转换相关文档 https://msdn.microsoft.com/zh-cn/library/ms173105.aspx
+** static const readonly
+static 修饰符可用于类、字段、方法、属性、运算符、事件和构造函数，但不能用于索引器、析构函数或类以外的类型。
+const 指定字段或局部变量的值是常数，不能被修改。被指定为 const 的变量，其初始值是在编译期计算的。
+readonly 指定字段或局部变量的值为常数，不能被修改。被指定为 readonly 的变量，其初始值是在运行时计算的。
+Tips：
+const 字段只能在该字段的声明中初始化。
+readonly 字段可以在声明或构造函数中初始化。因此，根据所使用的构造函数，readonly 字段可能具有不同的值。
+const 字段会被当做静态成员变量，所以不必要也不允许为该字段添加 static 修饰符。
+#+BEGIN_SRC c#
+class GStaticMember
+{
+  public const int const_imember_0 = 10;
+}
+GStaticMember member = new GStaticMember ();
+//Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);       // 编译错误，不允许通过对象访问静态字段
+Console.WriteLine ("const_imember_0 = {0}", GStaticMember.const_imember_0);
+#+END_SRC
 ** Tools
 *** mono 版 ILDASM 为 monodis
 http://stackoverflow.com/questions/1655767/does-mono-have-the-equivalent-of-ildasm
