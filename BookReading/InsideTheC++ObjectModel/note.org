@@ -1,4 +1,8 @@
 #+TITLE: Inside The C++ Object Model
+#+OPTIONS: ^:{}
+#+OPTIONS: \n:t 
+#+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
+
 总的来说这本书讲了编译器在你的 C++代码上又做了哪些手脚？
 
 * Object Lessons
@@ -34,7 +38,7 @@ C++对象模型的主要缺点是，如果应用程序代码本身没有改变�
 C++基类子对象的数据被直接放到派生类对象中。对于虚基类，则在类对象中为每个关联的虚基类对象加上一个指针。
 **** 对象模型如何影响程序
 不同的对象模型，会导致“现有的程序代码必须修改”以及“必须加入新的程序代码”两个结果。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 X foobar() {
    X xx;
    X *px = new X;
@@ -105,7 +109,7 @@ C++以下列方法支持多态：
 在默认构造函数被调用时才会发生。
 如果一个类 A 有默认构造函数，它内含一个成员对象 b（类型为 class B），该成员对象也有默认构造函数，但是在类 A 的默认构造函数中，没有调用类 B
 的默认构造函数。此时，编译器会扩展类 A 的默认构造函数，将对类 B 的默认构造函数调用插入进去。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 // programmer defined default constructor
 Bar::Bar() { str = 0; }
 
@@ -128,7 +132,7 @@ Bar::Bar()
 *** 类带有一个或多个虚基类
 对于类所定义的每一个构造函数，编译器会安插那些“允许每一个 virtual base class 的执行期存取操作”的码。如果一个类没有任何构造函数，编译器
 会为它们合成一个默认构造函数。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 class X { public: int i; };
 class A : public virtual X   { public: int j; };
 class B : public virtual X   { public: double d; };
@@ -147,7 +151,7 @@ void foo( const A* pa ) { pa->__vbcX->i = 1024; }
 #+END_SRC
 ** Copy Constructor Construction
 有三种情况，会以一个 object 的内容作为另一个类对象的初值：
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 class X { ... };
 X x;
 
@@ -181,7 +185,7 @@ X foo_bar()
 nontrivial 两种。只有 nontrivial 的实体才会被合成于程序中。
 决定一个 copy constructor 是否为 nontrivial 的标准在于 class 是否展现出 bitwise copy semantics。
 *** 基于位的 copy 语义(Bitwise copy Semantics)
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 // 下面的声明展现了基于位的 copy 语义
 class Word {
 public:
@@ -236,7 +240,7 @@ inline Word::Word( const Word& wd )
 编译器需要处理虚基类子对象。
 ** 程序转化语义学
 *** 明确的初始化操作
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 void foo_bar() {
    X x1( x0 );
    X x2 = x0;
@@ -260,7 +264,7 @@ void foo_bar() {
 }
 #+END_SRC
 *** 参数的初始化
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 X xx;
 // ...
 foo( xx );
@@ -278,7 +282,7 @@ foo( __temp0 );
 void foo( X& x0 );
 #+END_SRC
 *** 返回值的初始化
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 
 X bar() {
    X xx;
@@ -325,7 +329,7 @@ pf = bar;
 **** 返回值优化
 ***** 在使用者层面做优化
 定义一个计算用的 constructor。这样可能导致计算用途的 construtor 大量扩散。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 X bar()
 {
    X xx;
@@ -353,7 +357,7 @@ Named Return Value 优化提供了重要的效率改善，也受到了一些批�
 1 该优化由编译器默默完成，是否真的实施并不清楚。
 2 一旦函数变得复杂，优化就变得比较难以实施，有可能该优化就不会实施。
 3 该优化移除了函数内局部对象的构造和析构，改变了程序内容。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 X bar()
 {
    X xx;
@@ -395,7 +399,7 @@ bar( X &__result )
 C++标准要求，在同一个 access section 中，成员的排列只需符合较晚出现的成员在类对象中有较高的地址。也就是说各个成员并不一定得连续排列。
 成员变量之间可能会由于字节对齐而填充一些字节。
 编译器合成的内部数据成员，可能会放置在对象的最后，也可能放在最前，对此 C++标准并没有规定。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 // 下面的代码可以判断类成员的出现顺序
 template< class class_type,
           class data_type1,
@@ -419,7 +423,7 @@ access_order(
 编译器会对每个静态数据成员编码（name-mangling）,从而获得一个独一无二的名称，避免重名。
 *** 非静态数据成员
 非静态数据成员直接存放在每一个类对象之中。对一个非静态数据成员进行存取操作，编译器需要把类对象的起始地址加上数据成员的偏移量。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 origin._y = 0.0;
 那么地址&origin._y 将等于 &origin+(&Point3d::y-1);
 Tips：
@@ -447,7 +451,7 @@ Tips:
 1 多重继承的问题主要发生于派生类对象和其第二或后继基类对象之间的转换。
 对一个多重派生对象，将其地址指定给最左端（也就是第一个）基类的指针，情况将和单一继承相同，因为二者都指向相同的起始地址。
 至于第二或后继基类的地址指定操作，则需要将地址进行修改，加上（或减去，如果 downcast 的话）介于中间的子类对象的大小。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 Vertex3d v3d;
 Vertex  *pv;
 Point2d *pp;
@@ -492,7 +496,7 @@ C++的设计准则之一就是非静态成员函数至少和一般的非成员�
 
 2 将“每一个对非静态数据成员的存取操作”改为“经由 this 指针来存取”
 3 将成员函数重新写成一个外部函数。对函数名称进行 mangling 处理，使它在程序中成为独一无二的语汇
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 
 原始成员函数
 Point3d Point3d::magnitude()
@@ -519,7 +523,7 @@ obj.magnitude(); 变为 magnitude__7Point3dFv( &obj );
 ptr->magnitude(); 变为 magnitude__7Point3dFv( ptr );
 #+END_SRC
 *** 虚成员函数
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 ptr->normalize();
 上面的代码会被转换为下面的代码
 ( * ptr->vptr[ 1 ])( ptr );
@@ -534,21 +538,21 @@ ptr->normalize();
 在多重继承下，一个派生类内含有多个额外的虚函数表。所以，虚表指针成员也需要 name mangling 技术。
 有三种情况，第二或后继的 base class 会影响对虚函数的支持。
 1 通过一个指向第二基类的指针，调用派生类虚函数。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 Base2 *ptr = new Derived;
 // invokes Derived::~Derived
 // ptr must be adjusted backward by sizeof( Base1 )
 delete ptr;
 #+END_SRC
 2 通过一个指向派生类的指针，调用第二基类中继承而来的虚函数。在这种情况下，派生类指针必须再次调整，以指向第二个基类子对象。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 Derived *pder = new Derived;
 // invokes Base2::mumble()
 // pder must be adjusted forward by sizeof( Base1 )
 pder->mumble();
 #+END_SRC
 3 允许一个虚函数的返回值类型有所变化，可能是基类，也可能是派生类。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 Base2 *pb1 = new Derived;
 // invokes Derived* Derived::clone()
 // return must be adjusted to address Base2 subobject
@@ -564,7 +568,7 @@ Base2 *pb2 = pb1->clone();
 取一个非静态成员函数的地址，如果该函数为非虚函数，则得到它在内存中的真正地址。然而这个值也不是完全的，它需要被绑定于某个类对象的地址上，才能够
 通过它来调用该函数。
 指向成员函数的指针的声明语法，以及指向成员选择运算符的指针，其作用是作为 this 指针的空间保留者。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 指向成员函数的指针，其声明语法如下：
 double            // return type
 ( Point::*        // class the function is member
@@ -592,7 +596,7 @@ printf("Point::~Point = %p\n", &Point::~Point);
 对一个 virtual 成员函数取地址，所能获得的只是一个索引值。
 *** 多重继承下，指向成员函数的指针
 为了让成员函数的指针也能够支持多重继承和虚拟继承，设计了下面结构体
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 // fully general structure to support
 // pointer to member functions under MI
 struct __mptr {
@@ -612,7 +616,7 @@ struct __mptr {
 *** 形式参数
 面对“会带有副作用的实际参数”，通常都需要引入临时性对象。如果实际参数是一个常量表达式，在替换之前先完成求值操作，后继 inline 替换，就直接将
 常量绑上去。如果既不是个常量表达式，也不是个带有副作用的表达式，就直接替换之。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 inline int
 bar()
 {
@@ -708,7 +712,7 @@ C++程序中所有全局对象都被放置在程序的数据段中。如果明�
 1 如果异常处理被支持，这些对象不能够被放置在 try 区段之内。
 2 为了控制需要跨越模块做静态初始化对象的相依顺序而扯出来的复杂度。
 *** 局部静态对象
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 // generated temporary static object guard
 static struct Matrix *__0__F3 = 0 ;
 // the C analog to a reference is a pointer
@@ -729,6 +733,7 @@ identity__Fv ()
 }
 #+END_SRC
 *** 对象数组
+
 *** 默认构造和数组
 
 ** new delete 运算符
@@ -742,12 +747,205 @@ identity__Fv ()
 
 * Q&A:
 ** c++中的类型转换有哪些？
+*** 一、类型转换的意义：
+表达式是否合法取决于操作数的类型，而且合法的表达式其含义也由操作数类型决定。而操作数的类型又可由 C++中的类型转换而改变。因此，类型转换影响着
+表达式的合法性和表达式的结果。
+
+*** 二、什么是类型转换：
+顾名思义，类型转换就是一种类型值转换为另一种类型值的处理方式。在 C++中定义了内置类型之间的类型转换（即，标准转换，另一种转换被称为类类型转换），
+也允许将某种类型转换为类类型（例如，接受单个形参的构造函数可以将某种类型转换为类类型）或者将类类型转换为某种类型（例如，通过重载转换操作符可以
+将类型转换为某种类型）。需要记住的是
+（1）类类型转换的实现细节需要程序员们自己定义。
+（2）并非所有的类型之间都可以任意转换。
+例如：int a = "haha"; 编译这句代码会产生下面的错误提示信息：test.cpp invalid conversion from `const char*' to `int' 。
+
+*** 三、类型转换分类：
+**** 从是否需要在类型转换的地方写代码来使用类型转换，可以将类型转换分为：隐式类型转换、显示转换。
+隐式类型转换——编译器自动实现的类型转换。假设表达式需要某种特定类型的数值，但其操作数却是其他不同的类型，此时如果系统定义了适当的类型转换，
+编译器会自动根据转换规则将该操作数转换为需要的类型。
+显示转换——显示转换也称为强制类型转换，包括以下列名字命名的强制类型转换操作符：static_cast、dynamic_cast、const_cast 和
+reinterpret_cast。
+***** 隐式转换
+何时发生隐式类型转换？
+1、在混合类型的表达式中，其操作数被转换为相同的类型。例如：
+int ival；double dval；
+ival >= dval; //ival converted to double
+2、用作条件的表达式被转换为 bool 类型
+3、用一表达式初始化某个变量，或将一表达式赋值给某个变量，则该表达式被转换为该变量的类型（其实在函数调用中传递参数发生的隐式转换属于初始
+化形参变量发生的类型转换）
+***** 显式转换
+何时需要显式转换？
+（1）需要覆盖标准转换时，应该使用强制类型转换。例如：
+double dval;
+int ival;
+ival = ival * dval; //首先将 ival 转换 double 型，然后将乘积的结果转换为 int 型
+可以将上面这句代码用下面代码替换：
+ival *= static_cast<int>dval;
+（2）可能存在多种转换时，需要选择一种特定的类型转换。
+****** static_cast
+显式的类型转换，和（type）var 等价。
+****** dynamic_cast
+dynamic_cast 支持运行时识别指针或引用所指向的对象，将基类类型的指针或引用安全地转换为派生类型
+的指针或引用。
+Tips：
+转换引用时若转换失败会抛出 std::bad_cast 异常
+****** const_cast
+const_cast ,顾名思义,将转换掉表达式的 const 性质。
+const 只支持指针和引用的转换。
+#+BEGIN_SRC cpp 
+void test_type_cast()
+{
+    const int temp_01 = 10;
+    //    int temp_02 = const_cast<int>(temp_01);               //编译出错
+    //    cout << "temp_02 = " << temp_02 << endl;
+    
+    int temp_11 = 10;
+    //    const int temp_12 = const_cast<const int>(temp_11);   //编译出错
+    //    cout << "temp_12 = " << temp_12 << endl;
+    
+    const int* temp_21 = &temp_01;
+    int* temp_22 = const_cast<int*>(temp_21);
+    cout << "temp_22 = " << temp_22 << endl;
+    
+    int* temp_31 = &temp_11;
+    const int* temp_32 = const_cast<const int*>(temp_31);
+    cout << "temp_32 = " << temp_32 << endl;
+}
+#+END_SRC
+****** reinterpret_cast
+reinterpret_cast 通常为操作数的位模式提供较低层次的重新解释。
+**** 从是否需要编写代码来实现类型转换的具体实现细节，可以将类型转换分为：标准转换、类类型转换。
+标准转换——内置类型之间的相互转换。
+类类型转换——到类类型或从类类型的转换。接受一个形参的非显示构造函数定义了到类类型的转换。转换操作符定义了从类类型到操作符所指定类型的转换。
 ** extern 和 static 的区别？
+*** static
+**** 改变生命期
+static 将变量声明为 static 会改变变量在内存中的存储（变量被放置在数据段）从而改变变量的生命期（程序结束之前会释放该变量）。
+**** 改变作用域/可见性
+static 将变量的可见性限定在其所在的源文件内。所以 static 全局变量只在其所在源文件内可见,不可以在其他源文件中通过 extern 声明静态全局变量来
+存取 static 全局变量。
+**** 类静态成员
+static 成员变量属于类，可以通过类或类的对象来存取静态对象。
+static 成员函数没有隐含的 this 指针参数，可以通过类或类的对象来调用静态函数。
+Tips：
+程序中全局静态变量的初始化顺序是不定的。在第一次调用局部静态变量所在函数时,对局部静态变量进行初始化.
+未指定初值的内置类型静态变量被初始化为 0。未指定初始值的类对象在初始化时会调用默认构造函数。
+#+BEGIN_SRC cpp 
+class L6_Test00
+{
+public:
+    L6_Test00()
+    {
+        cout << "L6_Test00 -- L6_Test00()" << endl;
+    }
+    L6_Test00(int a)
+    {
+        m_value = a;
+        cout << "L6_Test00 -- L6_Test00(int a)" << endl;
+    }
+    static void Print()
+    {
+        cout << "L6_Test00::Print" << endl;
+    }
+    static int ivalue;
+    static float fvalue;
+    
+    int m_value;
+};
+int L6_Test00::ivalue;
+float L6_Test00::fvalue = 2.0;
+static L6_Test00 l6_obj1;
+static L6_Test00 l6_obj2(3);
+
+void TestLesson6(bool isRun)
+{
+    if(!isRun) return;
+    
+    cout << "L6_Test00::ivalue = " << L6_Test00::ivalue << endl;
+    cout << "L6_Test00::fvalue = " << L6_Test00::fvalue << endl;
+    static L6_Test00 temp;
+    L6_Test00::ivalue = 10;
+    cout << "L6_Test00::ivalue = " << L6_Test00::ivalue << endl;
+    temp.ivalue = 20;
+    cout << "L6_Test00::ivalue = " << L6_Test00::ivalue << endl;
+    
+    cout << "l6_obj1.m_value = " << l6_obj1.m_value << endl;
+    cout << "l6_obj2.m_value = " << l6_obj2.m_value << endl;
+    L6_Test00::Print();
+}
+// 输出结果：
+L6_Test00 -- L6_Test00()
+L6_Test00 -- L6_Test00(int a)
+L6_Test00::ivalue = 0
+L6_Test00::fvalue = 2
+L6_Test00 -- L6_Test00()
+L6_Test00::ivalue = 10
+L6_Test00::ivalue = 20
+l6_obj1.m_value = 0
+l6_obj2.m_value = 3
+L6_Test00::Print
+#+END_SRC
+*** extern
+**** 声明变量
+extern 用来声明一个变量。也就是说指明该变量是在其他地方定义的。
+Tips：
+任何带有初始化操作的声明都是定义。
+extern int iValue = 10;  // 定义了一个变量 iValue 并初始化其值为 10
+在函数内部不允许声明和定义同时出现
+#+BEGIN_SRC cpp 
+void test()
+{
+	extern int iValue1 = 10; // 报错
+  int iValue2 = 11;
+  extern int iValue2;      // 报错
+  extern int iValue3;
+  int iValue3;             // 报错
+}
+#+END_SRC
+**** 声明 c++函数
+声明 c++函数可以省略 extern，下面的代码效果是一样的。
+extern void CppFunc(int arg);
+void CppFunc(int arg);
+**** 链接指示
+***** 链接指示有两种形式
+第一种形式由关键字 extern 后接字符串字面值，再接“普通”函数声明。字符串字面值指出编写函数所用的语言。
+第二种形式是关键字 extern 后接字符串字面值，再接一对大括号，其中放置多个函数声明。
+当将 #include 指示在复合链接指示的花括号中的时候,假定头文件中的所 有普通函数声明都是用链接指示的语言编写的函数。链接指示可以嵌套,
+所以, 如果头文件包含了带链接指示的函数,该函数的链接不受影响。
+#+BEGIN_SRC cpp 
+// single-statement linkage directive
+extern "C" size_t strlen(const char *); 
+
+// compound-statement linkage directive
+extern "C" {
+	int strcmp(const char*, const char*); 
+  char *strcat(char*, const char*);
+}
+extern "C" {
+  #include <string.h>     // C functions that manipulate C-style strings 
+}
+#+END_SRC
+***** 链接指示支持的语言 
+extern "C" extern "Ada" extern "FORTRAN"
+***** 链接指示的运用
+在 C++中使用其他语言的函数时，需要通过 extern "xxx"来声明该语言的函数。
+extern "C" {
+	int strcmp(const char*, const char*); 
+  char *strcat(char*, const char*);
+}
+将 C++的函数导出给其他语言使用时，需要在定义该函数时使用 extern "xxx"。
+#+BEGIN_SRC cpp 
+// the calc function can be called from C programs
+extern "C" double calc(double dparm) 
+{ 
+	/* ... */
+  // 函数的具体实现省略了
+}
+#+END_SRC
 ** 字节对齐是什么？
 ** 内置类型变量在内存中如何布局？
-和 C 语言一样，在内存中连续地址中存放。
 ** 类在内存中的布局是怎样的？
-类包含了静态成员变量、非静态成员变量、静态成员函数、非静态成员函数、虚函数，基类的相关内容，虚基类的相关内容
+类包含了静态成员变量、非静态成员变量、静态成员函数、非静态成员函数、虚函数，基类的相关内容，虚基类的相关内容。
 类的静态成员变量、静态成员函数、成员函数，非静态成员函数会有隐含的 this 指针参数。这些函数和 C 语言一样。
 类的虚函数地址会被组织到一个虚函数表中。
 类、基类、虚基类都一样。
@@ -765,7 +963,7 @@ identity__Fv ()
 可以。
 ** memcpy 和 memset 的使用
 只有在类不含任何由编译器产生的内部成员时，memcpy 和 memset 才能有效运行，否则这两个函数会导致那些由编译器产生的内部成员的值被改写。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 class Shape {
 public:
    // oops: this will overwrite internal vptr!
@@ -789,13 +987,13 @@ virtual 机制包含虚基类 和 虚函数。
 通过指针或引用调用虚函数，或者对虚基类成员进行的存取，不能为直接调用和直接存取。因为每次调用和存取，指针或引用所指的对象的类型可能不同。
 ** Name Mangling
 一般而言，成员的名称前面会被加上类名称，形成独一无二的命名。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 class Bar {public int ival; ...}
 ival 可能会被转化为 ival__3Bar
 #+END_SRC
 对于成员函数，因为其可被重载，所以需要在 name mangling 时加上函数的参数类型。
 需要注意的是 name mangling 不会考虑函数的返回值类型。
-#+BEGIN_SRC 
+#+BEGIN_SRC cpp 
 class Point { public:
    void  x( float newX );
    float x();

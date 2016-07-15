@@ -7,7 +7,10 @@
 //
 
 #include "00_1test.h"
+#include <iostream>
+using namespace std;
 
 void TestLesson1(bool isRun)
 {
+    cout << "TestLesson1" << endl;
 }

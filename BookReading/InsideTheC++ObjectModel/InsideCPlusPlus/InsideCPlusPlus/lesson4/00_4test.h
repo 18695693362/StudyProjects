@@ -12,7 +12,8 @@
 #include <stdio.h>
 #include "01_GPureVirtualFunc.h"
 
-
+//
+//extern int g__temp = 10;
 extern void TestLesson4(bool isRun);
 
 #endif /* _0_test_hpp */
