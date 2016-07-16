@@ -34,7 +34,7 @@ void test_type_cast()
 int main(int argc, char *argv[])
 {
     cout << "Hello World!" << endl;
-    TestLesson1(true);
+    //TestLesson1(true);
     //TestLesson2(true);
     //TestLesson3(true);
     //TestLesson4(true);

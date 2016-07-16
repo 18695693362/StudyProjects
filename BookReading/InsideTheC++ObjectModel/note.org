@@ -733,18 +733,254 @@ identity__Fv ()
 }
 #+END_SRC
 *** 对象数组
+定义一个类对象数组时，如果该类没有明确定义一个默认构造函数，也没有编译器合成的有用的默认构造函数，此时只需要配置足够的内存就可以了。
+如果类对象有默认构造函数，则需要在每个创建的类上执行该默认构造函数。
+如果类对象有析构函数，则数组生命期结束时，会执行每个元素的析构函数。
+#+BEGIN_SRC 
+void*
+vec_new(
+   void *array,      // address of start of array
+   size_t elem_size, // size of each class object
+   int elem_count,   // number of elements in array
+   void (*constructor)( void* ),
+   void (*destructor)( void*, char )
+}
 
-*** 默认构造和数组
+void*
+vec_delete(
+   void *array,      // address of start of array
+   size_t elem_size, // size of each class object
+   int elem_count,   // number of elements in array
+   void (*destructor)( void*, char )
+}
+#+END_SRC
+*** Default Constructors 和数组
+为了支持数组对象初始化时，可调用类的含有默认参数的构造函数。编译器生成了一个不带任何参数的默认构造函数，然后在该函数内指定默认参数调用用户的
+构造函数。
+#+BEGIN_SRC 
+class complex {
+   complex(double=0.0, double=0.0);
+   ... 
+};
 
+// 编译器会合成下面的构造函数
+complex::complex()
+{
+   complex( 0.0, 0.0 );
+}
+#+END_SRC
 ** new delete 运算符
+*** 内置类型
+#+BEGIN_SRC c++
+int *pi = new int(5);
+//上面的代码会被转换为下面的代码
+int *pi;
+if ( pi = __new( sizeof( int )))
+    *pi = 5;
+
+delete pi;
+//上面的代码会被转换为下面的代码
+if ( pi != 0 )
+   __delete( pi );
+#+END_SRC
+*** 类对象
+#+BEGIN_SRC c++
+// 1 new 对象
+Point3d *origin = new Point3d;
+
+//上面的代码会被转换为下面的代码
+//Pseudo C++ code
+Point3d *origin;
+if ( origin = __new( sizeof( Point3d )))
+     origin = Point3d::Point3d( origin );
+
+//如果支持异常处理 则会转换为
+if ( origin = __new( sizeof( Point3d ))) {
+   try {
+   		origin = Point3d::Point3d( origin );
+   }
+   catch( ... ) {
+     // invoke delete lib function to
+     // free memory allocated by new ...
+     __delete( origin );
+     // propagate original exception upward
+     throw; 
+   }
+}
+
+// 2 delete 对象
+delete origin;
+
+//上面的代码会被转换为下面的代码
+if ( origin != 0 ) {
+     // Pseudo C++ code
+     Point3d::~Point3d( origin );
+     __delete( origin );
+}
+//如果支持异常处理 则会转换为
+if ( origin != 0) {
+	 try {
+      Point3d::~Point3d( origin );
+   }
+   catch( ... )
+   {
+      __delete( origin );
+      throw; 
+   }
+}
+#+END_SRC
+*** new
+#+BEGIN_SRC c++
+//下面这样的写法虽然正确，但是每一次 new 的调用必须返回一个独一无二的指针，所以如果申请 0 字节的内存，new 操作会将 size 变为 1.
+new T[ 0 ];
+
+// new 的实现，没有考虑异常处理
+extern void*
+operator new( size_t size )
+{
+   if ( size == 0 )
+        size = 1;
+   void *last_alloc;
+   while ( !( last_alloc = malloc( size )))
+   {
+      if ( _new_handler )
+         ( *_new_handler )();
+      else return 0;
+   }
+   return last_alloc;
+}
+#+END_SRC
+*** delete
+#+BEGIN_SRC c++
+extern void
+operator delete( void *ptr )
+{
+   if ( ptr )
+      free( (char*) ptr );
+}
+#+END_SRC
+*** new []
+#+BEGIN_SRC c++
+// array_key is the address of the new array
+// mustn't either be 0 or already entered
+// elem_count is the count; it may be 0
+typedef void *PV;
+extern int __insert_new_array(PV array_key, int elem_count);
+// fetches (and removes) the array_key from table
+// either returns the elem_count, or -1
+extern int __remove_old_array(PV array_key);
+
+PV __vec_new(PV ptr_array, int elem_count,
+            int size, PV construct )
+{
+  // if ptr_array is 0, allocate array from heap
+  // if set, programmer wrote either
+  //    T array[ count ];
+  // or
+  //    new ( ptr_array ) T[ 10 ]
+  int alloc = 0; // did we allocate here within vec_new?
+  int array_sz = elem_count * size;
+  if ( alloc = ptr_array == 0)
+        // global operator new ...
+        ptr_array = PV( new char[ array_sz ] );
+  // under Exception Handling,
+  // would throw exception bad_alloc
+  if ( ptr_array == 0/
+  return 0;
+  // place (array, count) into the cache
+  int status = __insert_new_array( ptr_array, elem_count );
+  if (status == -1) {
+    // under Exception Handling, would throw exception
+    // would throw exception bad_alloc
+    if ( alloc )
+        delete ptr_array;
+    return 0;
+  }
+  if (construct) {
+    register char* elem = (char*) ptr_array;
+    register char* lim = elem + array_sz;
+    // PF is a typedef for a pointer to function
+    register PF fp = PF(construct);
+    while (elem < lim) {
+        // invoke constructor through fp
+        // on `this' element addressed by elem
+        (*fp)( (void*)elem );
+        // then advance to the next element
+        elem += size;
+    }
+  }
+  return PV(ptr_array);
+}
+#+END_SRC
+*** delete []
+实施与数组上的析构函数，是根据交给 vec_delete 函数之“被删除的指针类型的 destructor”
+#+BEGIN_SRC c++
+  Point* ptr = new Point3d[10];
+  // 该代码只会抵用 Point 的析构函数。
+  delete [] ptr;
+
+  class L6_Point3d_01: public L6_Point_01
+  {
+  public:
+      L6_Point3d_01()
+      {
+          cout << "L6_Point3d_01()" << endl;
+      }
+      ~L6_Point3d_01()
+      {
+          cout << "~L6_Point3d_01()" << endl;
+      }
+  };
+  void l6_test01()
+  {
+      L6_Point_01* ptr = new L6_Point3d_01[3];
+      delete [] ptr;
+  }
+  // 代码的输出：
+  // L6_Point_01()
+  // L6_Point3d_01()
+  // L6_Point_01()
+  // L6_Point3d_01()
+  // L6_Point_01()
+  // L6_Point3d_01()
+  // ~L6_Point_01()
+  // ~L6_Point_01()
+  // ~L6_Point_01()
+#+END_SRC
+*** placement operator new 的语意
+placement operator new 不支持多态。
 ** 临时性对象
+临时性对象的销毁，应该是对完整表达式求值过程中的最后一个步骤。该完整表达式造成临时对象的产生。
+临时性对象的生命期规则有两个例外：
+1 表达式被用来初始化一个对象时，凡含有表达式执行结果的临时性对象，应该存留到对象的初始化操作完成为止。
+2 当一个临时性对象被一个引用绑定时，对象将残留，直到被初始化之 reference 的生命结束，或知道临时对象所在作用域结束。视哪一种情况先到达而定。
 * On the Cusp of the Object Model
 ** 模板
+内容比较杂乱，看原书内容吧。
 ** 异常处理
+C++异常处理由三个主要的语汇组件组成：
+1 一个 throw 自己。它在程序某处发出一个异常。被丢出去的异常可以是内建类型，也可以是使用者自定义类型。
+2 一个或多个 catch 子句。每个 catch 子句都是一个异常处理。它用来表示，这个子句准备处理某种类型的异常，并且在封闭的大括号区域中提供实际处理
+程序。
+3 一个 try 区段。它包含了一系列的语句，这些语句可能会引发 catch 子句起作用。
 ** 执行期类型识别
-
-
-
+typeid 既可以用于多态类，也可用于内置类型和非多态类。
+typeid(var)返回一个类型为 type_info 的 const 引用.
+#+BEGIN_SRC c++
+class type_info {
+public:
+   virtual ~type_info();
+   bool operator==( const type_info& ) const;
+   bool operator!=( const type_info& ) const;
+   bool before( const type_info& ) const;
+   const char* name() const;
+private:
+   // prevent memberwise init and copy
+   type_info( const type_info& );
+   type_info& operator=( const type_info& );
+   // data members
+};
+#+END_SRC
 * Q&A:
 ** c++中的类型转换有哪些？
 *** 一、类型转换的意义：

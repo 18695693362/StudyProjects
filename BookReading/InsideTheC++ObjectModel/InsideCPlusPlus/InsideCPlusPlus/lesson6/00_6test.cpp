@@ -51,6 +51,69 @@ void l6_test00()
 #endif
 }
 
+class L6_Point_01 {
+public:
+    L6_Point_01()
+    {
+        cout << "L6_Point_01()" << endl;
+    }
+    virtual ~L6_Point_01()
+    {
+        cout << "~L6_Point_01()" << endl;
+    }
+};
+class L6_Point3d_01: public L6_Point_01
+{
+public:
+    L6_Point3d_01()
+    {
+        cout << "L6_Point3d_01()" << endl;
+    }
+    ~L6_Point3d_01()
+    {
+        cout << "~L6_Point3d_01()" << endl;
+    }
+};
+void l6_test01()
+{
+    L6_Point_01* ptr = new L6_Point3d_01[3];
+    delete [] ptr;
+}
+
+class L6_Test_02 {
+public:
+    L6_Test_02(string name)
+    {
+        this->name = name;
+        cout << "L6_Test_02() name = " << this->name << endl;
+    }
+    virtual ~L6_Test_02()
+    {
+        cout << "~L6_Test_02()" << this->name << endl;
+    }
+    string name;
+};
+L6_Test_02 operator+(const L6_Test_02& lhs, const L6_Test_02& rhs)
+{
+    L6_Test_02 temp("0");
+    temp.name = lhs.name+"+"+rhs.name;
+    return temp;
+}
+
+
+void l6_test02()
+{
+    cout << "l6_test02-begin" << endl;
+    L6_Test_02 temp1("test1");
+    L6_Test_02 temp2("test2");
+    L6_Test_02 temp3("test3");
+    temp3 = temp1 + temp2;
+    temp1.name = "real-temp1";
+    temp2.name = "real-temp2";
+    temp3.name = "real-temp3";
+    cout << "l6_test02-end" << endl;
+}
+
 void TestLesson6(bool isRun)
 {
     if(!isRun) return;
@@ -68,4 +131,7 @@ void TestLesson6(bool isRun)
     L6_Test00::Print();
     
     //cout << "l_ivalue = " << l_ivalue << endl;
+    
+    l6_test01();
+    l6_test02();
 }
