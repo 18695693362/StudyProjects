@@ -40,6 +40,13 @@ namespace TestCSharp
 		{
 			if (!isRun)
 				return;
+
+			// c# dont support local static variable
+			//static int local_ivalue_0 = 12; 
+			//const static int local_ivlaue_1 = 10;
+
+			const int local_ivlaue_2 = 11;
+
 			GStaticMember member = new GStaticMember ();
 			Console.WriteLine ("const_imember_0 = {0}", GStaticMember.const_imember_0);
 			//Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);

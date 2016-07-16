@@ -1281,6 +1281,7 @@ static 修饰符可用于类、字段、方法、属性、运算符、事件和�
 const 指定字段或局部变量的值是常数，不能被修改。被指定为 const 的变量，其初始值是在编译期计算的。
 readonly 指定字段或局部变量的值为常数，不能被修改。被指定为 readonly 的变量，其初始值是在运行时计算的。
 Tips：
+static 不支持局部变量，只能用类的静态字段来代替 c++中的局部静态变量。
 const 字段只能在该字段的声明中初始化。
 readonly 字段可以在声明或构造函数中初始化。因此，根据所使用的构造函数，readonly 字段可能具有不同的值。
 const 字段会被当做静态成员变量，所以不必要也不允许为该字段添加 static 修饰符。
@@ -1293,6 +1294,8 @@ GStaticMember member = new GStaticMember ();
 //Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);       // 编译错误，不允许通过对象访问静态字段
 Console.WriteLine ("const_imember_0 = {0}", GStaticMember.const_imember_0);
 #+END_SRC
+** 编码规范
+https://msdn.microsoft.com/zh-cn/library/ff926074
 ** Tools
 *** mono 版 ILDASM 为 monodis
 http://stackoverflow.com/questions/1655767/does-mono-have-the-equivalent-of-ildasm
