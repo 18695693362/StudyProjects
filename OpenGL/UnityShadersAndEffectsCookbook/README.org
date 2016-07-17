@@ -1,6 +1,8 @@
-** Unity Shader And Effect Cookbook
+#+TITLE: Unity Shader And Effect Cookbook
+#+OPTIONS: ^:{}
+#+OPTIONS: \n:t 
+#+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
 
-#+BEGIN_EXAMPLE
-了解了OpenGL以后，进一步的学习。
-#+END_EXAMPLE
+* Diffuse Shading
+
 

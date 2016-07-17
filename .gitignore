@@ -1,20 +1,53 @@
-# unity project
+############################################ unity project
 *.userprefs
 OpenGL/UnityCg/Basics/MinimalShader/Library
 OpenGL/UnityCg/Basics/MinimalShader/Temp
 OpenGL/UnityCg/Basics/RGBCube/Library
 OpenGL/UnityCg/Basics/RGBCube/Temp
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Obj/
+UnityGenerated/
+Library/
+ 
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln
+*.user
+*.unityproj
+*.booproj
+ 
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
 
-# xcode project
+############################################ xcode project
 xcuserdata
 *xccheckout
 *xcworkspacedata
 *xcshareddata
 
-# jetbrain proj
+############################################ jetbrain proj
 .idea
 
-# custom proj
+############################################ custom proj
 .build
 build-Debug
 build-Release
@@ -22,7 +55,10 @@ build-Release
 libglm.a
 .qmake.stash
 *.pro.user
+
+# ProgrammingInCSharp mono proj
 BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/bin
 BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/obj
 BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/Properties
 TestCSharp.sln
+
