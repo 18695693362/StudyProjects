@@ -4,5 +4,24 @@
 #+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
 
 * Diffuse Shading
+** Properties
+#+BEGIN_SRC 
+Properties {
+		_MyFloatValue("This is a Float", Float) = 1.5
+		_MyColorValue("This is a ColorAmbient Color", Color) = (0.5,1,1,1)
+		_MyVectorValue("This is a Vector", Vector) = (1,2,3,4)
+		_MyRangeValue("This is a Range", Range(0,10)) = 2.5
+		_My2DValue("This is a Texture 2D", 2D) = "white" {}
+		_MyRectValue("This is a Texture Rect", Rect) = "white" {}
+		_MyCubeValue("This is a Texture Cube", Cube) = "white" {}
+}
+#+END_SRC
+* Tips:
+** unity 坐标系
+unity 为左手坐标系。
+** Shader
+** Error  
+*** Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)
+将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题
 
 
