@@ -23,5 +23,10 @@ unity 为左手坐标系。
 ** Error  
 *** Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)
 将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题
-
+** Normal Map
+Normal Map 又叫 Ramp Map，其实就是法线贴图。
+*** 参考资料
+[[http://www.songho.ca/opengl/gl_normaltransform.html][Normal 变换矩阵推导]]
+[[http://blog.csdn.net/candycat1992/article/details/41605257][Unity 中的 Normal Map]]
+[[http://http.developer.nvidia.com/CgTutorial/cg_tutorial_chapter08.html][Cg 中的 Normal Map]]
 
