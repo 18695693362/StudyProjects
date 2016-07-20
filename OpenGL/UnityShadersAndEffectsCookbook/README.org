@@ -43,7 +43,8 @@ http://docs.unity3d.com/Manual/SL-SurfaceShaders.html
 * Tips:
 ** unity 坐标系
 unity 为左手坐标系。
-** Shader
+** Skin Shader
+http://ten24.info/skin-shading-in-unity/
 ** Error  
 *** Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)
 将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题
