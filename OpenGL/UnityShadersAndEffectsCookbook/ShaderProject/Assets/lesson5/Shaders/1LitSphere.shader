@@ -31,7 +31,7 @@
 			UNITY_INITIALIZE_OUTPUT(Input,o);
 			TANGENT_SPACE_ROTATION;
 			o.tan1 = mul(rotation,UNITY_MATRIX_IT_MV[0].xyz);
-			o.tan1 = mul(rotation,UNITY_MATRIX_IT_MV[1].xyz);
+			o.tan2 = mul(rotation,UNITY_MATRIX_IT_MV[1].xyz);
 		}
 
 		inline fixed4 LightingUnlit(SurfaceOutput s, fixed3 lightDir, fixed atten)

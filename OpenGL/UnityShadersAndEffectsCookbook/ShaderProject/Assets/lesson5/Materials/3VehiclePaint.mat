@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: 1LitSphere
-  m_Shader: {fileID: 4800000, guid: 518760ea4752c4b599a955db7c0c3a9f, type: 3}
+  m_Name: 3VehiclePaint
+  m_Shader: {fileID: 4800000, guid: b94ba891b0f814af1b04fd80486319f4, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: 2000
@@ -19,7 +19,7 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 2800000, guid: 51f4bf2bf89b8448caaf75517a5e45ee, type: 3}
+          m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -33,7 +33,7 @@ Material:
         first:
           name: _NormalMap
         second:
-          m_Texture: {fileID: 2800000, guid: 4ebc307155f084578ba243174da032ed, type: 3}
+          m_Texture: {fileID: 2800000, guid: 8a46641d37c5544cea446eb296874cc2, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -85,6 +85,41 @@ Material:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ReflCube
+        second:
+          m_Texture: {fileID: 8900000, guid: eba771d0de90640b58adf77fb1af101e, type: 2}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _BRDFTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 22af4fd41431b4616a55e05a7b761704, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _AOMap
+        second:
+          m_Texture: {fileID: 2800000, guid: cc8b4e4b0f0b142da93c37a04960e70b, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _CubeMap
+        second:
+          m_Texture: {fileID: 8900000, guid: eba771d0de90640b58adf77fb1af101e, type: 2}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _ReflectCube
+        second:
+          m_Texture: {fileID: 8900000, guid: eba771d0de90640b58adf77fb1af101e, type: 2}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
     m_Floats:
       data:
         first:
@@ -134,6 +169,42 @@ Material:
         first:
           name: _Metallic
         second: 0
+      data:
+        first:
+          name: _SpecPower
+        second: 20
+      data:
+        first:
+          name: _DiffusePower
+        second: 0.8
+      data:
+        first:
+          name: _FalloffPower
+        second: 5
+      data:
+        first:
+          name: _ReflAmount
+        second: 0.5
+      data:
+        first:
+          name: _ReflPower
+        second: 0.29
+      data:
+        first:
+          name: _SpecIntensity
+        second: 0.5
+      data:
+        first:
+          name: _SpecWidth
+        second: 0.2
+      data:
+        first:
+          name: _ReflectAmount
+        second: 0.5
+      data:
+        first:
+          name: _ReflectPower
+        second: 2
     m_Colors:
       data:
         first:
@@ -145,5 +216,17 @@ Material:
         second: {r: 1, g: 1, b: 1, a: 1}
       data:
         first:
+          name: _SpecColor
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
           name: _DiffuseTint
-        second: {r: 0.68087345, g: 0.65397924, b: 0.8235294, a: 1}
+        second: {r: 0.49264705, g: 0.45977062, b: 0.322394, a: 1}
+      data:
+        first:
+          name: _MainTint
+        second: {r: 0.44117647, g: 0.40967667, b: 0.15570934, a: 1}
+      data:
+        first:
+          name: _SpecularColor
+        second: {r: 1, g: 1, b: 1, a: 1}
