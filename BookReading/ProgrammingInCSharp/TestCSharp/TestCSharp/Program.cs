@@ -52,13 +52,15 @@ namespace TestCSharp
 			//Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);
 		}
 
-		public static void Main (string[] args)
+		public static void RunBookTest (bool isRun)
 		{
-
+			if (!isRun)
+				return;
+			
 			Console.WriteLine ("Hello World!");
 
 			TestInheritance.RunTest (false);
-		
+
 			Person person1 = new Person ("God1");
 			//person.Print();
 			Person person2 = person1.Clone () as Person;
@@ -92,6 +94,19 @@ namespace TestCSharp
 			TestString.RunTest (false);
 			TestDelegateEvent.RunTest (false);
 			//TestAttribute.RunTest (true);
+		}
+
+		public static void RunAlgorithmTest (bool isRun)
+		{
+			if (!isRun)
+				return;
+			ListReverse.RunTest (true);
+		}
+
+		public static void Main (string[] args)
+		{
+			RunBookTest (false);
+			RunAlgorithmTest (true);
 		}
 	}
 

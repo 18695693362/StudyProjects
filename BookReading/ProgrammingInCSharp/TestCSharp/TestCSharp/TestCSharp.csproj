@@ -47,6 +47,10 @@
     <Compile Include="TestString.cs" />
     <Compile Include="TestDelegateEvent.cs" />
     <Compile Include="TestAttribute.cs" />
+    <Compile Include="algorithm\ListReverse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="algorithm\" />
+  </ItemGroup>
 </Project>

@@ -1055,6 +1055,28 @@ public class Employee:IComparable<Employee>
   }
 }
 #+END_SRC
+*** 实现 IEnumerable<T>
+#+BEGIN_SRC c#
+public IEnumerator<T> GetEnumerator ()
+{
+  bool isUseType1 = false;
+  if (isUseType1) {
+    for (GListNode<T> iter = first; iter != null; iter = iter.Next) {
+      yield return iter.Value;
+    }
+  } else {
+    GListNode<T> iter = first;
+    while (iter != null) {
+      yield return iter.Value;
+      iter = iter.Next;
+    }
+  }
+}
+System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
+{  
+  return GetEnumerator ();  
+}
+#+END_SRC
 ** 字符串与正则表达式
 
 *** string

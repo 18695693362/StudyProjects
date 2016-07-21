@@ -65,7 +65,7 @@ namespace TestCSharp
 
 		public static void RunLinkedListTest ()
 		{
-			LinkedList<int> myLinkList = new LinkedList<int> ();
+			GLinkedList<int> myLinkList = new GLinkedList<int> ();
 			Random rand = new Random ();
 			for (int i = 0; i < 10; i++) {
 				int nextInt = rand.Next (10);
@@ -348,7 +348,7 @@ namespace TestCSharp
 		}
 	}
 
-	public class LinkedList<T> where T : IComparable<T>
+	public class GLinkedList<T> where T : IComparable<T>
 	{
 		private Node<T> headNode = null;
 
