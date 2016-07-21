@@ -2,7 +2,26 @@
 #+OPTIONS: ^:{}
 #+OPTIONS: \n:t 
 #+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
+* 4 Reflecting your world
+** 光学基础
+反射：当光在两种物质分界面上改变传播方向又返回原来物质中的现象，叫做光的反射。
+折射：光从一种透明介质斜射入另一种透明介质时，传播方向一般会发生变化，这种现象叫光的折射。
+散射：光束通过不均匀媒质时，部分光束将偏离原来方向而分散传播，从侧向也可以看到光的现象，叫做光的散射。
+散射是多重折射和反射的结果。
+** Fresnel reflection
+当光入射到折射率不同的两个媒质分界面时，一部分光会被反射，这种现象称为菲涅尔反射(其实就是光的反射，只不过这个现象是菲涅尔发现的)。
+视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显，这就是“菲涅尔效应”。
+*** 如何模拟菲涅尔效应效果？
+#+BEGIN_SRC cg
+// rim 随视角和法线夹角的增大而增大
+float rim = 1.0 - saturate(dot(o.Normal,normalize(IN.viewDir)));
+rim = pow(rim,_RimPower);
 
+o.Albedo = color_.rgb * _DiffuseTint.rgb;
+// 物体反射的颜色 随 rim 的增大而增大。即视角正对物体时，反射的颜色少，随着视角和物体法线夹角增大，反射的颜色增大。
+o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
+o.Specular = _SpecPower;
+#+END_SRC
 * Basic 
 ** Properties
 Properties {
