@@ -22,6 +22,10 @@ o.Albedo = color_.rgb * _DiffuseTint.rgb;
 o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
 o.Specular = _SpecPower;
 #+END_SRC
+* 6 Transparency
+** Rendering Path
+
+
 * Basic 
 ** Properties
 Properties {
@@ -58,6 +62,132 @@ struct SurfaceOutput {
 使用 worldRefl;INTERNAL_DATA 时， 通过 WorldReflectionVector (IN, o.Normal)来从法线贴图获得反射向量
 使用 worldNormal;INTERNAL_DATA 时，通过 WorldNormalVector（IN, o.Normal）来从法线贴图获得法线
 http://docs.unity3d.com/Manual/SL-SurfaceShaders.html
+** shader 的代码结构
+#+BEGIN_SRC 
+Shader "GroupName/SubGroupName/ShaderName"
+{
+	Properties {
+		_MyFloatValue("This is a Float", Float) = 1.5
+		......
+  }
+  SubShader {
+  	Tags { "Queue" = "Transparent" "RenderType"="Opaque"}
+    ZWrite Off ColorMask RGB
+    CGPROGRAM
+    #pragma surface surf Lambert alpha:fade
+    /** surface shader **/
+    ENDCG
+    Pass {
+    	Name "FORWARD"
+		  Tags { "LightMode" = "ForwardBase" }
+      #pragma surface surf Lambert alpha:fade
+    }
+    Pass {
+    	......
+    }
+  }
+  SubShader {
+  	......
+  }
+  ....  // other subshader
+}
+#+END_SRC
+*** Properties
+Properties 指定了 surface shader 中可供调节的变量，这些变量可以被显示在 Inspector 中。
+*** SubShader
+1 每个 Shader 都包含一个 SubShader 列表。SubShader 列表中至少要有一个 SubShader。当加载一个 Shader 时，Unity 会遍历其包含的
+SubShader 列表，选择第一个用户机器所支持的 SubShader。如果没有 SubShader 被支持，则 Unity 会尝试使用 fallback shader。
+2 一个 SubShader 定义了一个 Pass 列表，也就是说一个 SubShader 中包含多个 Pass，在 SubShader 中可以有选择地设置其中包含的所
+有 Pass 所公用的任何状态。此外 SubShader 还有额外的 Tags 可以被设置。
+3 Unity 选定了 SubShader 后，当渲染一个物体时，SubShader 中的每个 Pass 会导致对该物体的一次渲染。
+4 任何在 Pass 中可用的状态都可以放置在 SubShader 中，这样的话 SubShader 中的所有 Pass 都会公用该状态的设置。
+**** SubShader Tags
+***** 渲染次序 Queue 
+可以通过 Queue tag 来确定物体的渲染顺序。Shader 决定了它的物体所属的渲染队列，这样就可以确保透明物体在不透明物体绘制之后再绘制。
+Unity 有四个预定义的渲染队列，但是默认的渲染队列之间可以定义更多的渲染队列。
+每个渲染队列在内部是通过一个整型的索引来表示的。Background 为 1000，Geometry 为 2000，AlphaTest 为 2450，Transparent
+为 3000，Overlay 为 4000。
+小于等于 2500 的渲染队列，被当做不透明物体的渲染队列，并且可以调整物体的渲染顺序来达到最佳性能。更高的渲染队列被认为是透明物体的渲染队列，
+并且物体依据距离来排序，从最远的物体开始渲染直到最近的物体。
+#+BEGIN_SRC 
+Tags { "Queue" = "Transparent" }
+#+END_SRC
+****** Background
+这个渲染队列在任何其他队列之前被渲染。
+****** Geometry (默认的渲染队列)
+不透明的几何体可以使用这个渲染队列
+****** AlphaTest
+需要 Alpha 测试的几何体使用该队列。它独立于 Geometry 渲染队列，因为所有固体渲染之后，再渲染需要 alpha-tested 物体会更高效。
+(因为只对需要 Alpha 测试的物体开启 Alpha 测试，不需要 Alpha 测试的不会放在该队列，所以高效)
+****** Transparent
+Geometry 和 AlphaTest 之后渲染的队列，该队列以从后到前的顺序渲染。需要 alpha-blended 的物体使用该队列。
+****** Overlay
+该渲染队列可以实现覆盖效果。任何最终渲染的物体使用该队列。
+****** 自定义渲染队列
+#+BEGIN_SRC 
+Tags { "Queue" = "Geometry+1" }
+#+END_SRC
+***** 渲染类型 RenderType
+RenderType 将 shaders 归类为很多不同的预定义的组。
+Shader Replacement 会用到该设置。/Manual/SL-ShaderReplacement.html
+有时候通过该设置来制作摄像机的深度贴图。/Manual/SL-CameraDepthTexture.html
+***** DisableBatching 
+有些 Shader 在 DrawCallBatching 下是不可用的，因为 DrawCallBatching 会将所有的几何体变换到世界空间，因此本地空间信息会丢失。
+#+BEGIN_SRC 
+Tags {"DisableBatching" = "True"}       // 为该 shader 始终禁止 Batching
+Tags {"DisableBatching" = "False"}      // 为该 shader 开启 Batching
+Tags {"DisableBatching" = "LODFading"}  // LOD Fading 开启时，禁止 Batching
+#+END_SRC
+***** 其他的一些 tag
+ForceNoShadowCasting
+IgnoreProjector
+CanUseSpriteAtlas
+PreviewType
+**** SurfaceShader 编译指令
+surface shader 被放置在 CGPROGRAM ... ENDCG 块中。有两点需要注意：
+1 surface shader 必须放在 SubShader 块中，不能放在 Pass 中。Unity 会通过编译将其放在不同 Pass 中。
+2 使用下面的指令来指明一个 surface shader
+#+BEGIN_SRC su
+#pragma surface surfaceFunction lightModel [optionalparams]
+#+END_SRC
+
+*** Pass
+**** Name
+为 Pass 定义可以个名称，这样就可以通过 UsePass 来引用它了。
+UsePass "VertexLit/SHADOWCASTER"
+**** Tags
+Pass 使用 Tags 来告诉渲染引擎，什么时候、如何被渲染。
+***** LightMode
+LightMode tag 定义了 Pass 在光照管线中的角色。这些 tags 很少手动指定。
+| Name         | Detail                                                                               |
+|--------------+--------------------------------------------------------------------------------------|
+| Always       | 总是渲染，没有光照被应用                                                             |
+| ForwardBase  | 在前置渲染中被应用，环境光、主要的定向光、vertex/SH 光、光照贴图被应用               |
+| ForwardAdd   | 附加的基于像素的光照被应用，每个灯光一个 Pass                                        |
+| Deferred     | 用于延迟渲染，渲染 g-buffer                                                          |
+| ShadowCaster | 渲染物体的深度到阴影贴图或深度贴图中                                                 |
+| PrepassBase  | legacy Deferred Lighting,渲染法线和镜面指数                                          |
+| PrepassFinal | legacy Deferred Lighting,渲染最终颜色                                                |
+| Vertex       | legacy Vertex Lit rendering,当物体没有光照贴图，所有顶点光照被应用                   |
+| VertexLMRGBM | legacy Vertex Lit rendering,当物体有光照贴图，光照贴图按照 RGBM 编码(PC&console)     |
+| VertexLM     | legacy Vertex Lit rendering,当物体有光照贴图，光照贴图按照 Double-LDR 编码（Mobile） |
+
+***** RequireOptions 
+指定 Pass 在满足某些外部条件时才被渲染。
+| Name           | Detail                                           |
+|----------------+--------------------------------------------------|
+| SoftVegetation | 在 Quality Settings 中开启 SoftVegetation 才渲染 |
+**** Render State Setup
+Pass 可以设置图形硬件的渲染状态。
+| Name                                                                         | Detial                                      |
+|------------------------------------------------------------------------------+---------------------------------------------|
+| Cull Back / Front / Off                                                      | 剔除                                        |
+| ZTest (Less / Greater / LEqual / GEqual / Equal / NotEqual / Always)         | 深度测试                                    |
+| ZWrite (On / Off)                                                            | 深度缓存区写入                              |
+| Blend SourceBlendMode DestBlendMode                                          |                                             |
+| Blend SourceBlendMode DestBlendMode, AlphaSourceBlendMode AlphaDestBlendMode |                                             |
+| ColorMask RGB / A / 0 / any combination of R, G, B, A                        | ColorMask 0 将关闭颜色缓冲区中所有通道的写入 |
+| Offset OffsetFactor, OffsetUnits                                             | 设置深度值的偏移                            |
 
 * Tips:
 ** unity 坐标系
