@@ -28,6 +28,7 @@ o.Specular = _SpecPower;
 
 * Basic 
 ** Properties
+#+BEGIN_SRC surface shader
 Properties {
 		_MyFloatValue("This is a Float", Float) = 1.5
 		_MyRangeValue("This is a Range", Range(0,10)) = 2.5
@@ -37,15 +38,18 @@ Properties {
 		_MyRectValue("This is a Texture Rect", Rect) = "white" {}
 		_MyCubeValue("This is a Texture Cube", Cube) = "white" {}
 }
+#+END_SRC
 ** SurfaceOutput
-struct SurfaceOutput {  
+#+BEGIN_SRC surface shader
+struct SurfaceOutput { 
     half3 Albedo;      //The color of the pixel  片段的颜色
     half3 Normal;      //The normal of the pixel  法线
     half3 Emission;    //The emissive color of the pixel 发出的颜色 
     half Specular;     //Specular power of the pixel    镜面高光系数
     half Gloss;        //Gloss intensity of the pixel  光泽强度
     half Alpha;        //Alpha value for the pixel     片段的透明度
-};  
+};
+#+END_SRC
 ** Input
 | 名称                      | 类型   | 意义                                                            |
 |---------------------------+--------+-----------------------------------------------------------------|
@@ -58,10 +62,12 @@ struct SurfaceOutput {
 | worldNormal               | float3 | 如果 surface shader 没有修改 o.Normal 则存放世界空间的法向量   |
 | worldRefl;INTERNAL_DATA   | float3 | 如果 surface shader 修改了 o.Normal，则存放世界空间的反射向量。 |
 | worldNormal;INTERNAL_DATA | float3 | 如果 surface shader 修改了 o.Normal，则存放世界空间的法向量。   |
-*** Tips:
+#+BEGIN_EXAMPLE
+Tips:
 使用 worldRefl;INTERNAL_DATA 时， 通过 WorldReflectionVector (IN, o.Normal)来从法线贴图获得反射向量
 使用 worldNormal;INTERNAL_DATA 时，通过 WorldNormalVector（IN, o.Normal）来从法线贴图获得法线
 http://docs.unity3d.com/Manual/SL-SurfaceShaders.html
+#+END_EXAMPLE
 ** shader 的代码结构
 #+BEGIN_SRC 
 Shader "GroupName/SubGroupName/ShaderName"
