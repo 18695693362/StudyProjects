@@ -113,9 +113,9 @@ Properties 指定了 surface shader 中可供调节的变量，这些变量可�
 ***** 渲染次序 Queue 
 可以通过 Queue tag 来确定物体的渲染顺序。Shader 决定了它的物体所属的渲染队列，这样就可以确保透明物体在不透明物体绘制之后再绘制。Unity 有四个预定义的渲染队列，但是默认的渲染队列之间可以定义更多的渲染队列。
 
-每个渲染队列在内部是通过一个整型的索引来表示的。Background 为 1000，Geometry 为 2000，AlphaTest 为 2450，Transparen 为 3000，Overlay 为 4000。
+每个渲染队列在内部是通过一个整型的索引来表示的。Background 为 1000，Geometry 为 2000，AlphaTest 为 2450，Transparent 为 3000，Overlay 为 4000。
 
-小于等于 2500 的渲染队列，被当做不透明物体的渲染队列，并且可以调整物体的渲染顺序来达到最佳性能。更高的渲染队列被认为是透明物体的渲染队列，并且物体依据距离来排序，从最远的物体开始渲染直到最近的物体。
+小于等于 2500 的渲染队列，被当做不透明物体的渲染队列，并且可以调整物体的渲染顺序来达到最佳性能。更高的渲染队列被认为是透明物体的渲染队列，并且物体依据距离来排序，从最远的物体开始渲染直到最近的物体。Skyboxes 是在所有不透明物体和所有透明物体之间被绘制的。
 #+BEGIN_EXAMPLE
 Tags { "Queue" = "Transparent" }
 #+END_EXAMPLE
@@ -232,7 +232,7 @@ ForwardAdd pass 用于任何附加的基于像素的光照。被该光照照明�
 1 光照的 RenderMode 属性被设置为 Not Important 将使用 per-vertex 或 SH 方式计算。
 2 最亮的方向光总是使用 per-pixel 方式来计算的。
 3 光照的 RenderMode 属性被设置为 Important 将使用 per-pixel 方式计算。
-4 按照上面的方式，使用 per-pixel 方式计算的光照数目少于 QualitySetting 中 current Pixel Light Count 所设置的数量时，更多的光照会使用 per-pixel 方式来计算,从而减低明亮度。
+4 按照上面的方式，使用 per-pixel 方式计算的光照数目少于 QualitySetting 中 current Pixel Light Count 所设置的数量时，更多的光照会使用 per-pixel 方式来计算,从而减低明亮度。(光照是按照距离的平方衰减的，而顶点光照是线性插值，所以 per-vertex 会更亮)
 
 Tips:
 per-vertex 就是光照计算在顶点着色器中进行。
@@ -322,6 +322,9 @@ Vertex Pass 用于无光照贴图的物体。使用 Blinn-Phong 光照模型对�
 VertexLMRGBM Pass 用于有光照贴图的物体，光照贴图按照 RGBM 编码（PC 和 consoles 平台）。没有实时的光照被应用，Pass 只是组合了贴图和光照贴图。
 
 VertexLMM Pass 用于有光照贴图的物体，光照贴图按照 double-LDR 编码（mobile 平台）。没有实时的光照被应用，Pass 只是组合了贴图和光照贴图。
+** RenderQueue And z-depth
+RenderQueue 是用来控制渲染顺序的。系统内置了下面的渲染队列 Background(1000) Geometry(2000) AlphaTest(2450) Transparent(3000) Overlay(4000)。索引值小的队列先渲染。
+z-depth 是表示被渲染的片段离摄像机的距离。渲染的时候会依据深度测试函数来比较此时被渲染的片段的 z-depth 值和当前 z-buffer 中的 z-depth 值，测试通过以后，该片段的颜色才会被写入。
 * Tips:
 ** unity 坐标系
 unity 为左手坐标系。
@@ -336,8 +339,8 @@ http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-
 *** 如果发现颜色部分正确部分不正确
 **** 检查 Input 中 viewDir lightDir 是否使用的是 float3.
 使用 float 会造成 yz 分量的缺失，导致 yz 分量不为 0 时，显示错误。
-
-
+*** Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见
+是因为被 Skybox 遮挡住了。Skybox 的深度值为 1，如果被渲染物体的深度值大于 1 肯定会被遮挡；如果被渲染的物体深度值等于 1，而且物体的渲染顺序在 Skybox 之前，物体也会被遮挡。
 ** Normal Map
 Normal Map 又叫 Ramp Map，其实就是法线贴图。
 *** 参考资料
