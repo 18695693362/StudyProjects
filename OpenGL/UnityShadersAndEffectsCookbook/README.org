@@ -341,6 +341,14 @@ http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-
 使用 float 会造成 yz 分量的缺失，导致 yz 分量不为 0 时，显示错误。
 *** Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见
 是因为被 Skybox 遮挡住了。Skybox 的深度值为 1，如果被渲染物体的深度值大于 1 肯定会被遮挡；如果被渲染的物体深度值等于 1，而且物体的渲染顺序在 Skybox 之前，物体也会被遮挡。
+*** vert': output parameter 'o' not completely initialized
+#+BEGIN_SRC surface shader
+void vert (inout appdata_full v, out Input o)  
+{
+	// 添加下面这句代码可以解决该错误
+  UNITY_INITIALIZE_OUTPUT(Input,o);  
+} 
+#+END_SRC
 ** Normal Map
 Normal Map 又叫 Ramp Map，其实就是法线贴图。
 *** 参考资料
