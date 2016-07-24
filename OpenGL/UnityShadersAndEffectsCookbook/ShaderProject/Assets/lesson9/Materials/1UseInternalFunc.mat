@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: 0PropertyTest
-  m_Shader: {fileID: 4800000, guid: da48522d0de1a4b88b5f6c244dc9f57b, type: 3}
+  m_Name: 1UseInternalFunc
+  m_Shader: {fileID: 4800000, guid: af34d6aad3dde4a358717b6e330bed0a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -19,7 +19,7 @@ Material:
         first:
           name: _MainTex
         second:
-          m_Texture: {fileID: 0}
+          m_Texture: {fileID: 2800000, guid: e652bc2d71aac437aad60e8cbb7dcec3, type: 3}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
@@ -67,27 +67,6 @@ Material:
       data:
         first:
           name: _DetailAlbedoMap
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _My2DValue
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MyRectValue
-        second:
-          m_Texture: {fileID: 0}
-          m_Scale: {x: 1, y: 1}
-          m_Offset: {x: 0, y: 0}
-      data:
-        first:
-          name: _MyCubeValue
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
@@ -150,16 +129,8 @@ Material:
         second: 0
       data:
         first:
-          name: _MyRangeValue
-        second: 2.5
-      data:
-        first:
-          name: _MyFloatValue
-        second: 1.5
-      data:
-        first:
-          name: _AmbientColor
-        second: 2
+          name: _Desaturate
+        second: 0.5
     m_Colors:
       data:
         first:
@@ -169,19 +140,3 @@ Material:
         first:
           name: _Color
         second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _EmissiveColor
-        second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _AmbientColor
-        second: {r: 0.5, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _MyColorValue
-        second: {r: 0.5, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _MyVectorValue
-        second: {r: 1, g: 2, b: 3, a: 4}
