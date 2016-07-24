@@ -25,7 +25,32 @@ o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
 o.Specular = _SpecPower;
 #+END_EXAMPLE
 * 6 Transparency
-
+* 8 Shader Optimize
+** 数据类型
+| Type  | Detial            | Range                                | Usage                          |
+|-------+-------------------+--------------------------------------+--------------------------------|
+| float | 32 位单精度浮点数 | 和通常编程中的 float 一样            | 存放物体坐标                   |
+| half  | 16 位中精度浮点数 | –60000 to +60000,精度是小数点后 3 位 | 适合存放 UV 值，颜色值         |
+| fixed | 11 位低精度浮点数 | 范围是[-2, 2]，精度是 1/256          | 可用于光照计算，颜色，单位向量 |
+[[https://docs.unity3d.com/Manual/SL-DataTypesAndPrecision.html][SL-DataTypesAndPrecision]]
+** noforwardadd
+该选项基于一个开关来自动告诉 Unity，任何采用该着色器的物体只从一个单一的方向光接收每个像素的光照。该着色器计算的其他光照将使用 SH 方式计算。
+#+BEGIN_SRC surface shader
+#pragma surface surf SimpleLambert noforwardadd
+#+END_SRC
+** exclude_path
+exclude_path:deferred, exclude_path:forward, exclude_path:prepass
+不为指定渲染方式(Deferred Shading, Forward , Legacy Deferred)生成代码。
+#+BEGIN_SRC surface shader
+#pragma surface surf SimpleLambert exclude_path:prepass
+#+END_SRC
+** nolightmap
+关闭该 shader 的所有光照贴图支持。
+** halfasview
+用 halfDir 代替 viewDir 作为光照函数的参数传入 shader。
+** 参考资料
+[[https://docs.unity3d.com/Manual/SL-SurfaceShaders.html][Shader 编译指令]]
+[[https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html][Mobile Optimize Doc]]
 * Basic 
 ** Properties
 #+BEGIN_EXAMPLE surface shader
