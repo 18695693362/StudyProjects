@@ -1,0 +1,35 @@
+﻿Shader "CookbookShader/lesson9/SceneDepthEF"
+{
+	Properties
+	{
+		_MainTex ("Texture", 2D) = "white" {}
+		_DepthPower("Depth Power", Range(0.1,5)) = 1
+	}
+	SubShader
+	{
+		Tags { "RenderType"="Opaque" }
+		LOD 100
+
+		Pass
+		{
+			CGPROGRAM
+			#pragma vertex vert_img
+			#pragma fragment frag
+			#pragma fragmentoption ARB_precision_hint_fastest
+			#include "UnityCG.cginc"
+
+			uniform sampler2D _MainTex;
+			half _DepthPower;
+			sampler2D _CameraDepthTexture;
+
+			fixed4 frag (v2f_img i) : Color
+			{
+				float d = UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture,i.uv.xy));
+				d = pow(Linear01Depth(d),_DepthPower);
+
+				return d;
+			}
+			ENDCG
+		}
+	}
+}
