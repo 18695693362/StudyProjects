@@ -350,6 +350,7 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 [[https://docs.unity3d.com/Manual/SL-SurfaceShaders.html][Shader 编译指令]]
 [[https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html][Mobile Optimize Doc]]
 * Screen Effect
+** 概述
 屏幕特效特效就相当于对最终显示图片到显示器之前的图片进行 PS 处理。具体处理每个像素的过程会通过一个 Shader 来进行，进行处理的时机是 Camera.OnRenderImage 被触发的时候，而 Graphics.Blit 可以将处理结果生效。
 处理每个像素的 Shader 通常会使用下面的一些配置：
 #+BEGIN_SRC surface shader
@@ -359,6 +360,11 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 // 上面这个参数用来指定片段着色器计算精度采用快速模式
 // http://forum.unity3d.com/threads/pragma-fragmentoption-arb_precision_hint_fastest-any-documentation-about-this.294465/
 #+END_SRC
+** 明度 亮度 饱和度 对比度
+明度（Brightness）是眼睛对光源和物体表面的明暗程度的感觉，主要是由光线强弱决定的一种视觉经验。
+亮度（Luminance）是指发光体（反光体）表面发光（反光）强弱的物理量。
+饱和度（Saturation）是指色彩的鲜艳程度，也称色彩的纯度。饱和度取决于该色中含色成分和消色成分（灰色）的比例。含色成分越大，饱和度越大；消色成分越大，饱和度越小。纯的颜色都是高度饱和的，如鲜红，鲜绿。混杂上白色，灰色或其他色调的颜色，是不饱和的颜色，如绛紫，粉红，黄褐等。完全不饱和的颜色根本没有色调，如黑白之间的各种灰色。
+对比度（Contrast）指的是一幅图像中明暗区域最亮的白和最暗的黑之间不同亮度层级的测量，差异范围越大代表对比越大，差异范围越小代表对比越小，好的对比率 120:1 就可容易地显示生动、丰富的色彩，当对比率高达 300:1 时，便可支持各阶的颜色。但对比率遭受和亮度相同的困境，现今尚无一套有效又公正的标准来衡量对比率，所以最好的辨识方式还是依靠使用者眼睛。
 * Tips:
 ** unity 坐标系
 unity 为左手坐标系。

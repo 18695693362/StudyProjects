@@ -1,4 +1,4 @@
-﻿Shader "CookbookShader/lesson9/SceneDepthEF"
+﻿Shader "CookbookShader/lesson10/SceneDepthEF"
 {
 	Properties
 	{

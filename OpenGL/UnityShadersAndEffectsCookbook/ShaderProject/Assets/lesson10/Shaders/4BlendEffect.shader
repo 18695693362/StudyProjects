@@ -1,4 +1,4 @@
-﻿Shader "CookbookShader/lesson9/BlendEffect"
+﻿Shader "CookbookShader/lesson10/BlendEffect"
 {
 	Properties
 	{

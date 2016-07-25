@@ -1,4 +1,4 @@
-﻿Shader "CookbookShader/lesson9/GrayScreenEF"
+﻿Shader "CookbookShader/lesson10/GrayScreenEF"
 {
 	Properties
 	{

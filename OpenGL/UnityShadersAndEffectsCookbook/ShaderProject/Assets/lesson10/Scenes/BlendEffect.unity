@@ -178,6 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d28e77a03b7843f6a7bdc7a407f073a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blendType: 3
   curShader: {fileID: 4800000, guid: 76e473432bd234c20ae2a9e332c6e986, type: 3}
   blendTex: {fileID: 2800000, guid: 58baa39076d7b4fe8b7954efb538763b, type: 3}
   blendFactor: 0.5

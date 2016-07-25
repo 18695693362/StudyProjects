@@ -1,4 +1,4 @@
-﻿Shader "CookbookShader/lesson9/BSCEffect"
+﻿Shader "CookbookShader/lesson10/BSCEffect"
 {
 	Properties
 	{
@@ -34,10 +34,10 @@
 
 				// opt Brightness
 				float3 brtColor = color * brt;
-				float intensityf = dot(brtColor,LuminanceCoeff);
-				float3 intensity = float3(intensityf,intensityf,intensityf);
 
 				// opt Saturation
+				float intensityf = dot(brtColor,LuminanceCoeff);
+				float3 intensity = float3(intensityf,intensityf,intensityf);
 				float3 satColor = lerp(intensity, brtColor, sat);
 
 				// opt Contrast
