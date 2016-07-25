@@ -3,54 +3,6 @@
 #+OPTIONS: \n:t 
 #+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
 Tips: 下载 htlm 格式文件直接在浏览器中打开，可以查看格式优化过的文档。
-* 4 Reflecting your world
-** 光学基础
-反射：当光在两种物质分界面上改变传播方向又返回原来物质中的现象，叫做光的反射。
-
-折射：光从一种透明介质斜射入另一种透明介质时，传播方向一般会发生变化，这种现象叫光的折射。
-
-散射：光束通过不均匀媒质时，部分光束将偏离原来方向而分散传播，从侧向也可以看到光的现象，叫做光的散射。散射是多重折射和反射的结果。
-** Fresnel reflection
-当光入射到折射率不同的两个媒质分界面时，一部分光会被反射，这种现象称为菲涅尔反射(其实就是光的反射，只不过这个现象是菲涅尔发现的)。
-视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显，这就是“菲涅尔效应”。
-*** 如何模拟菲涅尔效应效果？
-#+BEGIN_EXAMPLE cg
-// rim 随视角和法线夹角的增大而增大
-float rim = 1.0 - saturate(dot(o.Normal,normalize(IN.viewDir)));
-rim = pow(rim,_RimPower);
-
-o.Albedo = color_.rgb * _DiffuseTint.rgb;
-// 物体反射的颜色 随 rim 的增大而增大。即视角正对物体时，反射的颜色少，随着视角和物体法线夹角增大，反射的颜色增大。
-o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
-o.Specular = _SpecPower;
-#+END_EXAMPLE
-* 6 Transparency
-* 8 Shader Optimize
-** 数据类型
-| Type  | Detial            | Range                                | Usage                          |
-|-------+-------------------+--------------------------------------+--------------------------------|
-| float | 32 位单精度浮点数 | 和通常编程中的 float 一样            | 存放物体坐标                   |
-| half  | 16 位中精度浮点数 | –60000 to +60000,精度是小数点后 3 位 | 适合存放 UV 值，颜色值         |
-| fixed | 11 位低精度浮点数 | 范围是[-2, 2]，精度是 1/256          | 可用于光照计算，颜色，单位向量 |
-[[https://docs.unity3d.com/Manual/SL-DataTypesAndPrecision.html][SL-DataTypesAndPrecision]]
-** noforwardadd
-该选项基于一个开关来自动告诉 Unity，任何采用该着色器的物体只从一个单一的方向光接收每个像素的光照。该着色器计算的其他光照将使用 SH 方式计算。
-#+BEGIN_SRC surface shader
-#pragma surface surf SimpleLambert noforwardadd
-#+END_SRC
-** exclude_path
-exclude_path:deferred, exclude_path:forward, exclude_path:prepass
-不为指定渲染方式(Deferred Shading, Forward , Legacy Deferred)生成代码。
-#+BEGIN_SRC surface shader
-#pragma surface surf SimpleLambert exclude_path:prepass
-#+END_SRC
-** nolightmap
-关闭该 shader 的所有光照贴图支持。
-** halfasview
-用 halfDir 代替 viewDir 作为光照函数的参数传入 shader。
-** 参考资料
-[[https://docs.unity3d.com/Manual/SL-SurfaceShaders.html][Shader 编译指令]]
-[[https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html][Mobile Optimize Doc]]
 * Basic 
 ** Properties
 #+BEGIN_EXAMPLE surface shader
@@ -350,6 +302,63 @@ VertexLMM Pass 用于有光照贴图的物体，光照贴图按照 double-LDR �
 ** RenderQueue And z-depth
 RenderQueue 是用来控制渲染顺序的。系统内置了下面的渲染队列 Background(1000) Geometry(2000) AlphaTest(2450) Transparent(3000) Overlay(4000)。索引值小的队列先渲染。
 z-depth 是表示被渲染的片段离摄像机的距离。渲染的时候会依据深度测试函数来比较此时被渲染的片段的 z-depth 值和当前 z-buffer 中的 z-depth 值，测试通过以后，该片段的颜色才会被写入。
+* Reflecting your world
+** 光学基础
+反射：当光在两种物质分界面上改变传播方向又返回原来物质中的现象，叫做光的反射。
+
+折射：光从一种透明介质斜射入另一种透明介质时，传播方向一般会发生变化，这种现象叫光的折射。
+
+散射：光束通过不均匀媒质时，部分光束将偏离原来方向而分散传播，从侧向也可以看到光的现象，叫做光的散射。散射是多重折射和反射的结果。
+** Fresnel reflection
+当光入射到折射率不同的两个媒质分界面时，一部分光会被反射，这种现象称为菲涅尔反射(其实就是光的反射，只不过这个现象是菲涅尔发现的)。
+视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显，这就是“菲涅尔效应”。
+*** 如何模拟菲涅尔效应效果？
+#+BEGIN_EXAMPLE cg
+// rim 随视角和法线夹角的增大而增大
+float rim = 1.0 - saturate(dot(o.Normal,normalize(IN.viewDir)));
+rim = pow(rim,_RimPower);
+
+o.Albedo = color_.rgb * _DiffuseTint.rgb;
+// 物体反射的颜色 随 rim 的增大而增大。即视角正对物体时，反射的颜色少，随着视角和物体法线夹角增大，反射的颜色增大。
+o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
+o.Specular = _SpecPower;
+#+END_EXAMPLE
+* Shader Optimize
+** 数据类型
+| Type  | Detial            | Range                                | Usage                          |
+|-------+-------------------+--------------------------------------+--------------------------------|
+| float | 32 位单精度浮点数 | 和通常编程中的 float 一样            | 存放物体坐标                   |
+| half  | 16 位中精度浮点数 | –60000 to +60000,精度是小数点后 3 位 | 适合存放 UV 值，颜色值         |
+| fixed | 11 位低精度浮点数 | 范围是[-2, 2]，精度是 1/256          | 可用于光照计算，颜色，单位向量 |
+[[https://docs.unity3d.com/Manual/SL-DataTypesAndPrecision.html][SL-DataTypesAndPrecision]]
+** noforwardadd
+该选项基于一个开关来自动告诉 Unity，任何采用该着色器的物体只从一个单一的方向光接收每个像素的光照。该着色器计算的其他光照将使用 SH 方式计算。
+#+BEGIN_SRC surface shader
+#pragma surface surf SimpleLambert noforwardadd
+#+END_SRC
+** exclude_path
+exclude_path:deferred, exclude_path:forward, exclude_path:prepass
+不为指定渲染方式(Deferred Shading, Forward , Legacy Deferred)生成代码。
+#+BEGIN_SRC surface shader
+#pragma surface surf SimpleLambert exclude_path:prepass
+#+END_SRC
+** nolightmap
+关闭该 shader 的所有光照贴图支持。
+** halfasview
+用 halfDir 代替 viewDir 作为光照函数的参数传入 shader。
+** 参考资料
+[[https://docs.unity3d.com/Manual/SL-SurfaceShaders.html][Shader 编译指令]]
+[[https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html][Mobile Optimize Doc]]
+* Screen Effect
+屏幕特效特效就相当于对最终显示图片到显示器之前的图片进行 PS 处理。具体处理每个像素的过程会通过一个 Shader 来进行，进行处理的时机是 Camera.OnRenderImage 被触发的时候，而 Graphics.Blit 可以将处理结果生效。
+处理每个像素的 Shader 通常会使用下面的一些配置：
+#+BEGIN_SRC surface shader
+#pragma vertex vert_img        // 使用系统内置的函数
+#pragma fragment frag          // 具体处理过程在 frag 中实现
+#pragma fragmentoption ARB_precision_hint_fastest
+// 上面这个参数用来指定片段着色器计算精度采用快速模式
+// http://forum.unity3d.com/threads/pragma-fragmentoption-arb_precision_hint_fastest-any-documentation-about-this.294465/
+#+END_SRC
 * Tips:
 ** unity 坐标系
 unity 为左手坐标系。

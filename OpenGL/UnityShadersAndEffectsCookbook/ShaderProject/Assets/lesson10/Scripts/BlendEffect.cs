@@ -1,13 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
-public class BSCEffect : MonoBehaviour
+public class BlendEffect : MonoBehaviour
 {
+	public enum BlendType
+	{
+		Multiply,
+		Add,
+		Screen,
+		Overlay
+	}
+
+	public BlendType blendType;
 	public Shader curShader;
-	public float Brightness = 1.0f;
-	public float Saturation = 1.0f;
-	public float Contrast = 1.0f;
+	public Texture2D blendTex;
+	public float blendFactor = 0.5f;
 	private Material curMat;
 
 	Material CurMaterial {
@@ -19,7 +26,7 @@ public class BSCEffect : MonoBehaviour
 			return curMat;
 		}
 	}
-	// Use this for initialization
+
 	void Start ()
 	{
 		if (!SystemInfo.supportsImageEffects) {
@@ -42,21 +49,18 @@ public class BSCEffect : MonoBehaviour
 	void OnRenderImage (RenderTexture srcTex, RenderTexture desTex)
 	{
 		if (curShader != null) {
-			CurMaterial.SetFloat ("_BrightnessAmount", Brightness);
-			CurMaterial.SetFloat ("_SaturationAmount", Saturation);
-			CurMaterial.SetFloat ("_ContrastAmount", Contrast);
+			CurMaterial.SetTexture ("_BlendTex", blendTex);
+			CurMaterial.SetFloat ("_BlendFactor", blendFactor);
+			CurMaterial.SetFloat ("_BlendType", (float)blendType);
 			Graphics.Blit (srcTex, desTex, CurMaterial);
 		} else {
 			Graphics.Blit (srcTex, desTex);
 		}
 	}
-	
-	// Update is called once per frame
+
 	void Update ()
 	{
-		Brightness = Mathf.Clamp (Brightness, 0.0f, 2.0f);
-		Saturation = Mathf.Clamp (Saturation, 0.0f, 2.0f);
-		Contrast = Mathf.Clamp (Contrast, 0.0f, 3.0f);
+		blendFactor = Mathf.Clamp (blendFactor, 0.0f, 1.0f);
 	}
 
 	void OnDisable ()

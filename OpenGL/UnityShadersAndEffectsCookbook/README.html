@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-24 Sun 17:40 -->
+<!-- 2016-07-25 Mon 11:07 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Unity Shader And Effect Cookbook</title>
@@ -149,64 +149,67 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgheadline4">1. 4 Reflecting your world</a>
+<li><a href="#orgheadline46">1. Basic</a>
 <ul>
-<li><a href="#orgheadline1">1.1. 光学基础</a></li>
-<li><a href="#orgheadline3">1.2. Fresnel reflection</a>
+<li><a href="#orgheadline1">1.1. Properties</a></li>
+<li><a href="#orgheadline2">1.2. SurfaceOutput</a></li>
+<li><a href="#orgheadline3">1.3. Input</a></li>
+<li><a href="#orgheadline24">1.4. shader 的代码结构</a>
 <ul>
-<li><a href="#orgheadline2">1.2.1. 如何模拟菲涅尔效应效果？</a></li>
+<li><a href="#orgheadline4">1.4.1. Properties</a></li>
+<li><a href="#orgheadline17">1.4.2. SubShader</a></li>
+<li><a href="#orgheadline23">1.4.3. Pass</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline44">1.5. Unity's Rendering Pipline</a>
+<ul>
+<li><a href="#orgheadline25">1.5.1. Rendering Path</a></li>
+<li><a href="#orgheadline34">1.5.2. Forward Rendering path</a></li>
+<li><a href="#orgheadline41">1.5.3. Deferred Shading path</a></li>
+<li><a href="#orgheadline42">1.5.4. Legacy Deferred Lighting path</a></li>
+<li><a href="#orgheadline43">1.5.5. Legacy Vertex Lit Rendering path</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline45">1.6. RenderQueue And z-depth</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline50">2. Reflecting your world</a>
+<ul>
+<li><a href="#orgheadline47">2.1. 光学基础</a></li>
+<li><a href="#orgheadline49">2.2. Fresnel reflection</a>
+<ul>
+<li><a href="#orgheadline48">2.2.1. 如何模拟菲涅尔效应效果？</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgheadline5">2. 6 Transparency</a></li>
-<li><a href="#orgheadline9">3. 8 Shader Optimize</a>
+<li><a href="#orgheadline57">3. Shader Optimize</a>
 <ul>
-<li><a href="#orgheadline6">3.1. 数据类型</a></li>
-<li><a href="#orgheadline7">3.2. noforwardadd</a></li>
-<li><a href="#orgheadline8">3.3. exclude_path</a></li>
+<li><a href="#orgheadline51">3.1. 数据类型</a></li>
+<li><a href="#orgheadline52">3.2. noforwardadd</a></li>
+<li><a href="#orgheadline53">3.3. exclude_path</a></li>
+<li><a href="#orgheadline54">3.4. nolightmap</a></li>
+<li><a href="#orgheadline55">3.5. halfasview</a></li>
+<li><a href="#orgheadline56">3.6. 参考资料</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline55">4. Basic</a>
+<li><a href="#orgheadline58">4. Screen Effect</a></li>
+<li><a href="#orgheadline70">5. Tips:</a>
 <ul>
-<li><a href="#orgheadline10">4.1. Properties</a></li>
-<li><a href="#orgheadline11">4.2. SurfaceOutput</a></li>
-<li><a href="#orgheadline12">4.3. Input</a></li>
-<li><a href="#orgheadline33">4.4. shader 的代码结构</a>
+<li><a href="#orgheadline59">5.1. unity 坐标系</a></li>
+<li><a href="#orgheadline60">5.2. Skin Shader</a></li>
+<li><a href="#orgheadline61">5.3. Blinn Phong And Phong</a></li>
+<li><a href="#orgheadline67">5.4. Error</a>
 <ul>
-<li><a href="#orgheadline13">4.4.1. Properties</a></li>
-<li><a href="#orgheadline26">4.4.2. SubShader</a></li>
-<li><a href="#orgheadline32">4.4.3. Pass</a></li>
+<li><a href="#orgheadline62">5.4.1. Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</a></li>
+<li><a href="#orgheadline64">5.4.2. 如果发现颜色部分正确部分不正确</a></li>
+<li><a href="#orgheadline65">5.4.3. Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</a></li>
+<li><a href="#orgheadline66">5.4.4. vert': output parameter 'o' not completely initialized</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline53">4.5. Unity's Rendering Pipline</a>
+<li><a href="#orgheadline69">5.5. Normal Map</a>
 <ul>
-<li><a href="#orgheadline34">4.5.1. Rendering Path</a></li>
-<li><a href="#orgheadline43">4.5.2. Forward Rendering path</a></li>
-<li><a href="#orgheadline50">4.5.3. Deferred Shading path</a></li>
-<li><a href="#orgheadline51">4.5.4. Legacy Deferred Lighting path</a></li>
-<li><a href="#orgheadline52">4.5.5. Legacy Vertex Lit Rendering path</a></li>
-</ul>
-</li>
-<li><a href="#orgheadline54">4.6. RenderQueue And z-depth</a></li>
-</ul>
-</li>
-<li><a href="#orgheadline67">5. Tips:</a>
-<ul>
-<li><a href="#orgheadline56">5.1. unity 坐标系</a></li>
-<li><a href="#orgheadline57">5.2. Skin Shader</a></li>
-<li><a href="#orgheadline58">5.3. Blinn Phong And Phong</a></li>
-<li><a href="#orgheadline64">5.4. Error</a>
-<ul>
-<li><a href="#orgheadline59">5.4.1. Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</a></li>
-<li><a href="#orgheadline61">5.4.2. 如果发现颜色部分正确部分不正确</a></li>
-<li><a href="#orgheadline62">5.4.3. Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</a></li>
-<li><a href="#orgheadline63">5.4.4. vert': output parameter 'o' not completely initialized</a></li>
-</ul>
-</li>
-<li><a href="#orgheadline66">5.5. Normal Map</a>
-<ul>
-<li><a href="#orgheadline65">5.5.1. 参考资料</a></li>
+<li><a href="#orgheadline68">5.5.1. 参考资料</a></li>
 </ul>
 </li>
 </ul>
@@ -217,145 +220,12 @@ for the JavaScript code in this tag.
 <p>
 Tips: 下载 htlm 格式文件直接在浏览器中打开，可以查看格式优化过的文档。<br  />
 </p>
-<div id="outline-container-orgheadline4" class="outline-2">
-<h2 id="orgheadline4"><span class="section-number-2">1</span> 4 Reflecting your world</h2>
+<div id="outline-container-orgheadline46" class="outline-2">
+<h2 id="orgheadline46"><span class="section-number-2">1</span> Basic</h2>
 <div class="outline-text-2" id="text-1">
 </div><div id="outline-container-orgheadline1" class="outline-3">
-<h3 id="orgheadline1"><span class="section-number-3">1.1</span> 光学基础</h3>
+<h3 id="orgheadline1"><span class="section-number-3">1.1</span> Properties</h3>
 <div class="outline-text-3" id="text-1-1">
-<p>
-反射：当光在两种物质分界面上改变传播方向又返回原来物质中的现象，叫做光的反射。<br  />
-</p>
-
-<p>
-折射：光从一种透明介质斜射入另一种透明介质时，传播方向一般会发生变化，这种现象叫光的折射。<br  />
-</p>
-
-<p>
-散射：光束通过不均匀媒质时，部分光束将偏离原来方向而分散传播，从侧向也可以看到光的现象，叫做光的散射。散射是多重折射和反射的结果。<br  />
-</p>
-</div>
-</div>
-<div id="outline-container-orgheadline3" class="outline-3">
-<h3 id="orgheadline3"><span class="section-number-3">1.2</span> Fresnel reflection</h3>
-<div class="outline-text-3" id="text-1-2">
-<p>
-当光入射到折射率不同的两个媒质分界面时，一部分光会被反射，这种现象称为菲涅尔反射(其实就是光的反射，只不过这个现象是菲涅尔发现的)。<br  />
-视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显，这就是“菲涅尔效应”。<br  />
-</p>
-</div>
-<div id="outline-container-orgheadline2" class="outline-4">
-<h4 id="orgheadline2"><span class="section-number-4">1.2.1</span> 如何模拟菲涅尔效应效果？</h4>
-<div class="outline-text-4" id="text-1-2-1">
-<pre class="example">
-// rim 随视角和法线夹角的增大而增大
-float rim = 1.0 - saturate(dot(o.Normal,normalize(IN.viewDir)));
-rim = pow(rim,_RimPower);
-
-o.Albedo = color_.rgb * _DiffuseTint.rgb;
-// 物体反射的颜色 随 rim 的增大而增大。即视角正对物体时，反射的颜色少，随着视角和物体法线夹角增大，反射的颜色增大。
-o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
-o.Specular = _SpecPower;
-</pre>
-</div>
-</div>
-</div>
-</div>
-<div id="outline-container-orgheadline5" class="outline-2">
-<h2 id="orgheadline5"><span class="section-number-2">2</span> 6 Transparency</h2>
-</div>
-<div id="outline-container-orgheadline9" class="outline-2">
-<h2 id="orgheadline9"><span class="section-number-2">3</span> 8 Shader Optimize</h2>
-<div class="outline-text-2" id="text-3">
-</div><div id="outline-container-orgheadline6" class="outline-3">
-<h3 id="orgheadline6"><span class="section-number-3">3.1</span> 数据类型</h3>
-<div class="outline-text-3" id="text-3-1">
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Type</th>
-<th scope="col" class="org-left">Detial</th>
-<th scope="col" class="org-left">Range</th>
-<th scope="col" class="org-left">Usage</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">float</td>
-<td class="org-left">32 位单精度浮点数</td>
-<td class="org-left">和通常编程中的 float 一样</td>
-<td class="org-left">存放物体坐标</td>
-</tr>
-
-<tr>
-<td class="org-left">half</td>
-<td class="org-left">16 位中精度浮点数</td>
-<td class="org-left">–60000 to +60000,精度是小数点后 3 位</td>
-<td class="org-left">适合存放 UV 值，颜色值</td>
-</tr>
-
-<tr>
-<td class="org-left">fixed</td>
-<td class="org-left">11 位低精度浮点数</td>
-<td class="org-left">范围是[-2, 2]，精度是 1/256</td>
-<td class="org-left">可用于光照计算，颜色，单位向量</td>
-</tr>
-</tbody>
-</table>
-<p>
-<a href="https://docs.unity3d.com/Manual/SL-DataTypesAndPrecision.html">SL-DataTypesAndPrecision</a><br  />
-</p>
-</div>
-</div>
-<div id="outline-container-orgheadline7" class="outline-3">
-<h3 id="orgheadline7"><span class="section-number-3">3.2</span> noforwardadd</h3>
-<div class="outline-text-3" id="text-3-2">
-<p>
-该选项基于一个开关来自动告诉 Unity，任何采用该着色器的物体只从一个单一的方向光接收每个像素的光照。该着色器计算的其他光照将使用 SH 方式计算。<br  />
-</p>
-<div class="org-src-container">
-
-<pre class="src src-surface">#pragma surface surf SimpleLambert noforwardadd
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-orgheadline8" class="outline-3">
-<h3 id="orgheadline8"><span class="section-number-3">3.3</span> exclude_path</h3>
-<div class="outline-text-3" id="text-3-3">
-<p>
-exclude_path:deferred, exclude_path:forward, exclude_path:prepass<br  />
-不为指定渲染方式(Deferred Shading, Forward , Legacy Deferred)生成代码。<br  />
-</p>
-<div class="org-src-container">
-
-<pre class="src src-surface">#pragma surface surf SimpleLambert exclude_path:prepass
-</pre>
-</div>
-<p>
-<a href="https://docs.unity3d.com/Manual/SL-SurfaceShaders.html">其他编译指令</a><br  />
-<a href="https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html">Mobile Optimize Doc</a><br  />
-</p>
-</div>
-</div>
-</div>
-<div id="outline-container-orgheadline55" class="outline-2">
-<h2 id="orgheadline55"><span class="section-number-2">4</span> Basic</h2>
-<div class="outline-text-2" id="text-4">
-</div><div id="outline-container-orgheadline10" class="outline-3">
-<h3 id="orgheadline10"><span class="section-number-3">4.1</span> Properties</h3>
-<div class="outline-text-3" id="text-4-1">
 <pre class="example">
 Properties {
   _MyFloatValue("This is a Float", Float) = 1.5
@@ -369,9 +239,9 @@ Properties {
 </pre>
 </div>
 </div>
-<div id="outline-container-orgheadline11" class="outline-3">
-<h3 id="orgheadline11"><span class="section-number-3">4.2</span> SurfaceOutput</h3>
-<div class="outline-text-3" id="text-4-2">
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2"><span class="section-number-3">1.2</span> SurfaceOutput</h3>
+<div class="outline-text-3" id="text-1-2">
 <pre class="example">
 struct SurfaceOutput { 
     half3 Albedo;      //The color of the pixel  片段的颜色
@@ -384,9 +254,9 @@ struct SurfaceOutput {
 </pre>
 </div>
 </div>
-<div id="outline-container-orgheadline12" class="outline-3">
-<h3 id="orgheadline12"><span class="section-number-3">4.3</span> Input</h3>
-<div class="outline-text-3" id="text-4-3">
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3"><span class="section-number-3">1.3</span> Input</h3>
+<div class="outline-text-3" id="text-1-3">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -470,9 +340,9 @@ Tips:
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline33" class="outline-3">
-<h3 id="orgheadline33"><span class="section-number-3">4.4</span> shader 的代码结构</h3>
-<div class="outline-text-3" id="text-4-4">
+<div id="outline-container-orgheadline24" class="outline-3">
+<h3 id="orgheadline24"><span class="section-number-3">1.4</span> shader 的代码结构</h3>
+<div class="outline-text-3" id="text-1-4">
 <pre class="example">
 Shader "GroupName/SubGroupName/ShaderName"
 {
@@ -504,17 +374,17 @@ Shader "GroupName/SubGroupName/ShaderName"
 }
 </pre>
 </div>
-<div id="outline-container-orgheadline13" class="outline-4">
-<h4 id="orgheadline13"><span class="section-number-4">4.4.1</span> Properties</h4>
-<div class="outline-text-4" id="text-4-4-1">
+<div id="outline-container-orgheadline4" class="outline-4">
+<h4 id="orgheadline4"><span class="section-number-4">1.4.1</span> Properties</h4>
+<div class="outline-text-4" id="text-1-4-1">
 <p>
 Properties 指定了 surface shader 中可供调节的变量，这些变量可以被显示在 Inspector 中。<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline26" class="outline-4">
-<h4 id="orgheadline26"><span class="section-number-4">4.4.2</span> SubShader</h4>
-<div class="outline-text-4" id="text-4-4-2">
+<div id="outline-container-orgheadline17" class="outline-4">
+<h4 id="orgheadline17"><span class="section-number-4">1.4.2</span> SubShader</h4>
+<div class="outline-text-4" id="text-1-4-2">
 <p>
 1 每个 Shader 都包含一个 SubShader 列表。SubShader 列表中至少要有一个 SubShader。当加载一个 Shader 时，Unity 会遍历其包含的 SubShader 列表，选择第一个用户机器所支持的 SubShader。如果没有 SubShader 被支持，则 Unity 会尝试使用 fallback shader。<br  />
 </p>
@@ -531,7 +401,7 @@ Properties 指定了 surface shader 中可供调节的变量，这些变量可�
 4 任何在 Pass 中可用的状态都可以放置在 SubShader 中，这样的话 SubShader 中的所有 Pass 都会公用该状态的设置。<br  />
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline24"></a>SubShader Tags<br  /><ol class="org-ol"><li><a id="orgheadline20"></a>渲染次序 Queue<br  /><div class="outline-text-6" id="text-4-4-2-1-1">
+<ol class="org-ol"><li><a id="orgheadline15"></a>SubShader Tags<br  /><ol class="org-ol"><li><a id="orgheadline11"></a>渲染次序 Queue<br  /><div class="outline-text-6" id="text-1-4-2-1-1">
 <p>
 可以通过 Queue tag 来确定物体的渲染顺序。Shader 决定了它的物体所属的渲染队列，这样就可以确保透明物体在不透明物体绘制之后再绘制。Unity 有四个预定义的渲染队列，但是默认的渲染队列之间可以定义更多的渲染队列。<br  />
 </p>
@@ -547,37 +417,37 @@ Properties 指定了 surface shader 中可供调节的变量，这些变量可�
 Tags { "Queue" = "Transparent" }
 </pre>
 </div>
-<ol class="org-ol"><li><a id="orgheadline14"></a>Background<br  /><div class="outline-text-7" id="text-4-4-2-1-1-1">
+<ol class="org-ol"><li><a id="orgheadline5"></a>Background<br  /><div class="outline-text-7" id="text-1-4-2-1-1-1">
 <p>
 这个渲染队列在任何其他队列之前被渲染。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline15"></a>Geometry (默认的渲染队列)<br  /><div class="outline-text-7" id="text-4-4-2-1-1-2">
+<li><a id="orgheadline6"></a>Geometry (默认的渲染队列)<br  /><div class="outline-text-7" id="text-1-4-2-1-1-2">
 <p>
 不透明的几何体可以使用这个渲染队列<br  />
 </p>
 </div></li>
-<li><a id="orgheadline16"></a>AlphaTest<br  /><div class="outline-text-7" id="text-4-4-2-1-1-3">
+<li><a id="orgheadline7"></a>AlphaTest<br  /><div class="outline-text-7" id="text-1-4-2-1-1-3">
 <p>
 需要 Alpha 测试的几何体使用该队列。它独立于 Geometry 渲染队列，因为所有固体渲染之后，再渲染需要 alpha-tested 物体会更高效。(因为只对需要 Alpha 测试的物体开启 Alpha 测试，不需要 Alpha 测试的不会放在该队列，所以高效)<br  />
 </p>
 </div></li>
-<li><a id="orgheadline17"></a>Transparent<br  /><div class="outline-text-7" id="text-4-4-2-1-1-4">
+<li><a id="orgheadline8"></a>Transparent<br  /><div class="outline-text-7" id="text-1-4-2-1-1-4">
 <p>
 Geometry 和 AlphaTest 之后渲染的队列，该队列以从后到前的顺序渲染。需要 alpha-blended 的物体使用该队列。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline18"></a>Overlay<br  /><div class="outline-text-7" id="text-4-4-2-1-1-5">
+<li><a id="orgheadline9"></a>Overlay<br  /><div class="outline-text-7" id="text-1-4-2-1-1-5">
 <p>
 该渲染队列可以实现覆盖效果。任何最终渲染的物体使用该队列。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline19"></a>自定义渲染队列<br  /><div class="outline-text-7" id="text-4-4-2-1-1-6">
+<li><a id="orgheadline10"></a>自定义渲染队列<br  /><div class="outline-text-7" id="text-1-4-2-1-1-6">
 <pre class="example">
 Tags { "Queue" = "Geometry+1" }
 </pre>
 </div></li></ol></li>
-<li><a id="orgheadline21"></a>渲染类型 RenderType<br  /><div class="outline-text-6" id="text-4-4-2-1-2">
+<li><a id="orgheadline12"></a>渲染类型 RenderType<br  /><div class="outline-text-6" id="text-1-4-2-1-2">
 <p>
 RenderType 将 shaders 归类为很多不同的预定义的组。<br  />
 </p>
@@ -590,7 +460,7 @@ Shader Replacement 会用到该设置。/Manual/SL-ShaderReplacement.html<br  />
 有时候通过该设置来制作摄像机的深度贴图。/Manual/SL-CameraDepthTexture.html<br  />
 </p>
 </div></li>
-<li><a id="orgheadline22"></a>DisableBatching<br  /><div class="outline-text-6" id="text-4-4-2-1-3">
+<li><a id="orgheadline13"></a>DisableBatching<br  /><div class="outline-text-6" id="text-1-4-2-1-3">
 <p>
 有些 Shader 在 DrawCallBatching 下是不可用的，因为 DrawCallBatching 会将所有的几何体变换到世界空间，因此本地空间信息会丢失。<br  />
 </p>
@@ -600,7 +470,7 @@ Tags {"DisableBatching" = "False"}      // 为该 shader 开启 Batching
 Tags {"DisableBatching" = "LODFading"}  // LOD Fading 开启时，禁止 Batching
 </pre>
 </div></li>
-<li><a id="orgheadline23"></a>其他的一些 tag<br  /><div class="outline-text-6" id="text-4-4-2-1-4">
+<li><a id="orgheadline14"></a>其他的一些 tag<br  /><div class="outline-text-6" id="text-1-4-2-1-4">
 <pre class="example">
 ForceNoShadowCasting
 IgnoreProjector
@@ -608,7 +478,7 @@ CanUseSpriteAtlas
 PreviewType
 </pre>
 </div></li></ol></li>
-<li><a id="orgheadline25"></a>SurfaceShader 编译指令<br  /><div class="outline-text-5" id="text-4-4-2-2">
+<li><a id="orgheadline16"></a>SurfaceShader 编译指令<br  /><div class="outline-text-5" id="text-1-4-2-2">
 <p>
 surface shader 被放置在 CGPROGRAM &#x2026; ENDCG 块中。有两点需要注意：<br  />
 </p>
@@ -626,21 +496,21 @@ surface shader 被放置在 CGPROGRAM &#x2026; ENDCG 块中。有两点需要注
 </div></li></ol>
 </div>
 
-<div id="outline-container-orgheadline32" class="outline-4">
-<h4 id="orgheadline32"><span class="section-number-4">4.4.3</span> Pass</h4>
-<div class="outline-text-4" id="text-4-4-3">
-</div><ol class="org-ol"><li><a id="orgheadline27"></a>Name<br  /><div class="outline-text-5" id="text-4-4-3-1">
+<div id="outline-container-orgheadline23" class="outline-4">
+<h4 id="orgheadline23"><span class="section-number-4">1.4.3</span> Pass</h4>
+<div class="outline-text-4" id="text-1-4-3">
+</div><ol class="org-ol"><li><a id="orgheadline18"></a>Name<br  /><div class="outline-text-5" id="text-1-4-3-1">
 <p>
 为 Pass 定义一个名称，这样就可以通过 UsePass 来引用它了。<br  />
 UsePass "VertexLit/SHADOWCASTER"<br  />
 </p>
 </div></li>
-<li><a id="orgheadline30"></a>Tags<br  /><div class="outline-text-5" id="text-4-4-3-2">
+<li><a id="orgheadline21"></a>Tags<br  /><div class="outline-text-5" id="text-1-4-3-2">
 <p>
 Pass 使用 Tags 来告诉渲染引擎，什么时候、如何被渲染。<br  />
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline28"></a>LightMode<br  /><div class="outline-text-6" id="text-4-4-3-2-1">
+<ol class="org-ol"><li><a id="orgheadline19"></a>LightMode<br  /><div class="outline-text-6" id="text-1-4-3-2-1">
 <p>
 LightMode tag 定义了 Pass 在光照管线中的角色。这些 tags 很少手动指定。<br  />
 </p>
@@ -712,7 +582,7 @@ LightMode tag 定义了 Pass 在光照管线中的角色。这些 tags 很少手
 </table>
 </div></li>
 
-<li><a id="orgheadline29"></a>RequireOptions<br  /><div class="outline-text-6" id="text-4-4-3-2-2">
+<li><a id="orgheadline20"></a>RequireOptions<br  /><div class="outline-text-6" id="text-1-4-3-2-2">
 <p>
 指定 Pass 在满足某些外部条件时才被渲染。<br  />
 </p>
@@ -738,7 +608,7 @@ LightMode tag 定义了 Pass 在光照管线中的角色。这些 tags 很少手
 </tbody>
 </table>
 </div></li></ol></li>
-<li><a id="orgheadline31"></a>Render State Setup<br  /><div class="outline-text-5" id="text-4-4-3-3">
+<li><a id="orgheadline22"></a>Render State Setup<br  /><div class="outline-text-5" id="text-1-4-3-3">
 <p>
 Pass 可以设置图形硬件的渲染状态。<br  />
 </p>
@@ -796,9 +666,9 @@ Pass 可以设置图形硬件的渲染状态。<br  />
 </div></li></ol>
 </div>
 </div>
-<div id="outline-container-orgheadline53" class="outline-3">
-<h3 id="orgheadline53"><span class="section-number-3">4.5</span> Unity's Rendering Pipline</h3>
-<div class="outline-text-3" id="text-4-5">
+<div id="outline-container-orgheadline44" class="outline-3">
+<h3 id="orgheadline44"><span class="section-number-3">1.5</span> Unity's Rendering Pipline</h3>
+<div class="outline-text-3" id="text-1-5">
 <p>
 Shaders 定义了一个物体看起来是怎样的，以及这个物体如何和光照交互。应为光照计算必须在 shader 中进行，并且可能有很多种类型的光照和阴影，所以编写高质量的可用的 shaders 将是一个复杂的任务。为了让这项工作变的简单，Unity 提供了 Surface Shaders，其中所有的光照、阴影、光照贴图，正向渲染、延迟渲染等事情都被自动化管理。<br  />
 </p>
@@ -809,9 +679,9 @@ RenderTech-ForwardRendering.html
 RenderTech-DeferredShading.html
 </pre>
 </div>
-<div id="outline-container-orgheadline34" class="outline-4">
-<h4 id="orgheadline34"><span class="section-number-4">4.5.1</span> Rendering Path</h4>
-<div class="outline-text-4" id="text-4-5-1">
+<div id="outline-container-orgheadline25" class="outline-4">
+<h4 id="orgheadline25"><span class="section-number-4">1.5.1</span> Rendering Path</h4>
+<div class="outline-text-4" id="text-1-5-1">
 <p>
 光照是如何被应用以及 shader 的哪些 Passes 被使用都依赖于使用了哪种 Rendering Path. shader 中的每个 Pass 通过 Pass Tags 来传达它的光照类型。<br  />
 </p>
@@ -856,9 +726,9 @@ RenderTech-DeferredShading.html
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline43" class="outline-4">
-<h4 id="orgheadline43"><span class="section-number-4">4.5.2</span> Forward Rendering path</h4>
-<div class="outline-text-4" id="text-4-5-2">
+<div id="outline-container-orgheadline34" class="outline-4">
+<h4 id="orgheadline34"><span class="section-number-4">1.5.2</span> Forward Rendering path</h4>
+<div class="outline-text-4" id="text-1-5-2">
 <p>
 ForwardBase pass 用于一次性渲染环境光，光照贴图，主要的定向光以及不重要的光照(Spherical Harmonics)。<br  />
 </p>
@@ -871,12 +741,12 @@ ForwardAdd pass 用于任何附加的基于像素的光照。被该光照照明�
 如果 Forward Rendering 被使用，但是 shader 中没有合适的 Passes（没有 ForwardBase 或 ForwardAdd 存在），则物体会被按照 Vertex Lit path 的方式渲染。<br  />
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline35"></a>Forward Rendering Detail<br  /><div class="outline-text-5" id="text-4-5-2-1">
+<ol class="org-ol"><li><a id="orgheadline26"></a>Forward Rendering Detail<br  /><div class="outline-text-5" id="text-1-5-2-1">
 <p>
 依据光照对物体的影响，Forward Rendering path 使用一个或多个 Pass 来渲染这个物体。依据每个光照的不同设置和亮度，Forward Rendering 会对光照有不同的处理。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline38"></a>Implementation Detail<br  /><div class="outline-text-5" id="text-4-5-2-2">
+<li><a id="orgheadline29"></a>Implementation Detail<br  /><div class="outline-text-5" id="text-1-5-2-2">
 <p>
 在正向渲染中，一些影响到每个物体的最亮的光照会基于每个像素来计算。然后，最多有 4 个点光照被基于每个顶点来计算。剩余的光照按照 Spherical Harmonics 方式来计算，该方法速度比较快，但是只是一种近似计算。<br  />
 </p>
@@ -911,40 +781,40 @@ Base Pass 应用于 per-pixel 方式的方向光照 和 所有 per-vertex/Spheri
 <a href="./doc_res/2ForwardLightsClassify.png">Forward Rendering Pic2</a><br  />
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline36"></a>Base Pass<br  /><div class="outline-text-6" id="text-4-5-2-2-1">
+<ol class="org-ol"><li><a id="orgheadline27"></a>Base Pass<br  /><div class="outline-text-6" id="text-1-5-2-2-1">
 <p>
 Base pass 使用一个 per-pixel 方式计算的方向光照和所有的 SH 方式计算的光照渲染物体。这个阶段也会添加任何光照贴图，环境光<br  />
 和发射光到 shader 中。该 Pass 中的方向光可以有阴影。注意光照贴图的物体不会从 SH 方式计算的光照中获得照明。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline37"></a>Additional Passes<br  /><div class="outline-text-6" id="text-4-5-2-2-2">
+<li><a id="orgheadline28"></a>Additional Passes<br  /><div class="outline-text-6" id="text-1-5-2-2-2">
 <p>
 Additional Passes 用来渲染影响到物体的每个额外的 per-pixel 方式计算的光照。在该 Pass 计算的光照不能有阴影效果。<br  />
 （所以 Forward Rendering 只支持一个方向光有阴影）<br  />
 </p>
 </div></li></ol></li>
-<li><a id="orgheadline42"></a>Performance Considerations<br  /><div class="outline-text-5" id="text-4-5-2-3">
+<li><a id="orgheadline33"></a>Performance Considerations<br  /><div class="outline-text-5" id="text-1-5-2-3">
 <p>
 Spherical Harmonics 方式计算的光照渲染速度非常快。他们消耗很少的 CPU 资源，并且对于 GPU 基本是无消耗的（也就是说，Base Passes 总是计算 SH 方式计算的光照，但是，基于 SH 的工作方式，无论有多少光照按照 SH 方式计算，其消耗都是一样的）。<br  />
 SH 方式计算光照的缺点有：<br  />
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline39"></a>SH 是基于物体顶点的，而不是基于片段的。这意味着他们不支持光照的 Cookies 或法线贴图。<br  /></li>
-<li><a id="orgheadline40"></a>SH 是非常低频率的。你不能对 SH 方式计算的光照有有尖锐的光照变换。他们只会影响漫反射光照（对于镜面光来说频率太低了）<br  /></li>
-<li><a id="orgheadline41"></a>SH 是非局部的。点光源、聚光灯使用 SH 方式计算时，若靠近某些表面时看起来会是错误的。<br  /><div class="outline-text-7" id="text-4-5-2-3-0-3">
+<ol class="org-ol"><li><a id="orgheadline30"></a>SH 是基于物体顶点的，而不是基于片段的。这意味着他们不支持光照的 Cookies 或法线贴图。<br  /></li>
+<li><a id="orgheadline31"></a>SH 是非常低频率的。你不能对 SH 方式计算的光照有有尖锐的光照变换。他们只会影响漫反射光照（对于镜面光来说频率太低了）<br  /></li>
+<li><a id="orgheadline32"></a>SH 是非局部的。点光源、聚光灯使用 SH 方式计算时，若靠近某些表面时看起来会是错误的。<br  /><div class="outline-text-7" id="text-1-5-2-3-0-3">
 <p>
 总的来说，SH 方式计算光照对于低动态的物体来说通常是效果很好的。<br  />
 </p>
 </div></li></ol></li></ol>
 </div>
-<div id="outline-container-orgheadline50" class="outline-4">
-<h4 id="orgheadline50"><span class="section-number-4">4.5.3</span> Deferred Shading path</h4>
-<div class="outline-text-4" id="text-4-5-3">
+<div id="outline-container-orgheadline41" class="outline-4">
+<h4 id="orgheadline41"><span class="section-number-4">1.5.3</span> Deferred Shading path</h4>
+<div class="outline-text-4" id="text-1-5-3">
 <p>
 Deferred Pass 用来渲染光照计算需要的所有的信息（在内置 shaders 中会渲染：diffuse color, specular color, smoothness, world space normal, emission）。它还会添加光照贴图，反射探针以及环境光照到 emission 通道。<br  />
 </p>
 </div>
-<ol class="org-ol"><li><a id="orgheadline44"></a>Overview<br  /><div class="outline-text-5" id="text-4-5-3-1">
+<ol class="org-ol"><li><a id="orgheadline35"></a>Overview<br  /><div class="outline-text-5" id="text-1-5-3-1">
 <p>
 当使用延迟渲染时，对于可以影响一个物体的光照数量没有限制。所有的光照都是按照 per-pixel 方式计算的,这就意味着他们都可以正确地和法线贴图交互。另外所有的光照都可以有 cookies 和阴影。<br  />
 </p>
@@ -957,13 +827,13 @@ Deferred Pass 用来渲染光照计算需要的所有的信息（在内置 shade
 延迟渲染的缺点是，对于反锯齿没有真正的支持，并且不能够处理半透明的物体（这类物体需要通过 Forward Rendering 来渲染）。不支持 Mesh Render 的 Receive Shadows 标记，对于剔除层 masks 的支持也很有限。你只能使用最多 4 个剔除 masks。也就是说，你的剔除层 mask 必须至少包含所有的层减去任意的 4 个层，所以 32 个层中的 28 个层必须被设置。否则你将会得到变花的图像。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline45"></a>Requirements<br  /><div class="outline-text-5" id="text-4-5-3-2">
+<li><a id="orgheadline36"></a>Requirements<br  /><div class="outline-text-5" id="text-1-5-3-2">
 <p>
 延迟渲染需要图形卡包含 Multiple Render Targets，Shader Model 3.0 或者更高，支持深度贴图以及双面的模板缓冲区。大多数 PC2005 年以后的向卡支持延迟渲染，包括 GeForce6 以及更高，RadeonX1300 以及更高，InterG45+以及更高。在移动设备中，由于 MRT 使用的格式延迟渲染支持很有限（一些支持多个渲染目标的 GPUs 仍然只支持很有限的位数）。<br  />
 注意：在使用正交投影时，不支持延迟渲染。如果摄像机的投影模式被设置为正交投影，这些数值将被覆盖，并且摄像机将总是使用 Forward Rendering。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline46"></a>Performance Considerations<br  /><div class="outline-text-5" id="text-4-5-3-3">
+<li><a id="orgheadline37"></a>Performance Considerations<br  /><div class="outline-text-5" id="text-1-5-3-3">
 <p>
 在延迟渲染中渲染实时光照的开销和被照明的像素数量成比例，而和场景的复杂程度无关。所以小的点光源或聚光灯开销非常小，如果场景中的物体将它们整个或部分遮挡，渲染它们的开销将更小。<br  />
 </p>
@@ -972,7 +842,7 @@ Deferred Pass 用来渲染光照计算需要的所有的信息（在内置 shade
 当然，带阴影的光照会比没有阴影的光照开销更大。在延迟渲染中，对于每个产生阴影的光照，产生阴影的物体仍然需要被渲染一次或多次。此外，应用阴影的光照着色器比阴影关闭的有更高的渲染开销。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline47"></a>Implementation Details<br  /><div class="outline-text-5" id="text-4-5-3-4">
+<li><a id="orgheadline38"></a>Implementation Details<br  /><div class="outline-text-5" id="text-1-5-3-4">
 <p>
 当使用延迟渲染时，Unity 中的渲染处理在发生在下面两个 Passes 中：<br  />
 </p>
@@ -1059,12 +929,12 @@ Lighting Pass: 前面 Pass 产生的 buffers 在这里被使用，添加光照�
 当 camera 使用 HDR 渲染时，如果没有为 Emission+lighting buffer（RT3）创建独立的渲染对象，替代的渲染目标将被用作 RT3，camera 将会渲染到替代的渲染目标中。<br  />
 </p>
 </div></li>
-<li><a id="orgheadline48"></a>G-Buffer Pass<br  /><div class="outline-text-5" id="text-4-5-3-5">
+<li><a id="orgheadline39"></a>G-Buffer Pass<br  /><div class="outline-text-5" id="text-1-5-3-5">
 <p>
 G-Buffer Pass 为每个物体渲染一次。漫反射和镜面颜色，表面平滑度，世界空间的法线，发射+环境+反射+光照贴图都被渲染到 g-buffer 贴图中。g-buffer 贴图被设置为全局的着色器属性，从而在可以被着色器在后面阶段访问(名称为 CameraGBufferTexture0 &#x2026; CameraGBufferTexture3)<br  />
 </p>
 </div></li>
-<li><a id="orgheadline49"></a>Lighting Pass<br  /><div class="outline-text-5" id="text-4-5-3-6">
+<li><a id="orgheadline40"></a>Lighting Pass<br  /><div class="outline-text-5" id="text-1-5-3-6">
 <p>
 这个光照阶段会基于 g-buffer 和深度来计算光照。光照是在屏幕空间中计算的，所以光照花费的时间独立于场景的复杂度。光照被添加到发射缓冲区中。当对于场景的 Z buffer 测试开启时，和摄像机近平面没有相交的点光源和聚光灯会被当做 3D 形状来渲染。这使得部分或全部被遮挡的点光源或聚光灯的渲染开销很小。方向光和点光源聚光灯和近平面相交时，被当做全屏的方形面片来渲染。<br  />
 </p>
@@ -1078,9 +948,9 @@ G-Buffer Pass 为每个物体渲染一次。漫反射和镜面颜色，表面平
 </p>
 </div></li></ol>
 </div>
-<div id="outline-container-orgheadline51" class="outline-4">
-<h4 id="orgheadline51"><span class="section-number-4">4.5.4</span> Legacy Deferred Lighting path</h4>
-<div class="outline-text-4" id="text-4-5-4">
+<div id="outline-container-orgheadline42" class="outline-4">
+<h4 id="orgheadline42"><span class="section-number-4">1.5.4</span> Legacy Deferred Lighting path</h4>
+<div class="outline-text-4" id="text-1-5-4">
 <p>
 官方都要遗弃了，就不用了解了。<br  />
 </p>
@@ -1094,9 +964,9 @@ PrepassFinal pass 将贴图、光照和发射材质属性组合起来渲染最�
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline52" class="outline-4">
-<h4 id="orgheadline52"><span class="section-number-4">4.5.5</span> Legacy Vertex Lit Rendering path</h4>
-<div class="outline-text-4" id="text-4-5-5">
+<div id="outline-container-orgheadline43" class="outline-4">
+<h4 id="orgheadline43"><span class="section-number-4">1.5.5</span> Legacy Vertex Lit Rendering path</h4>
+<div class="outline-text-4" id="text-1-5-5">
 <p>
 因为顶点光照通常在不支持可编程渲染的平台上，Unity 无法创建多个 shader 变量来处理有光照贴图和没光照贴图的情况。所以为了处理有光照贴图和无光照贴图的物体，必须显式地写多个 Pass。<br  />
 </p>
@@ -1115,9 +985,9 @@ VertexLMM Pass 用于有光照贴图的物体，光照贴图按照 double-LDR �
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline54" class="outline-3">
-<h3 id="orgheadline54"><span class="section-number-3">4.6</span> RenderQueue And z-depth</h3>
-<div class="outline-text-3" id="text-4-6">
+<div id="outline-container-orgheadline45" class="outline-3">
+<h3 id="orgheadline45"><span class="section-number-3">1.6</span> RenderQueue And z-depth</h3>
+<div class="outline-text-3" id="text-1-6">
 <p>
 RenderQueue 是用来控制渲染顺序的。系统内置了下面的渲染队列 Background(1000) Geometry(2000) AlphaTest(2450) Transparent(3000) Overlay(4000)。索引值小的队列先渲染。<br  />
 z-depth 是表示被渲染的片段离摄像机的距离。渲染的时候会依据深度测试函数来比较此时被渲染的片段的 z-depth 值和当前 z-buffer 中的 z-depth 值，测试通过以后，该片段的颜色才会被写入。<br  />
@@ -1125,27 +995,196 @@ z-depth 是表示被渲染的片段离摄像机的距离。渲染的时候会依
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline67" class="outline-2">
-<h2 id="orgheadline67"><span class="section-number-2">5</span> Tips:</h2>
+<div id="outline-container-orgheadline50" class="outline-2">
+<h2 id="orgheadline50"><span class="section-number-2">2</span> Reflecting your world</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgheadline47" class="outline-3">
+<h3 id="orgheadline47"><span class="section-number-3">2.1</span> 光学基础</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+反射：当光在两种物质分界面上改变传播方向又返回原来物质中的现象，叫做光的反射。<br  />
+</p>
+
+<p>
+折射：光从一种透明介质斜射入另一种透明介质时，传播方向一般会发生变化，这种现象叫光的折射。<br  />
+</p>
+
+<p>
+散射：光束通过不均匀媒质时，部分光束将偏离原来方向而分散传播，从侧向也可以看到光的现象，叫做光的散射。散射是多重折射和反射的结果。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline49" class="outline-3">
+<h3 id="orgheadline49"><span class="section-number-3">2.2</span> Fresnel reflection</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+当光入射到折射率不同的两个媒质分界面时，一部分光会被反射，这种现象称为菲涅尔反射(其实就是光的反射，只不过这个现象是菲涅尔发现的)。<br  />
+视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显，这就是“菲涅尔效应”。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline48" class="outline-4">
+<h4 id="orgheadline48"><span class="section-number-4">2.2.1</span> 如何模拟菲涅尔效应效果？</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<pre class="example">
+// rim 随视角和法线夹角的增大而增大
+float rim = 1.0 - saturate(dot(o.Normal,normalize(IN.viewDir)));
+rim = pow(rim,_RimPower);
+
+o.Albedo = color_.rgb * _DiffuseTint.rgb;
+// 物体反射的颜色 随 rim 的增大而增大。即视角正对物体时，反射的颜色少，随着视角和物体法线夹角增大，反射的颜色增大。
+o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
+o.Specular = _SpecPower;
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline57" class="outline-2">
+<h2 id="orgheadline57"><span class="section-number-2">3</span> Shader Optimize</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-orgheadline51" class="outline-3">
+<h3 id="orgheadline51"><span class="section-number-3">3.1</span> 数据类型</h3>
+<div class="outline-text-3" id="text-3-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Type</th>
+<th scope="col" class="org-left">Detial</th>
+<th scope="col" class="org-left">Range</th>
+<th scope="col" class="org-left">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">float</td>
+<td class="org-left">32 位单精度浮点数</td>
+<td class="org-left">和通常编程中的 float 一样</td>
+<td class="org-left">存放物体坐标</td>
+</tr>
+
+<tr>
+<td class="org-left">half</td>
+<td class="org-left">16 位中精度浮点数</td>
+<td class="org-left">–60000 to +60000,精度是小数点后 3 位</td>
+<td class="org-left">适合存放 UV 值，颜色值</td>
+</tr>
+
+<tr>
+<td class="org-left">fixed</td>
+<td class="org-left">11 位低精度浮点数</td>
+<td class="org-left">范围是[-2, 2]，精度是 1/256</td>
+<td class="org-left">可用于光照计算，颜色，单位向量</td>
+</tr>
+</tbody>
+</table>
+<p>
+<a href="https://docs.unity3d.com/Manual/SL-DataTypesAndPrecision.html">SL-DataTypesAndPrecision</a><br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline52" class="outline-3">
+<h3 id="orgheadline52"><span class="section-number-3">3.2</span> noforwardadd</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+该选项基于一个开关来自动告诉 Unity，任何采用该着色器的物体只从一个单一的方向光接收每个像素的光照。该着色器计算的其他光照将使用 SH 方式计算。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-surface">#pragma surface surf SimpleLambert noforwardadd
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline53" class="outline-3">
+<h3 id="orgheadline53"><span class="section-number-3">3.3</span> exclude_path</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+exclude_path:deferred, exclude_path:forward, exclude_path:prepass<br  />
+不为指定渲染方式(Deferred Shading, Forward , Legacy Deferred)生成代码。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-surface">#pragma surface surf SimpleLambert exclude_path:prepass
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline54" class="outline-3">
+<h3 id="orgheadline54"><span class="section-number-3">3.4</span> nolightmap</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+关闭该 shader 的所有光照贴图支持。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline55" class="outline-3">
+<h3 id="orgheadline55"><span class="section-number-3">3.5</span> halfasview</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+用 halfDir 代替 viewDir 作为光照函数的参数传入 shader。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline56" class="outline-3">
+<h3 id="orgheadline56"><span class="section-number-3">3.6</span> 参考资料</h3>
+<div class="outline-text-3" id="text-3-6">
+<p>
+<a href="https://docs.unity3d.com/Manual/SL-SurfaceShaders.html">Shader 编译指令</a><br  />
+<a href="https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html">Mobile Optimize Doc</a><br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline58" class="outline-2">
+<h2 id="orgheadline58"><span class="section-number-2">4</span> Screen Effect</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+屏幕特效特效就相当于对最终显示图片到显示器之前的图片进行 PS 处理。具体处理每个像素的过程会通过一个 Shader 来进行，进行处理的时机是 Camera.OnRenderImage 被触发的时候，而 Graphics.Blit 可以将处理结果生效。<br  />
+处理每个像素的 Shader 通常会使用下面的一些配置：<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-surface">#pragma vertex vert_img        // 使用系统内置的函数
+#pragma fragment frag          // 具体处理过程在 frag 中实现
+#pragma fragmentoption ARB_precision_hint_fastest
+// 上面这个参数用来指定片段着色器计算精度采用快速模式
+// http://forum.unity3d.com/threads/pragma-fragmentoption-arb_precision_hint_fastest-any-documentation-about-this.294465/
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline70" class="outline-2">
+<h2 id="orgheadline70"><span class="section-number-2">5</span> Tips:</h2>
 <div class="outline-text-2" id="text-5">
-</div><div id="outline-container-orgheadline56" class="outline-3">
-<h3 id="orgheadline56"><span class="section-number-3">5.1</span> unity 坐标系</h3>
+</div><div id="outline-container-orgheadline59" class="outline-3">
+<h3 id="orgheadline59"><span class="section-number-3">5.1</span> unity 坐标系</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 unity 为左手坐标系。<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline57" class="outline-3">
-<h3 id="orgheadline57"><span class="section-number-3">5.2</span> Skin Shader</h3>
+<div id="outline-container-orgheadline60" class="outline-3">
+<h3 id="orgheadline60"><span class="section-number-3">5.2</span> Skin Shader</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 <a href="http://ten24.info/skin-shading-in-unity/">http://ten24.info/skin-shading-in-unity/</a><br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline58" class="outline-3">
-<h3 id="orgheadline58"><span class="section-number-3">5.3</span> Blinn Phong And Phong</h3>
+<div id="outline-container-orgheadline61" class="outline-3">
+<h3 id="orgheadline61"><span class="section-number-3">5.3</span> Blinn Phong And Phong</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 <a href="http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading">http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading</a><br  />
@@ -1153,36 +1192,36 @@ unity 为左手坐标系。<br  />
 </div>
 </div>
 
-<div id="outline-container-orgheadline64" class="outline-3">
-<h3 id="orgheadline64"><span class="section-number-3">5.4</span> Error</h3>
+<div id="outline-container-orgheadline67" class="outline-3">
+<h3 id="orgheadline67"><span class="section-number-3">5.4</span> Error</h3>
 <div class="outline-text-3" id="text-5-4">
-</div><div id="outline-container-orgheadline59" class="outline-4">
-<h4 id="orgheadline59"><span class="section-number-4">5.4.1</span> Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</h4>
+</div><div id="outline-container-orgheadline62" class="outline-4">
+<h4 id="orgheadline62"><span class="section-number-4">5.4.1</span> Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</h4>
 <div class="outline-text-4" id="text-5-4-1">
 <p>
 将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline61" class="outline-4">
-<h4 id="orgheadline61"><span class="section-number-4">5.4.2</span> 如果发现颜色部分正确部分不正确</h4>
+<div id="outline-container-orgheadline64" class="outline-4">
+<h4 id="orgheadline64"><span class="section-number-4">5.4.2</span> 如果发现颜色部分正确部分不正确</h4>
 <div class="outline-text-4" id="text-5-4-2">
-</div><ol class="org-ol"><li><a id="orgheadline60"></a>检查 Input 中 viewDir lightDir 是否使用的是 float3.<br  /><div class="outline-text-5" id="text-5-4-2-1">
+</div><ol class="org-ol"><li><a id="orgheadline63"></a>检查 Input 中 viewDir lightDir 是否使用的是 float3.<br  /><div class="outline-text-5" id="text-5-4-2-1">
 <p>
 使用 float 会造成 yz 分量的缺失，导致 yz 分量不为 0 时，显示错误。<br  />
 </p>
 </div></li></ol>
 </div>
-<div id="outline-container-orgheadline62" class="outline-4">
-<h4 id="orgheadline62"><span class="section-number-4">5.4.3</span> Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</h4>
+<div id="outline-container-orgheadline65" class="outline-4">
+<h4 id="orgheadline65"><span class="section-number-4">5.4.3</span> Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</h4>
 <div class="outline-text-4" id="text-5-4-3">
 <p>
 是因为被 Skybox 遮挡住了。Skybox 的深度值为 1，如果被渲染物体的深度值大于 1 肯定会被遮挡；如果被渲染的物体深度值等于 1，而且物体的渲染顺序在 Skybox 之前，物体也会被遮挡。<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline63" class="outline-4">
-<h4 id="orgheadline63"><span class="section-number-4">5.4.4</span> vert': output parameter 'o' not completely initialized</h4>
+<div id="outline-container-orgheadline66" class="outline-4">
+<h4 id="orgheadline66"><span class="section-number-4">5.4.4</span> vert': output parameter 'o' not completely initialized</h4>
 <div class="outline-text-4" id="text-5-4-4">
 <div class="org-src-container">
 
@@ -1196,15 +1235,15 @@ unity 为左手坐标系。<br  />
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline66" class="outline-3">
-<h3 id="orgheadline66"><span class="section-number-3">5.5</span> Normal Map</h3>
+<div id="outline-container-orgheadline69" class="outline-3">
+<h3 id="orgheadline69"><span class="section-number-3">5.5</span> Normal Map</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
 Normal Map 又叫 Ramp Map，其实就是法线贴图。<br  />
 </p>
 </div>
-<div id="outline-container-orgheadline65" class="outline-4">
-<h4 id="orgheadline65"><span class="section-number-4">5.5.1</span> 参考资料</h4>
+<div id="outline-container-orgheadline68" class="outline-4">
+<h4 id="orgheadline68"><span class="section-number-4">5.5.1</span> 参考资料</h4>
 <div class="outline-text-4" id="text-5-5-1">
 <p>
 <a href="http://www.songho.ca/opengl/gl_normaltransform.html">Normal 变换矩阵推导</a><br  />
@@ -1219,7 +1258,7 @@ Normal Map 又叫 Ramp Map，其实就是法线贴图。<br  />
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Dong Guo</p>
-<p class="date">Created: 2016-07-24 Sun 17:40</p>
+<p class="date">Created: 2016-07-25 Mon 11:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
