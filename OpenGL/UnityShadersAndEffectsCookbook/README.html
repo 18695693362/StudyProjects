@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-07-25 Mon 11:07 -->
+<!-- 2016-08-02 Tue 01:04 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="viewport" content="width=device-width, initial-scale=1" />
 <title>Unity Shader And Effect Cookbook</title>
@@ -193,23 +193,28 @@ for the JavaScript code in this tag.
 <li><a href="#orgheadline56">3.6. 参考资料</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline58">4. Screen Effect</a></li>
-<li><a href="#orgheadline70">5. Tips:</a>
+<li><a href="#orgheadline60">4. Screen Effect</a>
 <ul>
-<li><a href="#orgheadline59">5.1. unity 坐标系</a></li>
-<li><a href="#orgheadline60">5.2. Skin Shader</a></li>
-<li><a href="#orgheadline61">5.3. Blinn Phong And Phong</a></li>
-<li><a href="#orgheadline67">5.4. Error</a>
-<ul>
-<li><a href="#orgheadline62">5.4.1. Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</a></li>
-<li><a href="#orgheadline64">5.4.2. 如果发现颜色部分正确部分不正确</a></li>
-<li><a href="#orgheadline65">5.4.3. Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</a></li>
-<li><a href="#orgheadline66">5.4.4. vert': output parameter 'o' not completely initialized</a></li>
+<li><a href="#orgheadline58">4.1. 概述</a></li>
+<li><a href="#orgheadline59">4.2. 明度 亮度 饱和度 对比度</a></li>
 </ul>
 </li>
-<li><a href="#orgheadline69">5.5. Normal Map</a>
+<li><a href="#orgheadline72">5. Tips:</a>
 <ul>
-<li><a href="#orgheadline68">5.5.1. 参考资料</a></li>
+<li><a href="#orgheadline61">5.1. unity 坐标系</a></li>
+<li><a href="#orgheadline62">5.2. Skin Shader</a></li>
+<li><a href="#orgheadline63">5.3. Blinn Phong And Phong</a></li>
+<li><a href="#orgheadline69">5.4. Error</a>
+<ul>
+<li><a href="#orgheadline64">5.4.1. Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</a></li>
+<li><a href="#orgheadline66">5.4.2. 如果发现颜色部分正确部分不正确</a></li>
+<li><a href="#orgheadline67">5.4.3. Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</a></li>
+<li><a href="#orgheadline68">5.4.4. vert': output parameter 'o' not completely initialized</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline71">5.5. Normal Map</a>
+<ul>
+<li><a href="#orgheadline70">5.5.1. 参考资料</a></li>
 </ul>
 </li>
 </ul>
@@ -670,7 +675,7 @@ Pass 可以设置图形硬件的渲染状态。<br  />
 <h3 id="orgheadline44"><span class="section-number-3">1.5</span> Unity's Rendering Pipline</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
-Shaders 定义了一个物体看起来是怎样的，以及这个物体如何和光照交互。应为光照计算必须在 shader 中进行，并且可能有很多种类型的光照和阴影，所以编写高质量的可用的 shaders 将是一个复杂的任务。为了让这项工作变的简单，Unity 提供了 Surface Shaders，其中所有的光照、阴影、光照贴图，正向渲染、延迟渲染等事情都被自动化管理。<br  />
+Shaders 定义了一个物体看起来是怎样的，以及这个物体如何和光照交互。因为光照计算必须在 shader 中进行，并且可能有很多种类型的光照和阴影，所以编写高质量的可用的 shaders 将是一个复杂的任务。为了让这项工作变的简单，Unity 提供了 Surface Shaders，其中所有的光照、阴影、光照贴图，正向渲染、延迟渲染等事情都被自动化管理。<br  />
 </p>
 <pre class="example">
 本小结内容翻译自 Unity 官方文档：
@@ -1126,6 +1131,11 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass<br  />
 <p>
 关闭该 shader 的所有光照贴图支持。<br  />
 </p>
+<div class="org-src-container">
+
+<pre class="src src-surface">#pragma surface surf SimpleLambert noforwardadd nolightmap halfasview exclude_path:prepass
+</pre>
+</div>
 </div>
 </div>
 <div id="outline-container-orgheadline55" class="outline-3">
@@ -1146,9 +1156,12 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass<br  />
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline58" class="outline-2">
-<h2 id="orgheadline58"><span class="section-number-2">4</span> Screen Effect</h2>
+<div id="outline-container-orgheadline60" class="outline-2">
+<h2 id="orgheadline60"><span class="section-number-2">4</span> Screen Effect</h2>
 <div class="outline-text-2" id="text-4">
+</div><div id="outline-container-orgheadline58" class="outline-3">
+<h3 id="orgheadline58"><span class="section-number-3">4.1</span> 概述</h3>
+<div class="outline-text-3" id="text-4-1">
 <p>
 屏幕特效特效就相当于对最终显示图片到显示器之前的图片进行 PS 处理。具体处理每个像素的过程会通过一个 Shader 来进行，进行处理的时机是 Camera.OnRenderImage 被触发的时候，而 Graphics.Blit 可以将处理结果生效。<br  />
 处理每个像素的 Shader 通常会使用下面的一些配置：<br  />
@@ -1164,27 +1177,39 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass<br  />
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline70" class="outline-2">
-<h2 id="orgheadline70"><span class="section-number-2">5</span> Tips:</h2>
+<div id="outline-container-orgheadline59" class="outline-3">
+<h3 id="orgheadline59"><span class="section-number-3">4.2</span> 明度 亮度 饱和度 对比度</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+明度（Brightness）是眼睛对光源和物体表面的明暗程度的感觉，主要是由光线强弱决定的一种视觉经验。<br  />
+亮度（Luminance）是指发光体（反光体）表面发光（反光）强弱的物理量。<br  />
+饱和度（Saturation）是指色彩的鲜艳程度，也称色彩的纯度。饱和度取决于该色中含色成分和消色成分（灰色）的比例。含色成分越大，饱和度越大；消色成分越大，饱和度越小。纯的颜色都是高度饱和的，如鲜红，鲜绿。混杂上白色，灰色或其他色调的颜色，是不饱和的颜色，如绛紫，粉红，黄褐等。完全不饱和的颜色根本没有色调，如黑白之间的各种灰色。<br  />
+对比度（Contrast）指的是一幅图像中明暗区域最亮的白和最暗的黑之间不同亮度层级的测量，差异范围越大代表对比越大，差异范围越小代表对比越小，好的对比率 120:1 就可容易地显示生动、丰富的色彩，当对比率高达 300:1 时，便可支持各阶的颜色。但对比率遭受和亮度相同的困境，现今尚无一套有效又公正的标准来衡量对比率，所以最好的辨识方式还是依靠使用者眼睛。<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline72" class="outline-2">
+<h2 id="orgheadline72"><span class="section-number-2">5</span> Tips:</h2>
 <div class="outline-text-2" id="text-5">
-</div><div id="outline-container-orgheadline59" class="outline-3">
-<h3 id="orgheadline59"><span class="section-number-3">5.1</span> unity 坐标系</h3>
+</div><div id="outline-container-orgheadline61" class="outline-3">
+<h3 id="orgheadline61"><span class="section-number-3">5.1</span> unity 坐标系</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 unity 为左手坐标系。<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline60" class="outline-3">
-<h3 id="orgheadline60"><span class="section-number-3">5.2</span> Skin Shader</h3>
+<div id="outline-container-orgheadline62" class="outline-3">
+<h3 id="orgheadline62"><span class="section-number-3">5.2</span> Skin Shader</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 <a href="http://ten24.info/skin-shading-in-unity/">http://ten24.info/skin-shading-in-unity/</a><br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline61" class="outline-3">
-<h3 id="orgheadline61"><span class="section-number-3">5.3</span> Blinn Phong And Phong</h3>
+<div id="outline-container-orgheadline63" class="outline-3">
+<h3 id="orgheadline63"><span class="section-number-3">5.3</span> Blinn Phong And Phong</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 <a href="http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading">http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading</a><br  />
@@ -1192,36 +1217,36 @@ unity 为左手坐标系。<br  />
 </div>
 </div>
 
-<div id="outline-container-orgheadline67" class="outline-3">
-<h3 id="orgheadline67"><span class="section-number-3">5.4</span> Error</h3>
+<div id="outline-container-orgheadline69" class="outline-3">
+<h3 id="orgheadline69"><span class="section-number-3">5.4</span> Error</h3>
 <div class="outline-text-3" id="text-5-4">
-</div><div id="outline-container-orgheadline62" class="outline-4">
-<h4 id="orgheadline62"><span class="section-number-4">5.4.1</span> Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</h4>
+</div><div id="outline-container-orgheadline64" class="outline-4">
+<h4 id="orgheadline64"><span class="section-number-4">5.4.1</span> Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)</h4>
 <div class="outline-text-4" id="text-5-4-1">
 <p>
 将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline64" class="outline-4">
-<h4 id="orgheadline64"><span class="section-number-4">5.4.2</span> 如果发现颜色部分正确部分不正确</h4>
+<div id="outline-container-orgheadline66" class="outline-4">
+<h4 id="orgheadline66"><span class="section-number-4">5.4.2</span> 如果发现颜色部分正确部分不正确</h4>
 <div class="outline-text-4" id="text-5-4-2">
-</div><ol class="org-ol"><li><a id="orgheadline63"></a>检查 Input 中 viewDir lightDir 是否使用的是 float3.<br  /><div class="outline-text-5" id="text-5-4-2-1">
+</div><ol class="org-ol"><li><a id="orgheadline65"></a>检查 Input 中 viewDir lightDir 是否使用的是 float3.<br  /><div class="outline-text-5" id="text-5-4-2-1">
 <p>
 使用 float 会造成 yz 分量的缺失，导致 yz 分量不为 0 时，显示错误。<br  />
 </p>
 </div></li></ol>
 </div>
-<div id="outline-container-orgheadline65" class="outline-4">
-<h4 id="orgheadline65"><span class="section-number-4">5.4.3</span> Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</h4>
+<div id="outline-container-orgheadline67" class="outline-4">
+<h4 id="orgheadline67"><span class="section-number-4">5.4.3</span> Unity 渲染半透明物体，Editor 下 Scene 中可见，在 Game 中不可见</h4>
 <div class="outline-text-4" id="text-5-4-3">
 <p>
 是因为被 Skybox 遮挡住了。Skybox 的深度值为 1，如果被渲染物体的深度值大于 1 肯定会被遮挡；如果被渲染的物体深度值等于 1，而且物体的渲染顺序在 Skybox 之前，物体也会被遮挡。<br  />
 </p>
 </div>
 </div>
-<div id="outline-container-orgheadline66" class="outline-4">
-<h4 id="orgheadline66"><span class="section-number-4">5.4.4</span> vert': output parameter 'o' not completely initialized</h4>
+<div id="outline-container-orgheadline68" class="outline-4">
+<h4 id="orgheadline68"><span class="section-number-4">5.4.4</span> vert': output parameter 'o' not completely initialized</h4>
 <div class="outline-text-4" id="text-5-4-4">
 <div class="org-src-container">
 
@@ -1235,15 +1260,15 @@ unity 为左手坐标系。<br  />
 </div>
 </div>
 </div>
-<div id="outline-container-orgheadline69" class="outline-3">
-<h3 id="orgheadline69"><span class="section-number-3">5.5</span> Normal Map</h3>
+<div id="outline-container-orgheadline71" class="outline-3">
+<h3 id="orgheadline71"><span class="section-number-3">5.5</span> Normal Map</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
 Normal Map 又叫 Ramp Map，其实就是法线贴图。<br  />
 </p>
 </div>
-<div id="outline-container-orgheadline68" class="outline-4">
-<h4 id="orgheadline68"><span class="section-number-4">5.5.1</span> 参考资料</h4>
+<div id="outline-container-orgheadline70" class="outline-4">
+<h4 id="orgheadline70"><span class="section-number-4">5.5.1</span> 参考资料</h4>
 <div class="outline-text-4" id="text-5-5-1">
 <p>
 <a href="http://www.songho.ca/opengl/gl_normaltransform.html">Normal 变换矩阵推导</a><br  />
@@ -1258,7 +1283,7 @@ Normal Map 又叫 Ramp Map，其实就是法线贴图。<br  />
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Dong Guo</p>
-<p class="date">Created: 2016-07-25 Mon 11:07</p>
+<p class="date">Created: 2016-08-02 Tue 01:04</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

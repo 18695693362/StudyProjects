@@ -178,7 +178,7 @@ Pass 可以设置图形硬件的渲染状态。
 | ColorMask RGB / A / 0 / any combination of R, G, B, A                        | ColorMask 0 将关闭颜色缓冲区中所有通道的写入 |
 | Offset OffsetFactor, OffsetUnits                                             | 设置深度值的偏移                            |
 ** Unity's Rendering Pipline
-Shaders 定义了一个物体看起来是怎样的，以及这个物体如何和光照交互。应为光照计算必须在 shader 中进行，并且可能有很多种类型的光照和阴影，所以编写高质量的可用的 shaders 将是一个复杂的任务。为了让这项工作变的简单，Unity 提供了 Surface Shaders，其中所有的光照、阴影、光照贴图，正向渲染、延迟渲染等事情都被自动化管理。
+Shaders 定义了一个物体看起来是怎样的，以及这个物体如何和光照交互。因为光照计算必须在 shader 中进行，并且可能有很多种类型的光照和阴影，所以编写高质量的可用的 shaders 将是一个复杂的任务。为了让这项工作变的简单，Unity 提供了 Surface Shaders，其中所有的光照、阴影、光照贴图，正向渲染、延迟渲染等事情都被自动化管理。
 #+BEGIN_EXAMPLE
 本小结内容翻译自 Unity 官方文档：
 SL-RenderPipeline.html
@@ -344,6 +344,9 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 #+END_SRC
 ** nolightmap
 关闭该 shader 的所有光照贴图支持。
+#+BEGIN_SRC surface shader
+#pragma surface surf SimpleLambert noforwardadd nolightmap halfasview exclude_path:prepass
+#+END_SRC
 ** halfasview
 用 halfDir 代替 viewDir 作为光照函数的参数传入 shader。
 ** 参考资料
