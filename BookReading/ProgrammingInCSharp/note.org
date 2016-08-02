@@ -66,6 +66,17 @@ enum SomeValues
   Value_20 = 20,
   Value_21
 }
+// 遍历枚举值
+foreach (GViewType type in GViewType.GetValues(typeof(GViewType))) {
+  InitView_ (type);
+}
+// 需要注意的是 GViewType.GetValues(typeof(GViewType))返回的数组是按照名称字符串排序的，所以要按照枚举值遍历需要如下操作：
+var enums = GViewType.GetValues(typeof(GViewType));
+Array.Sort(enums);
+foreach(var eValue in enums)
+{
+	// do something
+}
 #+END_SRC
 *** 运算符
 ?? 如果 ?? 运算符的左操作数非空，该运算符将返回左操作数，否则返回右操作数。
@@ -872,6 +883,8 @@ public class ListBox:IEnumerable<string>
 *** 约束
 通过关键字 where 指定约束。
 public class Node<T>:IComparable<Node<T>> where T : IComparable<T> // 指定约束 T 需要实现 IComparable<T>接口
+public class Node<T> where T : new() // 指定 T 支持不带参数的构造函数
+public class Node<T> where T : class // 指定 T 可以被赋值为 null
 #+BEGIN_SRC c#
 public class Node<T>:IComparable<Node<T>> where T : IComparable<T>
 {
@@ -1307,15 +1320,19 @@ static 不支持局部变量，只能用类的静态字段来代替 c++中的局
 const 字段只能在该字段的声明中初始化。
 readonly 字段可以在声明或构造函数中初始化。因此，根据所使用的构造函数，readonly 字段可能具有不同的值。
 const 字段会被当做静态成员变量，所以不必要也不允许为该字段添加 static 修饰符。
+
+数组的初始化器是在运行时执行的，所以无法定义一个 const 数组并用指定的值初始化它。
 #+BEGIN_SRC c#
 class GStaticMember
 {
   public const int const_imember_0 = 10;
+  public const int[] int_arr = new int[3]{1,2,3}; // 编译错误提示只能用 null 初始化。
 }
 GStaticMember member = new GStaticMember ();
 //Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);       // 编译错误，不允许通过对象访问静态字段
 Console.WriteLine ("const_imember_0 = {0}", GStaticMember.const_imember_0);
 #+END_SRC
+
 ** 编码规范
 https://msdn.microsoft.com/zh-cn/library/ff926074
 ** Tools
