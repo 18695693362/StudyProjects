@@ -1,0 +1,515 @@
+
+#+TITLE: Unity Note
+#+OPTIONS: ^:{}
+#+OPTIONS: \n:t 
+#+HTML_HEAD: <link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
+Tips: 下载 htlm 格式文件直接在浏览器中打开，可以查看格式优化过的文档。
+* UI
+** Canvas
+Canvas 是一个区域，所有的 UI 元素必须在其中。Canvas 是包含一个 Canvas 组件的 GameObject。所有的 UI 元素必须是这个 Canvas 的子节点。
+*** 元素的渲染次序
+UI 元素在 Canvas 中的渲染次序，和他们在 Hierarchy 中的次序一致。第一个子节点先渲染，第二个子节点次之，等等。当两个 UI 元素重叠时，后面渲染的 UI 元素将出现在前面渲染的 UI 元素上面。通过改变 UI 元素在 Hierarchy 视图中的位置来改变他们的渲染顺序。
+*** 渲染模式
+ScreenSpace-Overlay 渲染模式将被渲染的 UI 元素放在场景最上面的屏幕上。如果屏幕尺寸或分辨率改变，Canvas 将会自动改尺寸来适配屏幕。
+ScreenSpace-Camera 渲染模式和 ScreenSpace-Overlay 渲染模式类似，但是 Canvas 被放置在一个特定的摄像机前的指定距离处。UI 元素被该摄像机渲染，也就是说摄像机的设置会影响 UI 的显示效果。如果摄像机被设置为透视投影，透视的扭曲量可通过 Camera 的 Field Of View 来控制。
+WorldSpace 渲染模式下，Canvas 就像任何场景中的物体一样。Canvas 的大小可以被手动设置，UI 元素会被基于他们的 3D 位置而绘制。
+*** 实例说明
+UI/Scenes/UICanvas 中，改变屏幕大小，ScreenSpace-Overlay 和 ScreenSpace-Camera 模式下的文字大小不会改变，Canvas 的尺寸会随着屏幕大小而调整。WorldSpace 模式下的文字大小会改变，Canvas 的尺寸不会随屏幕大小而改变。
+** Basic Layout
+*** Rect Transform
+Rect Transform 是专门针对 UI 开发的用来代替 Transform 的。Rect Transform 比 Transform 要多 width 和 height 两个属性，来指定一个矩形区域。
+对于包含 RectTransform 属性的游戏对象，Rect Tool 在改变尺寸时，会改变 RectTransform 的 size 大小。对于不包含 RectTransform 属性的游戏对象（如 Sprite），Rect Tool 改变的是游戏对象的 Scale。
+**** Pivot
+中心点会影响缩放、旋转、改变尺寸的结果。
+**** Anchors
+如果 Rect Transform 的父节点也是个 RectTransform，那么子节点可以通过多种方式 anchored 到父节点上。(其实，Anchors 定义了一个相对于父节点矩形的 Anchor 矩形区域-AnchorRect。)
+**** PosX PosY Width Height
+当 Anchors 重合时，PosX PosY 表示 Pivot 相对于 Anchors 的位置,Width Height 表示矩形区域的宽高。
+当 Anchors 在水平方向上重合，在竖直方向上分开时，PosX 表示 Pivot 相对于 Anchors 的水平位置，Width 表示矩形区域的宽。PosY 变为了 Top，表示中心点相对于 Anchors 最上面的距离，Height 变为了 Bottom 表示中心点相对于 Anchors 最下面的距离。
+当 Anchors 全部分开后，属性变为了 Left Right Top Bottom，分别表示节点的 Rect 相对于 AnchorRect 的位置。
+**** Blue 模式和 Raw 编辑模式
+Blue 模式下，会忽略 UI 元素的 Local Rotation 和 Local Scale，方便以原來的旋转和大小调整物体。
+Raw 模式下，调整 Pivot 和 Anchors 时会保持 UI 元素的位置和大小。
+**** Script 中常用属性和方法
+***** rectTransform.rect
+rectTransform.rect 该属性返回表示当前 UI 元素的矩形区域，position 表示矩形左下的坐标（基于当前 UI 元素的本地坐标），size 表示矩形区域的尺寸。
+***** rectTransform.TransformPoint
+rectTransform.TransformPoint(pos)可以将 UI 元素的本地坐标转换为世界坐标。
+***** rectTransform 属性设置
+在脚本中设置 rectTransform 属性时，先将 rectTransform 所属的 GameObject 加到场景中，然后再设置 rectTransform 相关的属性，否则 GameObject 在加入场景时会修改 RectTransform 的属性。
+#+BEGIN_SRC c#
+// 下面代码可以将一个 RectTransform 设置为其父节点大小，中心和其父节点重合
+public static void ResetRectToFullScreenAndInMiddle (RectTransform rectTransform)
+{
+  if (rectTransform != null) {
+    rectTransform.pivot = new Vector2 (0.5f, 0.5f);
+    rectTransform.localScale = Vector3.one;
+    rectTransform.anchorMin = Vector2.zero;
+    rectTransform.anchorMax = Vector2.one;
+    rectTransform.sizeDelta = Vector2.zero;
+    rectTransform.localPosition = Vector3.zero;
+  }
+}
+#+END_SRC
+
+** Visual Components
+*** Text
+Best Fit 选项会修改文字的尺寸来适应可显示的区域。
+*** Image
+ImageType 选项定义了被应用的 Sprite 如何显示:
+Simple 表示均等地缩放整个 sprite;
+Sliced 表示使用 3x3 分割的 Sprite，当修改尺寸时，四个角不会扭曲变形，只有中间的部分会缩放;
+Tiled 和 Sliced 类似，但是它不会缩放中心的内容，它是重复中心的内容;
+Filled 和 Simple 一样的方式显示 Sprite，只是它会从原点开始以指定的方向、方法以及总量来显示图片。
+选择 Simple 或 Filled 时，可以通过 Set Native Size 将 Image 的大小设置为原始图片的大小。
+*** Mask
+Mask 组件不是一个可视化的 UI 控件，但它是控制子 UI 元素显示的一种方式。Mask 会限制子 UI 元素的形状为他们父节点的形状。
+*** Effect
+Outline 组件可以为 UI 元素添加描边效果。通过修改 EffectColor 为描边设置颜色，EffectDistance 设置描边的相对位置。
+** Interaction Components
+*** Selectable Base Class
+Selectable 是所有可交互组件的基类，它按照统一的方式来处理元素。
+| Property     | Function                                                                                                   |
+|--------------+------------------------------------------------------------------------------------------------------------|
+| Interactible | 该属性决定了组件是否接受输入。当它被设置为 false 时，交互是不可用的，而且转换状态被设置为 Disable          |
+| Transition   | 对于一个可选中的组件，依据它当前所在状态有很多转换选项。不同的状态包括：normal，highlight,pressed,disabled |
+| Navigation   | 有一系列的导航选项来控制如何实现键盘导航                                                                   |
+*** Button
+状态改变触发的 UnityEvent：OnClick
+*** Toggle
+将多个 Toggle 的 Group 属性指定相同的包含 ToggleGroup 组件的 GameObject，可将这些 Toggle 指定为一组。
+状态改变触发的 UnityEvent：OnValueChanged
+*** Toggle Group
+为 GameObject 添加 ToggleGroup 可以分组管理 Toggle。Allow Switch Off 属性表示，点击分组中 On 的 Toggle，该 Toggle 会变为 Off。
+*** Slider
+Slider 有一个整型值，拖拉可以在最小和最大范围内改变该值。WholeNumbers 属性可以指定整型值为整数。
+状态改变触发的 UnityEvent：OnValueChanged
+*** ScrollBar
+ScrollBar 有一个 0 到 1 的整型值。Number Of Steps 属性表示拖动 ScrollBar 从 0 变为 1 一共需要多少个 Step，该值为 0 时，ScrollBar 的拖动是平滑的。
+状态改变触发的 UnityEvent：OnValueChanged
+*** Dropdown
+状态改变触发的 UnityEvent：OnValueChanged
+*** InputField
+ContentType 属性表示输入框内容的类型。Standard、Autocorrected、Integer Number、Decimal Number、Alphanumeric、Name、Email、Password*、Pin、Custom。
+OnValueChanged： 输入框中内容改变会触发该 UnityEvent
+EndEdit： 编辑完成时会触发该 UnityEvent
+*** ScrollRect(ScrollView)
+Horizontal 选项控制是否可以在水平方向滑动。
+Vertical 选项控制是否可以在竖直方向滑动
+MovementType 选项控制移动的类型，Unrestricted 表示不限制滑动范围；Clamped 表示限制滑动范围；Elastic 表示限制滑动范围，并且滑出范围后会自动回弹回来。
+ScrollRect 下的子节点 Viewport 用来控制显示区域，Viewport 上有一个 Mask 组件。Viewport 下的子节点 Content 用来放置滑动区域内要显示的内容。
+Vertical/Horizontal ScrollBar 属性用来绑定 ScrollRect 和 ScrollBar。
+OnValueChanged：滑动位置改变后触发该 UnityEvent
+** Animation Integration
+点击控件属性面板中的 Auto Generate Animation 按钮，可以为该控件生成相关动画配置。
+选中 Animation 对象，在 Inspector 面板中有 LoopTime 选项可以控制是否循环播放动画。
+Tips:
+UI 的 Animation 变换模式和 Unity 遗弃的动画系统是不兼容的。只能使用 Animator 组件。
+** Auto Layout
+自动布局系统提供了很多方式将元素放置在嵌套的布局分组中，例如 horizontal groups,vertical groups,grids。它允许元素依据其包含的内容自动地改变大小。自动布局系统是以 RectTransform 为基础构建的。
+*** Layout Element
+自动布局系统是基于布局元素和布局控制器的。一个布局元素是包含 RectTransform 组件的一个游戏对象，当然这个游戏对象可以包含其他任何组件。布局元素知道它自己的大小。布局元素不会直接设置自己的大小，但是其他的就像布局控制功能的组件可以利用布局元素提供的信息来计算出一个尺寸大小让其使用。
+一个布局元素定义了下面的属性：Minimum width、Minimum height、Preferred width、Preferred height、Flexible width、Flexible height。
+
+Layout Controller 使用 Layout elements 提供的信息的例子是 Content Size Fitter 和各种 Layout Group 组件。修改 layout group 中 layout elements 尺寸遵从下面原则：首先会分配最小的尺寸；如果还有足够的空间，就分配 PreferredSize;如果还有额外的空间可用，就分配 flexible size。
+
+任何包含 RectTransform 的游戏对象都可以被当做一个布局元素。它们的默认 mininum、prefered、和 flexible 尺寸为 0.特定的组件加到该游戏对象上时会改变这些布局属性的值。例如，Image 和 Text 组件会修改 preferred width 和 height 来匹配 sprite 和 text 的内容。
+
+如果你想覆盖一个游戏对象的布局属性（minimum, preferred, or flexible size),你可以为该游戏对象添加一个 Layout Element 组件。
+*** Layout Controller
+Layout Controller 组件可以用来控制一个过多个 Layout Element 的尺寸和位置。一个 Layout Controller 可以控制它自己所在的 GameObject 的 Layout Element 也可以控制子节点的 Layout Element。
+一个功能为 LayoutController 的组件其功能同时可以为 Layout Element.
+**** Content Size Fitter
+Content Size Fitter 的功能是控制它自己所在 GameObject 的 LayoutElement。如果将 Horizontal Fit 或 Vertical Fit 设置为 Preferred, Rect Transform 将会调整它自己的 width and/or height 来适应内容的大小.
+**** Aspect Ratio Fitter
+Aspect Ratio Fitter 的功能是控制它自己所在 GameObject 的 LayoutElement 的 Size。
+Aspect Mode 选项控制如何改变矩形尺寸来满足特定纵横比。
+| 属性                  | 功能                                                                                                                                  |
+|-----------------------+---------------------------------------------------------------------------------------------------------------------------------------|
+| None                  | 矩形不必符合指定宽高比                                                                                                                |
+| Width Controls Height | 高度基于宽度来自动调整                                                                                                                |
+| Height Controls Width | 宽度基于高度自动调整                                                                                                                  |
+| Fit In Parent	       | 宽度、高度、位置、锚点自动基于父节点调整， 使矩形在父节点内并且保持指定宽高比，这会让有些在父节点内的空间没有被当前节点的矩形所覆盖。 |
+| Envelope Parent       | 宽度、高度、位置、锚点自动基于父节点调整，使矩形覆盖父节点的整个区域且保持特定宽高比，这会让当前节点的矩形超出父节点的范围。          |
+Aspect Ratio 选项用来设置 width/height 的比值。
+**** Layout Groups
+作为 layout controller 的 layout group，它的作用是控制子 layout elements 的位置和尺寸。
+一个 layout group 不会控制自己的尺寸。它作为一个 layout element 可以被其他 layout controller 控制或者是手动设置。
+无论一个 layout group 分配了多大尺寸，它都会尽力为每一个子 layout element 分配合适的空间。layout group 可以以任意的方式嵌套。
+**** Driven Rect Transform properties
+因为自动布局系统中的 layout controller 会自动控制某些 UI 元素的尺寸和位置，所以不要手动编辑他们的尺寸和位置，否则，这些改变会被 layout controller 的自动布局重置。
+Rect Transform 有一个属性驱动的概念来达到上面的目的。例如，ContentSizeFitter 有 HorizontalFit 属性来设置使用 Minimum 还是 Preferred 来控制 GameObject 的 RectTransform 的宽度，选择其中一个就会让 Rect Transform 的 width 属性变为只读。
+属性驱动还可以防止手动的编辑。一个布局可以只随 GameView 的分辨率或尺寸而变化。这改变驱动属性的值，反过来又会修改 layout element 的位置和尺寸。但是，只改变 GameView 的大小不应该将 Scene 标记为未保存的。为了避免这样，驱动值不会作为 Scene 的部分被保存，驱动值的改动不会标记场景是否修改。
+*** Technical Details
+自动布局系统来自内置的某些组件，但是也可以创建新的组件来实现自定义的布局控制。可以通过实现自动布局系统可识别的特定接口来创建这样的组件。
+**** Layout Interfaces
+如果一个组件实现了 ILayoutElement 接口，它就会被自动布局系统当做一个 layout element。
+如果一个组件实现了 ILayoutGroup 接口，它被认为用来管理子节点的 RectTransforms。
+如果一个组件实现了 ILayoutSelfController 接口，它被认为用来管理自己的 RectTransform。
+**** Layout Calculations
+自动布局系统安装下面的顺序来计算和执行布局：
+1 通过调用 ILayoutElement 的 CalculateLayoutInputHorizontal 方法来计算 layout element 的 minimum,preferred,flexible widths。这是按照从下到上的顺序执行的，子节点会比他们的父节点先计算，这样父节点就可以在它的计算中获得它的子节点的信息。
+2 layout element 的有效宽度会被计算，并且通过 ILayoutController 的 SetLayoutHorizontal 方法进行设置。这是按照从上到下的顺序进行的，子节点会比他们的父节点晚计算，因为子节点宽度的分配会基于父节点的整个宽度大小。这个步骤之后，layout elements 就会有他们新的宽度。
+3 通过调用 ILayoutElement 的 CalculateLayoutInputVertical 方法来计算 layout element 的 minimum,preferred,flexible heights.这是按照从下到上的顺序执行的，子节点会比他们的父节点先计算，这样父节点就可以在它的计算中获得它的子节点的信息。
+4 layout element 的有效高度会被计算，并且通过 ILayoutController 的 SetLayoutVertical 方法进行设置。这是按照从上到下的顺序进行的，子节点会比他们的父节点晚计算，因为子节点宽度的分配会基于父节点的整个高度大小。这个步骤之后，layout elements 就会有他们新的高度。
+从上面可以看出，自动布局系统会先计算宽度，后计算高度，所以高度计算可以依赖宽度，但是宽度计算永远不能依赖高度。
+**** Triggering Layout Rebuild
+当组件的属性被修改引起当前的布局不可用时，需要对布局进行重新计算。可以通过下面的调用来触发布局的重新计算：
+#+BEGIN_SRC c#
+LayoutRebuilder.MarkLayoutForRebuild (transform as RectTransform);
+#+END_SRC
+这个重新构建不会立刻执行，而是在当前帧的最后，在渲染发生之前执行。不立即执行的原因是在一帧内可能会重建多次，如果每次都立即执行，会导致明显的性能下降。
+通常需要在下面这些地方触发布局的重新计算:
+在可以修改布局的属性设置函数中。
+在下面这些回调函数中：
+OnEnable
+OnDisable
+OnRectTransformDimensionsChange
+OnValidate (only needed in the editor, not at runtime)
+OnDidApplyAnimationProperties
+* UI How Tos
+** Designing UI for Multiple Resolutions
+通过 Anchors 和 Canvas Scaler 来实现多分辨率适配。Anhors 可以处理 UI 元素的相对位置，CanvasScaler 用来处理 UI 元素的大小。
+*** Canvas Scaler
+CanvasScaler 组件用来控制 Canvas 上 UI 元素的像素密度和总体的缩放。这个缩放会影响到 Canvas 下的所有 UI 元素，包括字体的大小，和 Sprite 的边框。
+UI Scale Mode 选项用来控制 UI 元素如何被缩放。
+| ModeType               | 功能                                              |
+|------------------------+---------------------------------------------------|
+| Constant Pixel Size    | 	不考虑屏幕尺寸，UI 元素的尺寸保持和像素大小一样 |
+| Scale With Screen Size | 	使 UI 元素在大的屏幕上变大                      |
+| Constant Physical Size | 	不考虑屏幕尺寸和分辨率大小，UI 元素保持物理尺寸 |
+
+Constant Pixel Size 缩放模式的参数：
+| ArgName                   | 说明                                                                         |
+|---------------------------+------------------------------------------------------------------------------|
+| Scale Factor              | 	按照该缩放值缩放所有 Canvas 下的 UI 元素.                                      |
+| Reference Pixels Per Unit | 	如果 Sprite 有 ‘Pixels Per Unit’ 设置,Sprite 中的一个像素就会占 UI 中的一个单位 |
+
+Scale With Screen Size 缩放模式的参数：
+| ArgName                   | 说明                                                                                    |
+|---------------------------+-----------------------------------------------------------------------------------------|
+| Reference Resolution      | UI 布局的设计分辨率.如果屏幕分辨率更大（更小），则 UI 将被放大（缩小）                  |
+| Screen Match Mode         | 如果当前分辨率和 Reference 分辨率纵横比不一致，该参数用来指定缩放如何缩放 Canvas 的区域 |
+| 1 Match Width or Height   | 以 width 或 height 或他们之间的值为依据缩放 canvas 区域                                 |
+| 2 Expand                  | 在水平或竖直方向上扩展 canvas 区域，从而让 canvas 区域比 reference 区域大               |
+| 3 Shrink                  | 在水平或竖直方向上裁剪 canvas 区域，从而让 canvas 区域比 reference 区域小               |
+| Reference Pixels Per Unit | 如果一个 Sprite 有 ‘Pixels Per Unit’设置,Sprite 中的一个像素就会占用 UI 中的一个单位    |
+当 ScreenMatchMode 选用 Match Width or Height 时，会有 Match 选项可供调节，它用来确定依据 width 还是 height 或者是他们之间的一个值来缩放 canvas 的区域。
+
+Constant Physical Size 缩放模式的参数:
+| ArgName                   | 说明                                                                                          |
+|---------------------------+-----------------------------------------------------------------------------------------------|
+| Physical Unit             | 	用来指定位置和尺寸使用的物理单位                                                            |
+| Fallback Screen DPI       | 	如果屏幕的 DPI 不可知，则假定其 DPI 为该选项设置的值                                        |
+| Default Sprite DPI        | 	有‘Pixels Per Unit’配置的 Sprites 使用的每英寸像素数目将匹配‘Reference Pixels Per Unit’配置 |
+| Reference Pixels Per Unit | 	如果 Sprite 有‘Pixels Per Unit’设置, 则它的 DPI 将匹配‘Default Sprite DPI’设置              |
+
+World Space Canvas 缩放模式的参数(当将 Canvas 的渲染模式设置为 WorldSpace 时会显示):
+| ArgName                   | 说明                                                                                                                                                                |
+|---------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Dynamic Pixels Per Unit   | 在 UI 中动态创建 bitmaps 时（例如创建 Text），每个单位用到的像素数目。                                                                                              |
+| Reference Pixels Per Unit | 如果 Sprite 有‘Pixels Per Unit’配置,Sprite 中的每个像素会占用世界中的一个单元。如果‘Reference Pixels Per Unit’被设置为 1,Sprite 的‘Pixels Per Unit’配置将按原样使用 |
+
+Tips:
+CanvasScaler 是通过修改 Canvas 的缩放值来实现缩放的。该缩放值可通过下面的方式获得：
+需要注意的是，CanvasScaler 的 scaleFactor 属性和 Canvas 的 scaleFactor 并不是同一个值。CanvasScaler 的 scaleFactor 表示在 Constant Pixel Size 模式下 UI 元素的缩放值。而 Canvas 得 scaleFactor 表示无论什么模式下，当前 Canvas 的缩放值。
+#+BEGIN_SRC c#
+GetComponentInParent<Canvas> ().scaleFactor;
+#+END_SRC
+*** Screen And Reference Resolution
+Screen.width 表示当前视图的像素宽度
+Screen.height 表示当前视图的像素高度
+Screen.resolutions 表示显示设备支持的所有全屏的分辨率
+Screen.currentResolution 表示显示设备当前全屏的分辨率
+#+BEGIN_EXAMPLE
+// 下面打印出了 Screen.currentResolution 和 Screen.resolutions 的内容：
+Screen.currentResolution = 1280 x 800 @ 0Hz
+Screen.resolutions = 640 x 480 @ 0Hz
+Screen.resolutions = 720 x 480 @ 0Hz
+Screen.resolutions = 800 x 500 @ 0Hz
+Screen.resolutions = 800 x 600 @ 0Hz
+Screen.resolutions = 1024 x 640 @ 0Hz
+Screen.resolutions = 1024 x 768 @ 0Hz
+Screen.resolutions = 1152 x 720 @ 0Hz
+Screen.resolutions = 1280 x 800 @ 0Hz
+#+END_EXAMPLE
+可以通过下面的方法来获取 ReferenceResolution
+#+BEGIN_SRC c#
+public static Vector2 GetCanvasReferenceResolution (GameObject gObj)
+{
+  CanvasScaler scaler = GUtility.GetComponentInSelfAndParent<CanvasScaler> (gObj);
+  return scaler.referenceResolution;
+}
+#+END_SRC
+* Scripts
+** Scene
+SceneManager.SceneManager.GetActiveScene().GetRootGameObjects()不会返回被标记为不被销毁的对象。
+
+** Object
+Object 中的几个静态方法。
+| Name              | 功能                                                |
+|-------------------+-----------------------------------------------------|
+| Destroy           | 删除一个游戏对象或组件或资源.                       |
+| DestroyImmediate  | 立即删除对象. 强烈建议使用 Destroy 代替此方法.        |
+| DontDestroyOnLoad | 在加载一个新场景时，该对象不被自动销毁              |
+| FindObjectOfType  | 返回第一个被加载的激活的 Type 类型的对象.             |
+| FindObjectsOfType | 返回所有被加载的激活的 Type 类型的对象.              |
+| Instantiate       | 克隆原始对象并返回克隆体.   |
+Tips: 
+DontDestroyOnLoad 只对场景中的 Root GameObjects 或他们上的组件有效。
+创建一个空对象，然后对其调用 DontDestoryOnLoad 可以将该对象变为当前场景的 Root GameObject。
+** GameObject
+*** GameObject.Find(string childName) 静态成员方法
+需要注意的是该方法会循环查找整个场景树的子节点。找到第一个名称为 childName 的节点。
+该方法会返回标记为不被销毁的对象。
+*** GameObject 定义的其他成员方法
+| Name                    | 功能                                                                                |
+|-------------------------+-------------------------------------------------------------------------------------|
+| AddComponent	          | 添加一个类名称为 className 的组件到当前对象上.                                      |
+| BroadcastMessage        | 调用当前对象以及其子对象上每个 MonoBehavior 上的名字单位 methodName 的方法          |
+| CompareTag	            | 判断 gameObject 的 tag 与参数的 tag 相同 ?                                          |
+| GetComponent            | 获取当前对象的指定类型的组件,不存在返回 null                                        |
+| GetComponentInChildren  | 获取当前对象或其子对象的指定类型的组件，不存在返回 null（遍历行为是以深度为优先的） |
+| GetComponentInParent	  | 获取当前对象或其父对象的指定类型的组件，不存在返回 null                             |
+| GetComponents	         | 获取当前对象的所有组件                                                              |
+| GetComponentsInChildren | 获取当前对象或其子对象的指定类型的所有组件。                                        |
+| GetComponentsInParent	 | 获取当前对象或其父对象的指定类型的所有组件。                                        |
+| SendMessage	           | 调用当前对象上每个 MonoBehavior 上的名字为 methodName 的方法                        |
+| SendMessageUpwards      | 调用当前对象以及其父对象上每个 MonoBehavior 上的名字单位 methodName 的方法          |
+| SetActive	             | 激活/不激活 当前对象                                                                |
+**** Tips:
+GetComponentInChildren(Type compType);
+GetComponentsInChildren(Type compType);
+GetComponentInParent(Type compType);
+GetComponentsInParent(Type compType);
+需要注意的是 
+1 上面 4 个方法会先在当前对象中寻找 CompType 类型的组件。
+2 方面 4 个方法会循环查找所有子节点或父节点
+** Transform
+*** transform.Find(string childName) 
+Find 方法不是递归查找子节点的，它只查询直接子节点(不会查找自己)。
+*** transform.root
+该方法返回 transform 的 Root 节点。
+*** 设置节点关系
+SetAsFirstSibling	将 transform 放置到本地 transform 列表最前。
+SetAsLastSibling	将 transform 放置到本地 transform 列表最后。
+SetParent	将 transfrom 设置为当前 transform 的父节点.
+
+** MonoBehavior
+*** 各种函数函数触发时机
+1 调用顺序如下
+OnValidate -> OnValidate-> Awake -> OnEnable -> Start -> 
+FixedUpdate -> Update-> LateUpdate -> 
+(OnPreRender -> OnPostRender -> OnRenderImage)
+-> OnDisable -> OnDestroy -> OnValidate
+2 只有 Camera 下的脚本会触发 OnPreRender -> OnPostRender -> OnRenderImage
+3 只有在编辑器模式下才会触发 OnValidate
+#+BEGIN_SRC c#
+public class MonoBehaviourTest : MonoBehaviour
+{
+	public static int counter = 1;
+
+	// 脚本实例被加载时调用
+	// Awake is called when the script instance is being loaded.
+	public void Awake ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} Awake", counter++));
+	}
+
+	// 当脚本为 enabled，在任何 Update 方法第一次调用之前，会调用 Start
+	// Start is called on the frame when a script is enabled just before any of
+	// the Update methods is called the first time.
+	public void Start ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} Start", counter++));
+	}
+
+	// 重置默认值，将脚本组件删除，再添加时会调用
+	// Reset to default values.
+	public void Reset ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} Reset", counter++));
+	}
+
+	// 当对象变为 enabled 或 active 时，调用 OnEnable
+	//This function is called when the object becomes enabled and active.
+	public void OnEnable ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnEnable", counter++));
+	}
+
+	// Monobehaviour 变为 Disabled 或 Inactive 时，会调用 OnDisable
+	// This function is called when the behaviour becomes disabled () or inactive.
+	public void OnDisable ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnDisable", counter++));
+	}
+
+	// MonoBehaviour 被销毁时会调用 OnDestroy
+	// This function is called when the MonoBehaviour will be destroyed.
+	public void OnDestroy ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnDestroy", counter++));
+	}
+
+	// 当脚本加载 或者 inspector 面板上的值被修改时会调用 OnValidate
+	//This function is called when the script is loaded or a value is
+	//changed in the inspector (Called in the editor only).
+	public void OnValidate ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnValidate", counter++));
+	}
+
+	// OnPreRender is called before a camera starts rendering the scene.
+	public void OnPreRender ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnPreRender", counter++));
+	}
+		
+	// OnPostRender is called after a camera finished rendering the scene.
+	public void OnPostRender ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnPostRender", counter++));
+	}
+
+	// OnRenderImage is called after all rendering is complete to render image.
+	public void OnRenderImage (RenderTexture src, RenderTexture dest)
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnRenderImage", counter++));
+	}
+
+	// 如果物体是可见的，每个摄像机触发一次 OnWillRenderObject 的调用
+	// OnWillRenderObject is called once for each camera if the object is visible.
+	public void OnWillRenderObject ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnWillRenderObject", counter++));
+	}
+
+	// 当前的 collider/rigidbody 和另外的 collider/rigidbody 开始接触时，会调用 OnCollisionEnter
+	// OnCollisionEnter is called when this collider/rigidbody has begun touching another
+	// rigidbody/collider.
+	public void OnCollisionEnter ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnCollisionEnter", counter++));
+	}
+
+	// 当前的 collider/rigidbody 和另外的 collider/rigidbody 停止接触时，会调用 OnCollisionExit
+	// OnCollisionExit is called when this collider/rigidbody has stopped touching another
+	// rigidbody/collider.
+	public void OnCollisionExit	()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnCollisionExit", counter++));
+	}
+
+	// 每一个和其他 collider/rigidbody 有接触的 collider/rigidbody 都会在每帧中触发 OnCollisionStay 的调用
+	// OnCollisionStay is called once per frame for every collider/rigidbody that is touching
+	// rigidbody/collider.
+	public void OnCollisionStay ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnCollisionStay", counter++));
+	}
+
+	public void OnTriggerEnter ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnTriggerEnter", counter++));
+	}
+
+	public void OnTriggerExit ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnTriggerExit", counter++));
+	}
+
+	public void OnTriggerStay ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} OnTriggerStay", counter++));
+	}
+
+	// 如果 MonoBehaviour 状态为 enabled，则以固定的帧率调用此函数
+	//This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
+	public void FixedUpdate ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} FixedUpdate", counter++));
+	}
+
+	// 如果 MonoBehaviour 状态为 enabled，则以固定的帧率调用此函数
+	// Update is called every frame, if the MonoBehaviour is enabled.
+	public void Update ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} Update", counter++));
+	}
+
+	// 如果 MonoBehaviour 状态为 enabled，则以每帧都会调用此函数
+	// LateUpdate is called every frame, if the Behaviour is enabled.
+	public void LateUpdate ()
+	{
+		GLogUtility.LogInfo (string.Format ("{0} LateUpdate", counter++));
+	}
+}
+#+END_SRC
+*** 单例 MonoBehavior
+单例 MonoBehavior 被添加到多个 GameObject 上后，对于每个 GameObject，都分别实例化了一个 MonoBehavior 对象，这些对象和你自己实例化的单例不是同一个对象。
+DocUpdate:
+创建 MonoBehavior 单例是不被允许的，会提示下面错误:
+#+BEGIN_EXAMPLE
+You are trying to create a MonoBehaviour using the 'new' keyword.  This is not allowed.  MonoBehaviours can only be added using AddComponent().  Alternatively, your script can inherit from ScriptableObject or no base class at all
+#+END_EXAMPLE
+*** public 变量赋值顺序
+public 变量的赋值顺序按照 初始化语句、构造函数、编辑器赋值的顺序。
+#+BEGIN_SRC c#
+public class Test:MonoBehaviour
+{
+	public int value2 = 10;
+
+	public Test ()
+	{
+		Debug.Log ("Test value2 = " + value2.ToString ());
+
+		value2 = 11;
+	}
+
+	void Awake ()
+	{
+		Debug.Log ("Awake value2 = " + value2.ToString ());
+	}
+
+	void Start ()
+	{
+		Debug.Log ("Start value2 = " + value2.ToString ());
+	}
+}
+// Output
+Test value2 = 10    //构造函数中读的值为 初始化语句中赋的值
+Awake value2 = 120  //在编辑器中设置了 value2 的值为 120, 所以编辑器赋值在 Awake 之前执行的。
+Start value2 = 120
+#+END_SRC
+** Resource
+*** Load
+需要注意一下两点
+1 使用 Resource.Load 时，其中参数不能填写后缀名，否则返回 null.
+2 通过 Resource.Load 返回的是 Prefab 本身，需要对其实例化才能使用。否则会报下面的错误
+Setting the parent of a transform which resides in a prefab is disabled to prevent data corruption.
+#+BEGIN_SRC c#
+var obj = Resources.Load ("UI/Root_bg") as GameObject;
+obj.transform.SetParent(rootUI);
+#+END_SRC
+** Animator
+animator 中的条件
+** Attributes
+*** RuntimeInitializeOnLoadMethod
+设置了[RuntimeInitializeOnLoadMethod]属性的静态函数，在场景加载完成后会被调用(Awake 消息触发之后调用)。
+不同文件中的[RuntimeInitializeOnLoadMethod]属性的静态函数调用顺序是不确定的。
+* Error
+** Setting the parent of a transform which resides in a prefab is disabled to prevent data corruption.
+错误的原因是，prefab 加载后不能直接加入到场景中。必须要以 prefab 为父本生成克隆对象，将克隆对象作为操作的对象加入场景。
+#+BEGIN_SRC c#
+public static GameObject CreateView ()
+{
+	// 正确的方式
+  return GameObject.Instantiate (Resources.Load ("UI/Root_start") as GameObject);
+}
+public static GameObject CreateView ()
+{
+	// 错误的方式
+  return Resources.Load ("UI/Root_start") as GameObject;
+}
+#+END_SRC

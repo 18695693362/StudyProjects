@@ -1,0 +1,1429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-08-02 Tue 11:04 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unity Note</title>
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Dong Guo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" href="http://orgmode.org/org-manual.css" type="text/css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Unity Note</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgheadline42">1. UI</a>
+<ul>
+<li><a href="#orgheadline4">1.1. Canvas</a>
+<ul>
+<li><a href="#orgheadline1">1.1.1. 元素的渲染次序</a></li>
+<li><a href="#orgheadline2">1.1.2. 渲染模式</a></li>
+<li><a href="#orgheadline3">1.1.3. 实例说明</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline14">1.2. Basic Layout</a>
+<ul>
+<li><a href="#orgheadline13">1.2.1. Rect Transform</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline19">1.3. Visual Components</a>
+<ul>
+<li><a href="#orgheadline15">1.3.1. Text</a></li>
+<li><a href="#orgheadline16">1.3.2. Image</a></li>
+<li><a href="#orgheadline17">1.3.3. Mask</a></li>
+<li><a href="#orgheadline18">1.3.4. Effect</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline29">1.4. Interaction Components</a>
+<ul>
+<li><a href="#orgheadline20">1.4.1. Selectable Base Class</a></li>
+<li><a href="#orgheadline21">1.4.2. Button</a></li>
+<li><a href="#orgheadline22">1.4.3. Toggle</a></li>
+<li><a href="#orgheadline23">1.4.4. Toggle Group</a></li>
+<li><a href="#orgheadline24">1.4.5. Slider</a></li>
+<li><a href="#orgheadline25">1.4.6. ScrollBar</a></li>
+<li><a href="#orgheadline26">1.4.7. Dropdown</a></li>
+<li><a href="#orgheadline27">1.4.8. InputField</a></li>
+<li><a href="#orgheadline28">1.4.9. ScrollRect(ScrollView)</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline30">1.5. Animation Integration</a></li>
+<li><a href="#orgheadline41">1.6. Auto Layout</a>
+<ul>
+<li><a href="#orgheadline31">1.6.1. Layout Element</a></li>
+<li><a href="#orgheadline36">1.6.2. Layout Controller</a></li>
+<li><a href="#orgheadline40">1.6.3. Technical Details</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgheadline46">2. UI How Tos</a>
+<ul>
+<li><a href="#orgheadline45">2.1. Designing UI for Multiple Resolutions</a>
+<ul>
+<li><a href="#orgheadline43">2.1.1. Canvas Scaler</a></li>
+<li><a href="#orgheadline44">2.1.2. Screen And Reference Resolution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgheadline66">3. Scripts</a>
+<ul>
+<li><a href="#orgheadline47">3.1. Scene</a></li>
+<li><a href="#orgheadline48">3.2. Object</a></li>
+<li><a href="#orgheadline52">3.3. GameObject</a>
+<ul>
+<li><a href="#orgheadline49">3.3.1. GameObject.Find(string childName) 静态成员方法</a></li>
+<li><a href="#orgheadline51">3.3.2. GameObject 定义的其他成员方法</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline56">3.4. Transform</a>
+<ul>
+<li><a href="#orgheadline53">3.4.1. transform.Find(string childName)</a></li>
+<li><a href="#orgheadline54">3.4.2. transform.root</a></li>
+<li><a href="#orgheadline55">3.4.3. 设置节点关系</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline60">3.5. MonoBehavior</a>
+<ul>
+<li><a href="#orgheadline57">3.5.1. 各种函数函数触发时机</a></li>
+<li><a href="#orgheadline58">3.5.2. 单例 MonoBehavior</a></li>
+<li><a href="#orgheadline59">3.5.3. public 变量赋值顺序</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline62">3.6. Resource</a>
+<ul>
+<li><a href="#orgheadline61">3.6.1. Load</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline63">3.7. Animator</a></li>
+<li><a href="#orgheadline65">3.8. Attributes</a>
+<ul>
+<li><a href="#orgheadline64">3.8.1. RuntimeInitializeOnLoadMethod</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#orgheadline68">4. Error</a>
+<ul>
+<li><a href="#orgheadline67">4.1. Setting the parent of a transform which resides in a prefab is disabled to prevent data corruption.</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Tips: 下载 htlm 格式文件直接在浏览器中打开，可以查看格式优化过的文档。<br  />
+</p>
+<div id="outline-container-orgheadline42" class="outline-2">
+<h2 id="orgheadline42"><span class="section-number-2">1</span> UI</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4"><span class="section-number-3">1.1</span> Canvas</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Canvas 是一个区域，所有的 UI 元素必须在其中。Canvas 是包含一个 Canvas 组件的 GameObject。所有的 UI 元素必须是这个 Canvas 的子节点。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline1" class="outline-4">
+<h4 id="orgheadline1"><span class="section-number-4">1.1.1</span> 元素的渲染次序</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+UI 元素在 Canvas 中的渲染次序，和他们在 Hierarchy 中的次序一致。第一个子节点先渲染，第二个子节点次之，等等。当两个 UI 元素重叠时，后面渲染的 UI 元素将出现在前面渲染的 UI 元素上面。通过改变 UI 元素在 Hierarchy 视图中的位置来改变他们的渲染顺序。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline2" class="outline-4">
+<h4 id="orgheadline2"><span class="section-number-4">1.1.2</span> 渲染模式</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+ScreenSpace-Overlay 渲染模式将被渲染的 UI 元素放在场景最上面的屏幕上。如果屏幕尺寸或分辨率改变，Canvas 将会自动改尺寸来适配屏幕。<br  />
+ScreenSpace-Camera 渲染模式和 ScreenSpace-Overlay 渲染模式类似，但是 Canvas 被放置在一个特定的摄像机前的指定距离处。UI 元素被该摄像机渲染，也就是说摄像机的设置会影响 UI 的显示效果。如果摄像机被设置为透视投影，透视的扭曲量可通过 Camera 的 Field Of View 来控制。<br  />
+WorldSpace 渲染模式下，Canvas 就像任何场景中的物体一样。Canvas 的大小可以被手动设置，UI 元素会被基于他们的 3D 位置而绘制。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline3" class="outline-4">
+<h4 id="orgheadline3"><span class="section-number-4">1.1.3</span> 实例说明</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+UI/Scenes/UICanvas 中，改变屏幕大小，ScreenSpace-Overlay 和 ScreenSpace-Camera 模式下的文字大小不会改变，Canvas 的尺寸会随着屏幕大小而调整。WorldSpace 模式下的文字大小会改变，Canvas 的尺寸不会随屏幕大小而改变。<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline14" class="outline-3">
+<h3 id="orgheadline14"><span class="section-number-3">1.2</span> Basic Layout</h3>
+<div class="outline-text-3" id="text-1-2">
+</div><div id="outline-container-orgheadline13" class="outline-4">
+<h4 id="orgheadline13"><span class="section-number-4">1.2.1</span> Rect Transform</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+Rect Transform 是专门针对 UI 开发的用来代替 Transform 的。Rect Transform 比 Transform 要多 width 和 height 两个属性，来指定一个矩形区域。<br  />
+对于包含 RectTransform 属性的游戏对象，Rect Tool 在改变尺寸时，会改变 RectTransform 的 size 大小。对于不包含 RectTransform 属性的游戏对象（如 Sprite），Rect Tool 改变的是游戏对象的 Scale。<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline5"></a>Pivot<br  /><div class="outline-text-5" id="text-1-2-1-1">
+<p>
+中心点会影响缩放、旋转、改变尺寸的结果。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline6"></a>Anchors<br  /><div class="outline-text-5" id="text-1-2-1-2">
+<p>
+如果 Rect Transform 的父节点也是个 RectTransform，那么子节点可以通过多种方式 anchored 到父节点上。(其实，Anchors 定义了一个相对于父节点矩形的 Anchor 矩形区域-AnchorRect。)<br  />
+</p>
+</div></li>
+<li><a id="orgheadline7"></a>PosX PosY Width Height<br  /><div class="outline-text-5" id="text-1-2-1-3">
+<p>
+当 Anchors 重合时，PosX PosY 表示 Pivot 相对于 Anchors 的位置,Width Height 表示矩形区域的宽高。<br  />
+当 Anchors 在水平方向上重合，在竖直方向上分开时，PosX 表示 Pivot 相对于 Anchors 的水平位置，Width 表示矩形区域的宽。PosY 变为了 Top，表示中心点相对于 Anchors 最上面的距离，Height 变为了 Bottom 表示中心点相对于 Anchors 最下面的距离。<br  />
+当 Anchors 全部分开后，属性变为了 Left Right Top Bottom，分别表示节点的 Rect 相对于 AnchorRect 的位置。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline8"></a>Blue 模式和 Raw 编辑模式<br  /><div class="outline-text-5" id="text-1-2-1-4">
+<p>
+Blue 模式下，会忽略 UI 元素的 Local Rotation 和 Local Scale，方便以原來的旋转和大小调整物体。<br  />
+Raw 模式下，调整 Pivot 和 Anchors 时会保持 UI 元素的位置和大小。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline12"></a>Script 中常用属性和方法<br  /><ol class="org-ol"><li><a id="orgheadline9"></a>rectTransform.rect<br  /><div class="outline-text-6" id="text-1-2-1-5-1">
+<p>
+rectTransform.rect 该属性返回表示当前 UI 元素的矩形区域，position 表示矩形左下的坐标（基于当前 UI 元素的本地坐标），size 表示矩形区域的尺寸。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline10"></a>rectTransform.TransformPoint<br  /><div class="outline-text-6" id="text-1-2-1-5-2">
+<p>
+rectTransform.TransformPoint(pos)可以将 UI 元素的本地坐标转换为世界坐标。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline11"></a>rectTransform 属性设置<br  /><div class="outline-text-6" id="text-1-2-1-5-3">
+<p>
+在脚本中设置 rectTransform 属性时，先将 rectTransform 所属的 GameObject 加到场景中，然后再设置 rectTransform 相关的属性，否则 GameObject 在加入场景时会修改 RectTransform 的属性。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">// 下面代码可以将一个 RectTransform 设置为其父节点大小，中心和其父节点重合
+public static void ResetRectToFullScreenAndInMiddle (RectTransform rectTransform)
+{
+  if (rectTransform != null) {
+    rectTransform.pivot = new Vector2 (0.5f, 0.5f);
+    rectTransform.localScale = Vector3.one;
+    rectTransform.anchorMin = Vector2.zero;
+    rectTransform.anchorMax = Vector2.one;
+    rectTransform.sizeDelta = Vector2.zero;
+    rectTransform.localPosition = Vector3.zero;
+  }
+}
+</pre>
+</div>
+</div></li></ol></li></ol>
+</div>
+</div>
+
+<div id="outline-container-orgheadline19" class="outline-3">
+<h3 id="orgheadline19"><span class="section-number-3">1.3</span> Visual Components</h3>
+<div class="outline-text-3" id="text-1-3">
+</div><div id="outline-container-orgheadline15" class="outline-4">
+<h4 id="orgheadline15"><span class="section-number-4">1.3.1</span> Text</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+Best Fit 选项会修改文字的尺寸来适应可显示的区域。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline16" class="outline-4">
+<h4 id="orgheadline16"><span class="section-number-4">1.3.2</span> Image</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<p>
+ImageType 选项定义了被应用的 Sprite 如何显示:<br  />
+Simple 表示均等地缩放整个 sprite;<br  />
+Sliced 表示使用 3x3 分割的 Sprite，当修改尺寸时，四个角不会扭曲变形，只有中间的部分会缩放;<br  />
+Tiled 和 Sliced 类似，但是它不会缩放中心的内容，它是重复中心的内容;<br  />
+Filled 和 Simple 一样的方式显示 Sprite，只是它会从原点开始以指定的方向、方法以及总量来显示图片。<br  />
+选择 Simple 或 Filled 时，可以通过 Set Native Size 将 Image 的大小设置为原始图片的大小。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline17" class="outline-4">
+<h4 id="orgheadline17"><span class="section-number-4">1.3.3</span> Mask</h4>
+<div class="outline-text-4" id="text-1-3-3">
+<p>
+Mask 组件不是一个可视化的 UI 控件，但它是控制子 UI 元素显示的一种方式。Mask 会限制子 UI 元素的形状为他们父节点的形状。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline18" class="outline-4">
+<h4 id="orgheadline18"><span class="section-number-4">1.3.4</span> Effect</h4>
+<div class="outline-text-4" id="text-1-3-4">
+<p>
+Outline 组件可以为 UI 元素添加描边效果。通过修改 EffectColor 为描边设置颜色，EffectDistance 设置描边的相对位置。<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline29" class="outline-3">
+<h3 id="orgheadline29"><span class="section-number-3">1.4</span> Interaction Components</h3>
+<div class="outline-text-3" id="text-1-4">
+</div><div id="outline-container-orgheadline20" class="outline-4">
+<h4 id="orgheadline20"><span class="section-number-4">1.4.1</span> Selectable Base Class</h4>
+<div class="outline-text-4" id="text-1-4-1">
+<p>
+Selectable 是所有可交互组件的基类，它按照统一的方式来处理元素。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Property</th>
+<th scope="col" class="org-left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Interactible</td>
+<td class="org-left">该属性决定了组件是否接受输入。当它被设置为 false 时，交互是不可用的，而且转换状态被设置为 Disable</td>
+</tr>
+
+<tr>
+<td class="org-left">Transition</td>
+<td class="org-left">对于一个可选中的组件，依据它当前所在状态有很多转换选项。不同的状态包括：normal，highlight,pressed,disabled</td>
+</tr>
+
+<tr>
+<td class="org-left">Navigation</td>
+<td class="org-left">有一系列的导航选项来控制如何实现键盘导航</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-orgheadline21" class="outline-4">
+<h4 id="orgheadline21"><span class="section-number-4">1.4.2</span> Button</h4>
+<div class="outline-text-4" id="text-1-4-2">
+<p>
+状态改变触发的 UnityEvent：OnClick<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline22" class="outline-4">
+<h4 id="orgheadline22"><span class="section-number-4">1.4.3</span> Toggle</h4>
+<div class="outline-text-4" id="text-1-4-3">
+<p>
+将多个 Toggle 的 Group 属性指定相同的包含 ToggleGroup 组件的 GameObject，可将这些 Toggle 指定为一组。<br  />
+状态改变触发的 UnityEvent：OnValueChanged<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline23" class="outline-4">
+<h4 id="orgheadline23"><span class="section-number-4">1.4.4</span> Toggle Group</h4>
+<div class="outline-text-4" id="text-1-4-4">
+<p>
+为 GameObject 添加 ToggleGroup 可以分组管理 Toggle。Allow Switch Off 属性表示，点击分组中 On 的 Toggle，该 Toggle 会变为 Off。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline24" class="outline-4">
+<h4 id="orgheadline24"><span class="section-number-4">1.4.5</span> Slider</h4>
+<div class="outline-text-4" id="text-1-4-5">
+<p>
+Slider 有一个整型值，拖拉可以在最小和最大范围内改变该值。WholeNumbers 属性可以指定整型值为整数。<br  />
+状态改变触发的 UnityEvent：OnValueChanged<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline25" class="outline-4">
+<h4 id="orgheadline25"><span class="section-number-4">1.4.6</span> ScrollBar</h4>
+<div class="outline-text-4" id="text-1-4-6">
+<p>
+ScrollBar 有一个 0 到 1 的整型值。Number Of Steps 属性表示拖动 ScrollBar 从 0 变为 1 一共需要多少个 Step，该值为 0 时，ScrollBar 的拖动是平滑的。<br  />
+状态改变触发的 UnityEvent：OnValueChanged<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline26" class="outline-4">
+<h4 id="orgheadline26"><span class="section-number-4">1.4.7</span> Dropdown</h4>
+<div class="outline-text-4" id="text-1-4-7">
+<p>
+状态改变触发的 UnityEvent：OnValueChanged<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline27" class="outline-4">
+<h4 id="orgheadline27"><span class="section-number-4">1.4.8</span> InputField</h4>
+<div class="outline-text-4" id="text-1-4-8">
+<p>
+ContentType 属性表示输入框内容的类型。Standard、Autocorrected、Integer Number、Decimal Number、Alphanumeric、Name、Email、Password*、Pin、Custom。<br  />
+OnValueChanged： 输入框中内容改变会触发该 UnityEvent<br  />
+EndEdit： 编辑完成时会触发该 UnityEvent<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline28" class="outline-4">
+<h4 id="orgheadline28"><span class="section-number-4">1.4.9</span> ScrollRect(ScrollView)</h4>
+<div class="outline-text-4" id="text-1-4-9">
+<p>
+Horizontal 选项控制是否可以在水平方向滑动。<br  />
+Vertical 选项控制是否可以在竖直方向滑动<br  />
+MovementType 选项控制移动的类型，Unrestricted 表示不限制滑动范围；Clamped 表示限制滑动范围；Elastic 表示限制滑动范围，并且滑出范围后会自动回弹回来。<br  />
+ScrollRect 下的子节点 Viewport 用来控制显示区域，Viewport 上有一个 Mask 组件。Viewport 下的子节点 Content 用来放置滑动区域内要显示的内容。<br  />
+Vertical/Horizontal ScrollBar 属性用来绑定 ScrollRect 和 ScrollBar。<br  />
+OnValueChanged：滑动位置改变后触发该 UnityEvent<br  />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline30" class="outline-3">
+<h3 id="orgheadline30"><span class="section-number-3">1.5</span> Animation Integration</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+点击控件属性面板中的 Auto Generate Animation 按钮，可以为该控件生成相关动画配置。<br  />
+选中 Animation 对象，在 Inspector 面板中有 LoopTime 选项可以控制是否循环播放动画。<br  />
+Tips:<br  />
+UI 的 Animation 变换模式和 Unity 遗弃的动画系统是不兼容的。只能使用 Animator 组件。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline41" class="outline-3">
+<h3 id="orgheadline41"><span class="section-number-3">1.6</span> Auto Layout</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+自动布局系统提供了很多方式将元素放置在嵌套的布局分组中，例如 horizontal groups,vertical groups,grids。它允许元素依据其包含的内容自动地改变大小。自动布局系统是以 RectTransform 为基础构建的。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline31" class="outline-4">
+<h4 id="orgheadline31"><span class="section-number-4">1.6.1</span> Layout Element</h4>
+<div class="outline-text-4" id="text-1-6-1">
+<p>
+自动布局系统是基于布局元素和布局控制器的。一个布局元素是包含 RectTransform 组件的一个游戏对象，当然这个游戏对象可以包含其他任何组件。布局元素知道它自己的大小。布局元素不会直接设置自己的大小，但是其他的就像布局控制功能的组件可以利用布局元素提供的信息来计算出一个尺寸大小让其使用。<br  />
+一个布局元素定义了下面的属性：Minimum width、Minimum height、Preferred width、Preferred height、Flexible width、Flexible height。<br  />
+</p>
+
+<p>
+Layout Controller 使用 Layout elements 提供的信息的例子是 Content Size Fitter 和各种 Layout Group 组件。修改 layout group 中 layout elements 尺寸遵从下面原则：首先会分配最小的尺寸；如果还有足够的空间，就分配 PreferredSize;如果还有额外的空间可用，就分配 flexible size。<br  />
+</p>
+
+<p>
+任何包含 RectTransform 的游戏对象都可以被当做一个布局元素。它们的默认 mininum、prefered、和 flexible 尺寸为 0.特定的组件加到该游戏对象上时会改变这些布局属性的值。例如，Image 和 Text 组件会修改 preferred width 和 height 来匹配 sprite 和 text 的内容。<br  />
+</p>
+
+<p>
+如果你想覆盖一个游戏对象的布局属性（minimum, preferred, or flexible size),你可以为该游戏对象添加一个 Layout Element 组件。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline36" class="outline-4">
+<h4 id="orgheadline36"><span class="section-number-4">1.6.2</span> Layout Controller</h4>
+<div class="outline-text-4" id="text-1-6-2">
+<p>
+Layout Controller 组件可以用来控制一个过多个 Layout Element 的尺寸和位置。一个 Layout Controller 可以控制它自己所在的 GameObject 的 Layout Element 也可以控制子节点的 Layout Element。<br  />
+一个功能为 LayoutController 的组件其功能同时可以为 Layout Element.<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline32"></a>Content Size Fitter<br  /><div class="outline-text-5" id="text-1-6-2-1">
+<p>
+Content Size Fitter 的功能是控制它自己所在 GameObject 的 LayoutElement。如果将 Horizontal Fit 或 Vertical Fit 设置为 Preferred, Rect Transform 将会调整它自己的 width and/or height 来适应内容的大小.<br  />
+</p>
+</div></li>
+<li><a id="orgheadline33"></a>Aspect Ratio Fitter<br  /><div class="outline-text-5" id="text-1-6-2-2">
+<p>
+Aspect Ratio Fitter 的功能是控制它自己所在 GameObject 的 LayoutElement 的 Size。<br  />
+Aspect Mode 选项控制如何改变矩形尺寸来满足特定纵横比。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">属性</th>
+<th scope="col" class="org-left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">None</td>
+<td class="org-left">矩形不必符合指定宽高比</td>
+</tr>
+
+<tr>
+<td class="org-left">Width Controls Height</td>
+<td class="org-left">高度基于宽度来自动调整</td>
+</tr>
+
+<tr>
+<td class="org-left">Height Controls Width</td>
+<td class="org-left">宽度基于高度自动调整</td>
+</tr>
+
+<tr>
+<td class="org-left">Fit In Parent</td>
+<td class="org-left">宽度、高度、位置、锚点自动基于父节点调整， 使矩形在父节点内并且保持指定宽高比，这会让有些在父节点内的空间没有被当前节点的矩形所覆盖。</td>
+</tr>
+
+<tr>
+<td class="org-left">Envelope Parent</td>
+<td class="org-left">宽度、高度、位置、锚点自动基于父节点调整，使矩形覆盖父节点的整个区域且保持特定宽高比，这会让当前节点的矩形超出父节点的范围。</td>
+</tr>
+</tbody>
+</table>
+<p>
+Aspect Ratio 选项用来设置 width/height 的比值。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline34"></a>Layout Groups<br  /><div class="outline-text-5" id="text-1-6-2-3">
+<p>
+作为 layout controller 的 layout group，它的作用是控制子 layout elements 的位置和尺寸。<br  />
+一个 layout group 不会控制自己的尺寸。它作为一个 layout element 可以被其他 layout controller 控制或者是手动设置。<br  />
+无论一个 layout group 分配了多大尺寸，它都会尽力为每一个子 layout element 分配合适的空间。layout group 可以以任意的方式嵌套。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline35"></a>Driven Rect Transform properties<br  /><div class="outline-text-5" id="text-1-6-2-4">
+<p>
+因为自动布局系统中的 layout controller 会自动控制某些 UI 元素的尺寸和位置，所以不要手动编辑他们的尺寸和位置，否则，这些改变会被 layout controller 的自动布局重置。<br  />
+Rect Transform 有一个属性驱动的概念来达到上面的目的。例如，ContentSizeFitter 有 HorizontalFit 属性来设置使用 Minimum 还是 Preferred 来控制 GameObject 的 RectTransform 的宽度，选择其中一个就会让 Rect Transform 的 width 属性变为只读。<br  />
+属性驱动还可以防止手动的编辑。一个布局可以只随 GameView 的分辨率或尺寸而变化。这改变驱动属性的值，反过来又会修改 layout element 的位置和尺寸。但是，只改变 GameView 的大小不应该将 Scene 标记为未保存的。为了避免这样，驱动值不会作为 Scene 的部分被保存，驱动值的改动不会标记场景是否修改。<br  />
+</p>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline40" class="outline-4">
+<h4 id="orgheadline40"><span class="section-number-4">1.6.3</span> Technical Details</h4>
+<div class="outline-text-4" id="text-1-6-3">
+<p>
+自动布局系统来自内置的某些组件，但是也可以创建新的组件来实现自定义的布局控制。可以通过实现自动布局系统可识别的特定接口来创建这样的组件。<br  />
+</p>
+</div>
+<ol class="org-ol"><li><a id="orgheadline37"></a>Layout Interfaces<br  /><div class="outline-text-5" id="text-1-6-3-1">
+<p>
+如果一个组件实现了 ILayoutElement 接口，它就会被自动布局系统当做一个 layout element。<br  />
+如果一个组件实现了 ILayoutGroup 接口，它被认为用来管理子节点的 RectTransforms。<br  />
+如果一个组件实现了 ILayoutSelfController 接口，它被认为用来管理自己的 RectTransform。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline38"></a>Layout Calculations<br  /><div class="outline-text-5" id="text-1-6-3-2">
+<p>
+自动布局系统安装下面的顺序来计算和执行布局：<br  />
+1 通过调用 ILayoutElement 的 CalculateLayoutInputHorizontal 方法来计算 layout element 的 minimum,preferred,flexible widths。这是按照从下到上的顺序执行的，子节点会比他们的父节点先计算，这样父节点就可以在它的计算中获得它的子节点的信息。<br  />
+2 layout element 的有效宽度会被计算，并且通过 ILayoutController 的 SetLayoutHorizontal 方法进行设置。这是按照从上到下的顺序进行的，子节点会比他们的父节点晚计算，因为子节点宽度的分配会基于父节点的整个宽度大小。这个步骤之后，layout elements 就会有他们新的宽度。<br  />
+3 通过调用 ILayoutElement 的 CalculateLayoutInputVertical 方法来计算 layout element 的 minimum,preferred,flexible heights.这是按照从下到上的顺序执行的，子节点会比他们的父节点先计算，这样父节点就可以在它的计算中获得它的子节点的信息。<br  />
+4 layout element 的有效高度会被计算，并且通过 ILayoutController 的 SetLayoutVertical 方法进行设置。这是按照从上到下的顺序进行的，子节点会比他们的父节点晚计算，因为子节点宽度的分配会基于父节点的整个高度大小。这个步骤之后，layout elements 就会有他们新的高度。<br  />
+从上面可以看出，自动布局系统会先计算宽度，后计算高度，所以高度计算可以依赖宽度，但是宽度计算永远不能依赖高度。<br  />
+</p>
+</div></li>
+<li><a id="orgheadline39"></a>Triggering Layout Rebuild<br  /><div class="outline-text-5" id="text-1-6-3-3">
+<p>
+当组件的属性被修改引起当前的布局不可用时，需要对布局进行重新计算。可以通过下面的调用来触发布局的重新计算：<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">LayoutRebuilder.MarkLayoutForRebuild (transform as RectTransform);
+</pre>
+</div>
+<p>
+这个重新构建不会立刻执行，而是在当前帧的最后，在渲染发生之前执行。不立即执行的原因是在一帧内可能会重建多次，如果每次都立即执行，会导致明显的性能下降。<br  />
+通常需要在下面这些地方触发布局的重新计算:<br  />
+在可以修改布局的属性设置函数中。<br  />
+在下面这些回调函数中：<br  />
+OnEnable<br  />
+OnDisable<br  />
+OnRectTransformDimensionsChange<br  />
+OnValidate (only needed in the editor, not at runtime)<br  />
+OnDidApplyAnimationProperties<br  />
+</p>
+</div></li></ol>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline46" class="outline-2">
+<h2 id="orgheadline46"><span class="section-number-2">2</span> UI How Tos</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgheadline45" class="outline-3">
+<h3 id="orgheadline45"><span class="section-number-3">2.1</span> Designing UI for Multiple Resolutions</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+通过 Anchors 和 Canvas Scaler 来实现多分辨率适配。Anhors 可以处理 UI 元素的相对位置，CanvasScaler 用来处理 UI 元素的大小。<br  />
+</p>
+</div>
+<div id="outline-container-orgheadline43" class="outline-4">
+<h4 id="orgheadline43"><span class="section-number-4">2.1.1</span> Canvas Scaler</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+CanvasScaler 组件用来控制 Canvas 上 UI 元素的像素密度和总体的缩放。这个缩放会影响到 Canvas 下的所有 UI 元素，包括字体的大小，和 Sprite 的边框。<br  />
+UI Scale Mode 选项用来控制 UI 元素如何被缩放。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ModeType</th>
+<th scope="col" class="org-left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Constant Pixel Size</td>
+<td class="org-left">不考虑屏幕尺寸，UI 元素的尺寸保持和像素大小一样</td>
+</tr>
+
+<tr>
+<td class="org-left">Scale With Screen Size</td>
+<td class="org-left">使 UI 元素在大的屏幕上变大</td>
+</tr>
+
+<tr>
+<td class="org-left">Constant Physical Size</td>
+<td class="org-left">不考虑屏幕尺寸和分辨率大小，UI 元素保持物理尺寸</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Constant Pixel Size 缩放模式的参数：<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ArgName</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Scale Factor</td>
+<td class="org-left">按照该缩放值缩放所有 Canvas 下的 UI 元素.</td>
+</tr>
+
+<tr>
+<td class="org-left">Reference Pixels Per Unit</td>
+<td class="org-left">如果 Sprite 有 ‘Pixels Per Unit’ 设置,Sprite 中的一个像素就会占 UI 中的一个单位</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Scale With Screen Size 缩放模式的参数：<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ArgName</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Reference Resolution</td>
+<td class="org-left">UI 布局的设计分辨率.如果屏幕分辨率更大（更小），则 UI 将被放大（缩小）</td>
+</tr>
+
+<tr>
+<td class="org-left">Screen Match Mode</td>
+<td class="org-left">如果当前分辨率和 Reference 分辨率纵横比不一致，该参数用来指定缩放如何缩放 Canvas 的区域</td>
+</tr>
+
+<tr>
+<td class="org-left">1 Match Width or Height</td>
+<td class="org-left">以 width 或 height 或他们之间的值为依据缩放 canvas 区域</td>
+</tr>
+
+<tr>
+<td class="org-left">2 Expand</td>
+<td class="org-left">在水平或竖直方向上扩展 canvas 区域，从而让 canvas 区域比 reference 区域大</td>
+</tr>
+
+<tr>
+<td class="org-left">3 Shrink</td>
+<td class="org-left">在水平或竖直方向上裁剪 canvas 区域，从而让 canvas 区域比 reference 区域小</td>
+</tr>
+
+<tr>
+<td class="org-left">Reference Pixels Per Unit</td>
+<td class="org-left">如果一个 Sprite 有 ‘Pixels Per Unit’设置,Sprite 中的一个像素就会占用 UI 中的一个单位</td>
+</tr>
+</tbody>
+</table>
+<p>
+当 ScreenMatchMode 选用 Match Width or Height 时，会有 Match 选项可供调节，它用来确定依据 width 还是 height 或者是他们之间的一个值来缩放 canvas 的区域。<br  />
+</p>
+
+<p>
+Constant Physical Size 缩放模式的参数:<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ArgName</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Physical Unit</td>
+<td class="org-left">用来指定位置和尺寸使用的物理单位</td>
+</tr>
+
+<tr>
+<td class="org-left">Fallback Screen DPI</td>
+<td class="org-left">如果屏幕的 DPI 不可知，则假定其 DPI 为该选项设置的值</td>
+</tr>
+
+<tr>
+<td class="org-left">Default Sprite DPI</td>
+<td class="org-left">有‘Pixels Per Unit’配置的 Sprites 使用的每英寸像素数目将匹配‘Reference Pixels Per Unit’配置</td>
+</tr>
+
+<tr>
+<td class="org-left">Reference Pixels Per Unit</td>
+<td class="org-left">如果 Sprite 有‘Pixels Per Unit’设置, 则它的 DPI 将匹配‘Default Sprite DPI’设置</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+World Space Canvas 缩放模式的参数(当将 Canvas 的渲染模式设置为 WorldSpace 时会显示):<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">ArgName</th>
+<th scope="col" class="org-left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Dynamic Pixels Per Unit</td>
+<td class="org-left">在 UI 中动态创建 bitmaps 时（例如创建 Text），每个单位用到的像素数目。</td>
+</tr>
+
+<tr>
+<td class="org-left">Reference Pixels Per Unit</td>
+<td class="org-left">如果 Sprite 有‘Pixels Per Unit’配置,Sprite 中的每个像素会占用世界中的一个单元。如果‘Reference Pixels Per Unit’被设置为 1,Sprite 的‘Pixels Per Unit’配置将按原样使用</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+Tips:<br  />
+CanvasScaler 是通过修改 Canvas 的缩放值来实现缩放的。该缩放值可通过下面的方式获得：<br  />
+需要注意的是，CanvasScaler 的 scaleFactor 属性和 Canvas 的 scaleFactor 并不是同一个值。CanvasScaler 的 scaleFactor 表示在 Constant Pixel Size 模式下 UI 元素的缩放值。而 Canvas 得 scaleFactor 表示无论什么模式下，当前 Canvas 的缩放值。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">GetComponentInParent&lt;Canvas&gt; ().scaleFactor;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline44" class="outline-4">
+<h4 id="orgheadline44"><span class="section-number-4">2.1.2</span> Screen And Reference Resolution</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+Screen.width 表示当前视图的像素宽度<br  />
+Screen.height 表示当前视图的像素高度<br  />
+Screen.resolutions 表示显示设备支持的所有全屏的分辨率<br  />
+Screen.currentResolution 表示显示设备当前全屏的分辨率<br  />
+</p>
+<pre class="example">
+// 下面打印出了 Screen.currentResolution 和 Screen.resolutions 的内容：
+Screen.currentResolution = 1280 x 800 @ 0Hz
+Screen.resolutions = 640 x 480 @ 0Hz
+Screen.resolutions = 720 x 480 @ 0Hz
+Screen.resolutions = 800 x 500 @ 0Hz
+Screen.resolutions = 800 x 600 @ 0Hz
+Screen.resolutions = 1024 x 640 @ 0Hz
+Screen.resolutions = 1024 x 768 @ 0Hz
+Screen.resolutions = 1152 x 720 @ 0Hz
+Screen.resolutions = 1280 x 800 @ 0Hz
+</pre>
+<p>
+可以通过下面的方法来获取 ReferenceResolution<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public static Vector2 GetCanvasReferenceResolution (GameObject gObj)
+{
+  CanvasScaler scaler = GUtility.GetComponentInSelfAndParent&lt;CanvasScaler&gt; (gObj);
+  return scaler.referenceResolution;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline66" class="outline-2">
+<h2 id="orgheadline66"><span class="section-number-2">3</span> Scripts</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-orgheadline47" class="outline-3">
+<h3 id="orgheadline47"><span class="section-number-3">3.1</span> Scene</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+SceneManager.SceneManager.GetActiveScene().GetRootGameObjects()不会返回被标记为不被销毁的对象。<br  />
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline48" class="outline-3">
+<h3 id="orgheadline48"><span class="section-number-3">3.2</span> Object</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Object 中的几个静态方法。<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Destroy</td>
+<td class="org-left">删除一个游戏对象或组件或资源.</td>
+</tr>
+
+<tr>
+<td class="org-left">DestroyImmediate</td>
+<td class="org-left">立即删除对象. 强烈建议使用 Destroy 代替此方法.</td>
+</tr>
+
+<tr>
+<td class="org-left">DontDestroyOnLoad</td>
+<td class="org-left">在加载一个新场景时，该对象不被自动销毁</td>
+</tr>
+
+<tr>
+<td class="org-left">FindObjectOfType</td>
+<td class="org-left">返回第一个被加载的激活的 Type 类型的对象.</td>
+</tr>
+
+<tr>
+<td class="org-left">FindObjectsOfType</td>
+<td class="org-left">返回所有被加载的激活的 Type 类型的对象.</td>
+</tr>
+
+<tr>
+<td class="org-left">Instantiate</td>
+<td class="org-left">克隆原始对象并返回克隆体.</td>
+</tr>
+</tbody>
+</table>
+<p>
+Tips:<br  />
+DontDestroyOnLoad 只对场景中的 Root GameObjects 或他们上的组件有效。<br  />
+创建一个空对象，然后对其调用 DontDestoryOnLoad 可以将该对象变为当前场景的 Root GameObject。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline52" class="outline-3">
+<h3 id="orgheadline52"><span class="section-number-3">3.3</span> GameObject</h3>
+<div class="outline-text-3" id="text-3-3">
+</div><div id="outline-container-orgheadline49" class="outline-4">
+<h4 id="orgheadline49"><span class="section-number-4">3.3.1</span> GameObject.Find(string childName) 静态成员方法</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+需要注意的是该方法会循环查找整个场景树的子节点。找到第一个名称为 childName 的节点。<br  />
+该方法会返回标记为不被销毁的对象。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline51" class="outline-4">
+<h4 id="orgheadline51"><span class="section-number-4">3.3.2</span> GameObject 定义的其他成员方法</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">AddComponent</td>
+<td class="org-left">添加一个类名称为 className 的组件到当前对象上.</td>
+</tr>
+
+<tr>
+<td class="org-left">BroadcastMessage</td>
+<td class="org-left">调用当前对象以及其子对象上每个 MonoBehavior 上的名字单位 methodName 的方法</td>
+</tr>
+
+<tr>
+<td class="org-left">CompareTag</td>
+<td class="org-left">判断 gameObject 的 tag 与参数的 tag 相同 ?</td>
+</tr>
+
+<tr>
+<td class="org-left">GetComponent</td>
+<td class="org-left">获取当前对象的指定类型的组件,不存在返回 null</td>
+</tr>
+
+<tr>
+<td class="org-left">GetComponentInChildren</td>
+<td class="org-left">获取当前对象或其子对象的指定类型的组件，不存在返回 null（遍历行为是以深度为优先的）</td>
+</tr>
+
+<tr>
+<td class="org-left">GetComponentInParent</td>
+<td class="org-left">获取当前对象或其父对象的指定类型的组件，不存在返回 null</td>
+</tr>
+
+<tr>
+<td class="org-left">GetComponents</td>
+<td class="org-left">获取当前对象的所有组件</td>
+</tr>
+
+<tr>
+<td class="org-left">GetComponentsInChildren</td>
+<td class="org-left">获取当前对象或其子对象的指定类型的所有组件。</td>
+</tr>
+
+<tr>
+<td class="org-left">GetComponentsInParent</td>
+<td class="org-left">获取当前对象或其父对象的指定类型的所有组件。</td>
+</tr>
+
+<tr>
+<td class="org-left">SendMessage</td>
+<td class="org-left">调用当前对象上每个 MonoBehavior 上的名字为 methodName 的方法</td>
+</tr>
+
+<tr>
+<td class="org-left">SendMessageUpwards</td>
+<td class="org-left">调用当前对象以及其父对象上每个 MonoBehavior 上的名字单位 methodName 的方法</td>
+</tr>
+
+<tr>
+<td class="org-left">SetActive</td>
+<td class="org-left">激活/不激活 当前对象</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol class="org-ol"><li><a id="orgheadline50"></a>Tips:<br  /><div class="outline-text-5" id="text-3-3-2-1">
+<p>
+GetComponentInChildren(Type compType);<br  />
+GetComponentsInChildren(Type compType);<br  />
+GetComponentInParent(Type compType);<br  />
+GetComponentsInParent(Type compType);<br  />
+需要注意的是<br  />
+1 上面 4 个方法会先在当前对象中寻找 CompType 类型的组件。<br  />
+2 方面 4 个方法会循环查找所有子节点或父节点<br  />
+</p>
+</div></li></ol>
+</div>
+</div>
+<div id="outline-container-orgheadline56" class="outline-3">
+<h3 id="orgheadline56"><span class="section-number-3">3.4</span> Transform</h3>
+<div class="outline-text-3" id="text-3-4">
+</div><div id="outline-container-orgheadline53" class="outline-4">
+<h4 id="orgheadline53"><span class="section-number-4">3.4.1</span> transform.Find(string childName)</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<p>
+Find 方法不是递归查找子节点的，它只查询直接子节点(不会查找自己)。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline54" class="outline-4">
+<h4 id="orgheadline54"><span class="section-number-4">3.4.2</span> transform.root</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<p>
+该方法返回 transform 的 Root 节点。<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline55" class="outline-4">
+<h4 id="orgheadline55"><span class="section-number-4">3.4.3</span> 设置节点关系</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<p>
+SetAsFirstSibling  将 transform 放置到本地 transform 列表最前。<br  />
+SetAsLastSibling  将 transform 放置到本地 transform 列表最后。<br  />
+SetParent  将 transfrom 设置为当前 transform 的父节点.<br  />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline60" class="outline-3">
+<h3 id="orgheadline60"><span class="section-number-3">3.5</span> MonoBehavior</h3>
+<div class="outline-text-3" id="text-3-5">
+</div><div id="outline-container-orgheadline57" class="outline-4">
+<h4 id="orgheadline57"><span class="section-number-4">3.5.1</span> 各种函数函数触发时机</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<p>
+1 调用顺序如下<br  />
+OnValidate -&gt; OnValidate-&gt; Awake -&gt; OnEnable -&gt; Start -&gt;<br  />
+FixedUpdate -&gt; Update-&gt; LateUpdate -&gt;<br  />
+(OnPreRender -&gt; OnPostRender -&gt; OnRenderImage)<br  />
+-&gt; OnDisable -&gt; OnDestroy -&gt; OnValidate<br  />
+2 只有 Camera 下的脚本会触发 OnPreRender -&gt; OnPostRender -&gt; OnRenderImage<br  />
+3 只有在编辑器模式下才会触发 OnValidate<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class MonoBehaviourTest : MonoBehaviour
+{
+  public static int counter = 1;
+
+  // 脚本实例被加载时调用
+  // Awake is called when the script instance is being loaded.
+  public void Awake ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} Awake", counter++));
+  }
+
+  // 当脚本为 enabled，在任何 Update 方法第一次调用之前，会调用 Start
+  // Start is called on the frame when a script is enabled just before any of
+  // the Update methods is called the first time.
+  public void Start ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} Start", counter++));
+  }
+
+  // 重置默认值，将脚本组件删除，再添加时会调用
+  // Reset to default values.
+  public void Reset ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} Reset", counter++));
+  }
+
+  // 当对象变为 enabled 或 active 时，调用 OnEnable
+  //This function is called when the object becomes enabled and active.
+  public void OnEnable ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnEnable", counter++));
+  }
+
+  // Monobehaviour 变为 Disabled 或 Inactive 时，会调用 OnDisable
+  // This function is called when the behaviour becomes disabled () or inactive.
+  public void OnDisable ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnDisable", counter++));
+  }
+
+  // MonoBehaviour 被销毁时会调用 OnDestroy
+  // This function is called when the MonoBehaviour will be destroyed.
+  public void OnDestroy ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnDestroy", counter++));
+  }
+
+  // 当脚本加载 或者 inspector 面板上的值被修改时会调用 OnValidate
+  //This function is called when the script is loaded or a value is
+  //changed in the inspector (Called in the editor only).
+  public void OnValidate ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnValidate", counter++));
+  }
+
+  // OnPreRender is called before a camera starts rendering the scene.
+  public void OnPreRender ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnPreRender", counter++));
+  }
+
+  // OnPostRender is called after a camera finished rendering the scene.
+  public void OnPostRender ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnPostRender", counter++));
+  }
+
+  // OnRenderImage is called after all rendering is complete to render image.
+  public void OnRenderImage (RenderTexture src, RenderTexture dest)
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnRenderImage", counter++));
+  }
+
+  // 如果物体是可见的，每个摄像机触发一次 OnWillRenderObject 的调用
+  // OnWillRenderObject is called once for each camera if the object is visible.
+  public void OnWillRenderObject ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnWillRenderObject", counter++));
+  }
+
+  // 当前的 collider/rigidbody 和另外的 collider/rigidbody 开始接触时，会调用 OnCollisionEnter
+  // OnCollisionEnter is called when this collider/rigidbody has begun touching another
+  // rigidbody/collider.
+  public void OnCollisionEnter ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnCollisionEnter", counter++));
+  }
+
+  // 当前的 collider/rigidbody 和另外的 collider/rigidbody 停止接触时，会调用 OnCollisionExit
+  // OnCollisionExit is called when this collider/rigidbody has stopped touching another
+  // rigidbody/collider.
+  public void OnCollisionExit ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnCollisionExit", counter++));
+  }
+
+  // 每一个和其他 collider/rigidbody 有接触的 collider/rigidbody 都会在每帧中触发 OnCollisionStay 的调用
+  // OnCollisionStay is called once per frame for every collider/rigidbody that is touching
+  // rigidbody/collider.
+  public void OnCollisionStay ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnCollisionStay", counter++));
+  }
+
+  public void OnTriggerEnter ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnTriggerEnter", counter++));
+  }
+
+  public void OnTriggerExit ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnTriggerExit", counter++));
+  }
+
+  public void OnTriggerStay ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} OnTriggerStay", counter++));
+  }
+
+  // 如果 MonoBehaviour 状态为 enabled，则以固定的帧率调用此函数
+  //This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
+  public void FixedUpdate ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} FixedUpdate", counter++));
+  }
+
+  // 如果 MonoBehaviour 状态为 enabled，则以固定的帧率调用此函数
+  // Update is called every frame, if the MonoBehaviour is enabled.
+  public void Update ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} Update", counter++));
+  }
+
+  // 如果 MonoBehaviour 状态为 enabled，则以每帧都会调用此函数
+  // LateUpdate is called every frame, if the Behaviour is enabled.
+  public void LateUpdate ()
+  {
+    GLogUtility.LogInfo (string.Format ("{0} LateUpdate", counter++));
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline58" class="outline-4">
+<h4 id="orgheadline58"><span class="section-number-4">3.5.2</span> 单例 MonoBehavior</h4>
+<div class="outline-text-4" id="text-3-5-2">
+<p>
+单例 MonoBehavior 被添加到多个 GameObject 上后，对于每个 GameObject，都分别实例化了一个 MonoBehavior 对象，这些对象和你自己实例化的单例不是同一个对象。<br  />
+DocUpdate:<br  />
+创建 MonoBehavior 单例是不被允许的，会提示下面错误:<br  />
+</p>
+<pre class="example">
+You are trying to create a MonoBehaviour using the 'new' keyword.  This is not allowed.  MonoBehaviours can only be added using AddComponent().  Alternatively, your script can inherit from ScriptableObject or no base class at all
+</pre>
+</div>
+</div>
+<div id="outline-container-orgheadline59" class="outline-4">
+<h4 id="orgheadline59"><span class="section-number-4">3.5.3</span> public 变量赋值顺序</h4>
+<div class="outline-text-4" id="text-3-5-3">
+<p>
+public 变量的赋值顺序按照 初始化语句、构造函数、编辑器赋值的顺序。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public class Test:MonoBehaviour
+{
+  public int value2 = 10;
+
+  public Test ()
+  {
+    Debug.Log ("Test value2 = " + value2.ToString ());
+
+    value2 = 11;
+  }
+
+  void Awake ()
+  {
+    Debug.Log ("Awake value2 = " + value2.ToString ());
+  }
+
+  void Start ()
+  {
+    Debug.Log ("Start value2 = " + value2.ToString ());
+  }
+}
+// Output
+Test value2 = 10    //构造函数中读的值为 初始化语句中赋的值
+Awake value2 = 120  //在编辑器中设置了 value2 的值为 120, 所以编辑器赋值在 Awake 之前执行的。
+Start value2 = 120
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline62" class="outline-3">
+<h3 id="orgheadline62"><span class="section-number-3">3.6</span> Resource</h3>
+<div class="outline-text-3" id="text-3-6">
+</div><div id="outline-container-orgheadline61" class="outline-4">
+<h4 id="orgheadline61"><span class="section-number-4">3.6.1</span> Load</h4>
+<div class="outline-text-4" id="text-3-6-1">
+<p>
+需要注意一下两点<br  />
+1 使用 Resource.Load 时，其中参数不能填写后缀名，否则返回 null.<br  />
+2 通过 Resource.Load 返回的是 Prefab 本身，需要对其实例化才能使用。否则会报下面的错误<br  />
+Setting the parent of a transform which resides in a prefab is disabled to prevent data corruption.<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">var obj = Resources.Load ("UI/Root_bg") as GameObject;
+obj.transform.SetParent(rootUI);
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline63" class="outline-3">
+<h3 id="orgheadline63"><span class="section-number-3">3.7</span> Animator</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+animator 中的条件<br  />
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline65" class="outline-3">
+<h3 id="orgheadline65"><span class="section-number-3">3.8</span> Attributes</h3>
+<div class="outline-text-3" id="text-3-8">
+</div><div id="outline-container-orgheadline64" class="outline-4">
+<h4 id="orgheadline64"><span class="section-number-4">3.8.1</span> RuntimeInitializeOnLoadMethod</h4>
+<div class="outline-text-4" id="text-3-8-1">
+<p>
+设置了[RuntimeInitializeOnLoadMethod]属性的静态函数，在场景加载完成后会被调用(Awake 消息触发之后调用)。<br  />
+不同文件中的[RuntimeInitializeOnLoadMethod]属性的静态函数调用顺序是不确定的。<br  />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline68" class="outline-2">
+<h2 id="orgheadline68"><span class="section-number-2">4</span> Error</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-orgheadline67" class="outline-3">
+<h3 id="orgheadline67"><span class="section-number-3">4.1</span> Setting the parent of a transform which resides in a prefab is disabled to prevent data corruption.</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+错误的原因是，prefab 加载后不能直接加入到场景中。必须要以 prefab 为父本生成克隆对象，将克隆对象作为操作的对象加入场景。<br  />
+</p>
+<div class="org-src-container">
+
+<pre class="src src-c#">public static GameObject CreateView ()
+{
+  // 正确的方式
+  return GameObject.Instantiate (Resources.Load ("UI/Root_start") as GameObject);
+}
+public static GameObject CreateView ()
+{
+  // 错误的方式
+  return Resources.Load ("UI/Root_start") as GameObject;
+}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Dong Guo</p>
+<p class="date">Created: 2016-08-02 Tue 11:04</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
