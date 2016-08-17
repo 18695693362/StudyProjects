@@ -99,14 +99,18 @@ DEPENDPATH += $$PWD/../../../libs/glm
 vec3 result_color;                      // 没有初始化是错误的。
 vec3 result_color = vec3(0.0,0.0,0.0)   // 初始化过了，可以正常使用。
 
+DONE
+lesson5
+实现摄像机
+lesson6
+实现一个skybox
+
 TODO
 lesson4
 实现一个描边效果
 lesson5
 裁剪平面例子实现
 离子系统实现
-lesson6
-实现一个skybox
 lesson7
 实现阴影贴图
 

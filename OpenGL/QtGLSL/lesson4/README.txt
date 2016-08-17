@@ -165,7 +165,7 @@ glHint(GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE);
 需要缓冲区之间过多的数据移动。使用帧缓冲区对象创建自己的帧缓冲区，利用它所绑定的渲染缓冲区可以最小化数据copy并优化性能。
 帧缓冲区对象可用于离屏渲染、更新贴图映射、执行buffer ping-ponging。
 窗口系统创建的默认帧缓冲区是唯一可以显示到显示器上的缓冲区。默认帧缓冲区关联的color\depth\stencil渲染缓冲区是自动创建
-的。应用程序创建的帧缓冲区对象，需要额外创建这些渲染缓存区和帧缓存去对象关联。默认帧缓冲区对象关联的缓存区不能和应用程序
+的。应用程序创建的帧缓冲区对象，需要额外创建这些渲染缓存区和帧缓存区对象关联。默认帧缓冲区对象关联的缓存区不能和应用程序
 创建的帧缓冲区对象相关联，反之亦然。
 void glGenFramebuffers(GLsizei n,GLuint* ids);
 void glBindFramebuffer(GLenum target, GLuint framebuffer);
@@ -205,7 +205,7 @@ attachment GL_COLOR_ATTACHMENTi, GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT, or 
 renderbuffertarget GL_RENDERBUFFER
 renderbuffer 为0时移除当前关联的attachment
 （4）检查帧缓冲区的状态
-贴图和缓冲区格式以及帧缓冲区附加点的各种组合会产生各种情况导致渲染无法完成。修改帧缓冲区附加的后，最好检查一下帧缓冲区的状态。
+贴图和缓冲区格式以及帧缓冲区附加点的各种组合会产生各种情况导致渲染无法完成。修改帧缓冲区附加之后，最好检查一下帧缓冲区的状态。
 GLenum glCheckFramebufferStatus(GLenum target);
 target GL_READ_FRAMEBUFFER, GL_DRAW_FRAMEBUFFER, or GL_FRAMEBUFFER
 有任何错误时返回0
