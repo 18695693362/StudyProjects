@@ -349,7 +349,7 @@ Tips:
 1. Hemisphere Lighting
 半球光照背后的理念是使用两个半球来模拟光照。上面的半球代表天空，下面的半球表示地面。物体法线直接指向上方的表面，其所有光
 照都来自上半球，物体法线直接指向下方的表面，其所有光照都来自下半球。为两个半球指定合适的颜色，可以让球体上法线指向上方的
-被照亮，法线指向下方的在影音中。
+被照亮，法线指向下方的在阴影中。
 计算表面任何一点的光照：
 Color = a * SkyColor + (1 - a) GroundColor
 _
@@ -359,8 +359,121 @@ _
 or a = 0.5 + 0.5*cos(x)
 
 2. Image-Based Lighting
+在基于图片的光照中涉及到以下步骤：
+（1）使用光照探针（例如，一个反射球）来抓取发生在现实场景中的照明。抓取到的全方向的，高动态范围的图片被
+称作一个光照探针图片
+（2）使用光照探针图片来创建环境的表示（例如，环境贴图）
+（3）将需要渲染的物体放到环境中
+（4）使用步骤（2）生成环境表示来渲染物体
+Shaders for Image-based Lighting
+--------------------- Vertex Shader ---------------------
+// Vertex shader for image-based lighting
+#version 330 core
+uniform mat4 MVMatrix;
+uniform mat4 MVPMatrix;
+uniform mat3 NormalMatrix;
+in vec4 VertexPosition;
+in vec3 VertexNormal;
+out vec3 ReflectDir;
+out vec3 Normal;
+void main() {
+    Normal = normalize(NormalMatrix * VertexNormal);
+    vec4 pos = MVMatrix * VertexPosition;
+    vec3 eyeDir = pos.xyz;
+    ReflectDir = reflect(eyeDir, Normal);
+    gl_Position = MVPMatrix * VertexPosition;
+}
+ -------------------- Fragment Shader --------------------
+ // Fragment shader for image-based lighting
+#version 330 core
+uniform vec3 BaseColor;
+uniform float SpecularPercent;
+uniform float DiffusePercent;
+uniform samplerCube SpecularEnvMap;
+uniform samplerCube DiffuseEnvMap;
+in vec3 ReflectDir; in vec3 Normal;
+out vec4 FragColor;
+void main() {
+    // Look up environment map values in cube maps
+    vec3 diffuseColor = vec3(texture(DiffuseEnvMap, normalize(Normal)));
+    vec3 specularColor = vec3(texture(SpecularEnvMap, normalize(ReflectDir)));
+    // Add lighting to base color and mix
+    vec3color=mix(BaseColor,diffuseColor*BaseColor,DiffusePercent);
+    color = mix(color, specularColor + color, SpecularPercent);
+    FragColor = vec4(color, 1.0);
+}
 
 3. Lighting with Spherical Harmonics
+Spherical Harmonics是用来计算光照漫反射项的方法。这种方法利用光照探针图片可以精确再现漫反射，而不需要在运行时访问光照探针
+图片。探针图片被预处理来产生一些系数，在运行时，这些系数可以被用来在数学上表示这个探针图片。
+Spherical hamonics表示了一张图片在一个球上的频率空间。这类似于在直线或者是圆上的傅里叶变换。这种图片的表示方法是连续的并且
+是旋转不变的。使用这种方式表示一个光照探针图片，你可以只使用9个球谐基函数精确地再现一个表面的漫反射。这9个球谐基函数可以通过
+归一化表面法线的常数、线性、二次多项式来获得。
+直观上来看，使用少量数目的频率空间上的基函数来模拟漫反射似乎是可以的，因为漫反射在表面的变化很慢。只使用9项参数，对于任何输入
+的物理光照分布，在所有朝向的表面上的平均错误要小于3%。使用Debevec的光照探针图片，平均错误还要小于1%，并且对于任意像素的最大
+错误要小于5%。
+每个球谐基函数有一个基于使用的光照探针图片的系数。这个系数对于不同的颜色通道也不同，所以你可以将每个系数当做一个RGB值。预处理
+阶段用来计算光照探针图片的这九个RGB参数。
+使用Spherical Harmonics的漫反射公式为：
+diffuse = c1 L22 (x^2-y^2) + c3 L20 z^2 + c4 L00 - c5L20 +
+          2c1(L2 m2 xy + L21 xz + L2 m1 yz) +
+          2c2(L11 x + L1 m1 y + L10z)
+c1-c5 为5个常数，L系数是九个基函数系数，他们是通过特定的光照探针图片在预处理阶段计算出来的。x,y,z为被渲染的顶点的归一化的法
+线。
+
+因为漫反射变化比较慢，对于没有巨大多边形的场景，我们理当在顶点着色器中计算光照，然后在光栅化阶段进行插值。
+// Shaders for Spherical Harmonics Lighting
+// --------------------- Vertex Shader ---------------------
+// Vertex shader for computing spherical harmonics
+#version 330 core
+uniform mat4 MVMatrix;
+uniform mat4 MVPMatrix;
+uniform mat3 NormalMatrix;
+uniform float ScaleFactor;
+const float C1 = 0.429043;
+const float C2 = 0.511664;
+const float C3 = 0.743125;
+const float C4 = 0.886227;
+const float C5 = 0.247708;
+// Constants for Old Town Square lighting
+const vec3 L00 = vec3( 0.871297, 0.875222, 0.864470);
+const vec3 L1m1 = vec3( 0.175058, 0.245335, 0.312891);
+const vec3 L10 = vec3( 0.034675, 0.036107, 0.037362);
+const vec3 L11 = vec3(-0.004629, -0.029448, -0.048028);
+const vec3 L2m2 = vec3(-0.120535, -0.121160, -0.117507);
+const vec3 L2m1 = vec3( 0.003242, 0.003624, 0.007511);
+const vec3 L20 = vec3(-0.028667, -0.024926, -0.020998);
+const vec3 L21 = vec3(-0.077539, -0.086325, -0.091591);
+const vec3 L22 = vec3(-0.161784, -0.191783, -0.219152);
+
+in vec4 VertexPosition;
+in vec3 VertexNormal;
+out vec3 DiffuseColor;
+void main()
+{
+vec3 tnorm = normalize(NormalMatrix * VertexNormal);
+DiffuseColor =  C1 * L22 *(tnorm.x * tnorm.x - tnorm.y * tnorm.y) +
+                C3 * L20 * tnorm.z * tnorm.z +
+                C4 * L00 -
+                C5 * L20 +
+                2.0 * C1 * L2m2 * tnorm.x * tnorm.y +
+                2.0 * C1 * L21 * tnorm.x * tnorm.z +
+                2.0 * C1 * L2m1 * tnorm.y * tnorm.z +
+                2.0 * C2 * L11 * tnorm.x +
+                2.0 * C2 * L1m1 * tnorm.y +
+                2.0 * C2 * L10 * tnorm.z;
+DiffuseColor *= ScaleFactor;
+gl_Position = MVPMatrix * VertexPosition;
+}
+// -------------------- Fragment Shader --------------------
+// Fragment shader for lighting with spherical harmonics
+#version 330 core
+in vec3 DiffuseColor;
+out vec4 FragColor;
+void main()
+{
+FragColor = vec4(DiffuseColor, 1.0);
+}
 
 三、 Shadow Mapping
 
