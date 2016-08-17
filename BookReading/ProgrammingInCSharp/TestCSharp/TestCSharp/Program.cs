@@ -36,6 +36,32 @@ namespace TestCSharp
 			Value_21
 		}
 
+		struct UnsafePoint
+		{
+			public int x, y;
+		}
+
+		public static void ChangeStr (string str)
+		{
+			str = "after changed\n";
+		}
+
+		public static void TestUnsafe (bool isRun)
+		{
+			if (!isRun)
+				return;
+			
+			unsafe {
+				UnsafePoint pt = new UnsafePoint ();
+				UnsafePoint* pp = &pt;
+				pp->x = 123;
+				pp->y = 456;
+				Console.WriteLine ("{0} {1}", pt.x, pt.y);
+
+				Console.WriteLine ("x&y = {0}", 15 & 3);
+			}
+		}
+
 		public static void TestStaticMember (bool isRun)
 		{
 			if (!isRun)
@@ -59,6 +85,20 @@ namespace TestCSharp
 			
 			Console.WriteLine ("Hello World!");
 
+			int i = 10;
+			int j = 10;
+			Console.WriteLine ("object.ReferenceEquals(i,j) = {0}", object.ReferenceEquals (i, j));
+
+			string str1 = "hello";
+			string str2 = "hello";
+			Console.WriteLine ("object.ReferenceEquals(str1,str2) = {0}", 
+				object.ReferenceEquals (str1, str2));
+
+			string temp = "before changed";
+			ChangeStr (temp);
+			Console.WriteLine (temp);
+
+			TestUnsafe (false);
 			TestInheritance.RunTest (false);
 
 			Person person1 = new Person ("God1");
@@ -83,12 +123,13 @@ namespace TestCSharp
 			nested_class.PrintOuterObjCount ();
 			nested_class.PrintNestedObjCount ();
 
-			TestStaticMember (true);
+			TestStaticMember (false);
 
 			TestFraction.RunTest (false);
 			TestStruct.RunTest (false);
 
-			TestInterface.RunTest (false);
+			TestInterface.RunTest (true);
+			TestDispose.RunTestDispose (false);
 			TestArray.RunTest (false);
 
 			TestString.RunTest (false);
@@ -105,7 +146,7 @@ namespace TestCSharp
 
 		public static void Main (string[] args)
 		{
-			RunBookTest (false);
+			RunBookTest (true);
 			RunAlgorithmTest (true);
 		}
 	}
