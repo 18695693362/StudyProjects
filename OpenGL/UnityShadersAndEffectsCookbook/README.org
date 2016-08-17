@@ -139,7 +139,17 @@ surface shader 被放置在 CGPROGRAM ... ENDCG 块中。有两点需要注意�
 #+BEGIN_EXAMPLE su
 #pragma surface surfaceFunction lightModel [optionalparams]
 #+END_EXAMPLE
+**** LOD
+LOD 很简单，它是 Level of Detail 的缩写，在这里例子里我们指定了其为 200（其实这是 Unity 的内建 Diffuse 着色器的设定值）。这个数值决定了我们能用什么样的 Shader。在 Unity 的 Quality Settings 中我们可以设定允许的最大 LOD，当设定的 LOD 小于 SubShader 所指定的 LOD 时，这个 SubShader 将不可用。Unity 内建 Shader 定义了一组 LOD 的数值，我们在实现自己的 Shader 的时候可以将其作为参考来设定自己的 LOD 数值，这样在之后调整根据设备图形性能来调整画质时可以进行比较精确的控制。
 
+VertexLit 及其系列 = 100
+Decal, Reflective VertexLit = 150
+Diffuse = 200
+Diffuse Detail, Reflective Bumped Unlit, Reflective Bumped VertexLit = 250
+Bumped, Specular = 300
+Bumped Specular = 400
+Parallax = 500
+Parallax Specular = 600
 *** Pass
 **** Name
 为 Pass 定义一个名称，这样就可以通过 UsePass 来引用它了。
@@ -394,8 +404,11 @@ void vert (inout appdata_full v, out Input o)
 #+END_SRC
 ** Normal Map
 Normal Map 又叫 Ramp Map，其实就是法线贴图。
+UnpackNormal 的作用是将 0-1 范围的数值(法线贴图存储的颜色值)映射为-1-1 范围的数值（法线向量）。
 *** 参考资料
 [[http://www.songho.ca/opengl/gl_normaltransform.html][Normal 变换矩阵推导]]
 [[http://blog.csdn.net/candycat1992/article/details/41605257][Unity 中的 Normal Map]]
 [[http://http.developer.nvidia.com/CgTutorial/cg_tutorial_chapter08.html][Cg 中的 Normal Map]]
 [[http://learnopengl.com/#!Advanced-Lighting/Normal-Mapping][Normal Map Detail]]
+* 参考资料
+https://onevcat.com/2013/07/shader-tutorial-1/
