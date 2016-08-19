@@ -63,6 +63,9 @@ x,y,z 都缩放3倍
 ⎥ 0.0     0.0   1.0 0.0⎥   ⎥z⎥   ⎥   z           ⎥
 ⎣ 0.0     0.0   0.0 1.0⎦   ⎣1⎦   ⎣   1           ⎦
 沿任意轴(Rx,Ry,Rz)旋转o度
+（4）Shearing 切变
+⎡ 1 s ⎤ * ⎡ x ⎤ = ⎡ x+sy ⎤
+⎣ 0 1 ⎦   ⎣ y ⎦   ⎣  y   ⎦
 4. Perspective Projection / Orthographic Projection
 构造透视投影矩阵和正交投影矩阵
 http://www.songho.ca/opengl/gl_projectionmatrix.html
