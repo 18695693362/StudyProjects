@@ -321,6 +321,25 @@ namespace TestCSharp
 			Console.WriteLine ("Sub2 receives the IShape event.");
 		}
 	}
+
+	public interface ILogX
+	{
+		// this is error, interface can't be static
+		//static void log (int type, string info);
+	}
+
+	public class LogX : ILogX
+	{
+		static void Log (int type, string info)
+		{
+			Console.WriteLine ("type={0} info={1}", type, info);
+		}
+
+		void log (int type, string info)
+		{
+			Log (type, info);
+		}
+	}
 }
 
 
