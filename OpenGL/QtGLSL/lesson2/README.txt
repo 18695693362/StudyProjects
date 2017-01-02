@@ -95,6 +95,7 @@ invariant 和 precise 可以保证shader中的计算不变性。
 invariant 用于任何shader的输出变量。如果两个shader使用同一个表达式计算该输出变量，那么结果是相同的
 invariant gl_Position;
 invariant centroid out vec3 Color;
+centroid  在打开多点采样的时候，强迫一个片断输入变量的采样位于图元像素覆盖的区域，centroid限定的任何顶点着色器输出，都必须有一个匹配的片断着色器输入也被centroid限定
 #pragma STDGL invariant(all)
 precise   用于任何函数返回值或任何计算变量。也可用于内置变量，用户变量。
 precise gl_Position;
