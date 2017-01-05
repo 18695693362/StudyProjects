@@ -10,6 +10,10 @@ public class MoveSync : MonoBehaviour {
     public GameObject serverArea;
 
     public bool isShowGObjInSameArea = false;
+    public bool isAutoMove = false;
+    public float autoChangeDirInterval = 5.0f;
+    float autoChangeTimer = 5.0f;
+    System.Random autoDirRandom = new System.Random();
 
     public int delayTime = 0;
     public int delayDeltaTime = 0;
@@ -17,6 +21,7 @@ public class MoveSync : MonoBehaviour {
     public NetSimulator netSimulator = new NetSimulator();
     MoveInfo curMoveInfo = new MoveInfo();
     MoveInfo lastMoveInfo = new MoveInfo();
+    MoveInfo svrCurMoveInfo = null;
     int maxX;
     int maxY;
 
@@ -82,7 +87,7 @@ public class MoveSync : MonoBehaviour {
     bool UpdateSGObjDir(Vector2 dir)
     {
         bool resultClientSGObj = UpdateGObjDir(dir, clientSGObj.transform);
-        bool resultServerGObj = UpdateGObjDir(dir, clientGObj.transform);
+        bool resultServerGObj = UpdateGObjDir(dir, serverGObj.transform);
         Debug.Assert(resultClientSGObj == resultServerGObj);
 
         return resultServerGObj;
@@ -109,22 +114,43 @@ public class MoveSync : MonoBehaviour {
     void UpdateCMove()
     {
         curMoveInfo.Reset();
-        if (Input.GetKey(KeyCode.A))
+        if (isAutoMove)
         {
-            curMoveInfo.dir.x = -1;
+            autoChangeTimer += Time.deltaTime;
+            if (autoChangeTimer > autoChangeDirInterval)
+            {
+                autoChangeTimer -= autoChangeDirInterval;
+                int x = autoDirRandom.Next(-1, 2);
+                int y = autoDirRandom.Next(-1, 2);
+                curMoveInfo.dir.x = x;
+                curMoveInfo.dir.y = y;
+                //Debug.Log("- dir = "+curMoveInfo.dir.ToString());
+            }
+            else
+            {
+                curMoveInfo = lastMoveInfo.Clone() as MoveInfo;
+            }
         }
-        if (Input.GetKey(KeyCode.D))
+        else
         {
-            curMoveInfo.dir.x = 1;
+            if (Input.GetKey(KeyCode.A))
+            {
+                curMoveInfo.dir.x = -1;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                curMoveInfo.dir.x = 1;
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                curMoveInfo.dir.y = 1;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                curMoveInfo.dir.y = -1;
+            }
         }
-        if (Input.GetKey(KeyCode.W))
-        {
-            curMoveInfo.dir.y = 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            curMoveInfo.dir.y = -1;
-        }
+        
         if (curMoveInfo.dir != Vector2.zero)
         {
             curMoveInfo.speed = moveSpeed;
@@ -136,7 +162,7 @@ public class MoveSync : MonoBehaviour {
         UpdateGObjDir(curMoveInfo.dir, clientGObj.transform);
 
         lastMoveInfo = curMoveInfo.Clone() as MoveInfo;
-        netSimulator.Send(curMoveInfo);
+        netSimulator.Send(curMoveInfo.Clone() as MoveInfo);
     }
 
     void UpdateSMove()
@@ -144,8 +170,12 @@ public class MoveSync : MonoBehaviour {
         MoveInfo info = netSimulator.Receive();
         if (info != null)
         {
-            UpdateSGObjPos(info.dir*info.speed);
-            UpdateSGObjDir(info.dir);
+            svrCurMoveInfo = info;
+        }
+        if (svrCurMoveInfo != null)
+        {
+            UpdateSGObjPos(svrCurMoveInfo.dir*svrCurMoveInfo.speed);
+            UpdateSGObjDir(svrCurMoveInfo.dir);
         }
     }
 }
@@ -187,23 +217,34 @@ public class NetSimulator
             TimeSpan span = new TimeSpan(DateTime.Now.Ticks);
             if (span.TotalMilliseconds >= info.receiveTime)
             {
+                Debug.Log("+++++++++++++++++++++++++++++++");
+                Debug.Log("curTime = " + span.TotalMilliseconds.ToString());
+                Debug.Log("rcvTime = " + info.receiveTime.ToString());
                 sendStack.RemoveAt(0);
                 return info;
             }
         }
         return null;
     }
+
+    bool isBeginSend = true;
+    double preSendTime = 0;
     public void Send(MoveInfo moveInfo)
     {
         if (moveInfo != null)
         {
-            int delay = delayTimeRandom.Next(delayTime - delayDeltaTime, delayTime + delayDeltaTime);
-            TimeSpan span = new TimeSpan(DateTime.Now.Ticks);
-            moveInfo.receiveTime = span.TotalMilliseconds;
-            if (delay > 0)
+            int delay = delayTimeRandom.Next(delayTime, delayTime + delayDeltaTime);
+            if (isBeginSend)
             {
-                moveInfo.receiveTime = moveInfo.receiveTime + delay;
+                isBeginSend = false;
+                TimeSpan span = new TimeSpan(DateTime.Now.Ticks);
+                moveInfo.receiveTime = span.TotalMilliseconds + delay;
             }
+            else
+            {
+                moveInfo.receiveTime = preSendTime + delay;
+            }
+            preSendTime = moveInfo.receiveTime;
             sendStack.Add(moveInfo);
         }
     }
