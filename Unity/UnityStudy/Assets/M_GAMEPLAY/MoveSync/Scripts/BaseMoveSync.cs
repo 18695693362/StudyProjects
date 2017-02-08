@@ -22,6 +22,7 @@ public class BaseMoveSync : MonoBehaviour {
     public NetSimulator netSimulator = new NetSimulator();
     protected MoveInfo curMoveInfo = new MoveInfo();
     protected MoveInfo lastMoveInfo = new MoveInfo();
+    protected MoveInfo lastSyncedMoveInfo = new MoveInfo();
     protected MoveInfo svrPreMoveInfo = null;
     int maxX;
     int maxY;
@@ -73,24 +74,50 @@ public class BaseMoveSync : MonoBehaviour {
         return false;
     }
 
-    Vector2 originDirVector = new Vector2(0, 1);
     bool UpdateGObjDir(Vector2 dir, Transform gObjTrans)
     {
-        Vector3 curEulerAngles = gObjTrans.localEulerAngles;
-        curEulerAngles.z = Vector2.Angle(originDirVector, dir);
-        if (dir.x > originDirVector.x)
+        if (dir.magnitude < 0.01)
         {
-            curEulerAngles.z = -curEulerAngles.z;
+            return false;
         }
+        Vector3 curEulerAngles = gObjTrans.localEulerAngles;
+        curEulerAngles.z = ConvertDirToEulerAngleZ(dir);
+        
         gObjTrans.localEulerAngles = curEulerAngles;
-        return false;
+        return true;
     }
 
-    protected bool UpdateSGObjPosByMoveInfo(MoveInfo moveInfo)
+    Vector2 originDirVector = new Vector2(0, 1);
+    public float ConvertDirToEulerAngleZ(Vector2 dir)
     {
-        Vector3 newPos = moveInfo.position;
-        clientSGObj.transform.localPosition = newPos;
-        serverGObj.transform.localPosition = newPos;
+        float eulerAngleZ = Vector2.Angle(originDirVector, dir);
+        if (dir.x > originDirVector.x)
+        {
+            eulerAngleZ = -eulerAngleZ;
+        }
+        return eulerAngleZ;
+    }
+
+    public Vector2 ConvertEulerAngleZToDir(float eulerAngleZ)
+    {
+        Vector2 dir = Quaternion.Euler(0,0,eulerAngleZ) * originDirVector;
+        return dir.normalized;
+    }
+
+    protected Vector2 GetSGObjPos()
+    {
+        return serverGObj.transform.localPosition;
+    }
+
+    protected Vector2 GetSGObjDir()
+    {
+        return ConvertEulerAngleZToDir(serverGObj.transform.localEulerAngles.z);
+    }
+
+    protected bool UpdateSGObjPosByPos(Vector2 pos)
+    {
+        clientSGObj.transform.localPosition = pos;
+        serverGObj.transform.localPosition = pos;
         return true;
     }
 
@@ -117,6 +144,8 @@ public class BaseMoveSync : MonoBehaviour {
     {
         UpdateConfig();
 
+        UpdateCurMoveInfo();
+
         UpdateCMove();
 
         UpdateSMove();
@@ -132,35 +161,44 @@ public class BaseMoveSync : MonoBehaviour {
     }
 
     bool isFirstAutoMove = true;
-    void UpdateCMove()
+    void UpdateCurMoveInfo()
     {
         curMoveInfo.Reset();
         if (isAutoMove)
         {
-            autoChangeTimer += Time.deltaTime;
-            if (autoChangeTimer > autoChangeDirInterval)
+            if (!isStopClient)
             {
-                autoChangeTimer -= autoChangeDirInterval;
-                int x = 0;
-                int y = 0;
-                if (isFirstAutoMove)
+                autoChangeTimer += Time.deltaTime;
+                if (autoChangeTimer > autoChangeDirInterval)
                 {
-                    isFirstAutoMove = false;
-                    x = 1;
-                    y = 1;
+                    autoChangeTimer -= autoChangeDirInterval;
+                    int x = 0;
+                    int y = 0;
+                    if (isFirstAutoMove)
+                    {
+                        isFirstAutoMove = false;
+                        x = 1;
+                        y = 1;
+                    }
+                    else
+                    {
+                        x = autoDirRandom.Next(-1, 2);
+                        y = autoDirRandom.Next(-1, 2);   
+                    }
+                    curMoveInfo.dir.x = x;
+                    curMoveInfo.dir.y = y;
+                    curMoveInfo.speed = moveSpeed;
+                    //Debug.Log("- dir = "+curMoveInfo.dir.ToString());
                 }
                 else
                 {
-                    x = autoDirRandom.Next(-1, 2);
-                    y = autoDirRandom.Next(-1, 2);   
+                    curMoveInfo = lastMoveInfo.Clone() as MoveInfo;
                 }
-                curMoveInfo.dir.x = x;
-                curMoveInfo.dir.y = y;
-                //Debug.Log("- dir = "+curMoveInfo.dir.ToString());
             }
             else
             {
                 curMoveInfo = lastMoveInfo.Clone() as MoveInfo;
+                curMoveInfo.speed = 0;
             }
         }
         else
@@ -181,18 +219,25 @@ public class BaseMoveSync : MonoBehaviour {
             {
                 curMoveInfo.dir.y = -1;
             }
+
+            if (curMoveInfo.dir != Vector2.zero)
+            {
+                curMoveInfo.speed = moveSpeed;
+            }
         }
         
         if (curMoveInfo.dir != Vector2.zero)
         {
-            curMoveInfo.speed = moveSpeed;
             curMoveInfo.dir.Normalize();
         }
         else
         {
             curMoveInfo.dir = lastMoveInfo.dir;
         }
+    }
 
+    void UpdateCMove()
+    {
         if (!isStopClient)
         {
             Vector2 deltaPos = curMoveInfo.dir * curMoveInfo.speed;
@@ -207,19 +252,22 @@ public class BaseMoveSync : MonoBehaviour {
 
     protected virtual void SendMoveInfo(MoveInfo moveInfo)
     {
-        lastMoveInfo = moveInfo.Clone() as MoveInfo;
-        netSimulator.Send(moveInfo.Clone() as MoveInfo);
-        AddNetflowCounter();
+        // do nothing 
     }
 
     protected virtual void UpdateSMove()
     {
+        if ( netSimulator.IsNetDataEmpty() && curMoveInfo.speed == 0 )
+        {
+            return;
+        }
+
         MoveInfo info = netSimulator.Receive();
         if (info != null)
         {
             AddNetflowCounter();
 
-            UpdateSGObjPosByMoveInfo(info);
+            UpdateSGObjPosByPos(info.position);
             UpdateSGObjDir(info.dir);
 
             svrPreMoveInfo = info;

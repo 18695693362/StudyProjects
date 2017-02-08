@@ -8,7 +8,7 @@ public class MoveSyncV4 : BaseMoveSync{
         {
             AddNetflowCounter();
 
-            UpdateSGObjPosByMoveInfo(info);
+            UpdateSGObjPosByPos(info.position);
             UpdateSGObjDir(info.dir);
 
             svrPreMoveInfo = info;

@@ -8,7 +8,9 @@ public class MoveInfo:ICloneable
     public Vector2 dir = Vector2.zero;
     public Vector2 position = Vector2.zero;
     public int speed = 0;
-
+    // send time unit - second
+    public float sendTime;
+    
     // receive time unit-ms
     public double receiveTime;
 
@@ -35,6 +37,11 @@ public class NetSimulator
     public float delayRate = 0.0f;
     System.Random netRandom = new System.Random();
     List<MoveInfo> sendStack = new List<MoveInfo>();
+
+    public bool IsNetDataEmpty()
+    {
+        return sendStack.Count == 0;
+    }
 
     public MoveInfo Receive()
     {
