@@ -78,6 +78,28 @@ namespace TestCSharp
 			//Console.WriteLine ("const_imember_0 = {0}", member.const_imember_0);
 		}
 
+        public static void TestFuncArgTransmit(bool isRun)
+        {
+            if (!isRun)
+				return;
+
+            int value1 = 0;
+            FuncRefArg(ref value1);
+            Console.WriteLine("FuncRefArg value1 = " + value1);
+
+            int value2;
+            FuncOutArg(out value2);
+            Console.WriteLine("FuncOutArg value2 = " + value2);
+        }
+        static void FuncRefArg(ref int arg)
+        {
+            arg = 1111;
+        }
+        static void FuncOutArg(out int arg)
+        {
+            arg = 2222;
+        }
+
 		public static void RunBookTest (bool isRun)
 		{
 			if (!isRun)
@@ -88,6 +110,14 @@ namespace TestCSharp
 			int i = 10;
 			int j = 10;
 			Console.WriteLine ("object.ReferenceEquals(i,j) = {0}", object.ReferenceEquals (i, j));
+
+            int iValue = 10;
+            //Boxing int value
+            object oValue = iValue;
+            Console.WriteLine("Unboxing oValue result = " + (int)oValue);
+            //执行到下面的代码会报错，提示非法的类型转换
+            //float fValue = (float)oValue;
+            //Console.WriteLine("Unboxing oValue result = " + fValue);
 
 			string str1 = "hello";
 			string str2 = "hello";
@@ -102,7 +132,7 @@ namespace TestCSharp
 			TestInheritance.RunTest (false);
 
 			Person person1 = new Person ("God1");
-			//person.Print();
+			person1.Print();
 			Person person2 = person1.Clone () as Person;
 			person2.Name = "God2";
 			Console.WriteLine (person1.Name);
@@ -112,8 +142,7 @@ namespace TestCSharp
 
 			//Global.PrintClassName();
 
-			SomeValues
-			tmp = SomeValues.Value_0;
+			SomeValues tmp = SomeValues.Value_0;
 			Console.WriteLine (tmp.ToString ());
 			Console.WriteLine (10.GetType ());
 
@@ -124,6 +153,7 @@ namespace TestCSharp
 			nested_class.PrintNestedObjCount ();
 
 			TestStaticMember (false);
+            TestFuncArgTransmit(true);
 
 			TestFraction.RunTest (false);
 			TestStruct.RunTest (false);
@@ -155,11 +185,17 @@ namespace TestCSharp
 	{
 		public static string ClassName = "Person";
 		private string name = "Unknown";
+        private int age;
 
 		public string Name {
 			set{ name = value; }
 			get{ return name; }
 		}
+        public int Age
+        {
+            set { age = value; }
+            get { return age; }
+        }
 
 		static Person ()
 		{
@@ -173,7 +209,8 @@ namespace TestCSharp
 
 		public void Print ()
 		{
-			Console.WriteLine (this.name);
+			Console.WriteLine(this.name);
+            Console.WriteLine(this.age);
 		}
 
 		public static void PrintClassName ()
