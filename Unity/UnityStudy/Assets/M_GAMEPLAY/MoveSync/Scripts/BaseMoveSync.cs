@@ -4,9 +4,9 @@ using UnityEngine.UI;
 using System;
 
 public class BaseMoveSync : MonoBehaviour {
-    GameObject clientGObj;
-    GameObject clientSGObj;
-    GameObject serverGObj;
+    protected GameObject clientGObj;
+    protected GameObject clientSGObj;
+    protected GameObject serverGObj;
     GameObject serverArea;
     Text netflowTxt;
 
@@ -45,7 +45,7 @@ public class BaseMoveSync : MonoBehaviour {
         maxY = (int)serverArea.GetComponent<RectTransform>().sizeDelta.y;
 	}
 
-    bool UpdateGObjPos(Vector2 deltaPos, Transform gObjTrans)
+    protected bool UpdateGObjPos(Vector2 deltaPos, Transform gObjTrans)
     {
         Vector3 curPos = gObjTrans.localPosition;
         curPos.x += deltaPos.x;
@@ -74,7 +74,7 @@ public class BaseMoveSync : MonoBehaviour {
         return false;
     }
 
-    bool UpdateGObjDir(Vector2 dir, Transform gObjTrans)
+    protected bool UpdateGObjDir(Vector2 dir, Transform gObjTrans)
     {
         if (dir.magnitude < 0.01)
         {
@@ -236,7 +236,7 @@ public class BaseMoveSync : MonoBehaviour {
         }
     }
 
-    void UpdateCMove()
+    protected virtual void UpdateCMove()
     {
         if (!isStopClient)
         {
