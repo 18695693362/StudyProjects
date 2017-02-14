@@ -3,10 +3,10 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLDebugLogger>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include "glm/gtc/matrix_transform.hpp"
 
-class MGLWidgetDrawCMD : public QOpenGLWidget, protected QOpenGLFunctions
+class MGLWidgetDrawCMD : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
     Q_OBJECT
 public:
