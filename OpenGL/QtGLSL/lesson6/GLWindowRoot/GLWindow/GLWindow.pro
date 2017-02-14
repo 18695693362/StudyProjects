@@ -50,7 +50,7 @@ DISTFILES += \
     ../../../TIPS.txt \
     ../../README.txt
 
-RES_DIR = "res"
+G_RES_DIR = "res"
 G_SRC_DIR = $${PWD}/$${G_RES_DIR}
 G_DES_DIR = $${OUT_PWD}/$${G_RES_DIR}
 win32 {

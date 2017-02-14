@@ -19,9 +19,9 @@ public:
         kOrtho,
         kPerspective
     };
-    void SetOrthoMatrix( float left, float right,
+    void SetOrthoMatrix(float left, float right,
                          float bottom, float top,
-                         float near, float far, bool is_active);
+                         float nearV, float farV, bool is_active);
     void GetOrhtoMatrix(glm::mat4x4& matrix)
     {
         matrix = _ortho;

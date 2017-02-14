@@ -4,7 +4,12 @@
 #include <QOpenGLFunctions_4_1_Compatibility>
 
 #define MyGLFunc ((QOpenGLExtraFunctions*)(QOpenGLContext::currentContext()->functions()))
+
 #define glClearDepth					MyGLFunc->glClearDepthf
+#define glCullFace						MyGLFunc->glCullFace
+#define glDepthFunc						MyGLFunc->glDepthFunc
+#define glGetIntegerv					MyGLFunc->glGetIntegerv
+
 #define glCreateShader					MyGLFunc->glCreateShader
 #define glShaderSource 					MyGLFunc->glShaderSource
 #define glCompileShader 				MyGLFunc->glCompileShader
@@ -40,7 +45,11 @@
 #define glBindBuffer			        MyGLFunc->glBindBuffer
 #define glDeleteBuffers			  		MyGLFunc->glDeleteBuffers
 #define glBufferData                    MyGLFunc->glBufferData
+#define glBufferSubData					MyGLFunc->glBufferSubData
+#define glUniform1i						MyGLFunc->glUniform1i
 #define glUniform1f                     MyGLFunc->glUniform1f
+#define glUniform3fv                    MyGLFunc->glUniform3fv
 #define glUniform4fv                    MyGLFunc->glUniform4fv
-
+#define glUniformMatrix4fv				MyGLFunc->glUniformMatrix4fv
+#define glActiveTexture					MyGLFunc->glActiveTexture
 #endif // GLFUNCDEFINE_H

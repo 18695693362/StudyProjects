@@ -2,7 +2,7 @@
 
 一、 Basic Color Theory
 1. 物理世界的颜色
-在物理世界中，光是由光子组成的，用最简单的术语讲，光子是沿直线传播的离子，它拥有自己的“颜色”（其表示了波长或频率）。
+在物理世界中，光是由光子组成的，用最简单的术语讲，光子是沿直线传播的粒子，它拥有自己的“颜色”（其表示了波长或频率）。
 可见光的波长范围为390nm-720nm，其中包含了7种颜色：violet indigo blue green yellow orange red。
 人眼可以看到不止7种颜色，其实是不同波长光子混合而形成的唯一的颜色。
 2. 计算机中的颜色
@@ -79,7 +79,7 @@ value的范围为[0,1]。1表示每个样本都需要独立被渲染，0表示�
 
 五、 Testing and Operating on Fragments
 1. 简述
-片段着色器处理片段之后还会进过下面的处理：
+片段着色器处理片段之后还会经过下面的处理：
 （1）Scissor test
 （2）Multisample fragment operations
 （3）Stencil test
@@ -103,7 +103,7 @@ https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/11%20Anti
 多边形偏移可用于 渲染固体的高亮边缘、表面贴花、隐藏线移除
 glEnable(GL_POLYGON_OFFSET_FILL)
 void glPolygonOffset(GLfloat factor, GLfloat units);
-开启多边形偏移后，在执行深度测试之前，每个片段的深度值会被添加一个偏移值。偏移值安装下面方法计算：
+开启多边形偏移后，在执行深度测试之前，每个片段的深度值会被添加一个偏移值。偏移值按照下面方法计算：
 offset = m * factor + r * units
 6. Blending
 混合操作把源片段的RGB和alpha值与已经存储在这个位置的像素的对应值进行组合.
@@ -254,9 +254,11 @@ void glDisablei(GLenum capability, GLuint index);
 GLboolean glIsEnabledi(GLenum capability, GLuint index);
 
 3. Dual-Source Blending
+Dual source blending 是指一种混合模式，片段着色器输出两个颜色值到相同的buffer中。为了实现这个目的，
+这两个输出必须指向相同的buffer索引，但是用另外的一个参数指定哪个是color 0，哪个是color 1。如下：
 layout (location = 0, index = 0) out vec4 first_output;
 layout (location = 0, index = 1) out vec4 second_output;
-上面的第二个输出被用作一下面枚举为参数的混合
+上面的第二个输出被用作以下面枚举为参数的混合
 GL_SRC1_COLOR
 GL_SRC1_ALPHA
 GL_ONE_MINUS_SRC1_COLOR

@@ -33,9 +33,9 @@ GCamera::GCamera(const glm::vec3 &pos)
     _perspective    = glm::perspective(45.0f,1.0f,0.1f,100.0f);
 }
 
-void GCamera::SetOrthoMatrix(float left, float right, float bottom, float top, float near, float far, bool is_active)
+void GCamera::SetOrthoMatrix(float left, float right, float bottom, float top, float nearV, float farV, bool is_active)
 {
-    _ortho = glm::ortho(left,right,bottom,top,near,far);
+    _ortho = glm::ortho(left, right, bottom, top, nearV, farV);
 
     if(is_active)
     {

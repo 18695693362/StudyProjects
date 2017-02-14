@@ -3,11 +3,11 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLDebugLogger>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include "glm/gtc/matrix_transform.hpp"
 #include "../../common/gtriangle.h"
 
-class GOGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class GOGLWidget : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
     Q_OBJECT
 public:

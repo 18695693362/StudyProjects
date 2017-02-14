@@ -176,6 +176,9 @@ void glTexParameter{fi}(GLenum target, GLenum pname, Type param );
 void glTexParameter{fi}v(GLenum target, GLenum pname, const Type *param );
 void glTexParameterI{i ui}v(GLenum target, GLenum pname, const Type *param );
 
+Tips:
+关于纹理对象和采样器对象 http://blog.csdn.net/cyrosly/article/details/5431963
+
 七、 Using Textures
 在shader中通过有维度类型的sampler变量来表示的。每个sampler变量由贴图对象和sampler对象组成，贴图对象包含了一组图片数据，
 sampler对象包含了一组采样参数。贴图对象被绑定到贴图单元，sampler对象被绑定到对应的sampler单元。使用GLSL的内置函数texture

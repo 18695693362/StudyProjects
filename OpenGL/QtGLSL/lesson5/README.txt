@@ -75,12 +75,15 @@ http://www.songho.ca/opengl/gl_projectionmatrix.html
 （2）法线向量用来进行光照计算，其在透视投影之前进行，所以法线向量不需要透视投影。
 需要注意的是法线向量的变换公用物体的变换。
 n′ = M(−1)Tn
+http://www.cnblogs.com/hefee/p/3817397.html
 6. OpenGL Matrices
 为了优化性能，将对于每个顶点都相同的矩阵运算放在应用程序中进行，计算完毕后传递给顶点着色器。
 （1）OpenGL中的矩阵行列
 opengl中矩阵是列主序的
 mat3x4 m;
 vec4 v = m[1]; // v 是矩阵m的第二列向量
+http://blog.csdn.net/oracleot/article/details/5378746
+
 三、 OpenGL Transformations
 1. 在OpenGL中指定最近和最远的裁剪平面
 void glDepthRange(GLclampd near, GLclampd far);
@@ -97,8 +100,12 @@ http://www.songho.ca/opengl/gl_projectionmatrix.html
 用户裁切是指添加额外的裁切平面。
 glEnable(GL_CLIP_PLANE0);
 开启第0个裁剪平面
+void glClipPlane(GLenum plane, const GLdouble *equation);
+指定裁剪平面
 gl_ClipDistance用来指定定点和平面的关系。距离=0表示定点在裁剪平面上，距离>0表示顶点在裁剪平面内
 (顶点不会被裁剪)，距离<0表示顶点在裁剪平面外(顶点被裁剪)；
+http://blog.sina.com.cn/s/blog_5ff6097b0100xqvr.html
+
 四、 Transform Feedback
 1. 简述
 Transform feedback是在顶点处理结束以后，在图元装配和光栅化之前。当顶点数据组合为图元时，Transform
