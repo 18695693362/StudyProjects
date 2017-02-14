@@ -155,7 +155,9 @@ index 指定顶点属性的索引
 divisor 指定顶点属性被更新的频率
 
 
-
+六、参考资料
+1. 关于OpenGL Draw函数的详细信息
+(利用现代OpenGL API大幅度减少由于执行驱动导致CPU的开销)http://www.opengpu.org/home.php?mod=space&uid=36152&do=blog&id=598
 
 
 

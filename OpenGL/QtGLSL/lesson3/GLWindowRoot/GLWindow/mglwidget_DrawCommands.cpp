@@ -170,10 +170,10 @@ void MGLWidgetDrawCMD::initializeGL()
     _InitOpenGLLogging();
 
     glClearColor(0.0f,0.0f,1.0f,1.0f);
-    glClearDepth(1.0f);
+    glClearDepthf(1.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
@@ -316,7 +316,7 @@ void MGLWidgetDrawCMD::paintGL()
     {
         glUniformMatrix4fv(ubo_indices[Model],1,GL_FALSE,glm::value_ptr(model_matrix));
     }
-    glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 0);
+    //glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 0);
 
     // DrawArraysInstanced
     model_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, 0.0f, -5.0f));

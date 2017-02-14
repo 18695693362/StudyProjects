@@ -2,13 +2,13 @@
 #define MGLWIDGET_DRAWCM_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include "glm/gtc/matrix_transform.hpp"
 #include "../../../common/vbm.h"
 #include "../../../common/gdebug.h"
 #include "../../../common/gtriangle.h"
 
-class MGLWidgetDrawInstanced : public QOpenGLWidget, protected QOpenGLFunctions
+class MGLWidgetDrawInstanced : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
     Q_OBJECT
 public:

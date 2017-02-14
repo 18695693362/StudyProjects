@@ -2,13 +2,13 @@
 #define GINSTANCEARRAY_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include "glm/gtc/matrix_transform.hpp"
 #include "../../../common/vbm.h"
 #include "../../../common/gdebug.h"
 #include "../../../common/gtriangle.h"
 
-class GInstanceArray : public QOpenGLWidget, protected QOpenGLFunctions
+class GInstanceArray : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
     Q_OBJECT
 public:
