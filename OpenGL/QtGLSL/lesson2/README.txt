@@ -188,7 +188,7 @@ buffer blocks和uniform block相比，有两个优点：
 (2) buffer blocks的大小可以在渲染之前再确定，而不是编译连接的时候。
 buffer BufferObject {
     int     mode;
-    vec4    points[];    // 改数组的大小可以在渲染之前确定
+    vec4    points[];    // 该数组的大小可以在渲染之前确定
 };
 ==5== In/Out Blocks
 out Lighting {
