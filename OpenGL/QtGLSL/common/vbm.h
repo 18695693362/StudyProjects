@@ -3,6 +3,7 @@
 
 //#include "vgl.h"
 #include <QtGui/qopengl.h>
+#include "glfuncdefine.h"
 
 typedef struct VBM_HEADER_t
 {

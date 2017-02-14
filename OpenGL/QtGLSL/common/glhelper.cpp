@@ -5,27 +5,6 @@
 #include <QElapsedTimer>
 #include "../libs/glm/glm/gtx/norm.hpp"
 using namespace std;
-#define glCreateShader QOpenGLContext::currentContext()->functions()->glCreateShader
-#define glShaderSource QOpenGLContext::currentContext()->functions()->glShaderSource
-#define glCompileShader QOpenGLContext::currentContext()->functions()->glCompileShader
-#define glGetShaderiv   QOpenGLContext::currentContext()->functions()->glGetShaderiv
-#define glGetShaderInfoLog QOpenGLContext::currentContext()->functions()->glGetShaderInfoLog
-#define glCreateProgram QOpenGLContext::currentContext()->functions()->glCreateProgram
-#define glAttachShader  QOpenGLContext::currentContext()->functions()->glAttachShader
-#define glLinkProgram   QOpenGLContext::currentContext()->functions()->glLinkProgram
-#define glDeleteShader  QOpenGLContext::currentContext()->functions()->glDeleteShader
-#define glGetProgramiv  QOpenGLContext::currentContext()->functions()->glGetProgramiv
-#define glGetProgramInfoLog QOpenGLContext::currentContext()->functions()->glGetProgramInfoLog
-#define glIsProgram  QOpenGLContext::currentContext()->functions()->glIsProgram
-#define glGetUniformLocation QOpenGLContext::currentContext()->functions()->glGetUniformLocation
-#define glGetActiveUniformBlockiv QOpenGLContext::currentContext()->functions()->glGetActiveUniformBlockiv
-#define glGenerateMipmap          QOpenGLContext::currentContext()->functions()->glGenerateMipmap
-#define glDrawElementsBaseVertex  QOpenGLContext::currentContext()->functions()->glDrawElementsBaseVertex
-#define glGenTextures             QOpenGLContext::currentContext()->functions()->glGenTextures
-#define glBindTexture             QOpenGLContext::currentContext()->functions()->glBindTexture
-#define glTexParameteri           QOpenGLContext::currentContext()->functions()->glTexParameteri
-#define glGetError                QOpenGLContext::currentContext()->functions()->glGetError
-#define glTexImage2D              QOpenGLContext::currentContext()->functions()->glTexImage2D
 
 GLHelper::GLHelper()
 {

@@ -6,6 +6,7 @@
 #include "../libs/glm/glm/glm.hpp"
 #include "../libs/glm/glm/gtc/matrix_transform.hpp"
 #include "../libs/glm/glm/gtc/quaternion.hpp"
+#include "glfuncdefine.h"
 #include <string>
 #include <functional>
 
