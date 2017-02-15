@@ -135,7 +135,31 @@ target - GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_1D_ARRAY, GL_TE
 GL_TEXTURE_RECTANGLE. GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
 GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, and GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
 读入image中的数据大小是由target、format和type决定的。
-通常来讲将数据读入应用程序不是高效的操作，如果必须要读取贴图数据，应该讲数据读到buffer对象中，然后将buffer映射到应用程序中。
+通常来讲将数据读入应用程序不是高效的操作，如果必须要读取贴图数据，应该将数据读到buffer对象中，然后将buffer映射到应用程序中。
+(1) 绑定PBO pixel buffer object
+for (int i=0;i<pbo_count;i++)
+{
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo[i]);
+    glReadPixels(0, 0, width, height, fmt, GL_UNSIGNED_BYTE, 0);
+}
+(2) 隔2-3帧后，读取缓冲区中存储的数据
+/* Read from the oldest bound pbo. */
+glBindBuffer(GL_PIXEL_PACK_BUFFER, pbos[dx]);
+
+ptr = (unsigned char*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+if (NULL != ptr) {
+    memcpy(pixels, ptr, nbytes);
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+}
+else {
+    SX_ERROR("Failed to map the buffer");
+}
+
+/* Trigger the next read. */
+SX_DEBUG("glReadPixels() with pbo: %d", pbos[dx]);
+glReadPixels(0, 0, width, height, fmt, GL_UNSIGNED_BYTE, 0);
+
+http://www.roxlu.com/2014/048/fast-pixel-transfers-with-pixel-buffer-objects
 
 6. Texture Data Layout
 大多数情况图片数据是从左到右，从上到下在内存贴图图元之间紧密排列。
@@ -308,7 +332,7 @@ buffer textures和一维贴图的主要区别为：
 （3）一维贴图的贴图坐标是标准化的浮点值，而buffer textures使用非标准化的整数贴图坐标。
 
 关联buffer对象和贴图对象
-oid glTexBuffer(GLenum target, GLenum internalFormat, GLuint buffer);
+void glTexBuffer(GLenum target, GLenum internalFormat, GLuint buffer);
 void glTexBufferRange(GLenum target, GLenum internalFormat, GLuint buffer, GLintptr offset,
 GLsizeiptr size);
 
@@ -438,7 +462,7 @@ OpenGL获得你传递给它的贴图坐标，并且查找两个最靠近的样�
 线性过滤不仅可用于1D 2D 3D贴图，它还可用于邻接的mipmap。
 GL_TEXTURE_MAG_FILTER和GL_TEXTURE_MIN_FILTER这两个参数控制OpenGL如何过滤贴图。
 贴图被放大时使用GL_TEXTURE_MAG_FILTER参数的配置。需求的贴图分辨率比最高分辨率的mipmap(level0)高.
-贴图被缩小是使用GL_TEXTURE_MIN_FILTER参数的配置。
+贴图被缩小时使用GL_TEXTURE_MIN_FILTER参数的配置。
 
 3. Using and Generating Mipmaps
 GL_TEXTURE_MIN_FILTER参数控制着，当mipmap level比0大时，贴图图元如何创建。
@@ -448,7 +472,7 @@ GL_NEAREST_MIPMAP_NEAREST、GL_NEAREST_MIPMAP_LINEAR、GL_LINEAR_MIPMAP_NEAREST�
 获得图元；B控制如何将这些样本混合。NEAREST表示只使用最近level的mipmap，LINEAR表示取两个最近的mipmap进行线性插值。
 Tips:
 GL_TEXTURE_MAG_FILTER的默认值为GL_LINEAR，GL_TEXTURE_MIN_FILTER的默认值为GL_LINEAR_MIPMAP_LINEAR。所以默认情况
-下回启用mipmapping。使用mipmapping要求完整的mipmap集合，即所有level的mipmap都必须存在，如果没有完整的mipmap，shader
+下会启用mipmapping。使用mipmapping要求完整的mipmap集合，即所有level的mipmap都必须存在，如果没有完整的mipmap，shader
 中会返回无用的贴图数据。
 
 为了使用mipmapping，你必须提供所有2的幂尺寸的贴图，这些2的幂尺寸的贴图尺寸范围为1x1到贴图最大尺寸。
