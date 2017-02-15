@@ -50,6 +50,7 @@
 #define glUniform1f                     MyGLFunc->glUniform1f
 #define glUniform3fv                    MyGLFunc->glUniform3fv
 #define glUniform4fv                    MyGLFunc->glUniform4fv
+#define glUniformMatrix3fv				MyGLFunc->glUniformMatrix3fv
 #define glUniformMatrix4fv				MyGLFunc->glUniformMatrix4fv
 #define glActiveTexture					MyGLFunc->glActiveTexture
 #endif // GLFUNCDEFINE_H

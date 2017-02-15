@@ -46,7 +46,8 @@ FORMS    +=
 
 
 RESOURCES += \
-    ../../../res/light/light_shader.qrc
+    ../../../res/light/light_shader.qrc \
+    ../../../res/light_obj/light_obj.qrc
 
 INCLUDEPATH += $$PWD/../../../libs/glm
 DEPENDPATH += $$PWD/../../../libs/glm
@@ -56,7 +57,7 @@ DISTFILES += \
     ../../README.txt \
     ../../../Readme.txt
 
-RES_DIR = "res"
+G_RES_DIR = "res"
 G_SRC_DIR = $${PWD}/$${G_RES_DIR}
 G_DES_DIR = $${OUT_PWD}/$${G_RES_DIR}
 win32 {
@@ -70,7 +71,7 @@ macx {
 linux {
     copyfiles.commands = cp -r $$G_SRC_DIR $$G_DES_DIR
 }
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
+#QMAKE_EXTRA_TARGETS += copyfiles
+#POST_TARGETDEPS += copyfiles
+#QMAKE_EXTRA_TARGETS += copyfiles
+#POST_TARGETDEPS += copyfiles

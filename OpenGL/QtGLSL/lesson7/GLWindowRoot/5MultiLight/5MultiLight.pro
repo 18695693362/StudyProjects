@@ -57,13 +57,13 @@ DISTFILES += \
     ../../README.txt \
     ../../../Readme.txt
 
-RES_DIR = "res"
+G_RES_DIR = "res"
 G_SRC_DIR = $${PWD}/$${G_RES_DIR}
 G_DES_DIR = $${OUT_PWD}/$${G_RES_DIR}
 win32 {
     G_SRC_DIR ~= s,/,\\,g
     G_DES_DIR ~= s,/,\\,g
-    copyfiles.commands = $$quote(cmd /c xcopy /Y /S /I $${G_SRC_DIR} $${G_DES_DIR})
+    copyfiles.commands = $$quote(cmd /c xcopy /Y /S /I /E $${G_SRC_DIR} $${G_DES_DIR})
 }
 macx {
     copyfiles.commands = cp -r $$G_SRC_DIR $$G_DES_DIR
@@ -71,7 +71,7 @@ macx {
 linux {
     copyfiles.commands = cp -r $$G_SRC_DIR $$G_DES_DIR
 }
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
+#QMAKE_EXTRA_TARGETS += copyfiles
+#POST_TARGETDEPS += copyfiles
+#QMAKE_EXTRA_TARGETS += copyfiles
+#POST_TARGETDEPS += copyfiles

@@ -73,7 +73,7 @@ void GOGLWidget::initializeGL()
     glClearDepth(100.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
@@ -234,8 +234,8 @@ void GOGLWidget::InitCubeForLight()
         GUniformType::kLight0_Strengthen
     };
     int uniform_count = sizeof(uniform_types) / sizeof(GUniformType);
-    _cube_for_light.Init(":0_dir_light.vert",
-                         ":0_dir_light.frag",
+    _cube_for_light.Init(":2_dir_light.vert",
+                         ":2_dir_light.frag",
                          uniform_types,
                          uniform_count);
 

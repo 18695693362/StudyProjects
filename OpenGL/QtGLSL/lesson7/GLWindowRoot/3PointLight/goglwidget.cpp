@@ -53,10 +53,7 @@ void GOGLWidget::initializeGL()
 //                 "skybox_2/back.jpg",
 //                 QImage::Format::Format_RGB888);
     //_skybox.SetScale(10);
-    _point_light.Init();
-    _point_light.SetColor(glm::vec4(1.0,1.0,1.0,1.0));
-    _point_light.SetTranslate(glm::vec3(1.3,1.3,1.3));
-    _point_light.SetScale(0.3);
+    InitPointLight();
     for(int cube_index=0; cube_index<_kCubesCount; cube_index++)
     {
         InitCubeForLight(_cubes[cube_index],cube_index,_point_light);
@@ -80,7 +77,7 @@ void GOGLWidget::initializeGL()
     glClearDepth(100.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
@@ -117,6 +114,44 @@ void GOGLWidget::resizeGL(int w, int h)
     glViewport(0,0,window_width_,window_height_);
 }
 
+void GOGLWidget::InitPointLight()
+{
+    _point_light.property.enable      = true;
+    _point_light.property.type        = GLightType::kPointLight;
+    _point_light.property.dir         = glm::vec3(-1.0,-1.0,0);
+
+    _point_light.SetColor(glm::vec4(1.0,0.0,0.0,1.0));
+    _point_light.property.color       = glm::vec3(1.0,1.0,1.0);
+    _point_light.SetTranslate(glm::vec3(1.3,1.3,1.3));                        // pos
+
+    _point_light.property.ambient     = glm::vec3(0.1,0.1,0.1);
+    _point_light.property.shininess   = (float)32.0f;
+    _point_light.property.strengthen  = (float)1.0f;
+    _point_light.property.attenuation = (float)1.0f;
+    _point_light.property.linear_attenuation      = (float)0.09f;
+    _point_light.property.quadratic_attenuation   = (float)0.032f;
+    _point_light.property.spot_inner_cutoff       = (float)12.50f;
+    _point_light.property.spot_outer_cutoff       = (float)30.00f;
+
+    GUniformType uniform_types[] = {
+        GUniformType::kTranslate,
+        GUniformType::kScale,
+        GUniformType::kColor,
+        GUniformType::kViewMatrix,
+        GUniformType::kProjectionMatrix,
+    };
+
+    int uniform_count = sizeof(uniform_types) / sizeof(GUniformType);
+    _point_light.Init(":0_light_obj.vert",
+              ":0_light_obj.frag",
+              uniform_types,
+              uniform_count);
+
+    _point_light.SetScale(0.3);
+    _point_light.SetCameraGetter([this](){
+        return &(this->_camera);
+    });
+}
 
 void GOGLWidget::keyPressEvent(QKeyEvent *event)
 {
@@ -252,8 +287,8 @@ void GOGLWidget::InitCubeForLight(GCubeForLight& cube, int index, GLightBase& li
         GUniformType::kLight0_QuadraticAttenuation
     };
     int uniform_count = sizeof(uniform_types) / sizeof(GUniformType);
-    cube.Init(":0_point_light.vert",
-              ":0_point_light.frag",
+    cube.Init(":3_point_light.vert",
+              ":3_point_light.frag",
               uniform_types,
               uniform_count);
 

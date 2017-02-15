@@ -3,7 +3,7 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLDebugLogger>
-#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include "glm/gtc/matrix_transform.hpp"
 #include "../../common/gtriangle.h"
 #include "../../common/gcube.h"
@@ -12,7 +12,7 @@
 #include "../../common/gcamera.h"
 #include "../../common/glight.h"
 
-class GOGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
+class GOGLWidget : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
     Q_OBJECT
 public:
@@ -27,6 +27,7 @@ protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
 private:
+    void InitPointLight();
     void InitCubeForLight(GCubeForLight &cube, int index, GLightBase &light);
 
     bool    is_full_screen_;
@@ -37,7 +38,7 @@ private:
     GCube           _cube;
     GSkybox         _skybox;
 
-    GPointLight         _point_light;
+    GCubeLight          _point_light;
     static const int    _kCubesCount = 6;
     GCubeForLight       _cubes[_kCubesCount];
 

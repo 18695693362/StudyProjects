@@ -23,6 +23,7 @@ SOURCES += main.cpp \
     ../../../common/gskybox.cpp \
     ../../../common/gtimermgr.cpp \
     ../../../common/gcubeforlight.cpp \
+    ../../../common/glight.cpp \
     ../../../common/gmodel.cpp
 
 HEADERS  += \
@@ -35,6 +36,7 @@ HEADERS  += \
     ../../../common/gcamera.h \
     ../../../common/gskybox.h \
     ../../../common/gtimermgr.h \
+    ../../../common/glight.h \
     ../../../common/gmodel.h \
     ../../../common/gcubeforlight.h
 
@@ -54,7 +56,7 @@ DISTFILES += \
     ../../README.txt \
     ../../../Readme.txt
 
-RES_DIR = "res"
+G_RES_DIR = "res"
 G_SRC_DIR = $${PWD}/$${G_RES_DIR}
 G_DES_DIR = $${OUT_PWD}/$${G_RES_DIR}
 win32 {
@@ -68,7 +70,7 @@ macx {
 linux {
     copyfiles.commands = cp -r $$G_SRC_DIR $$G_DES_DIR
 }
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
+#QMAKE_EXTRA_TARGETS += copyfiles
+#POST_TARGETDEPS += copyfiles
+#QMAKE_EXTRA_TARGETS += copyfiles
+#POST_TARGETDEPS += copyfiles
