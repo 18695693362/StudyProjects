@@ -313,10 +313,11 @@ glm::quat GLHelper::GetRotateBetweenVec(const glm::quat &start, const glm::quat 
 string GLHelper::GetGResAbsPath()
 {
     QDir temp_dir;
-    const char* res_relative_path = "./../../../res";
-    if(temp_dir.exists(res_relative_path))
+    QString res_path = QCoreApplication::applicationDirPath() + "/../res";
+    //const char* res_relative_path = "./../../../res";
+    if(temp_dir.exists(res_path))
     {
-        return temp_dir.absoluteFilePath(res_relative_path).toStdString();
+        return temp_dir.absoluteFilePath(res_path).toStdString();
     }
     else
     {
