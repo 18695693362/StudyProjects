@@ -100,6 +100,19 @@ DEPENDPATH += $$PWD/../../../libs/glm
 vec3 result_color;                      // 没有初始化是错误的。
 vec3 result_color = vec3(0.0,0.0,0.0)   // 初始化过了，可以正常使用。
 
+14. 光照通常不会影响物体的透明度，所以光照计算中，颜色的alpha值通常是不变的。
+
+15. 什么是摄像机空间（视觉空间、观察空间）？
+所谓摄像机空间、视觉空间、观察空间就是摄像机节点的本地坐标系。
+
+16. 光照计算在视觉坐标系下进行有什么好处？
+光照计算中通常需要视觉方向，当在视觉坐标系下进行光照计算时，视觉方向即为顶点在视觉坐标系下的坐标。
+
+17. 几种光照成分的名称
+ambient   环境光
+diffuse   漫反射光
+specular  镜面反射光
+
 DONE
 lesson5
 实现摄像机
@@ -115,6 +128,9 @@ lesson5
 lesson7
 实现延迟渲染
 实现阴影贴图
+
+//examples
+实现多重采样抗锯齿
 
 参考链接：
 Modern OpenGL Tutorials:            http://ogldev.atspace.co.uk/index.html

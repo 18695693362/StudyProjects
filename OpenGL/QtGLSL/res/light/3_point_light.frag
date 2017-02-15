@@ -1,6 +1,5 @@
 #version 410 core
 uniform vec4 ambient;
-uniform vec3 eye_dir;
 uniform int  light0_type;
 uniform vec3 light0_color;
 uniform vec3 light0_pos;
@@ -27,7 +26,7 @@ void main()
     if(specular != 0.0)
     {
         vec3 reflect_dir = reflect(light0_dir,normal);
-        specular = max(pow(max(dot(-eye_dir,reflect_dir),0.0), light0_shininess), 0);
+        specular = max(pow(max(dot(-vo_pos_in_view,reflect_dir),0.0), light0_shininess), 0);
     }
 
     float attenuation = 1 / (light0_attenuation +

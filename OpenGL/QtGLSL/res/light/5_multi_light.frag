@@ -16,28 +16,27 @@ struct GSLightProp
     float       spot_outer_cutoff;
 };
 #define LIGHT_COUNT 3
-uniform vec3 eye_dir;
 uniform GSLightProp lights[LIGHT_COUNT];
 in vec4 vo_color;
 in vec3 vo_normal;
 in vec3 vo_pos_in_view;
 out vec4 fo_color;
 
-vec3 CalcLight(vec3 obj_pos, vec3 obj_color, GSLightProp light_prop,vec3 normal,vec3 eye_dir);
+vec3 CalcLight(vec3 obj_pos, vec3 obj_color, GSLightProp light_prop,vec3 normal);
 void main()
 {
     vec3 result_color = vec3(0.0,0.0,0.0);
     vec3 normal = normalize(vo_normal);
     for(int i=0; i<LIGHT_COUNT; i++)
     {
-        result_color += CalcLight(vo_pos_in_view,vo_color.rgb,lights[i],normal,eye_dir);
+        result_color += CalcLight(vo_pos_in_view,vo_color.rgb,lights[i],normal, vo_pos_in_view);
     }
 
     fo_color = vec4(result_color,vo_color.a);
     //fo_color = vo_color;
 }
 
-vec3 CalcLight(vec3 obj_pos, vec3 obj_color, GSLightProp light_prop,vec3 normal,vec3 eye_dir)
+vec3 CalcLight(vec3 obj_pos, vec3 obj_color, GSLightProp light_prop,vec3 normal, vec3 eye_dir)
 {
     vec3 color = vec3(0.0,0.0,0.0);
     if(light_prop.enable)

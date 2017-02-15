@@ -1,11 +1,11 @@
 #version 410 core
 uniform vec4 ambient;
-uniform vec3 eye_dir;
 uniform vec3 light0_color;
 uniform vec3 light0_dir;
 uniform float light0_shininess;
 uniform float light0_strength;
 
+in vec3 vo_pos_in_view;
 in vec4 vo_color;
 in vec3 vo_normal;
 out vec4 fo_color;
@@ -19,7 +19,8 @@ void main()
     if(specular != 0.0)
     {
         vec3 reflect_dir = reflect(-light0_dir,normal);
-        specular = max(pow(max(dot(-eye_dir,reflect_dir),0.0), light0_shininess), 0);
+        //specular = max(pow(max(dot(-eye_dir,reflect_dir),0.0), light0_shininess), 0);
+        specular = max(pow(max(dot(-vo_pos_in_view,reflect_dir),0.0), light0_shininess), 0);
     }
 
     vec3 scatteredLight = ambient.xyz + light0_color*diffuse;
