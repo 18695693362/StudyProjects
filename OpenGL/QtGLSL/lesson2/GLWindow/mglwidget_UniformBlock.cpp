@@ -98,7 +98,7 @@ void MGLWidgetUniformBlock::initializeGL()
         glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_SIZE, size);
         glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_TYPE, type);
 
-        memcpy( (GLchar*)buffer + offset[Translation], &translation, size[Scale] * GLHelper::TypeSize(type[Translation]) );
+        memcpy( (GLchar*)buffer + offset[Translation], &translation, size[Translation] * GLHelper::TypeSize(type[Translation]) );
         memcpy( (GLchar*)buffer + offset[Scale],       &scale,       size[Scale] * GLHelper::TypeSize(type[Scale]) );
         memcpy( (GLchar*)buffer + offset[Rotation],    &rotation,    size[Rotation] * GLHelper::TypeSize(type[Rotation]) );
         memcpy( (GLchar*)buffer + offset[Enabled],     &enabled,     size[Enabled] * GLHelper::TypeSize(type[Enabled]) );

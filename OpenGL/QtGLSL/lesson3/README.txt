@@ -47,7 +47,7 @@ GL_PIXEL_PACK_BUFFER            用于保存从图片对象(textures/framebuffer
 GL_PIXEL_UNPACK_BUFFER          用于指定glTexImage2D的来源数据
 GL_TEXTURE_BUFFER               将buffer绑定到texture对象上，这样就可以在shader中获取其数据了
 GL_TRANSFORM_FEEDBACK_BUFFER    用于保存变换后的顶点属性
-GL_UNIFORM_BUFFER
+GL_UNIFORM_BUFFER               用于保存Uniform数据
 
 //指定当前绑定的target类的buffer对象 或者 创建target类的buffer对象
 glBindBuffer(GLenum target, GLuint buffer);

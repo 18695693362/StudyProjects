@@ -1,5 +1,6 @@
     TIPS
-0. OpenGL为右手坐标系。Unity3D为左手坐标系。
+
+0. OpenGL为右手坐标系，Unity3D为左手坐标系。
 
 1. 设置缩放变换矩阵时需要将w设置为1，否则缩放无效
 e.g:
@@ -9,6 +10,7 @@ mat4 scale = mat4x4(
     vec4(  0,   0, 0.1,   0),
     vec4(  0,   0,   0,   1)
     );
+如果上面的w也为1，则缩放是无效的。
 
 2. shader中不使用的uniform会被自动移除
 下面的代码可以让 model_matrix uniform不被移除，而且可以通过颜色确定 model_matrix的值
