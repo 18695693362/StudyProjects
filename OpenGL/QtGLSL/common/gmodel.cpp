@@ -20,6 +20,10 @@ string GModel::GetUniformName(GUniformType type)
     {
         return "color";
     }
+    case GUniformType::kModelMatrix:
+    {
+        return "model_matrix";
+    }
     case GUniformType::kViewMatrix:
     {
         return "view_matrix";
@@ -98,6 +102,12 @@ string GModel::GetUniformName(GUniformType type)
     return "";
 }
 
+void GModel::GetModelMatrix(glm::mat4x4 &out_mm)
+{
+    out_mm = glm::translate(glm::mat4(1),_translate);
+    out_mm = glm::scale(out_mm,glm::vec3(_scale));
+}
+
 void GModel::AddLight(GLightBase *light)
 {
     if(!light)
@@ -151,6 +161,13 @@ void GModel::SetUniformInDraw()
     {
         float scale = GetScale();
         glUniform1f(info->local,scale);
+    }
+    local = GetUniformInfo(GUniformType::kModelMatrix);
+    if(local!=-1)
+    {
+        glm::mat4x4 model_matrix = glm::translate(glm::mat4(1),_translate);
+        model_matrix = glm::scale(model_matrix,glm::vec3(_scale));
+        glUniformMatrix4fv(local,1,GL_FALSE,glm::value_ptr(model_matrix));
     }
     info = GetUniformInfo(GUniformType::kColor);
     if(info)
@@ -211,7 +228,7 @@ void GModel::SetUniformInDraw()
     info = GetUniformInfo(GUniformType::kEyeDir);
     if(info) //eye-space
     {
-        glm::vec3 dir = -camera->GetForward();
+        glm::vec3 dir = glm::vec3(0,0,-1);
         dir = glm::normalize(dir);
         glUniform3fv(info->local,1,glm::value_ptr(dir));
     }
@@ -322,4 +339,54 @@ GLint GModel::GetUniformLocal(GUniformType type)
         return info->local;
     }
     return -1;
+}
+
+
+void GCubeDataHelper::GetVertexData(GLfloat *&vertex_data, int &data_size, int& pos_comp_count, int& color_comp_count, int& normal_comp_count)
+{
+    static GLfloat vertices[] =
+    {
+        //----pos----------/ /----color-------/   /----normal------/
+        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,//1
+         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,//2
+         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,//3
+        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,//4
+         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,//5
+         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,//6
+         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f
+    };
+    vertex_data = vertices;
+    data_size = sizeof(vertices);
+    pos_comp_count = 3;
+    color_comp_count = 4;
+    normal_comp_count = 3;
 }

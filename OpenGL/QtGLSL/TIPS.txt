@@ -115,6 +115,24 @@ ambient   环境光
 diffuse   漫反射光
 specular  镜面反射光
 
+18. VBO和VAO的区别
+(1) VBO是一个Buffer对象，用来存储顶点的原始数据。
+--Tips--
+（1-1）GL_ARRAY_BUFFER的绑定VBO操作（即调用glBindBuffer(GL_ARRAY_BUFFER,_vbo)），不属于VAO所记录的状态。
+调用绑定VBO操作后，第一次调用glVertexAttribPointer时，才会将当前绑定的vbo记录到VAO中。
+VBO的创建 、绑定、删除
+glGenBuffers(1,&_vertex_buffer);
+glBindBuffer(GL_ARRAY_BUFFER, _vertex_buffer);
+glBufferData(GL_ARRAY_BUFFER, data_size,vertex_data,GL_STATIC_DRAW);
+glDeleteBuffers(1,&_vertex_buffer)
+(2) VAO是一个OpenGL对象，用来存储一系列状态来提供给顶点数据。它保存了顶点数据的格式，当前绑定的vbo这些状态。
+VAO的创建、绑定、删除
+glGenVertexArrays(1,&_vertex_arr_obj);
+glBindVertexArray(_vertex_arr_obj);
+glDeleteVertexArrays(1,&_vertex_arr_obj);
+
+参考--https://www.khronos.org/opengl/wiki/Vertex_Specification
+
 DONE
 lesson5
 实现摄像机

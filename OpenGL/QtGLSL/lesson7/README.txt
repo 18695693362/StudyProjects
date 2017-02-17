@@ -476,11 +476,166 @@ FragColor = vec4(DiffuseColor, 1.0);
 }
 
 三、 Shadow Mapping
+阴影贴图时一种多阶段技术，它使用深度贴图来渲染阴影。其中一个关键的阶段是从触发阴影的光源
+而不是从最终的视点，来看场景。从光源来看场景，所有看到的都是会被该光源点亮的。
+阴影贴图技术的两个阶段如下：
+（1）以光源的位置为视点渲染场景，把深度贴图对象附加到帧缓冲区对象,将深度值渲染到贴图中。
+（2）以本来的视点渲染场景，
+
+// -- Step 1.1 -- Create a depth texture and attach to framebuffer
+glGenTextures(1, &depth_texture);
+glBindTexture(GL_TEXTURE_2D, depth_texture);
+// Allocate storage for the texture data
+glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32,
+             DEPTH_TEXTURE_SIZE, DEPTH_TEXTURE_SIZE,
+             0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+// Set the default filtering modes
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+// Set up depth comparison mode
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,GL_COMPARE_REF_TO_TEXTURE);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
+// Set up wrapping modes
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+glBindTexture(GL_TEXTURE_2D, 0);
+
+// Create FBO to render depth into
+glGenFramebuffers(1, &depth_fbo);
+glBindFramebuffer(GL_FRAMEBUFFER, depth_fbo);
+
+// Attach the depth texture to it
+glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,depth_texture, 0);
+// Disable color rendering as there are no color attachments
+glDrawBuffer(GL_NONE);
 
 
+// -- Step 1.2 -- prepare render scene from light pos
+// Time varying light position
+vec3 light_position = vec3(sinf(t * 6.0f * 3.141592f) * 300.0f,
+                           200.0f,
+                           cosf(t * 4.0f * 3.141592f) * 100.0f + 250.0f);
 
+// Matrices for rendering the scene
+mat4 scene_model_matrix = rotate(t * 720.0f, Y);
 
+// Matrices used when rendering from the light’s position
+mat4 light_view_matrix = lookat(light_position, vec3(0.0f), Y);
+mat4 light_projection_matrix(frustum(-1.0f, 1.0f, -1.0f, 1.0f,1.0f, FRUSTUM_DEPTH));
 
+// Now we render from the light’s position into the depth buffer.
+// Select the appropriate program
+glUseProgram(render_light_prog);
+
+glUniformMatrix4fv(render_light_uniforms.MVPMatrix,
+                   1, GL_FALSE,
+                   light_projection_matrix *
+                   light_view_matrix *
+                   scene_model_matrix);
+
+// ---- vertex shader ----
+#version 330 core
+uniform mat4 MVPMatrix;
+layout (location = 0) in vec4 position;
+void main(void)
+{
+        gl_Position = MVPMatrix * position;
+}
+// ---- fragment shader ----
+// Fragment shader for shadow map generation
+#version 330 core
+layout (location = 0) out vec4 color;
+void main(void)
+{
+        color = vec4(1.0);
+}
+
+// -- Step 1.3 -- render from light pos to generate Shadow texture
+// Bind the "depth only" FBO and set the viewport to the size
+// of the depth texture
+glBindFramebuffer(GL_FRAMEBUFFER, depth_fbo);
+glViewport(0, 0, DEPTH_TEXTURE_SIZE, DEPTH_TEXTURE_SIZE);
+
+// Clear
+glClearDepth(1.0f);
+glClear(GL_DEPTH_BUFFER_BIT);
+
+// Enable polygon offset to resolve depth-fighting isuses
+glEnable(GL_POLYGON_OFFSET_FILL);
+glPolygonOffset(2.0f, 4.0f);
+
+// Draw from the light’s point of view
+DrawScene(true);
+glDisable(GL_POLYGON_OFFSET_FILL);
+
+// -- Step 2.1 -- render scene at real eye pos and use shadow map texture
+mat4 scene_model_matrix = rotate(t * 720.0f, Y);
+mat4 scene_view_matrix = translate(0.0f, 0.0f, -300.0f);
+mat4 scene_projection_matrix = frustum(-1.0f, 1.0f, -aspect, aspect,1.0f, FRUSTUM_DEPTH);
+mat4 scale_bias_matrix = mat4(vec4(0.5f, 0.0f, 0.0f, 0.0f),
+                              vec4(0.0f, 0.5f, 0.0f, 0.0f),
+                              vec4(0.0f, 0.0f, 0.5f, 0.0f),
+                              vec4(0.5f, 0.5f, 0.5f, 1.0f));
+mat4 shadow_matrix = scale_bias_matrix * light_projection_matrix * light_view_matrix;
+// ---- vertex shader ----
+#version 330 core
+uniform mat4 model_matrix;
+uniform mat4 view_matrix;
+uniform mat4 projection_matrix;
+uniform mat4 shadow_matrix;
+layout (location = 0) in vec4 position;
+layout (location = 1) in vec3 normal;
+out VS_FS_INTERFACE
+{
+        vec4 shadow_coord;
+        vec3 world_coord;
+        vec3 eye_coord;
+        vec3 normal;
+} vertex;
+void main(void)
+{
+        vec4 world_pos = model_matrix * position;
+        vec4 eye_pos = view_matrix * world_pos;
+        vec4 clip_pos = projection_matrix * eye_pos;
+        vertex.world_coord = world_pos.xyz;
+        vertex.eye_coord = eye_pos.xyz;
+        vertex.shadow_coord = shadow_matrix * world_pos;
+        vertex.normal = mat3(view_matrix * model_matrix) * normal;
+        gl_Position = clip_pos;
+}
+// ---- fragment shader ----
+#version 330 core
+uniform sampler2DShadow depth_texture;
+uniform vec3 light_position;
+uniform vec3 material_ambient;
+uniform vec3 material_diffuse;
+uniform vec3 material_specular;
+uniform float material_specular_power;
+layout (location = 0) out vec4 color;
+in VS_FS_INTERFACE
+{
+        vec4 shadow_coord;
+        vec3 world_coord;
+        vec3 eye_coord;
+        vec3 normal;
+} fragment;
+void main(void)
+{
+        vec3 N = fragment.normal;
+        vec3 L = normalize(light_position - fragment.world_coord);
+        vec3 R = reflect(-L, N);
+        vec3 E = normalize(fragment.eye_coord);
+        float NdotL = dot(N, L);
+        float EdotR = dot(-E, R);
+        float diffuse = max(NdotL, 0.0);
+        float specular = max(pow(EdotR, material_specular_power),0.0);
+        float f = textureProj(depth_texture, fragment.shadow_coord);
+        color = vec4(material_ambient + f * (material_diffuse * diffuse +
+                     material_specular * specular), 1.0);
+}
 
 
 

@@ -13,6 +13,7 @@ enum GUniformType
     kTranslate,
     kScale,
     kColor,
+    kModelMatrix,
     kViewMatrix,
     kProjectionMatrix,
     kNormalMatrix,
@@ -115,7 +116,7 @@ struct GMaterialProp
 };
 
 class GLightBase;
-class GModel
+class GModel:public QOpenGLExtraFunctions
 {
 public:
     static std::string GetUniformName(GUniformType type);
@@ -148,6 +149,7 @@ public:
     {
         return _color;
     }
+    void GetModelMatrix(glm::mat4x4& out_mm);
     void SetViewMatrixGetter(std::function<void(glm::mat4x4&)> getter)
     {
         _view_matrix_getter = getter;
@@ -223,4 +225,9 @@ protected:
     std::function<GCamera*()>         _camera_getter;
 };
 
+class GCubeDataHelper
+{
+public:
+    static void GetVertexData(GLfloat *&vertex_data, int &data_size, int& pos_comp_count, int& color_comp_count, int& normal_comp_count);
+};
 #endif // GMODEL_H

@@ -24,7 +24,7 @@ void GCubeForLight::Init(const char *v_shader, const char *f_shader, GUniformTyp
 
             GLfloat* vertex_data;
             int data_size, pos_comp_count, color_comp_count, normal_comp_count, stride;
-            GetVertexData(vertex_data, data_size, pos_comp_count, color_comp_count, normal_comp_count);
+            GCubeDataHelper::GetVertexData(vertex_data, data_size, pos_comp_count, color_comp_count, normal_comp_count);
             stride = sizeof(GLfloat)*(pos_comp_count+color_comp_count+normal_comp_count);
 
             glGenBuffers(1, &_vertex_buffer);
@@ -80,55 +80,6 @@ void GCubeForLight::Init(const char *v_shader, const char *f_shader, GUniformTyp
         }
         glUseProgram(0);
     }
-}
-
-void GCubeForLight::GetVertexData(GLfloat *&vertex_data, int& data_size, int &pos_comp_count, int &color_comp_count, int &normal_comp_count)
-{
-    static GLfloat vertices[] =
-    {
-        //----pos----------/ /----color-------/   /----normal------/
-        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,//1
-         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,//2
-         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,//3
-        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0, -1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,//4
-         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,//5
-         0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f, -1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,//6
-         0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0, 0.5, 0.31, 1.0,  0.0f,  1.0f,  0.0f
-    };
-    vertex_data = vertices;
-    data_size = sizeof(vertices);
-    pos_comp_count = 3;
-    color_comp_count = 4;
-    normal_comp_count = 3;
 }
 
 void GCubeForLight::Draw()
