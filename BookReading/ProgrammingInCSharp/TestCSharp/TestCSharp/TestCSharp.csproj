@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="TestArgPass.cs" />
     <Compile Include="TestDispose.cs" />
     <Compile Include="TestInheritance.cs" />
     <Compile Include="TestNestedClass.cs" />

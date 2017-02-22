@@ -154,8 +154,9 @@ namespace TestCSharp
 
 			TestStaticMember (false);
             TestFuncArgTransmit(true);
+            TestArgPass.RunTest(true);
 
-			TestFraction.RunTest (false);
+            TestFraction.RunTest (false);
 			TestStruct.RunTest (false);
 
 			TestInterface.RunTest (true);
