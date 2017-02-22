@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shadow_gen.frag</file>
+        <file>shadow_gen.vert</file>
+    </qresource>
+</RCC>

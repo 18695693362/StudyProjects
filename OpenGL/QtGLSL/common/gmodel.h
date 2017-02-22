@@ -116,7 +116,7 @@ struct GMaterialProp
 };
 
 class GLightBase;
-class GModel:public QOpenGLExtraFunctions
+class GModel
 {
 public:
     static std::string GetUniformName(GUniformType type);

@@ -162,7 +162,7 @@ void GModel::SetUniformInDraw()
         float scale = GetScale();
         glUniform1f(info->local,scale);
     }
-    local = GetUniformInfo(GUniformType::kModelMatrix);
+    local = GetUniformLocal(GUniformType::kModelMatrix);
     if(local!=-1)
     {
         glm::mat4x4 model_matrix = glm::translate(glm::mat4(1),_translate);
