@@ -5,13 +5,21 @@ public class S1_StateEvent : MonoBehaviour {
     public bool isDestroyChild = false;
     public bool childActiveValue = false;
     public bool addOrRemoveScriptOfChild = false;
+    public bool isPrintOneTimesInUpdate = true;
 
     void Awake() {
         Debug.Log("Invoke Awake -- " + name);
     }
 
+    int printInUpdateCount = 0;
     void Update()
     {
+        if (printInUpdateCount < 1)
+        {
+            Debug.Log("Invoke Update -- " + name);
+            printInUpdateCount++;
+        }
+
         if(transform.childCount>0)
         {
             var child = transform.GetChild(0).gameObject;
@@ -50,8 +58,18 @@ public class S1_StateEvent : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
+    int printInLateUpdateCount = 0;
+    void LateUpdate()
+    {
+        if (printInLateUpdateCount < 1)
+        {
+            Debug.Log("Invoke LateUpdate -- " + name);
+            printInLateUpdateCount++;
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
         Debug.Log("Invoke Start -- " + name);
 	}
 
@@ -68,5 +86,35 @@ public class S1_StateEvent : MonoBehaviour {
     void OnDestroy()
     {
         Debug.Log("Invoke OnDestroy -- " + name);
+    }
+
+    int printInOnPreRenderCount = 0;
+    void OnPreRender()
+    {
+        if(printInOnPreRenderCount<1)
+        {
+            Debug.Log("Invoke OnPreRender -- " + name);
+            printInOnPreRenderCount++;
+        }
+    }
+
+    int printInOnRenderImageCount = 0;
+    void OnRenderImage(RenderTexture src, RenderTexture dest)
+    {
+        if(printInOnRenderImageCount<1)
+        {
+            Debug.Log("Invoke OnRenderImage -- " + name);
+            printInOnRenderImageCount++;
+        }
+    }
+
+    int printInOnPostRenderCount = 0;
+    void OnPostRender()
+    {
+        if(printInOnPostRenderCount<1)
+        {
+            Debug.Log("Invoke OnPostRender -- " + name);
+            printInOnPostRenderCount++;
+        }
     }
 }

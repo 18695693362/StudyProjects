@@ -62,3 +62,5 @@ BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/obj
 BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/Properties
 TestCSharp.sln
 
+OpenGL/QtGLSL/libs/glm/Makefile.Debug
+OpenGL/QtGLSL/libs/glm/Makefile.Release
