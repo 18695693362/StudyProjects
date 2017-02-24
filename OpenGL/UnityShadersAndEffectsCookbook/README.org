@@ -5,6 +5,7 @@
 Tips: 下载 htlm 格式文件直接在浏览器中打开，可以查看格式优化过的文档。
 * Basic 
 ** Properties
+通过 Properties，可以将 shader 的一些参数暴露给编辑器进行设置。
 #+BEGIN_EXAMPLE surface shader
 Properties {
   _MyFloatValue("This is a Float", Float) = 1.5
@@ -325,6 +326,7 @@ z-depth 是表示被渲染的片段离摄像机的距离。渲染的时候会依
 *** 如何模拟菲涅尔效应效果？
 #+BEGIN_EXAMPLE cg
 // rim 随视角和法线夹角的增大而增大
+// saturate 函数的作用是把输入值限制到[0, 1] 之间
 float rim = 1.0 - saturate(dot(o.Normal,normalize(IN.viewDir)));
 rim = pow(rim,_RimPower);
 
@@ -378,15 +380,26 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 亮度（Luminance）是指发光体（反光体）表面发光（反光）强弱的物理量。
 饱和度（Saturation）是指色彩的鲜艳程度，也称色彩的纯度。饱和度取决于该色中含色成分和消色成分（灰色）的比例。含色成分越大，饱和度越大；消色成分越大，饱和度越小。纯的颜色都是高度饱和的，如鲜红，鲜绿。混杂上白色，灰色或其他色调的颜色，是不饱和的颜色，如绛紫，粉红，黄褐等。完全不饱和的颜色根本没有色调，如黑白之间的各种灰色。
 对比度（Contrast）指的是一幅图像中明暗区域最亮的白和最暗的黑之间不同亮度层级的测量，差异范围越大代表对比越大，差异范围越小代表对比越小，好的对比率 120:1 就可容易地显示生动、丰富的色彩，当对比率高达 300:1 时，便可支持各阶的颜色。但对比率遭受和亮度相同的困境，现今尚无一套有效又公正的标准来衡量对比率，所以最好的辨识方式还是依靠使用者眼睛。
-* Tips:
-** unity 坐标系
-unity 为左手坐标系。
-** Skin Shader
+* Skin Shader
 http://ten24.info/skin-shading-in-unity/
-** Blinn Phong And Phong
+* Blinn Phong And Phong
 http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading
-
-** Error  
+* Normal Map
+Normal Map 又叫 Ramp Map，其实就是法线贴图。
+UnpackNormal 的作用是将 0-1 范围的数值(法线贴图存储的颜色值)映射为-1-1 范围的数值（法线向量）。
+*** 参考资料
+[[http://www.songho.ca/opengl/gl_normaltransform.html][Normal 变换矩阵推导]]
+[[http://blog.csdn.net/candycat1992/article/details/41605257][Unity 中的 Normal Map]]
+[[http://http.developer.nvidia.com/CgTutorial/cg_tutorial_chapter08.html][Cg 中的 Normal Map]]
+[[http://learnopengl.com/#!Advanced-Lighting/Normal-Mapping][Normal Map Detail]]
+* Q&A
+** unity 坐标系是左手还是右手？
+unity 为左手坐标系
+DirectX 为左手坐标系
+OpenGL 为右手坐标系
+** 为什么 Unity 中 skybox 是在所有不透明物体和所有透明物体之间被绘制的？
+一般来讲 skybox 可以在 background 渲染队列中进行渲染，但是，这样会导致像素的 OverDraw，因此在不透明物体后再绘制 Skybox 可以减少这种 OverDraw。
+* Error  
 *** Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)
 将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题
 *** 如果发现颜色部分正确部分不正确
@@ -402,13 +415,6 @@ void vert (inout appdata_full v, out Input o)
   UNITY_INITIALIZE_OUTPUT(Input,o);  
 } 
 #+END_SRC
-** Normal Map
-Normal Map 又叫 Ramp Map，其实就是法线贴图。
-UnpackNormal 的作用是将 0-1 范围的数值(法线贴图存储的颜色值)映射为-1-1 范围的数值（法线向量）。
-*** 参考资料
-[[http://www.songho.ca/opengl/gl_normaltransform.html][Normal 变换矩阵推导]]
-[[http://blog.csdn.net/candycat1992/article/details/41605257][Unity 中的 Normal Map]]
-[[http://http.developer.nvidia.com/CgTutorial/cg_tutorial_chapter08.html][Cg 中的 Normal Map]]
-[[http://learnopengl.com/#!Advanced-Lighting/Normal-Mapping][Normal Map Detail]]
+
 * 参考资料
 https://onevcat.com/2013/07/shader-tutorial-1/
