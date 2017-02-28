@@ -325,8 +325,11 @@ z-depth 是表示被渲染的片段离摄像机的距离。渲染的时候会依
 
 散射：光束通过不均匀媒质时，部分光束将偏离原来方向而分散传播，从侧向也可以看到光的现象，叫做光的散射。散射是多重折射和反射的结果。
 ** Fresnel reflection
-当光入射到折射率不同的两个媒质分界面时，一部分光会被反射，这种现象称为菲涅尔反射(其实就是光的反射，只不过这个现象是菲涅尔发现的)。
-视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显，这就是“菲涅尔效应”。
+菲涅尔反射 
+“菲涅尔”是一个人的名字，因为他发现了一个有关反射的光学现象，这个现象就用这个人的名字命名了。那么，是什么现象呢？ 
+就是反射/折射与视点角度之间的关系。如果你站在湖边，低头看脚下的水，你会发现水是透明的，反射不是特别强烈；如果你看远处的湖面，你会发现水并不是透明的，但反射非常强烈。这就是“菲涅尔效应”。 简单的讲，就是视线垂直于表面时，反射较弱，而当视线非垂直表面时，夹角越小，反射越明显。如果你看向一个圆球，那圆球中心的反射较弱，靠近边缘较强。不过这种过度关系被折射率影响。 
+如果不使用“菲涅尔效应”的话，则反射是不考虑视点与表面之间的角度的。 注意，在真实世界中，除了金属之外，其它物质均有不同程度的“菲涅尔效应”。 
+所谓菲涅尔反射就是用波动的理论来解释光的反射。 主要包括一些电磁场的边界传输条件，比如 P 矢量和 S 矢量的反射，菲涅尔用波动学说第一次从本质上解释了光的传播，而之前人们只能从宏观上进行试验，无法从微观的理论上获得支持。然而缺少微观理论支持的定律总是空虚的，随时都可能被推翻的。
 *** 如何模拟菲涅尔效应效果？
 #+BEGIN_EXAMPLE cg
 // rim 随视角和法线夹角的增大而增大
@@ -339,6 +342,9 @@ o.Albedo = color_.rgb * _DiffuseTint.rgb;
 o.Emission = (texCUBE(_Cubemap,IN.worldRefl).rgb * _ReflectAmount)*rim;
 o.Specular = _SpecPower;
 #+END_EXAMPLE
+*** 参考资料
+菲涅耳反射 互动百科 http://www.baike.com/wiki/%E8%8F%B2%E6%B6%85%E5%B0%94%E5%8F%8D%E5%B0%84
+菲涅耳方程 维基百科 https://zh.wikipedia.org/wiki/%E8%8F%B2%E6%B6%85%E8%80%B3%E6%96%B9%E7%A8%8B
 * Shader Optimize
 ** 数据类型
 | Type  | Detial            | Range                                | Usage                          |
@@ -370,34 +376,52 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 [[https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html][Mobile Optimize Doc]]
 * LightingModel
 ** Lambert
-只考虑环境光的光照模型。
+只考虑环境光和漫反射的光照模型。
 \begin{equation}  
-color = objColor * ambientColor;
+diffuseFactor = objNormal \cdot lightDir;
+color = objColor * (ambientColor + diffuseFactor \cdot lightColor);
 \end{equation}  
 ** Phong
 考虑环境光，漫反射光，镜面反射光的光照模型。其中镜面反射按照视角和反射光夹角来计算。
 shininess 为反光度
+镜面高光不和物体颜色交互，它被直接反射，所以在最终计算颜色时，镜面高光颜色是和散色出来的颜色相加的。
 #+BEGIN_LaTeX
-diffuse = objNormal . lightDir;
-specular = clamp(reflect(lightDir) * viewDir, 0, 1);
-color = objColor * ( ambientColor + diffuse * lightColor ) + specular^shininess * lightColor;
+diffuseFactor = objNormal . lightDir;
+specularFactor = saturate(reflect(lightDir) \cdot viewDir, 0, 1);
+specularFactor = specularFactor^shininess;
+color = objColor \cdot (ambientFactor + diffuseFactor) \cdot lightColor) + specularFactor \cdot lightColor;
 #+END_LaTeX 
 *** 缺点
 1. 当放射光方向和视角夹角大于 90 度时，specular 被设置为 0，当反光度比较小时，镜面半径会比较大，而 specular 被设置为 0 导致，镜面光照突然就消失了。
+   当然该缺点可以通过将 specular+1 从而将 specular 的值限定在[0,2]的范围呢
 2. 反射光方向计算复杂
   #+BEGIN_LaTeX
-  refectLightDir = (lightDir . objNormal) * objNormal * 2 - lightDir;
-  #+END_LaTeX 
+  refectLightDir = 2 (lightDir \cdot objNormal) \cdot objNormal - lightDir;
+  #+END_LaTeX
+3. 没有考虑菲涅耳效应。反射量随视角和法线的夹角增大而增大。
 ** BlinnPhong
 考虑环境光，漫反射光，镜面反射光的光照模型。反射光方向取视线和光照方向的中心线，镜面反射按照中心线和法线的夹角来计算。
 \begin{equation}  
-diffuse = objNormal . lightDir;
-specular = normalize(lightDir + viewDir) . objNormal;
-color = objColor * ( ambientColor + diffuse * lightColor ) + specular^shininess * lightColor;
+diffuseFactor = objNormal . lightDir;
+specularFactor = normalize(lightDir + viewDir) \cdot objNormal;
+specularFactor = specularFactor^shininess;
+color = objColor \cdot (ambientFactor + diffuseFactor) \cdot lightColor) + specularFactor \cdot lightColor;
 \end{equation}
-http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading
-** Cook-Torrance
 
+http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading
+** PBR
+*** Cook-Torrance 模型
+下面是计算机图形学引入的 BRDF 模型，又叫做 Cook-Torrance 模型.
+#+BEGIN_LaTeX
+f(l,v) = frac{F(l,h)G(l,v)D(h)}{4cos\theta_i cos\theta_o}} = frac{F(l,h)G(l,v)D(h)}{4(n \cdot l)(n \cdot v)}}
+#+END_LaTeX
+F(l,h)为菲涅耳反射方程，用于计算 l 方向的入射光和在 h 法线处的反射量；
+G(l,v)为几何衰减因子，用于计算入射光线被遮挡(Shadowing)和反射光线被遮挡(Masking)的量；
+D(h)为法线分布函数，用于计算在 h 方向上法线的分布率；
+h 表示微观法线
+n 表示宏观法线
+l 表示入射光方向
+v 表示视觉方向
 * Screen Effect
 ** 概述
 屏幕特效特效就相当于对最终显示图片到显示器之前的图片进行 PS 处理。具体处理每个像素的过程会通过一个 Shader 来进行，进行处理的时机是 Camera.OnRenderImage 被触发的时候，而 Graphics.Blit 可以将处理结果生效。
@@ -452,6 +476,10 @@ DirectX 为左手坐标系
 OpenGL 为右手坐标系
 ** 为什么 Unity 中 skybox 是在所有不透明物体和所有透明物体之间被绘制的？
 一般来讲 skybox 可以在 background 渲染队列中进行渲染，但是，这样会导致像素的 OverDraw，因此在不透明物体后再绘制 Skybox 可以减少这种 OverDraw。
+** TODO 为什么光照和表面的交互用乘法？
+** 为什么光的衰减和离光源的距离的平方成反比？
+在点光源，聚光灯等模拟中，通常会为光照添加衰减，这个衰减系数和光源距离的平方相关，具体原因查看下面文章。
+基于物理着色：BRDF https://zhuanlan.zhihu.com/p/21376124
 * Error  
 *** Shader error in Too many texture interpolators would be used for ForwardBase pass (11 out of max 10)
 将 #pragma target 3.0 变为 #pragma target 4.0 可解决问题
