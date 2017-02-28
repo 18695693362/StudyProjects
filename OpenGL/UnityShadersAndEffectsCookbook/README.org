@@ -113,7 +113,9 @@ Tags { "Queue" = "Geometry+1" }
 #+END_EXAMPLE
 ***** 渲染类型 RenderType
 RenderType 将 shaders 归类为很多不同的预定义的组。
-
+#+BEGIN_SRC cg
+Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
+#+END_SRC
 Shader Replacement 会用到该设置。/Manual/SL-ShaderReplacement.html
 
 有时候通过该设置来制作摄像机的深度贴图。/Manual/SL-CameraDepthTexture.html
@@ -171,7 +173,9 @@ LightMode tag 定义了 Pass 在光照管线中的角色。这些 tags 很少手
 | Vertex       | legacy Vertex Lit rendering,当物体没有光照贴图，所有顶点光照被应用                   |
 | VertexLMRGBM | legacy Vertex Lit rendering,当物体有光照贴图，光照贴图按照 RGBM 编码(PC&console)     |
 | VertexLM     | legacy Vertex Lit rendering,当物体有光照贴图，光照贴图按照 Double-LDR 编码（Mobile） |
-
+#+BEGIN_SRC cg
+Tags { "LightMode" = "ForwardAdd" }
+#+END_SRC
 ***** RequireOptions 
 指定 Pass 在满足某些外部条件时才被渲染。
 | Name           | Detail                                           |
@@ -364,6 +368,36 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 ** 参考资料
 [[https://docs.unity3d.com/Manual/SL-SurfaceShaders.html][Shader 编译指令]]
 [[https://docs.unity3d.com/Manual/MobileOptimizationPracticalGuide.html][Mobile Optimize Doc]]
+* LightingModel
+** Lambert
+只考虑环境光的光照模型。
+\begin{equation}  
+color = objColor * ambientColor;
+\end{equation}  
+** Phong
+考虑环境光，漫反射光，镜面反射光的光照模型。其中镜面反射按照视角和反射光夹角来计算。
+shininess 为反光度
+#+BEGIN_LaTeX
+diffuse = objNormal . lightDir;
+specular = clamp(reflect(lightDir) * viewDir, 0, 1);
+color = objColor * ( ambientColor + diffuse * lightColor ) + specular^shininess * lightColor;
+#+END_LaTeX 
+*** 缺点
+1. 当放射光方向和视角夹角大于 90 度时，specular 被设置为 0，当反光度比较小时，镜面半径会比较大，而 specular 被设置为 0 导致，镜面光照突然就消失了。
+2. 反射光方向计算复杂
+  #+BEGIN_LaTeX
+  refectLightDir = (lightDir . objNormal) * objNormal * 2 - lightDir;
+  #+END_LaTeX 
+** BlinnPhong
+考虑环境光，漫反射光，镜面反射光的光照模型。反射光方向取视线和光照方向的中心线，镜面反射按照中心线和法线的夹角来计算。
+\begin{equation}  
+diffuse = objNormal . lightDir;
+specular = normalize(lightDir + viewDir) . objNormal;
+color = objColor * ( ambientColor + diffuse * lightColor ) + specular^shininess * lightColor;
+\end{equation}
+http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading
+** Cook-Torrance
+
 * Screen Effect
 ** 概述
 屏幕特效特效就相当于对最终显示图片到显示器之前的图片进行 PS 处理。具体处理每个像素的过程会通过一个 Shader 来进行，进行处理的时机是 Camera.OnRenderImage 被触发的时候，而 Graphics.Blit 可以将处理结果生效。
@@ -380,10 +414,29 @@ exclude_path:deferred, exclude_path:forward, exclude_path:prepass
 亮度（Luminance）是指发光体（反光体）表面发光（反光）强弱的物理量。
 饱和度（Saturation）是指色彩的鲜艳程度，也称色彩的纯度。饱和度取决于该色中含色成分和消色成分（灰色）的比例。含色成分越大，饱和度越大；消色成分越大，饱和度越小。纯的颜色都是高度饱和的，如鲜红，鲜绿。混杂上白色，灰色或其他色调的颜色，是不饱和的颜色，如绛紫，粉红，黄褐等。完全不饱和的颜色根本没有色调，如黑白之间的各种灰色。
 对比度（Contrast）指的是一幅图像中明暗区域最亮的白和最暗的黑之间不同亮度层级的测量，差异范围越大代表对比越大，差异范围越小代表对比越小，好的对比率 120:1 就可容易地显示生动、丰富的色彩，当对比率高达 300:1 时，便可支持各阶的颜色。但对比率遭受和亮度相同的困境，现今尚无一套有效又公正的标准来衡量对比率，所以最好的辨识方式还是依靠使用者眼睛。
+** MotionBlur 的实现
+运动模糊产生的原因是 一个视觉信息采集周期内，同一个采集点接收到了多个信息，这些信息在同一个运动方向上依次排列。
+#+BEGIN_SRC csharp
+fixed4 frag (v2f i) : SV_Target
+{
+    float4 col = tex2D(_MainTex, i.uv);
+    if (!_isStopBlur)
+    {
+    	// uvOffset 就是运动方向的反方向
+        fixed2 uvOffset = i.uv - _Center;
+        for (int iterCount = 1; iterCount < _IterNumber; ++iterCount)
+        {
+        	// 取出倒数第 iterCount 个信息，并累加到 col 中
+            col += tex2D(_MainTex, i.uv+uvOffset*iterCount*_SpeedFactor);
+        }
+        // 对所有信息取平均值
+        col /= (float)_IterNumber;
+    }
+    return col;
+}
+#+END_SRC
 * Skin Shader
 http://ten24.info/skin-shading-in-unity/
-* Blinn Phong And Phong
-http://gamedev.stackexchange.com/questions/82494/why-is-h-blinn-used-instead-of-r-phong-in-specular-shading
 * Normal Map
 Normal Map 又叫 Ramp Map，其实就是法线贴图。
 UnpackNormal 的作用是将 0-1 范围的数值(法线贴图存储的颜色值)映射为-1-1 范围的数值（法线向量）。
@@ -415,6 +468,9 @@ void vert (inout appdata_full v, out Input o)
   UNITY_INITIALIZE_OUTPUT(Input,o);  
 } 
 #+END_SRC
+*** 在写屏幕特效的时候，发现屏幕不刷新了
+请检查 OnRenderImage 中是不是总是调用了 Graphics.Blit(srcTex,desTex)，或者 Graphic.Blit(srcTex,desTex,CurMaterial)
+
 
 * 参考资料
 https://onevcat.com/2013/07/shader-tutorial-1/
