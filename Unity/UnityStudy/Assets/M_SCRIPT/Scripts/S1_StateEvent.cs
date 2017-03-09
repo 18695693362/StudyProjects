@@ -14,9 +14,9 @@ public class S1_StateEvent : MonoBehaviour {
     int printInUpdateCount = 0;
     void Update()
     {
-        if (printInUpdateCount < 1)
+        if (printInUpdateCount < 1 || !isPrintOneTimesInUpdate)
         {
-            Debug.Log("Invoke Update -- " + name);
+            Debug.Log("Invoke Update -- " + name + " " + printInUpdateCount);
             printInUpdateCount++;
         }
 
@@ -61,9 +61,9 @@ public class S1_StateEvent : MonoBehaviour {
     int printInLateUpdateCount = 0;
     void LateUpdate()
     {
-        if (printInLateUpdateCount < 1)
+        if (printInLateUpdateCount < 1 || !isPrintOneTimesInUpdate)
         {
-            Debug.Log("Invoke LateUpdate -- " + name);
+            Debug.Log("Invoke LateUpdate -- " + name + " " + printInLateUpdateCount);
             printInLateUpdateCount++;
         }
     }
@@ -88,12 +88,22 @@ public class S1_StateEvent : MonoBehaviour {
         Debug.Log("Invoke OnDestroy -- " + name);
     }
 
+    int printInOnWillRenderObject = 0;
+    void OnWillRenderObject ( )
+    {
+        if (printInOnWillRenderObject<1 || !isPrintOneTimesInUpdate)
+        {
+            Debug.Log("Invoke OnWillRenderObject -- " + name + " " + printInOnWillRenderObject);
+            printInOnWillRenderObject++;
+        }
+    }
+
     int printInOnPreRenderCount = 0;
     void OnPreRender()
     {
-        if(printInOnPreRenderCount<1)
+        if(printInOnPreRenderCount<1 || !isPrintOneTimesInUpdate)
         {
-            Debug.Log("Invoke OnPreRender -- " + name);
+            Debug.Log("Invoke OnPreRender -- " + name + " " + printInOnPreRenderCount);
             printInOnPreRenderCount++;
         }
     }
@@ -101,9 +111,9 @@ public class S1_StateEvent : MonoBehaviour {
     int printInOnRenderImageCount = 0;
     void OnRenderImage(RenderTexture src, RenderTexture dest)
     {
-        if(printInOnRenderImageCount<1)
+        if(printInOnRenderImageCount<1 || !isPrintOneTimesInUpdate)
         {
-            Debug.Log("Invoke OnRenderImage -- " + name);
+            Debug.Log("Invoke OnRenderImage -- " + name + " " + printInOnRenderImageCount);
             printInOnRenderImageCount++;
         }
     }
@@ -111,9 +121,9 @@ public class S1_StateEvent : MonoBehaviour {
     int printInOnPostRenderCount = 0;
     void OnPostRender()
     {
-        if(printInOnPostRenderCount<1)
+        if(printInOnPostRenderCount<1 || !isPrintOneTimesInUpdate)
         {
-            Debug.Log("Invoke OnPostRender -- " + name);
+            Debug.Log("Invoke OnPostRender -- " + name + " " + printInOnPostRenderCount);
             printInOnPostRenderCount++;
         }
     }
