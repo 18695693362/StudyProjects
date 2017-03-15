@@ -32,10 +32,14 @@ public class MoveInfo:ICloneable
     }
 }
 
-public class NetSimulator
+public class NetSimulatorBase
 {
     public float delayRate = 0.0f;
-    System.Random netRandom = new System.Random();
+    protected System.Random netRandom = new System.Random();
+}
+
+public class NetSimulator: NetSimulatorBase
+{
     List<MoveInfo> sendStack = new List<MoveInfo>();
 
     public bool IsNetDataEmpty()
@@ -63,6 +67,46 @@ public class NetSimulator
         if (moveInfo != null)
         {
             sendStack.Add(moveInfo);
+        }
+    }
+}
+
+public class SyncData
+{
+    public int keyframe;
+    public List<MoveInfo> infoList = new List<MoveInfo>();
+}
+
+public class NetSimulatorEx:NetSimulatorBase
+{
+    public int keyframe = 5;
+    List<SyncData> sendStack = new List<SyncData>();
+
+    public bool IsNetDataEmpty()
+    {
+        return sendStack.Count == 0;
+    }
+
+    public SyncData Receive()
+    {
+        if (sendStack.Count > 0)
+        {
+            SyncData syncData = sendStack[0];
+            if (netRandom.Next(100)/100.0f > delayRate)
+            {
+                // not delay
+                sendStack.RemoveAt(0);
+                return syncData;
+            }
+        }
+        return null;
+    }
+
+    public void Send(SyncData syncData)
+    {
+        if (syncData!= null)
+        {
+            sendStack.Add(syncData);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 
 public class BaseMoveSync : MonoBehaviour {
     protected GameObject clientGObj;
@@ -20,6 +21,7 @@ public class BaseMoveSync : MonoBehaviour {
     public float delayRate = 0.3f;
 
     public NetSimulator netSimulator = new NetSimulator();
+    public NetSimulatorEx netSimulatorEx = new NetSimulatorEx();
     protected MoveInfo curMoveInfo = new MoveInfo();
     protected MoveInfo lastMoveInfo = new MoveInfo();
     protected MoveInfo lastSyncedMoveInfo = new MoveInfo();
@@ -156,6 +158,7 @@ public class BaseMoveSync : MonoBehaviour {
     void UpdateConfig()
     {
         netSimulator.delayRate = delayRate;
+        netSimulatorEx.delayRate = delayRate;
         clientSGObj.SetActive(isShowGObjInSameArea);
         serverArea.SetActive(!isShowGObjInSameArea);
     }
@@ -279,6 +282,27 @@ public class BaseMoveSync : MonoBehaviour {
                 UpdateSGObjPosByDeltaPos(svrPreMoveInfo.dir*svrPreMoveInfo.speed);
                 UpdateSGObjDir(svrPreMoveInfo.dir);
             }    
+        }
+    }
+
+    protected void AddNetflowCounter(SyncData syncData)
+    {
+        if ( syncData != null )
+        {
+            netflowCounter += sizeof ( int );
+            AddNetflowCounter ( syncData.infoList );
+        }
+    }
+
+    protected void AddNetflowCounter(List<MoveInfo> infoList)
+    {
+        if ( infoList != null )
+        {
+            foreach ( var info in infoList )
+            {
+                if ( info != null )
+                    AddNetflowCounter ( );
+            }
         }
     }
 

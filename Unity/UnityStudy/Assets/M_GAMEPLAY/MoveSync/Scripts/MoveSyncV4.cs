@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+// 每帧都进行同步的 帧同步
 public class MoveSyncV4 : BaseMoveSync{
     // 在帧同步算法中 客户端不直接使用本地的输入数据，而是统一采用服务器发送的数据
     protected override void UpdateCMove()
