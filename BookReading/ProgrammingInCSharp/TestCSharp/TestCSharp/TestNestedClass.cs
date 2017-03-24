@@ -6,7 +6,7 @@ namespace TestCSharp
 	{
 		public static void RunTest ()
 		{
-			
+            OuterClass obj = new OuterClass();
 		}
 	}
 	public class OuterClass
@@ -15,6 +15,7 @@ namespace TestCSharp
 		public OuterClass()
 		{
 			outer_obj_count++;
+            NestedClass.PrintInfo ( );
 		}
 		public class NestedClass
 		{
@@ -27,6 +28,10 @@ namespace TestCSharp
 			{
 				Console.WriteLine(nested_obj_count);
 			}
+            static protected internal void PrintInfo()
+            {
+                Console.WriteLine ( "invoke static protected internal function!" );
+            }
 		}
 	}
 }

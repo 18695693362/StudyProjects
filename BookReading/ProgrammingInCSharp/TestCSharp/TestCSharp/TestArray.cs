@@ -45,11 +45,17 @@ namespace TestCSharp
 			float[] floatArr = { 1.0f, 1.1f, 1.2f };
 			PrintArray<float> (floatArr);
 			double[] doubleArr = { 2.0, 2.1, 2.2 };
-//			doubleArr = (double[])floatArr;
-//			PrintArray<double> (doubleArr);
-//			Object[] objArr = intArr;
-//					
-//			PrintArray<Object> (objArr);
+            float[] floatArr2 = {0.0f, 1.0f};
+            floatArr2 = floatArr;
+			PrintArray<float> (floatArr2);
+            //			doubleArr = (double[])floatArr;
+            //			PrintArray<double> (doubleArr);
+            //			Object[] objArr = intArr;
+            //			PrintArray<Object> (objArr);
+            float[] floatArrEx1 = new float[2]{1.0f, 1.1f};
+            float[] floatArrEx2 = new float[3]{1.0f, 1.1f, 1.2f};
+            floatArrEx2 = floatArrEx1;
+			PrintArray<float> (floatArrEx2);
 
 			ListBox lstBox = new ListBox ("My", "Name", "is", "God", "!");
 			Console.WriteLine (lstBox [1]);
@@ -61,6 +67,28 @@ namespace TestCSharp
 			foreach (string s in lstBox) {
 				//Console.WriteLine (s);
 			}
+
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            dict.Add ( 1, "a" );
+            dict.Add ( 2, "b" );
+            dict.Add ( 3, "c" );
+            dict.Add ( 4, "d" );
+            dict.Add ( 5, "e" );
+
+            List<int> needRemoveKeys = new List<int>();
+            foreach(var k in dict.Keys)
+            {
+                //if ( k < 4 ) dict.Remove ( k );
+                if ( k < 4 ) needRemoveKeys.Add ( k );
+            }
+            foreach(var k in needRemoveKeys)
+            {
+                dict.Remove ( k );
+            }
+            foreach(var k in dict.Keys)
+            {
+                Console.WriteLine ( "k = " + k.ToString() + "  v = " + dict[k].ToString() );
+            }
 		}
 
 		public static void RunLinkedListTest ()
@@ -80,7 +108,7 @@ namespace TestCSharp
 			if (!isRun)
 				return;
 
-			//RunArrayTest ();
+			RunArrayTest ();
 
 			List<Employee> empList = new List<Employee> ();
 			Random rand = new Random ();

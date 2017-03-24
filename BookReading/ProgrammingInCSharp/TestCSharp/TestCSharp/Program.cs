@@ -153,15 +153,15 @@ namespace TestCSharp
 			nested_class.PrintNestedObjCount ();
 
 			TestStaticMember (false);
-            TestFuncArgTransmit(true);
-            TestArgPass.RunTest(true);
+            TestFuncArgTransmit(false);
+            TestArgPass.RunTest(false);
 
             TestFraction.RunTest (false);
 			TestStruct.RunTest (false);
 
-			TestInterface.RunTest (true);
+			TestInterface.RunTest (false);
 			TestDispose.RunTestDispose (false);
-			TestArray.RunTest (false);
+			TestArray.RunTest (true);
 
 			TestString.RunTest (false);
 			TestDelegateEvent.RunTest (false);
