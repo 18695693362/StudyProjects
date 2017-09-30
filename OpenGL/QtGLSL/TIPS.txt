@@ -1,8 +1,14 @@
     TIPS
 
-0. OpenGL为右手坐标系，Unity3D为左手坐标系。OpenGL旋转正方向遵循右手原则，Unity3D旋转正方向遵循左手原则。
+- OpenGL升级
+  - QGLWidget QGLFormat被淘汰掉了，需要使用QOpenGLWidget QSurfaceFormat代替
+  - 所有OpenGL的API都被封装到QOpenGLFunctions 和 QOpenGLExtraFunctions 中了,MyGLWidget需要派生自这个两个函数，否则OpenGL方法无法使用
+  - glShadeModel函数不再支持，需要注释掉。
+  - 需要在MGLWidget::initializeGL()一开始调用initializeOpenGLFunctions();否则会crash。
 
-1. 设置缩放变换矩阵时需要将w设置为1，否则缩放无效
+- OpenGL为右手坐标系，Unity3D为左手坐标系。OpenGL旋转正方向遵循右手原则，Unity3D旋转正方向遵循左手原则。
+
+- 设置缩放变换矩阵时需要将w设置为1，否则缩放无效
 e.g:
 mat4 scale = mat4x4(
     vec4(0.1,   0,   0,   0),
@@ -12,21 +18,21 @@ mat4 scale = mat4x4(
     );
 如果上面的w也为1，则缩放是无效的。
 
-2. shader中不使用的uniform会被自动移除
+- shader中不使用的uniform会被自动移除
 下面的代码可以让 model_matrix uniform不被移除，而且可以通过颜色确定 model_matrix的值
 //vs_fs_color = model_matrix[2];
 vs_fs_color = color;
 
 
-3. Qt 开启c++11
+- Qt 开启c++11
 CONFIG += c++11
 
-4. glGetError glGetUniformLocation bug
+- glGetError glGetUniformLocation bug
 第一次调用glGetUniformLocation会报下面错误
 error GL_INVALID_OPERATION = 1282
 Error glGetUniformLocation local = 0
 
-5. 绘制的物体没有显示出来
+- 绘制的物体没有显示出来
 （1）是否开启了深度测试，导致物体被剔除了
 （2）查看物体是否位于视野外，导致物体被剔除了
 （3）查看是否开启了glEnable(GL_CULL_FACE); 物体表面被当做背面了！
@@ -79,43 +85,43 @@ GL_LEQUAL表示如果输入的深度值小于或等于参考值，则通过
 （9）检查顶点数据的定义是否使用了static，该程序中顶点定义都作为函数的局部变量，若不是static，
 函数执行完毕，数据就被释放了。
 
-6. Qt 包含库头文件
+- Qt 包含库头文件
 在.pro文件中添加如下代码
 INCLUDEPATH += $$PWD/../../../libs/glm
 DEPENDPATH += $$PWD/../../../libs/glm
 
-7. 不能将build目录放在项目目录下，否则复制目录会递归死循环
+- 不能将build目录放在项目目录下，否则复制目录会递归死循环
 
-8. GTimerMgr中Schedule(target,task,...)task不能用std::function
+- GTimerMgr中Schedule(target,task,...)task不能用std::function
 因为std::function无法比较，Unschedule时需要支持指定task的Unschedule。
 
-9. 注意： vector遍历删除照成iterator实效的问题
+- 注意： vector遍历删除照成iterator失效的问题
 例如 GTimerMgr::Unschedule中
 
-10. 实现自定义的LookUp时，需要注意OpenGL中矩阵的存储是列主序的
+- 实现自定义的LookUp时，需要注意OpenGL中矩阵的存储是列主序的
 
-11. 旋转摄像机画面没有变化：请检查一下QOpenGLWidget是否开启了每帧执行update的操作！
+- 旋转摄像机画面没有变化：请检查一下QOpenGLWidget是否开启了每帧执行update的操作！
 
-12. 物体贴图为黑白颜色时，检查glTexImage2D的format参数是否正确。
+- 物体贴图为黑白颜色时，检查glTexImage2D的format参数是否正确。
 
-13. shader中定义的变量需要进行初始化，否则其值是随机值。
+- shader中定义的变量需要进行初始化，否则其值是随机值。
 vec3 result_color;                      // 没有初始化是错误的。
 vec3 result_color = vec3(0.0,0.0,0.0)   // 初始化过了，可以正常使用。
 
-14. 光照通常不会影响物体的透明度，所以光照计算中，颜色的alpha值通常是不变的。
+- 光照通常不会影响物体的透明度，所以光照计算中，颜色的alpha值通常是不变的。
 
-15. 什么是摄像机空间（视觉空间、观察空间）？
+- 什么是摄像机空间（视觉空间、观察空间）？
 所谓摄像机空间、视觉空间、观察空间就是摄像机节点的本地坐标系。
 
-16. 光照计算在视觉坐标系下进行有什么好处？
+- 光照计算在视觉坐标系下进行有什么好处？
 光照计算中通常需要视觉方向，当在视觉坐标系下进行光照计算时，视觉方向即为顶点在视觉坐标系下的坐标。
 
-17. 几种光照成分的名称
+- 几种光照成分的名称
 ambient   环境光
 diffuse   漫反射光
 specular  镜面反射光
 
-18. VBO和VAO的区别
+- VBO和VAO的区别
 (1) VBO是一个Buffer对象，用来存储顶点的原始数据。
 --Tips--
 （1-1）GL_ARRAY_BUFFER的绑定VBO操作（即调用glBindBuffer(GL_ARRAY_BUFFER,_vbo)），不属于VAO所记录的状态。
