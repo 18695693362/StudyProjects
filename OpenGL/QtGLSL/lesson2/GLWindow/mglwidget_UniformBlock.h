@@ -1,9 +1,10 @@
 #ifndef MGLWIDGET_H
 #define MGLWIDGET_H
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
+#include <QOpenGLExtraFunctions>
 
-class MGLWidgetUniformBlock : public QGLWidget
+class MGLWidgetUniformBlock : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
     Q_OBJECT
 public:

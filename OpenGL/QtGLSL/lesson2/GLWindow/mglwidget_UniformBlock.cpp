@@ -25,11 +25,11 @@ enum Attrib_IDs {
     vPos = 1
 };
 GLuint VAOs[NumVAOs];
-GLuint Buffers[NumBuffers];
+GLuint VBuffers[NumBuffers];
 const GLuint NumVertices = 6;
 
 MGLWidgetUniformBlock::MGLWidgetUniformBlock(QWidget *parent, const char* name, bool full_screen) :
-    QGLWidget(parent)
+    QOpenGLWidget(parent)
 {
     setGeometry( kDefaultX, kDefaultY, kDesignSizeW, kDesignSizeH );
     setMinimumSize(kMinWidth, kMinHeight);
@@ -46,11 +46,13 @@ MGLWidgetUniformBlock::MGLWidgetUniformBlock(QWidget *parent, const char* name, 
 
 void MGLWidgetUniformBlock::initializeGL()
 {
+    initializeOpenGLFunctions();
+
     glClearColor(0.0f,0.0f,1.0f,1.0f);
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;
@@ -119,8 +121,8 @@ void MGLWidgetUniformBlock::initializeGL()
             {-0.85,  0.90},
         };
 
-        glGenBuffers(NumBuffers,Buffers);
-        glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+        glGenBuffers(NumBuffers,VBuffers);
+        glBindBuffer(GL_ARRAY_BUFFER, VBuffers[ArrayBuffer]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
         glVertexAttribPointer(vPos,2,GL_FLOAT,GL_FALSE,0,BUFF_OFFSET(0));
