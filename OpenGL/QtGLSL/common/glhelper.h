@@ -33,7 +33,7 @@ public:
     static QString GetShaderTxt(const QString& filePath);
 
     static GLint GetUniformLocal(GLuint program, const char* uniform_name);
-    static bool  IsGLError();
+    static bool  IsGLError(std::string error_msg="");
 
     static size_t TypeSize(GLenum type);
 

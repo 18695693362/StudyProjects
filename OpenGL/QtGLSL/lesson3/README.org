@@ -1,0 +1,193 @@
+    Drawing with OpenGL
+
+* 一、OpenGL Graphics Primitives
+** Points
+  - 点的大小
+    在程序中用 glPointSize(GLfloat size)来固定点的大小
+    在 shader 中用 gl_PointSize 来设置点的大小（只有 GL_PROGRAM_POINT_SIZE 为 GL_TRUE 才可用）
+  - 点的光栅化规则
+    以点为中心以点的大小为边长的正方形包含的像素会被覆盖
+** Point Sprites
+在渲染点的时候，点内的每个片段都会执行片段着色器。gl_PointCoord 变量可以在 fragment shader 中使用，用来表示片段在点内的坐标。
+将 gl_PointCoord 当作贴图坐标来使用，可以代替简单的正方形块。结合 alpha 混合或片段丢弃，甚至可以创建形状各异的点 sprite。
+** Lines, Strips, and Loops
+   - 多条线按顺序连接不闭合 被称作 line strip
+   - 多条线按顺序连接闭合   被称作 line loop
+   - 线的宽度
+     glLineWidth 用来设置线的宽度
+     反锯齿开启后，线被当做长方体，其长度和线长度相同，宽度和线宽度相同。
+   - 线的光栅化规则
+     光栅化线的规则被称为钻石退出规则.当光栅化一条从 A 点到 B 点的线，如果一个点的正方形内所包含的钻石形状的边被经过，那么这个点就会被点亮，除非点 B 在这个钻石形状内。这样的话，如果还有一条线是从 B 点到 C 点，这样点 B 只被点亮一次。
+** Triangles Strips Fans
+   - Triangles Strips 某个三角形会公用前一个三角形后面两个顶点
+   - Triangles Fans 所有三角形公用第一个顶点
+   - 三角形渲染
+     当分开的多个三角形被渲染时，每个三角形的渲染是独立于其他三角形的。
+     一个三角形被渲染时，将三角形的每个顶点投影到屏幕空间形成三条边。如果一个采样落在三条边形成的半空间的正面，那么这个采样就会被点亮。
+     如果两个三角形共享一条边，没有任何一个采样点被两个三角形都包含。这样可以保证 OpenGL 光栅化包含共享边网格的可靠性，多个三角形之间不会有间隙，也不会过度绘制。
+** Rendering Polygons As Points, Outlines, or Solids
+  一个多边形有两面，正面和背面，依据那一面正对着观察者，可以有不同的渲染。这样就可以绘制固体的剖面图了，在剖面图中，物体的里面和外面有明显的差别。
+  #+BEGIN_SRC c
+  // 默认情况下 face=GL_FRONT_AND_BACK mode=GL_FILL
+  // 设置多边形渲染模式
+  void glPolygonMode(GLenum face, GLenum mode);
+  // face = GL_FRONT_AND_BACK
+  // mode = GL_POINT GL_LINE GL_FILL
+
+  // Tips： 貌似不能为 FRONT 和 BACK 指定不同的 mode？
+  // 该特性已经从 opengl 3.2 版本开始，被标记为 deprecated，所以 face 的枚举值只能为 GL_FRONT_AND_BACK
+  // https://stackoverflow.com/questions/19672014/why-is-gl-front-and-gl-back-deprecated-in-opengl-3-2-onwards
+  #+END_SRC
+** Reversing and Culling Polygon Faces
+  按照惯例，多边形顶点按照逆时针方向出现在屏幕上时被称作正向。
+  你可以使用方向一致（都是逆时针正向 或 都是顺时针反向）的多边形来构建任何“合理”的固体。
+  #+BEGIN_SRC c
+  // 指定正面
+  void glFrontFace(GLenum mode);
+  //GL_CCW counterclockwise
+  //GL_CW  clockwise
+
+  // 指定剔除的面
+  void glCullFace(GLenum mode)
+  // GL_FRONT GL_BACK GL_FRONT_AND_BACK
+  glEnable(GL_CULL_FACE)
+  #+END_SRC
+
+* 二、Data in OpenGL Buffers
+** Creating and allocating buffers
+调用 glGenBuffers 生成 buffer object 的名称。
+void glGenBuffers(GLsizei n, GLuint *buffers);
+
+---Buffer Binding Targets(points)---
+Target                          Uses
+GL_ARRAY_BUFFER                 用于通过 glVertexAttribPointer 设置顶点数组数据指针
+GL_COPY_READ/WRITE_BUFFER       用于 buffer 之间 copy 数据
+GL_DRAW_INDIRECT_BUFFER         用于 indirect 绘制时保存绘制命令的参数
+GL_ELEMENT_ARRAY_BUFFER         用于保存顶点的索引，执行索引绘制命令 glDrawElements
+GL_PIXEL_PACK_BUFFER            用于保存从图片对象(textures/framebuffer)读取的数据 glGetTexImage glReadPixels
+GL_PIXEL_UNPACK_BUFFER          用于指定 glTexImage2D 的来源数据
+GL_TEXTURE_BUFFER               将 buffer 绑定到 texture 对象上，这样就可以在 shader 中获取其数据了
+GL_TRANSFORM_FEEDBACK_BUFFER    用于保存变换后的顶点属性
+GL_UNIFORM_BUFFER               用于保存 Uniform 数据
+
+//指定当前绑定的 target 类的 buffer 对象 或者 创建 target 类的 buffer 对象
+glBindBuffer(GLenum target, GLuint buffer);
+** Getting Data into and out of Buffers
+glBufferData(GLenum target,GLsizeiptr size,const GLvoid* data,GLenum usage)
+glBufferSubData(GLenum target,GLintptr offset,GLsizeiptr size,const GLvoid* data);
+glClearBufferData(GLenum target,GLenum internalfamat,GLenum format,GLenum type,const void* data)
+glClearSubBufferData(GLenum target,GLenum internalfamat,GLintptr offset,GLintptr size,GLenum format,GLenum type,const void* data)
+glCopyBufferSubData(GLenum readtarget,GLenum writetarget,GLintptr readoffset,GLintptr writeoffset,GLsizeiptr size)
+** Reading the contents of a buffer
+void glGetBufferSubData(GLenum target,GLintptr offset,GLsizeiptr size,GLvoid* data);
+** Accessing the Content of Buffers
+void* glMapBuffer(GLenum target,GLenum access)
+---Access Modes---
+GL_READ_ONLY
+GL_WRITE_ONLY
+GL_READ_WRITE
+void glUnmapBuffer(GLenum target)
+** Asynchronous and explicit mapping
+void* glMapBufferRange(GLenum target,GLintptr offset,GLsizeiptr length,GLbitfield access)
+--- Access ---
+GL_MAP_INVALIDATE_RANGE_BIT         指定范围的数据被忽略成为 invalid 数据，不能和 GL_MAP_READ_BIT 同时使用
+GL_MAP_INVALIDATE_BUFFER_BIT        整个范围的数据被忽略成为 invalid 数据，不能和 GL_MAP_READ_BIT 同时使用
+GL_MAP_FLUSH_EXPLICIT_BIT           指定更新数据的范围，和 GL_MAP_WRITE_BIT 同时使用
+GL_MAP_UNSYNCHRONIZED_BIT           未指定该参数时，在返回关联的范围之前，OpenGL 会等待所有访问该 buffer 的操作完成
+
+void glFlushMappedBufferRange(GLenum target,GLintptr offset,GLsizeiptr length);
+** Discarding Buffer Data
+glInvalidateBufferData(GLuint buffer)
+glInvalidateBufferSubData(GLuint buffer,GLintptr offset,GLsizeptr length)
+
+
+* 三、Vertex Specification
+** VertexAttibPointer in Depth
+void glVertexAttribPointer(GLuint index,GLint size,GLenum type,GLboolean normalized,GLsizei stride,const GLvoid* pointer)
+e.g:
+glVertexAttribPointer(index,size,GL_INT,GL_TRUE,stride,pointer)
+数据被标准化的方法 result = source/(pow(32)-1)
+glVertexAttribPointer(index,size,GL_UNSIGNED_BYTE,GL_TRUE,stride,pointer)
+数据被标准化的方法 result = (2*source+1)/(pow(8)-1)
+** Integer Vertex Attributes
+void glVertexAttribIPointer(GLuint index,GLint size,GLenum type,GLsizei stride,const GLvoid* pointer)
+type -- GL_BYPTE,GL_UNSIGNED_BYTE,GL_SHORT,GL_UNSIGNED_SHORT,GL_INT,GL_UNSIGNED_INT
+** Double-Precision Vertex Attributes
+void glVertexAttribLPointer(GLuint index,GLint size,GLenum type,GLsizei stride,const GLvoid* pointer)
+type -- GL_DOUBLE
+** Packed Data Formats for Vertex Attributes
+GL_INT_2_10_10_10_REV
+GL_UNSIGNED_INT_2_10_10_10_REV
+** Static Vertex-Attribute Specification
+静态顶点属性是顶点属性的默认值。
+void glVertexAttrib{1234}{fds}(GLuint index,TYPE values);
+void glVertexAttrib{1234}{fds}v(GLuint index,const TYPE* values);
+void glVertexAttrib4{bsifd ub us ui}v(GLuint index,const TYPE* values);
+
+void glVertexAttrib4Nub(GLuint index,GLubyte x,GLubyte y,GLubyte z,GLubyte w);
+void glVertexAttrib4N{bsi ub us ui}v(GLuint index,const TYPE* v);
+
+void glVertexAttribI{1234}{i ui}(GLuint index, TYPE values);
+void glVertexAttribI{123}{i ui}v(GLuint index,const TYPE *values);
+void glVertexAttribI4{bsi ub us ui}v(GLuint index,const TYPE *values);
+
+void glVertexAttribL{1234}(GLuint index, TYPE values);
+void glVertexAttribL{1234}v(GLuint index, const TYPE *values);
+
+* 四、OpenGL Drawing Commands
+1. 绘图命令
+Open 的绘图命令可以粗略的分为两类：基于索引的和非索引的
+void glDrawArrays(GLenum mode,GLint first, GLsizei count);
+void glDrawElements(GLenum mode,GLsizei count,GLenum type,const GLvoid* indices);
+void glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
+void glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count,GLenum type,const GLvoid *indices);
+void glDrawRangeElementsBaseVertex(GLenum mode,GLuint start, GLuint end,GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
+void glDrawArraysIndirect(GLenum mode,const GLvoid *indirect);
+void glDrawElementsIndirect(GLenum mode, GLenum type, const GLvoid * indirect);
+
+void glMultiDrawArrays(GLenum mode, const GLint * first, const GLint * count, GLsizei primcount);
+void glMultiDrawElements(GLenum mode, const GLint * count, GLenum type,const GLvoid * const * indices, GLsizei primcount);
+void glMultiDrawElementsBaseVertex(GLenum mode, const GLint * count,GLenum type,const GLvoid * const * indices, GLsizei primcount,const GLint * baseVertex);
+void glMultiDrawArraysIndirect(GLenum mode, const void * indirect,GLsizei drawcount, GLsizei stride);
+void glMultiDrawElementsIndirect(GLenum mode, GLenum type,const void * indirect, GLsizei drawcount, GLsizei stride);
+
+2. Restarting Primitives
+void glPrimitiveRestartIndex(GLuint index);
+设置 primitive_restart_index,使用 glDrawElements 系列的绘图命令时，当获取顶点的索引和 primitive_restart_index 相等时，会忽略当前索引，并且以下一个索引为新图元的第一个顶点。
+
+* 五、Instanced Rendering
+1. instanced draw
+void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei primCount);
+void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void* indices, GLsizei primCount);
+void glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type,const void* indices, GLsizei instanceCount, GLuint baseVertex);
+
+2. Instanced Vertex Attributes
+void glVertexAttribDivisor(GLuint index, GLuint divisor);
+index 指定顶点属性的索引
+divisor 指定顶点属性被更新的频率
+
+
+* 六、参考资料
+1. 关于 OpenGL Draw 函数的详细信息
+(利用现代 OpenGL API 大幅度减少由于执行驱动导致 CPU 的开销)http://www.opengpu.org/home.php?mod=space&uid=36152&do=blog&id=598
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

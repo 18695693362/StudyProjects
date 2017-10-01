@@ -194,22 +194,22 @@ void GLHelper::Log(const std::string log_str,LogType type)
     cout << log_str << endl;
 }
 
-bool  GLHelper::IsGLError()
+bool  GLHelper::IsGLError(string error_msg)
 {
     GLenum error = glGetError();
     if(error!=GL_NO_ERROR)
     {
         if(GL_INVALID_OPERATION == error)
         {
-            Log("error GL_INVALID_OPERATION = "+to_string(error));
+            Log("error GL_INVALID_OPERATION = "+to_string(error)+" "+error_msg);
         }
         else if(GL_INVALID_VALUE == error)
         {
-            Log("error GL_INVALID_VALUE = "+to_string(error));
+            Log("error GL_INVALID_VALUE = "+to_string(error)+" "+error_msg);
         }
         else
         {
-            Log(string("error = ")+to_string(error));
+            Log(string("error = ")+to_string(error)+" "+error_msg);
         }
         return true;
     }

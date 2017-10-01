@@ -3,8 +3,9 @@ TEMPLATE = subdirs
 SUBDIRS += \
     GLWindow \
     GLDrawInstanced \
+    GLPolygonMode \
     ../../libs/glm
 
 OTHER_FILES += \
-    ../README.txt \
+    ../README.md \
     ../../TIPS.txt

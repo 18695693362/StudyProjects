@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
     format.setVersion(4,1);
     QSurfaceFormat::setDefaultFormat(format);
 
-    //MGLWidgetDrawInstanced widget(NULL,"DrawCMD",false);
-    GInstanceArray widget(NULL,"GInstanceArray",false);
+    MGLWidgetDrawInstanced widget(NULL,"DrawCMD",false);
+    //GInstanceArray widget(NULL,"GInstanceArray",false);
     //TestVBObject widget(NULL,"TestVBObject",false);
     widget.show();
     

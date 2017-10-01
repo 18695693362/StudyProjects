@@ -74,6 +74,7 @@ void MGLWidgetDrawInstanced::initializeGL()
         GetOffsetData(offset_data,offset_data_size);
         GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
         glUniform2fv(offset_uniform_local,_kInstanceCount,offset_data);
+        //下面的方法是无效的
         //glUniform1fv(offset_uniform_local,200,offset_data);
 
         glBindVertexArray(0);

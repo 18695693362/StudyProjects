@@ -1,10 +1,10 @@
 #ifndef GLFUNCDEFINE_H
 #define GLFUNCDEFINE_H
 #include <QtOpenGL>
-#include <QOpenGLFunctions_4_1_Compatibility>
+#include <QOpenGLFunctions_4_4_Compatibility>
 
 #define MyGLFunc ((QOpenGLExtraFunctions*)(QOpenGLContext::currentContext()->functions()))
-
+#define MyGLFuncOfVer ((QOpenGLFunctions_4_4_Compatibility*)(QOpenGLContext::currentContext()->versionFunctions()))
 #define glClearDepth					MyGLFunc->glClearDepthf
 #define glCullFace					MyGLFunc->glCullFace
 #define glDepthFunc					MyGLFunc->glDepthFunc
@@ -54,4 +54,6 @@
 #define glUniformMatrix3fv				MyGLFunc->glUniformMatrix3fv
 #define glUniformMatrix4fv				MyGLFunc->glUniformMatrix4fv
 #define glActiveTexture					MyGLFunc->glActiveTexture
+
+#define glPolygonMode                                   MyGLFuncOfVer->glPolygonMode
 #endif // GLFUNCDEFINE_H
