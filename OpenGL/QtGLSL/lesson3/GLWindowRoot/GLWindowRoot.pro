@@ -4,8 +4,9 @@ SUBDIRS += \
     GLWindow \
     GLDrawInstanced \
     GLPolygonMode \
+    GLDrawElements \
     ../../libs/glm
 
 OTHER_FILES += \
-    ../README.md \
+    ../README.org \
     ../../TIPS.txt

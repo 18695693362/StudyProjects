@@ -1,4 +1,4 @@
-    Drawing with OpenGL
+#+Title: Drawing with OpenGL
 
 * 一、OpenGL Graphics Primitives
 ** Points
@@ -100,7 +100,6 @@ void glFlushMappedBufferRange(GLenum target,GLintptr offset,GLsizeiptr length);
 glInvalidateBufferData(GLuint buffer)
 glInvalidateBufferSubData(GLuint buffer,GLintptr offset,GLsizeptr length)
 
-
 * 三、Vertex Specification
 ** VertexAttibPointer in Depth
 void glVertexAttribPointer(GLuint index,GLint size,GLenum type,GLboolean normalized,GLsizei stride,const GLvoid* pointer)
@@ -116,6 +115,7 @@ type -- GL_BYPTE,GL_UNSIGNED_BYTE,GL_SHORT,GL_UNSIGNED_SHORT,GL_INT,GL_UNSIGNED_
 void glVertexAttribLPointer(GLuint index,GLint size,GLenum type,GLsizei stride,const GLvoid* pointer)
 type -- GL_DOUBLE
 ** Packed Data Formats for Vertex Attributes
+type --
 GL_INT_2_10_10_10_REV
 GL_UNSIGNED_INT_2_10_10_10_REV
 ** Static Vertex-Attribute Specification
@@ -135,37 +135,90 @@ void glVertexAttribL{1234}(GLuint index, TYPE values);
 void glVertexAttribL{1234}v(GLuint index, const TYPE *values);
 
 * 四、OpenGL Drawing Commands
-1. 绘图命令
+** 绘图命令
 Open 的绘图命令可以粗略的分为两类：基于索引的和非索引的
+#+BEGIN_SRC c
+// mode
+// GL_TRIANGLES, GL_LINE_LOOP, GL_LINES, and GL_POINTS.
+// 从第 first 个顶点数据开始，取 count 个顶点数据来绘制 mode 类型的几何图元
 void glDrawArrays(GLenum mode,GLint first, GLsizei count);
+
+// type
+// GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT, or GL_UNSIGNED_INT
+// 从 GL_ELEMENT_ARRAY_BUFFER 缓冲区对象中，偏移 indices 字节开始，取 count 个 type 类型的索引值，依据索引值指定的顶点数据来绘制 mode 类型的几何图元
 void glDrawElements(GLenum mode,GLsizei count,GLenum type,const GLvoid* indices);
+
+// basevertex 指定偏移多少个索引数据 (indices 指定偏移字节数)
+// 对 glDrawElements 的一个改进。增加了 GLint basevertex 参数，称为索引基数，所有的 index 数值都要加上这个数值后再进行绘制。
 void glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
+
+// start 指定最小的索引值 end 指定最大的索引值
+// TODO 如果 获取到的索引值不在[start end]范围内，
 void glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count,GLenum type,const GLvoid *indices);
+
 void glDrawRangeElementsBaseVertex(GLenum mode,GLuint start, GLuint end,GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
+
+// indirect 指定 GL_DRAW_INDIRECT_BUFFER 缓冲区的偏移，绘制命令的参数保存在 GL_DRAW_INDIRECT_BUFFER 缓冲区对象中
 void glDrawArraysIndirect(GLenum mode,const GLvoid *indirect);
+
 void glDrawElementsIndirect(GLenum mode, GLenum type, const GLvoid * indirect);
 
+// primcount 指定几何图元的个数 first 和 count 都是包含 primcount 个元素的数组
+// 一次函数调用绘制多个几何图元
 void glMultiDrawArrays(GLenum mode, const GLint * first, const GLint * count, GLsizei primcount);
+
 void glMultiDrawElements(GLenum mode, const GLint * count, GLenum type,const GLvoid * const * indices, GLsizei primcount);
+
 void glMultiDrawElementsBaseVertex(GLenum mode, const GLint * count,GLenum type,const GLvoid * const * indices, GLsizei primcount,const GLint * baseVertex);
+
 void glMultiDrawArraysIndirect(GLenum mode, const void * indirect,GLsizei drawcount, GLsizei stride);
+
 void glMultiDrawElementsIndirect(GLenum mode, GLenum type,const void * indirect, GLsizei drawcount, GLsizei stride);
 
-2. Restarting Primitives
+typedef struct DrawArraysIndirectCommand_t
+{
+    GLuint count;
+    GLuint primCount;
+    GLuint first;
+    GLuint baseInstance;
+} DrawArraysIndirectCommand;
+
+typedef struct DrawElementsIndirectCommand_t
+{
+    GLuint count;
+    GLuint primCount;
+    GLuint firstIndex;
+    GLuint baseVertex;
+    GLuint baseInstance;
+} DrawElementsIndirectCommand;
+#+END_SRC
+
+** Restarting Primitives
+#+BEGIN_SRC c
 void glPrimitiveRestartIndex(GLuint index);
-设置 primitive_restart_index,使用 glDrawElements 系列的绘图命令时，当获取顶点的索引和 primitive_restart_index 相等时，会忽略当前索引，并且以下一个索引为新图元的第一个顶点。
+//设置 primitive_restart_index,使用 glDrawElements 系列的绘图命令时，当获取顶点的索引和 primitive_restart_index 相等时，会忽略当前索引，并且以下一个索引为新图元的第一个顶点。
+#+END_SRC
 
 * 五、Instanced Rendering
-1. instanced draw
+Instanced Rendering 是一连串执行相同绘制命令多次的一种方法。这是一种绘制大量几何体的高效方法，该方法只有很少的 API 调用。
+- instanced draw
+#+BEGIN_SRC c
+// primCount 绘制几何图元的个数
 void glDrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GLsizei primCount);
 void glDrawElementsInstanced(GLenum mode, GLsizei count, GLenum type, const void* indices, GLsizei primCount);
-void glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type,const void* indices, GLsizei instanceCount, GLuint baseVertex);
+void glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type,const void* indices, GLsizei primCount, GLuint baseVertex);
+#+END_SRC
 
-2. Instanced Vertex Attributes
+- Instanced Vertex Attributes
+下面的函数使得顶点属性变为“instanced”
+#+BEGIN_SRC c
 void glVertexAttribDivisor(GLuint index, GLuint divisor);
-index 指定顶点属性的索引
-divisor 指定顶点属性被更新的频率
+//index   指定顶点属性的索引
+//divisor 指定顶点属性被更新的频率 divisor 为 0 时，对指定的属性关闭 instancing(或 instanced)
+#+END_SRC
 
+- 关于 Instancing 参考资料
+  - https://learnopengl-cn.github.io/04%20Advanced%20OpenGL/10%20Instancing/
 
 * 六、参考资料
 1. 关于 OpenGL Draw 函数的详细信息

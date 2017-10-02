@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>DrawElements.frag</file>
+        <file>DrawElements.vert</file>
+    </qresource>
+</RCC>

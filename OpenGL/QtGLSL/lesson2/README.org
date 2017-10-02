@@ -1,0 +1,388 @@
+#+TITLE: Shader Fundamentals
+
+* Shaders and OpenGL
+从 3.1 版本开始，固定函数管线从 CoreProfile 中移除了，shaders 成为强制要求的。
+
+* OpenGL's Programmable pipline
+** 4.3 版本的图形管线包含 4 个阶段：
+(1) vertex shading stage.       [mandatory]
+接收 vertex-buffer 对象指定的顶点数据，分别处理每个顶点。
+(2) tessellation shading stage  [optional]
+在 OpenGL 管线中生成额外的几何图元。激活该阶段时，它将从顶点着色阶段接收数据，并做进一步处理。
+(3) geometry shading stage      [optional]
+可以修改 OpenGL 管线中的几何图元，分别处理每个几何图元（修改、忽略几何图元）。
+(4) fragment shading stage      [mandatory]
+该阶段处理由光栅化程序产生的 fragments，在这个阶段片段的颜色和深度值被计算。
+(5) compute shading stage
+该阶段不是图形管线的一部分。
+** 数据传输
+shader 通过 in/out(输入/输出)变量来进行数据传递。
+uniform 为 OpenGL 应用程序定义变量，在 shader 中只能读不能修改。
+
+* Shading Language
+** 类型转换
+隐式类型转换
+int -> uint
+int,uint -> float
+int,uint,float -> double
+显式类型转换
+float f=10.0;
+int ten=int(f);
+** 聚集类型
+BaseType    2D vec      3D vec      4D vec      MatrixTypes
+float       vec2        vec3        vec4        mat2    mat3    mat4
+                                                mat2x2  mat2x3  mat2x4
+                                                mat3x2  mat3x3  mat3x4
+                                                mat4x2  mat4x3  mat4x4
+double      dvec2       dvec3       dvec4       dmat2   dmat3   dmat4
+                                                dmat2x2 dmat2x3 dmat2x4
+                                                dmat3x2 dmat3x3 dmat3x4
+                                                dmat4x2 dmat4x3 dmat4x4
+int         ivec2       ivec3       ivec4       X
+uint        uvec2       uvec3       uvec4       X
+bool        bvec2       bvec3       bvec4       X
+** Structrues
+struct Particle {
+    float lifetime;
+    vec3  position;
+    vec3  velocity;
+};
+** Array
+#+BEGIN_SRC c
+float coeff[3] = float[3](1.0,2.0,3.0);
+float[3] coeff = float[3](1.0,2.0,3.0);
+coeff.length();     // =3
+float coeff[3][5];
+coeff[2].length();  // =5
+#+END_SRC
+** Storage Qualifiers
+#+BEGIN_SRC c
+-TypeModifier-      -Description-
+const               标记变量为只读
+=in                 输入变量
+=out                输出变量
+=uniform            从 App 传到 shader 的变量，shader 中只读
+buffer              和 App 共享的读写内存
+shared              computer shader 使用。
+
+初始化 shader 中 uniform array 数据的两种方法：
+uniform vec2 offsets[100];
+--方法 1--
+for(GLuint i = 0; i < 100; i++)
+{
+    stringstream ss;
+    string index;
+    ss << i;
+    index = ss.str();
+    GLint location = glGetUniformLocation(shader.Program, ("offsets[" + index + "]").c_str())
+    glUniform2f(location, translations[i].x, translations[i].y);
+}
+--方法 2--
+GLint offset_uniform_local = glGetUniformLocation(program, "offsets");
+glUniform2fv(offset_uniform_local,100,translations);
+//注意：下面这种方法是不可用的
+glUniform1fv(offset_uniform_local,200,translations);
+#+END_SRC
+** Function
+returnType functionName([accessModifier] type1 variable1,[accessModifier] type2 variable2)
+{
+    // function body
+    return returnValue;
+}
+-AccessModifier-    -Description-
+in                  值被 copy 到函数
+const in            只读的 copy 到函数的值
+out                 值被 copy 到函数外
+inout               值被 copy 到函数内、外
+** 计算不变性
+invariant 和 precise 可以保证 shader 中的计算不变性。
+invariant 用于任何 shader 的输出变量。如果两个 shader 使用同一个表达式计算该输出变量，那么结果是相同的
+invariant gl_Position;
+invariant centroid out vec3 Color;
+centroid  在打开多点采样的时候，强迫一个片断输入变量的采样位于图元像素覆盖的区域，centroid 限定的任何顶点着色器输出，都必须有一个匹配的片断着色器输入也被 centroid 限定
+#pragma STDGL invariant(all)
+precise   用于任何函数返回值或任何计算变量。也可用于内置变量，用户变量。
+precise gl_Position;
+precise out vec3 Location;
+precise vec3 subdivide(vec3 P1, vec3 P2)
+{
+    // .....
+}
+** Shader Preprocessor
+    #define
+    #define LPos(n) gl_LightSource[n].position
+    __LINE__
+    __FILE__
+    __VERSION__
+#undef
+#if
+#ifdef
+#ifndef
+#else
+#elif
+#endif
+#error text 在编译 shader 时,向日志消息中插入 text
+#pragma options
+    #pragma optimize(on)
+    #pragma optimize(off)
+    #pragma debug(on)
+    #pragma debug(off)
+#extension options
+    #extension extension_name : <directive>
+    #extension all : <directive>
+    -Directive-         -Description-
+    require             如果扩展不存在或扩展为 all,则标记一个错误
+    enable              如果特定的扩展不存在则给一个警告,如果为 all,则标记一个错误
+    warn                如果特定扩展不存在,或者使用了任意扩展,则给一个警告
+    disable             如果扩展不支持,则产生一个错误或者警告
+#version number
+#line options
+
+* Interface Blocks
+** 概述
+shader 和 app 或 shader 之间共享的变量可以组织为 blocks,Uniform 变量可以组织到 uniform blocks 中,
+input 和 output 变量可以组织到 in/out blocks 中,shader 存储缓存组织到 buffer blocks 中.
+uniform b {     // uniform or in or out or buffer
+    vec4 v1;    // list of variables
+    bool v2;    // ...
+};              // access members as v1 and v2
+uniform b {     // uniform or in or out or buffer
+    vec4 v1;    // list of variables
+    bool v2;    // ...
+} name;         // access members as name.v1 and name.v2
+** Uniform Block Layout Control
+-LayoutQualifier-           -Description-
+shared                      指定 uniform block 被多个程序共享(这个是默认修饰)
+packed                      指定 uniform block 使用最小内存布局.uniform block 不能夸程序共享
+std140                      使用标准布局.
+std430                      使用标准布局.
+row_major                   uniform block 中的矩阵为行主序存储
+column_major                uniform block 中的矩阵为列主序存储(这是默认方式)
+layout (shared, row_major) uniform
+{
+    //.....
+};
+** 在 app 中访问 Uniform blocks
+(1) 返回 shader 中名称为 uniformBlockName 的 uniform block 索引
+GLuint glGetUniformBlockIndex(GLuint program, const char* uniformBlockName);
+e.g:
+uboIndex = glGetUniformBlockIndex(program, "Uniforms");
+(2) 获取 shader 中 index 为 uniformBlockIndex 的 uniform block 的名称为 pname 的参数的值
+glGetActiveUniformBlockiv (GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint *params);
+e.g:
+glGetActiveUniformBlockiv(program, uboIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &uboSize);
+(3) 依据 names 获取 shader 中对应 uniform 变量的索引
+e.g:
+glGetUniformIndices(program,NumUniforms, names, indices);
+(4) 依据 uniform 变量的索引,获取其其他参数
+glGetActiveUniformsiv (GLuint program, GLsizei uniformCount, const GLuint *uniformIndices, GLenum pname, GLint *params);
+e.g:
+glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_OFFSET, offset);
+glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_SIZE, size);
+glGetActiveUniformsiv(program,NumUniforms,indices,GL_UNIFORM_TYPE, type);
+(5) 将当前绑定的缓冲区对象和索引为 index 的 uniform block 关联
+void glBindBufferRange(GLenum target,GLuint index,GLuint buffer,GLintptr offset,GLsizeiptr size);
+void glBindBufferBase(GLenum target,GLuint index,GLuint buffer);
+e.g:
+glBindBufferBase(GL_UNIFORM_BUFFER, uboIndex, ubo);
+glBindBufferRange(GL_UNIFORM_BUFFER,ubo_index,ubo,ubo_offset[type],data_size);
+** buffer blocks
+buffer blocks 和 uniform block 相比，有两个优点：
+(1) 着色器可以写入，修改 buffer blocks 的内容。
+(2) buffer blocks 的大小可以在渲染之前再确定，而不是编译连接的时候。
+buffer BufferObject {
+    int     mode;
+    vec4    points[];    // 该数组的大小可以在渲染之前确定
+};
+** In/Out Blocks
+out Lighting {
+    vec3 normal;
+    vec2 bumpCoord;
+}
+in Lighting {
+    vec3 normal;
+    vec2 bumpCoord;
+};
+
+* Compiling Shaders
+使用 shader 的步骤：
+#+BEGIN_SRC c
+  //==== 对于每个 shader object ====
+  //step 1. create a shader object.
+  // 创建 shader 对象
+  GLuint glCreateShader(GLenum type);
+  /* --type-- */
+  /* GL_VERTEX_SHADER */
+  /* GL_FRAGMENT_SHADER */
+  /* GL_TESS_CONTROL_SHADER */
+  /* GL_TESS_EVALUATION_SHADER */
+  /* GL_GEOMETRY_SHADER */
+  // 关联 shader 对象和 shader 源代码
+  void   glShaderSource(GLuint shader,GLsizei count,const GLchar** string, const GLint* length);
+  //step 2. compile your shader source into the object.
+  // 编译 shader 源代码
+  void glCompileShader(GLuint shader);
+  //step 3. verify that your shader compiled successfully
+  void glGetShaderiv (GLuint shader, GLenum pname, GLint *params);
+  void glGetShaderInfoLog(GLuint shader,GLsizei bufSize,GLsizei* length,char* infoLog);
+
+  //==== 将多个 shader objects 连接到一个 shader 程序 ====
+  //step 1. create a shader program
+  GLuint glCreateProgram(void);
+  //step 2. attach the appropriate shader objects to the shader program.
+  void glAttachShader(GLuint program,GLuint shader);
+  void glDetachShader(GLuint program,GLuint shader);
+  //step 3. link the shader program
+  void glLinkProgram(GLuint program);
+  //step 4. verify that the shader link phase completed successfully
+  void glGetProgramiv (GLuint program, GLenum pname, GLint *params);
+  void glGetProgramInfoLog (GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);
+  //step 5. use the shader for vertex or fragment processing
+  void glUseProgram(GLuint program);
+  GLboolean glIsShader(GLuint shader);
+  GLboolean glIsProgram(GLuint program);
+#+END_SRC
+
+* Shader Subroutines
+** GLSL Subroutine Setup
+(1) 定义 Subroutine 类型
+subroutine returnType subroutineType(type param, ...);
+e.g:
+subroutine vec4 LightFunc(vec3);
+(2) 使用前面定义好的 Subroutine 类型来定义一组 subroutine
+subroutine (LightFunc) vec4 ambient(vec3 n)
+{
+    return Materials.ambient;
+}
+subroutine (LightFunc) vec4 diffuse(vec3 n)
+{
+    return Materials.diffuse*max(dot(normalize(n),LightVec.xyz),0.0);
+}
+(3) 指定一个 subroutine uniform 变量来保存你在程序中选择的 subroutine 函数指针
+e.g:
+subroutine uniform LightFunc materialShader;
+~Tips~
+一个 subroutine 可以对应多个 subroutine 类型
+subroutine void Type_1();
+subroutine void Type_2();
+
+subroutine (Type_1) Func_1();
+subroutine (Type_2) Func_2();
+subroutine (Type_1,Type_2) Func_12();
+
+subroutine uniform Type_1 func_1;  // 可以使用 Func_1 Func_12
+subroutine uniform Type_2 func_2;  // 可以使用 Func_2 Func_12
+** Selecting Shader Subroutines
+GLint glGetSubroutineUniformLocation(GLuint program,GLenum shadertype,const char* name);
+获得 subroutine uniform 的位置
+GLuint glGetSubroutineIndex(GLuint program,GLenum shadertype,const char* name);
+获得 subroutine 的 index
+GLuint glUniformSubroutinesuiv(GLenum shadertype,GLsizei count,const GLuint* indices);
+设置 count 个 subroutine uniforms 为 indices 中保存的值
+e.g:
+#+BEGIN_SRC c
+GLint materialShaderLoc;
+GLuint ambientIndex;
+GLuint diffuseIndex;
+
+glUseProgram(program);
+
+materialShaderLoc = glGetSubroutineUniformLocation(program,GL_VERTEX_SHADER,"materialShader");
+
+if (materialShaderLoc < 0)
+{
+    // Error
+}
+ambientIndex = glGetSubroutineIndex(program,GL_VERTEX_SHADER,"ambient");
+diffuseIndex = glGetSubroutineIndex(program,GL_VERTEX_SHADER,"diffuse");
+if(ambientIndex==GL_INVALID_INDEX || diffuseIndex==GL_INVALID_INDEX)
+{
+    //
+}
+else
+{
+    GLsizei n;
+    glGetIntegerv(GL_MAX_SUBROUTINE_UNIFORM_LOCATIONS, &n);
+
+    GLuint* indices = new GLuint[n];
+    indices[materialShaderLoc] = ambientIndex;
+
+    glUniformSubroutinesuiv(GL_VERTEX_SHADER, n, indices);
+
+    delete [] indices;
+}
+#+END_SRC
+* Separate Shader Objects
+4.1 版本之前的 OpenGL，应用程序执行期间，同一时间只能绑定一个 shader program。一个 vertex shader 处理一组几何元素然后交由多个 fragment shader 进行后续处理，这种情况下，你需要多个 shader program 对应，这些 shader program 都有相同的 vertex shader.
+
+4.1 版本中 Separate shader objects 可以将不同 shader programs 的多个 shader 阶段组合到一个 program pipeline 中。其步骤如下：
+#+BEGIN_SRC c
+//(1) 创建可重用的 shader program
+glProgramParameter(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
+glCreateShaderProgramv()
+//(2) 使用新的 shader pipeline 将多个来自不同 shader programs 的 shader 阶段组合为一个可复用的 program pipeline.
+glGenProgramPipelines();
+glBindProgramPipeline();
+glUseProgramStages (GLuint pipeline, GLbitfield stages, GLuint program);
+//~Tips1~ 删除 program pipelines
+glDeleteProgramPipelines();
+//~Tips2~ 设置 uniform 变量值:
+//set the active program object for a program pipeline object
+glActiveShaderProgram();
+//set uniform
+glUniform*();
+glProgramUniform*();
+glProgramUniformMatrix*();
+#+END_SRC
+
+#+BEGIN_SRC c
+  static GLuint LoadPipeline(
+          const char* vsSource,
+          const char* gsSource,
+          const char* fsSource)
+  {
+      GLuint vsProgram = glCreateShaderProgramv(GL_VERTEX_SHADER, 1, &vsSource);
+      GLuint gsProgram = glCreateShaderProgramv(GL_GEOMETRY_SHADER, 1, &gsSource);
+      GLuint fsProgram = glCreateShaderProgramv(GL_FRAGMENT_SHADER, 1, &fsSource);
+
+      GLuint pipeline;
+      glGenProgramPipelines(1, &pipeline);
+      glBindProgramPipeline(pipeline);
+
+      glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vsProgram);
+      glUseProgramStages(pipeline, GL_GEOMETRY_SHADER_BIT, gsProgram);
+      glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fsProgram);
+
+      // glUniform* now heed the "active" shader program rather than glUseProgram
+      glActiveShaderProgram(pipeline, vsProgram);
+      glUniform1f(fooLocation, 1.0f);
+
+      return pipeline;
+  }
+#+END_SRC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
