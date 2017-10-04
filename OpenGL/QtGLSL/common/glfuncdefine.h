@@ -29,7 +29,6 @@
 #define glDrawArrays					MyGLFunc->glDrawArrays
 #define glDrawArraysInstanced				MyGLFunc->glDrawArraysInstanced
 #define glDrawElements					MyGLFunc->glDrawElements
-#define glDrawElementsBaseVertex        		MyGLFunc->glDrawElementsBaseVertex
 #define glDrawElementsInstanced				MyGLFunc->glDrawElementsInstanced
 #define glGenTextures                   		MyGLFunc->glGenTextures
 #define glBindTexture                   		MyGLFunc->glBindTexture
@@ -56,4 +55,5 @@
 #define glActiveTexture					MyGLFunc->glActiveTexture
 
 #define glPolygonMode                                   MyGLFuncOfVer->glPolygonMode
+#define glDrawElementsBaseVertex        		MyGLFuncOfVer->glDrawElementsBaseVertex
 #endif // GLFUNCDEFINE_H

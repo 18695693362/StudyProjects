@@ -9,5 +9,7 @@ void main()
     //vs_fs_color = model_matrix[2];
     vo_f_color = vo_color;
 
-    gl_Position = vi_position;
+    mat4 scale = mat4(0.5);
+    scale[3].w = 1;
+    gl_Position = vi_position * scale;
 }

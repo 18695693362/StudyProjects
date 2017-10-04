@@ -48,9 +48,9 @@
   //GL_CW  clockwise
 
   // 指定剔除的面
-  void glCullFace(GLenum mode)
+  void glCullFace(GLenum mode);
   // GL_FRONT GL_BACK GL_FRONT_AND_BACK
-  glEnable(GL_CULL_FACE)
+  void glEnable(GL_CULL_FACE);
   #+END_SRC
 
 * 二、Data in OpenGL Buffers
@@ -150,10 +150,13 @@ void glDrawElements(GLenum mode,GLsizei count,GLenum type,const GLvoid* indices)
 
 // basevertex 指定偏移多少个索引数据 (indices 指定偏移字节数)
 // 对 glDrawElements 的一个改进。增加了 GLint basevertex 参数，称为索引基数，所有的 index 数值都要加上这个数值后再进行绘制。
+// 例如：GLushort vetex_indices[] = {0,1,2,3,4}; 下面的函数取的索引数据为{2,3,4}
+// glDrawElementsBaseVertex(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL, 2);
 void glDrawElementsBaseVertex(GLenum mode, GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
 
 // start 指定最小的索引值 end 指定最大的索引值
-// TODO 如果 获取到的索引值不在[start end]范围内，
+// 如果 获取到的索引值不在[start end]范围内，在我自己的 PC 电脑上也没有任何影响，几何图元依然可以渲染出来
+// https://stackoverflow.com/questions/7549991/questions-about-gldrawrangeelements
 void glDrawRangeElements(GLenum mode, GLuint start, GLuint end, GLsizei count,GLenum type,const GLvoid *indices);
 
 void glDrawRangeElementsBaseVertex(GLenum mode,GLuint start, GLuint end,GLsizei count, GLenum type,const GLvoid *indices, GLint basevertex);
@@ -210,7 +213,7 @@ void glDrawElementsInstancedBaseVertex(GLenum mode, GLsizei count, GLenum type,c
 #+END_SRC
 
 - Instanced Vertex Attributes
-下面的函数使得顶点属性变为“instanced”
+下面的函数使得顶点属性变为 instanced（或 instancing)
 #+BEGIN_SRC c
 void glVertexAttribDivisor(GLuint index, GLuint divisor);
 //index   指定顶点属性的索引

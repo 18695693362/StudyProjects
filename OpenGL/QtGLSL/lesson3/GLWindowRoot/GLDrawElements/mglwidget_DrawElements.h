@@ -17,14 +17,7 @@ protected:
     virtual void paintGL();
     virtual void resizeGL(int w, int h);
 
-protected slots:
-    void messageLogged(const QOpenGLDebugMessage &msg);
-
 private:
-    void _InitOpenGLLogging();
-    void _UpdateTransformMatrix(unsigned int type,glm::mat4 matrix);
-
-    QOpenGLDebugLogger* gl_logger_;
     bool    is_full_screen_;
     float   window_width_;
     float   window_height_;
