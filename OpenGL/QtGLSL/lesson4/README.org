@@ -56,11 +56,11 @@ void glStencilMaskSeparate(GLenum face, GLuint mask)
 但这些值被写入到帧缓冲区时会被映射到帧缓存区支持的值的范围。
 可以通过 glVertexAttribPointer()来指定值是否被标准化。
 ** Vertex Color
-顶点颜色数据的使用
+顶点颜色数据的使用，可以查看该章实例项目中的以下文件：
 vertexcolor.h
 vertexcolor.cpp
 ** Rasterization
-光栅化用来决定屏幕上的哪些区域被特定的几何图元覆盖，其结合输入的顶点数据线性插值产生片段着色器中的每个变量。
+光栅化用来决定屏幕上的哪些区域被特定的几何图元覆盖，其结合输入的顶点数据线性插值产生各个片段的数据并提供给片段着色器中的对应变量。
 应用在颜色数据上的线性插值被称作 Gouraud shading
 
 * 四、Multisampling
@@ -75,9 +75,21 @@ void glGetMultisamplefv(GL_SAMPLE_POSITION, GLuint index, GLfloat *val);
 在着色器中的使用 sample 关键字，可以使被修饰的变量依据每个样本的不同地址有对应的细微差别。
 2. Sample Shading
 glEnable(GL_SAMPLE_SHADING) 可以使片段着色器中的 in 变量自动依据样本地址插值。
-void glMinSampleShading(GLfloat value)
-value 的范围为[0,1]。1 表示每个样本都需要独立被渲染，0 表示忽略样本渲染率。
 
+下面的函数可以控制片段着色器中接收到的样本数量：
+void glMinSampleShading(GLfloat value)
+value 的范围为[0,1]。1 表示每个样本都需要独立被渲染，0 表示忽略样本渲染。
+
+Tips:
+Qt 中让 QOpenGLWidget 支持多重采样需要如下操作:
+#+BEGIN_SRC c
+QSurfaceFormat format;
+format.setRenderableType(QSurfaceFormat::OpenGL);
+format.setProfile(QSurfaceFormat::CoreProfile);
+format.setOption(QSurfaceFormat::DebugContext);
+// 设置采样数量，从而支持多重采样
+format.setSamples(4);
+#+END_SRC
 * 五、Testing and Operating on Fragments
 1. 简述
 片段着色器处理片段之后还会经过下面的处理：
