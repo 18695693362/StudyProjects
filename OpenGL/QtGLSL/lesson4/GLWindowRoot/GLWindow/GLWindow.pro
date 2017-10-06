@@ -39,4 +39,4 @@ DEPENDPATH += $$PWD/../../../libs/glm
 
 DISTFILES += \
     ../../../TIPS.txt \
-    ../../README.txt
+    ../../README.org

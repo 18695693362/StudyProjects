@@ -10,7 +10,7 @@
 大部分显示设备只能显示一小部分可见光谱。他们使用主要的三种颜色（红、绿、蓝）来生成可以显示光谱。
 
 * 二、Buffers and Their Uses
-1. 简述
+** 简述
 在 OpenGL 中可以使用下面几种 buffer：Color buffers\ Depth buffer\ Stencil buffer，所有这些 buffer 组合起来形成
 framebuffer。
 当应用程序启动时，使用的是 default framebuffer.其总是包含一个 Color buffer.
@@ -24,7 +24,7 @@ default framebuffer 的主颜色缓冲区是特殊的颜色缓冲区，它和屏
 深度值是通过测量到眼睛距离来得到的，拥有更小深度值的像素会覆盖更大生深度的像素。
 (3) Stencil Buffer
 模板缓冲区用来将绘制限定在特定的区域内。
-2. Clearing Buffers
+** Clearing Buffers
 (1) 设置清除缓存的值
 void glClearColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
 void glClearDepth(GLclampd depth);
@@ -32,7 +32,7 @@ void glClearDepthf(GLclampf depth);
 void glClearStencil(GLint s);
 (2) 清除缓存
 void glClear(GLbitfield mask);
-3. Masking Buffers
+** Masking Buffers
 OpenGL 写数据到开启的颜色、深度、模板缓冲区之前，会在数据上执行掩码操作。
 void glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
 void glColorMaski(GLuint buffer, GLboolean red, GLboolean green, GLboolean blue,GLboolean alpha);
@@ -44,22 +44,22 @@ void glStencilMaskSeparate(GLenum face, GLuint mask)
 指定一个位掩码控制模板缓存区的各个位平面的写入。mask 的初始值为全 1。
 
 * 三、Color and OpenGL
-1. 简述
+** 简述
 为片段指定颜色的工作是由片段着色器来做的，有很多种方式来做这件事情：
 (1) 片段着色器不使用任何额外的数据来生成片段颜色。
 (2) 附加的颜色数据被提供给每个顶点，这些数据可能会被顶点着色器修改，然后传递给片段着色器。
 片段着色器依据此颜色数据来生成片段颜色
 (3) 附加的数据（但不是特定颜色数据）被提供给片段着色器，并且通过计算来生成颜色。
 (4) 额外的数据，例如数字图片，在片段着色器中被引用用来查询颜色数据。
-2. Color Representation and OpenGL
+** Color Representation and OpenGL
 默认情况下片段着色器接收到的值被当作浮点值，这些值的范围为[0.0,1.0](即标准化的值)，
 但这些值被写入到帧缓冲区时会被映射到帧缓存区支持的值的范围。
 可以通过 glVertexAttribPointer()来指定值是否被标准化。
-3. Vertex Color
+** Vertex Color
 顶点颜色数据的使用
 vertexcolor.h
 vertexcolor.cpp
-4. Rasterization
+** Rasterization
 光栅化用来决定屏幕上的哪些区域被特定的几何图元覆盖，其结合输入的顶点数据线性插值产生片段着色器中的每个变量。
 应用在颜色数据上的线性插值被称作 Gouraud shading
 
@@ -161,7 +161,7 @@ glBlendFunc(GL_SRC_ALPHA_STAURATE,GL_ONE);
 glHint(GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE);
 
 * 七、Framebuffer Objects
-1. 简述
+**  简述
 到目前为止我们所讨论的缓存区都是由窗口系统默认为我们所创建的。尽管你可以只通过这些默认的缓冲区来运用任何技术，但是，这样会
 需要缓冲区之间过多的数据移动。使用帧缓冲区对象创建自己的帧缓冲区，利用它所绑定的渲染缓冲区可以最小化数据 copy 并优化性能。
 帧缓冲区对象可用于离屏渲染、更新贴图映射、执行 buffer ping-ponging。
@@ -179,8 +179,7 @@ GL_FRAMEBUFFER_DEFAULT_HEIGHT
 GL_FRAMEBUFFER_DEFAULT_LAYERS
 GL_FRAMEBUFFER_DEFAULT_SAMPLES
 GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS
-
-2. Renderbuffers
+** Renderbuffers
 （1）创建 renderbuffer 对象
 渲染缓冲区是由 OpenGL 管理的高效内存，其中保存了格式化的图片数据。
 void glGenRenderbuffers(GLsizei n, GLuint *ids);
