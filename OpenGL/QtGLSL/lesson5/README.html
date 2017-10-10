@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2017-10-09 周一 12:17 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<title>5 Viewing Transformations Clipping and Feedback</title>
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Dong Guo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">5 Viewing Transformations Clipping and Feedback</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgheadline1">1. 一、Viewing</a></li>
+<li><a href="#orgheadline8">2. 二、User Transformations</a>
+<ul>
+<li><a href="#orgheadline2">2.1. Matrix Multiply Refresher</a></li>
+<li><a href="#orgheadline3">2.2. Homogeneous Coordinates</a></li>
+<li><a href="#orgheadline4">2.3. 线性变换和矩阵</a></li>
+<li><a href="#orgheadline5">2.4. Perspective Projection / Orthographic Projection</a></li>
+<li><a href="#orgheadline6">2.5. 法线变换</a></li>
+<li><a href="#orgheadline7">2.6. OpenGL Matrices</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline9">3. 三、OpenGL Transformations</a></li>
+<li><a href="#orgheadline10">4. 四、Transform Feedback</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1"><span class="section-number-2">1</span> 一、Viewing</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+将三维变为二维用到的关键工具有：视图模型、标准设备坐标的使用、通过矩阵乘运用线性变换、设置视图映射。
+</p>
+<ol class="org-ol">
+<li>Camera Model</li>
+</ol>
+<p>
+制作需要的视图所进行的变换处理和用照相机拍照片类似。拍照片的步骤：（1）放置照相机（2）放置模型（3）选择镜头
+OpenGL 渲染图片的步骤：（1）将照相机移动到你想放置的地方，并且将它的方向放置正确。【视图变换】（2）将被拍摄的物体放到场景中。【模型变换】（3）选择照相机摄像头调解缩放。【投影变换】（4）拍照（5）放大或缩小结果图片到需要的尺寸。【视口变换】步骤 3 决定了场景中多少内容被拍摄到。步骤 5 决定了被拍摄到的内容放到多大的屏幕上。
+</p>
+<ol class="org-ol">
+<li>Viewing Frustum</li>
+</ol>
+<p>
+OpenGL 会排除太近或太远的几何体，也就是说在 near 平面前面的或在 far 平面后面的物体会被排除。靠近视景体顶角的物体会非常大，特别是在顶角上时，这会造成问题。物体太远时出于性能原因，以及深度精度问题，太远的物体会被排除。
+</p>
+<ol class="org-ol">
+<li>Frustum Clipping</li>
+</ol>
+<p>
+图元跨越裁剪平面时，OpenGL 会裁剪这样的图元。
+</p>
+<ol class="org-ol">
+<li>Orthographic Viewing Model</li>
+</ol>
+<p>
+物体正交投影投影后，维持物体实际尺寸以及他们之间的夹角不变。正交投影只是忽略一个维度的坐标。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline8" class="outline-2">
+<h2 id="orgheadline8"><span class="section-number-2">2</span> 二、User Transformations</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="orgheadline2"><span class="section-number-3">2.1</span> Matrix Multiply Refresher</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+C(B(Av)) = (CBA)v
+可以利用上面的原理来优化性能
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="orgheadline3"><span class="section-number-3">2.2</span> Homogeneous Coordinates</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+将三维坐标转化为四维齐次坐标有两个好处：（1）可以进行透视投影（2）可以通过线性变换来表示平移
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="orgheadline4"><span class="section-number-3">2.3</span> 线性变换和矩阵</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>变换物体和变换坐标系有些情况下需要进行物体变换，另外一些情况下则需要进行坐标系变换。但是，这两种变换实际上是等价的，将物体变换一个量等价于将坐标系变换一个相反的量。变换坐标系，其实就是将以该坐标系表示的所有物体都进行和该坐标系相同的变换。详情可以参考，ComputerGraphicMath 这篇博客的内容。</li>
+<li><p>
+平移
+</p>
+<pre class="example">
+x,y,z 都平移 2.5
+1.0 0.0 0.0 2.5   x   x+2.5
+0.0 1.0 0.0 2.5 * y = y+2.5
+0.0 0.0 1.0 2.5   z   z+2.5
+0.0 0.0 0.0 1.0   1   1
+</pre></li>
+<li><p>
+缩放
+</p>
+<pre class="example">
+x,y,z 都缩放 3 倍
+3.0 0.0 0.0 0.0   x   3x
+0.0 3.0 0.0 0.0 * y = 3y
+0.0 0.0 3.0 0.0   z   3z
+0.0 0.0 0.0 1.0   1   1
+</pre></li>
+<li><p>
+Rotation
+</p>
+<pre class="example">
+沿 x 轴旋转 50 度
+1.0  0.0    0.0   0.0   x      x            
+0.0  cos50 -sin50 0.0   y    cos50*y-sin50*z
+0.0  sin50  cos50 0.0 * z =  sin50*y+cos50*z
+0.0  0.0    0.0   1.0   1      1            
+沿 y 轴旋转 50 度
+cos50  0.0   sin50 0.0   x    cos50*x+sin50*z
+0.0    1.0   0.0   0.0   y      y            
+-sin50  0.0   cos50 0.0 * z = -sin50*x+cos50*z
+0.0    0.0   0.0   1.0   1      1            
+沿 z 轴旋转 50 度
+cos50  -sin50 0.0 0.0   x   cos50*x-sin50*y
+sin50   cos50 0.0 0.0 * y = sin50*x+cos50*y
+0.0     0.0   1.0 0.0   z      z           
+0.0     0.0   0.0 1.0   1      1           
+沿任意轴(Rx,Ry,Rz)旋转 o 度
+</pre></li>
+<li><p>
+Shearing 切变
+</p>
+<pre class="example">
+1 s  *  x  =  x+sy 
+0 1     y      y
+</pre></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="orgheadline5"><span class="section-number-3">2.4</span> Perspective Projection / Orthographic Projection</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+构造透视投影矩阵和正交投影矩阵
+<a href="http://www.songho.ca/opengl/gl_projectionmatrix.html">http://www.songho.ca/opengl/gl_projectionmatrix.html</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="orgheadline6"><span class="section-number-3">2.5</span> 法线变换</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+法线向量只用了三维，没有用齐次坐标。因为：（1）平移物体不会修改它的法线，所以法线不需要考虑平移问题（2）法线向量用来进行光照计算，其在透视投影之前进行，所以法线向量不需要透视投影。需要注意的是法线向量的变换公用物体的变换。
+\(n_{eye} = (M^{−1})^Tn\)
+</p>
+
+<p>
+<a href="http://www.songho.ca/opengl/gl_normaltransform.html">http://www.songho.ca/opengl/gl_normaltransform.html</a>
+<a href="http://www.cnblogs.com/hefee/p/3817397.html">http://www.cnblogs.com/hefee/p/3817397.html</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="orgheadline7"><span class="section-number-3">2.6</span> OpenGL Matrices</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+为了优化性能，将对于每个顶点都相同的矩阵运算放在应用程序中进行，计算完毕后传递给顶点着色器。（1）OpenGL 中的矩阵行列
+opengl 中矩阵是列主序的
+</p>
+<div class="org-src-container">
+
+<pre class="src src-glsl">mat3x4 m;
+vec4 v = m[1]; // v 是矩阵 m 的第二列向量
+</pre>
+</div>
+<p>
+<a href="http://blog.csdn.net/oracleot/article/details/5378746">http://blog.csdn.net/oracleot/article/details/5378746</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline9" class="outline-2">
+<h2 id="orgheadline9"><span class="section-number-2">3</span> 三、OpenGL Transformations</h2>
+<div class="outline-text-2" id="text-3">
+<ol class="org-ol">
+<li>在 OpenGL 中指定最近和最远的裁剪平面</li>
+</ol>
+<p>
+void glDepthRange(GLclampd near, GLclampd far);
+void glDepthRangef(GLclampf near, GLclampf far);
+</p>
+<ol class="org-ol">
+<li>在 OpenGL 中指定显示区域</li>
+</ol>
+<p>
+void glViewport(GLint x, GLint y, GLint width, GLint height);
+</p>
+<ol class="org-ol">
+<li>多个视口</li>
+<li>z 的精度</li>
+</ol>
+<p>
+使用浮点数来做计算会有精度限制。所以数值上不同的深度坐标最后会有相同的 z 浮点值。这会造成错误的隐藏物体。使用透视除法后，z 的精度会更加糟糕。随着变换后的深度坐标远离近裁剪平面，它的精度会变小。下面的链接中，通过图示直观地说明了这个问题。
+<a href="http://www.songho.ca/opengl/gl_projectionmatrix.html">http://www.songho.ca/opengl/gl_projectionmatrix.html</a>
+</p>
+<ol class="org-ol">
+<li>User Clipping</li>
+</ol>
+<p>
+用户裁切是指添加额外的裁切平面。
+glEnable(GL<sub>CLIP</sub><sub>PLANE0</sub>);
+开启第 0 个裁剪平面
+void glClipPlane(GLenum plane, const GLdouble *equation);
+指定裁剪平面
+gl<sub>ClipDistance</sub> 用来指定定点和平面的关系。距离=0 表示定点在裁剪平面上，距离&gt;0 表示顶点在裁剪平面内
+(顶点不会被裁剪)，距离&lt;0 表示顶点在裁剪平面外(顶点被裁剪)；
+<a href="http://blog.sina.com.cn/s/blog_5ff6097b0100xqvr.html">http://blog.sina.com.cn/s/blog_5ff6097b0100xqvr.html</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline10" class="outline-2">
+<h2 id="orgheadline10"><span class="section-number-2">4</span> 四、Transform Feedback</h2>
+<div class="outline-text-2" id="text-4">
+<ol class="org-ol">
+<li>简述</li>
+</ol>
+<p>
+Transform feedback 是在顶点处理结束以后，在图元装配和光栅化之前。当顶点数据组合为图元时，Transform
+feedback 捕获这些顶点数据并且可以将他们的属性记录到缓冲区对象中。
+</p>
+<ol class="org-ol">
+<li>Transform feedback Objects</li>
+</ol>
+<p>
+transform feedback object 封装了实现 transform feedback 的状态。这些状态包括：用于保存捕获到的顶点数据的缓冲区、计数索引每个缓冲区有多少满；标示 transform feedback 是否是当前激活的。（1）创建 transform feedback 对象名称
+void glGenTransformFeedbacks(GLsizei n, GLuint * ids);
+（2）创建/绑定 transform feedback 对象
+void glBindTransformFeedback(GLenum target, GLuint id);
+GLboolean glIsTransformFeedback(GLenum id);
+（3）删除 transform feedback
+void glDeleteTransformFeedbacks(GLsizei n, const GLuint ids);
+</p>
+<ol class="org-ol">
+<li>Transform Feedback Buffers</li>
+</ol>
+<p>
+void glBindBufferBase(GLenum target, GLuint index, GLuint buffer);
+void glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset,GLsizeiptr size);
+target GL<sub>TRANSFORM</sub><sub>FEEDBACK</sub><sub>BUFFER</sub>
+</p>
+<ol class="org-ol">
+<li>Configuring Transform Feedback Varyings</li>
+</ol>
+<p>
+在 transform feedback 阶段,指定哪些变量会被记录,以及被记录到哪个 buffer 中
+void glTransformFeedbackVaryings(GLuint program, GLsizei count,const GLchar ** varyings, GLenum bufferMode);
+bufferMode
+GL<sub>INTERLEAVED</sub><sub>ATTRIBS</sub>
+GL<sub>SEPARATE</sub><sub>ATTRIBS</sub>
+注意上面的代码需要在 glLinkProgram()之前调用。
+gl<sub>SkipComponents1</sub>, gl<sub>SkipComponents2</sub>, gl<sub>SkipComponents3</sub>, gl<sub>SkipComponents4</sub>, and gl<sub>NextBuffer</sub>.
+</p>
+<ol class="org-ol">
+<li>开始、停止 Transform Feedback</li>
+</ol>
+<p>
+void glBeginTransformFeedback(GLenum primitiveMode);
+void glPauseTransformFeedback(void);
+void glResumeTransformFeedback(void);
+void glEndTransformFeedback(void);
+</p>
+<ol class="org-ol">
+<li>离子系统</li>
+</ol>
+<p>
+实现离子系统
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Dong Guo</p>
+<p class="date">Created: 2017-10-09 周一 12:17</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
