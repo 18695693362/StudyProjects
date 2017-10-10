@@ -160,9 +160,11 @@ lesson7
 
 参考链接：
 Modern OpenGL Tutorials:            http://ogldev.atspace.co.uk/index.html
+                                    https://github.com/flcker/ogldev_source
+
 learnopengl:                        https://learnopengl-cn.readthedocs.io/zh/latest/
 opengl-tutorial:                    http://www.opengl-tutorial.org/
-
+openglredbook:                      https://github.com/openglredbook/examples
 
 
 

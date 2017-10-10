@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ParticleSystemUpdate.frag</file>
+        <file>ParticleSystemUpdate.vert</file>
+        <file>ParticleSystemUpdate.geom</file>
+        <file>ParticleSystemRender.frag</file>
+        <file>ParticleSystemRender.vert</file>
+        <file>ParticleSystemRender.geom</file>
+    </qresource>
+</RCC>

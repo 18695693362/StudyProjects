@@ -32,6 +32,7 @@ void glClearDepthf(GLclampf depth);
 void glClearStencil(GLint s);
 (2) 清除缓存
 void glClear(GLbitfield mask);
+GL_COLOR_BUFFER_BIT GL_DEPTH_BUFFER_BIT GL_STENCIL_BUFFER_BIT
 ** Masking Buffers
 OpenGL 写数据到开启的颜色、深度、模板缓冲区之前，会在数据上执行掩码操作。
 void glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);
@@ -47,8 +48,7 @@ void glStencilMaskSeparate(GLenum face, GLuint mask)
 ** 简述
 为片段指定颜色的工作是由片段着色器来做的，有很多种方式来做这件事情：
 (1) 片段着色器不使用任何额外的数据来生成片段颜色。
-(2) 附加的颜色数据被提供给每个顶点，这些数据可能会被顶点着色器修改，然后传递给片段着色器。
-片段着色器依据此颜色数据来生成片段颜色
+(2) 附加的颜色数据被提供给每个顶点，这些数据可能会被顶点着色器修改，然后传递给片段着色器。片段着色器依据此颜色数据来生成片段颜色
 (3) 附加的数据（但不是特定颜色数据）被提供给片段着色器，并且通过计算来生成颜色。
 (4) 额外的数据，例如数字图片，在片段着色器中被引用用来查询颜色数据。
 ** Color Representation and OpenGL
@@ -65,8 +65,7 @@ vertexcolor.cpp
 
 * 四、Multisampling
 1. 简述
-多重采样是一种平滑化几何图元边缘的一种技术。通过对每个几何图元的每个像素进行多次采样，对每个像素保存多个样本，
-对所有样本进行处理来确定像素的最终颜色。
+多重采样是一种平滑化几何图元边缘的一种技术。通过对每个几何图元的每个像素进行多次采样，对每个像素保存多个样本， 对所有样本进行处理来确定像素的最终颜色。
 glGetIntegerv(GL_SAMPLE_BUFFERS)用来检查是否支持多重采样。
 glEnable(GL_MULTISAMPLE)开启多重采样
 glGetIntegerv(GL_SAMPLES)获取样本的数量
@@ -91,8 +90,8 @@ format.setOption(QSurfaceFormat::DebugContext);
 format.setSamples(4);
 #+END_SRC
 * 五、Testing and Operating on Fragments
-1. 简述
-片段着色器处理片段之后还会经过下面的处理：
+** 简述
+片段着色器处理片段之后还会按顺序经过下面的处理：
 （1）Scissor test
 （2）Multisample fragment operations
 （3）Stencil test
@@ -100,17 +99,28 @@ format.setSamples(4);
 （5）Blending
 （6）Dithering
 （7）Logical operations
-2. Scissor Test
+如果某个片段在某个阶段被淘汰，那么它就会被丢弃，后续的阶段就不需要在执行了。
+** Scissor Test
+指定一个正方形区域，区域外的片段都将被忽略
 void glScissor(GLint x, GLint y, GLsizei width, GLsizei height);
 glEnable(GL_SCISSOR_TEST) glDisable(GL_SCISSOR_TEST) 裁剪测试开启控制
-3. Multisample Fragment Operations
+** Multisample Fragment Operations
 下面链接详细描述了多重采样的原理
 http://learnopengl.com/#!Advanced-OpenGL/Anti-Aliasing
 https://learnopengl-cn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/11%20Anti%20Aliasing/
-4. Stencil Test
+
+默认情况下多重采用计算片段覆盖的值是不包含 alpha 的(即，不会计算 alpha)，通过 glEnable()可以更改该设置
+GL_SAMPLE_ALPHA_TO_CONVERAGE 指定计算包括 alpha
+GL_SAMPLE_ALPHA_TO_ONE       设置 alpha 值为 1，并使用它
+GL_SAMPLE_COVERAGE           使用通过 glSampleCoverage 设置的值
+GL_SAMPLE_MASK               指定一个额外的 bit 序列作为覆盖值的掩码，这个掩码和采样覆盖值位与
+
+当开启了 GL_SAMPLE_COVERAGE，就可以通过 glSampleConverage 函数来指定一个值和片段覆盖值进行位与（AND）
+glSampleMaski(GLuint index, GLbitfield mask)可用来指定掩码的 bit 序列
+** Stencil Test
 模板测试需要模板缓冲区，如果不存在模板缓冲区，模板测试则总是通过。
 // TODO 实现一个描边效果
-5. Depth Test
+** Depth Test
 深度缓存区保存了视点到物体的距离。
 （1）Polygon Offset
 多边形偏移可用于 渲染固体的高亮边缘、表面贴花、隐藏线移除
@@ -118,7 +128,7 @@ glEnable(GL_POLYGON_OFFSET_FILL)
 void glPolygonOffset(GLfloat factor, GLfloat units);
 开启多边形偏移后，在执行深度测试之前，每个片段的深度值会被添加一个偏移值。偏移值按照下面方法计算：
 offset = m * factor + r * units
-6. Blending
+** Blending
 混合操作把源片段的 RGB 和 alpha 值与已经存储在这个位置的像素的对应值进行组合.
 （1）Blending Factors
 Sr,Sg,Sb,Sa 表示源混合因子
@@ -126,11 +136,11 @@ Dr,Dg,Db,Da 表示目标混合因子
 Rs,Gs,Bs,As 表示源颜色
 Rd,Gd,Bd,Ad 表示目标颜色
 最终的颜色为 SrRs+DrRd, SgGs+DgGd, SbBs+DbBd, SaAs+DaAd
-7. Dithering
+** Dithering
 抖动可以让系统表示更多的颜色。
-8. Logical Operations
+** Logical Operations
 将输入的片段值（source）和已经存储在颜色缓存区中的片段值（destination）进行逻辑运算。
-9. Occlusion Query
+** Occlusion Query
 深度缓冲区确定了每个像素的可见性。出于性能考虑，如果在一个几何体渲染之前可以确定它是否可见非常有意义。
 遮挡查询可以让你确定一个特定的几何在执行深度测试后是否可见。
 使用遮挡查询的步骤：
@@ -144,7 +154,7 @@ void glGetQueryObjectiv(GLenum id,GLenum pname,GLint* params)
 void glGetQueryObjectuiv(GLenum id, GLenum pname, GLuint *params);
 （6）清除遮挡查询对象
 void glDeleteQueries(GLsizei n, const GLuint *ids);
-10. Conditional Rendering
+** Conditional Rendering
 遮挡查询的一个问题是它需要 OpenGL 暂停处理几何体和片段，记录深度缓冲区中受影响的片段的数目，
 并将该值返回给应用程序。以这种方式停止图形硬件，在性能敏感的应用程序中，会影响到性能。
 为了消除暂停 OpenGL 的操作，条件渲染允许图形硬件来决定是否等待遮挡查询结果。
@@ -180,92 +190,111 @@ glHint(GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE);
 窗口系统创建的默认帧缓冲区是唯一可以显示到显示器上的缓冲区。默认帧缓冲区关联的 color\depth\stencil 渲染缓冲区是自动创建
 的。应用程序创建的帧缓冲区对象，需要额外创建这些渲染缓存区和帧缓存区对象关联。默认帧缓冲区对象关联的缓存区不能和应用程序
 创建的帧缓冲区对象相关联，反之亦然。
-void glGenFramebuffers(GLsizei n,GLuint* ids);
-void glBindFramebuffer(GLenum target, GLuint framebuffer);
-void glDeleteFramebuffers(GLsizei n, const GLuint *ids);
-GLboolean glIsFramebuffer(GLuint framebuffer);
-void glFramebufferParameteri(GLenum target, GLenum pname, GLint param);
-pname
-GL_FRAMEBUFFER_DEFAULT_WIDTH
-GL_FRAMEBUFFER_DEFAULT_HEIGHT
-GL_FRAMEBUFFER_DEFAULT_LAYERS
-GL_FRAMEBUFFER_DEFAULT_SAMPLES
-GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS
+#+BEGIN_SRC c
+  void glGenFramebuffers(GLsizei n,GLuint* ids);
+  void glBindFramebuffer(GLenum target, GLuint framebuffer);
+  /* target - GL_FRAMEBUFFER */
+  void glDeleteFramebuffers(GLsizei n, const GLuint *ids);
+  GLboolean glIsFramebuffer(GLuint framebuffer);
+  void glFramebufferParameteri(GLenum target, GLenum pname, GLint param);
+  /* pname */
+  /* GL_FRAMEBUFFER_DEFAULT_WIDTH */
+  /* GL_FRAMEBUFFER_DEFAULT_HEIGHT */
+  /* GL_FRAMEBUFFER_DEFAULT_LAYERS */
+  /* GL_FRAMEBUFFER_DEFAULT_SAMPLES */
+  /* GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS */
+#+END_SRC
 ** Renderbuffers
 （1）创建 renderbuffer 对象
 渲染缓冲区是由 OpenGL 管理的高效内存，其中保存了格式化的图片数据。
+#+BEGIN_SRC c
 void glGenRenderbuffers(GLsizei n, GLuint *ids);
 void glDeleteRenderbuffers(GLsizei n, const GLuint *ids);
 void glIsRenderbuffer(GLuint renderbuffer);
 void glBindRenderbuffer(GLenum target, GLuint renderbuffer);
-target 必须为 GL_RENDERBUFFER
+//target 必须为 GL_RENDERBUFFER
+#+END_SRC
 （2）为 renderbuffer 对象分配空间
 第一次以未使用过的 renderbuffer 名字调用 glBindRenderbuffer 时，OpenGL 会创建一个 renderbuffer 对象，其所有状态都是默认值。
 将 renderbuffer 关联到帧缓冲区对象之前，需要为其申请存储空间并制定图片格式。
-void glRenderbufferStorage(GLenum target, GLenum internalformat,GLsizei width, GLsizei height);
-void glRenderbufferStorageMultisample(GLenum target,GLsizei samples, GLenum internalformat, GLsizei width,GLsizei height);
-target 必须为 GL_RENDERBUFFER
-internalformat
-对于 color-renderable buffer 为 GL_RED GL_R8 GL_R16 ...
-对于 depth-renderable buffer 为 GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16 ...
-对于 stencil buffer 为 GL_STENCIL_INDEX, GL_STENCIL_INDEX1 ...
-对于 packed depth-stencil 为 GL_DEPTH_STENCIL
+#+BEGIN_SRC c
+  void glRenderbufferStorage(GLenum target, GLenum internalformat,GLsizei width, GLsizei height);
+  void glRenderbufferStorageMultisample(GLenum target,GLsizei samples, GLenum internalformat, GLsizei width,GLsizei height);
+  /* target 必须为 GL_RENDERBUFFER */
+  /* internalformat */
+  /* 对于 color-renderable buffer 为 GL_RED GL_R8 GL_R16 ... */
+  /* 对于 depth-renderable buffer 为 GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16 ... */
+  /* 对于 stencil buffer 为 GL_STENCIL_INDEX, GL_STENCIL_INDEX1 ... */
+  /* 对于 packed depth-stencil 为 GL_DEPTH_STENCIL */
+#+END_SRC
+
 （3）将 renderbuffer 关联到 framebuffer 上
-void glFramebufferRenderbuffer(GLenum target, GLenum attachment,GLenum renderbuffertarget, GLuint renderbuffer);
-target GL_READ_FRAMEBUFFER, GL_DRAW_FRAMEBUFFER, or GL_FRAMEBUFFER
-attachment GL_COLOR_ATTACHMENTi, GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT, or GL_DEPTH_STENCIL_ATTACHMENT
-renderbuffertarget GL_RENDERBUFFER
-renderbuffer 为 0 时移除当前关联的 attachment
+#+BEGIN_SRC c
+  void glFramebufferRenderbuffer(GLenum target, GLenum attachment,GLenum renderbuffertarget, GLuint renderbuffer);
+  /* target GL_READ_FRAMEBUFFER, GL_DRAW_FRAMEBUFFER, or GL_FRAMEBUFFER */
+  /* attachment GL_COLOR_ATTACHMENTi, GL_DEPTH_ATTACHMENT, GL_STENCIL_ATTACHMENT, or GL_DEPTH_STENCIL_ATTACHMENT */
+  /* renderbuffertarget GL_RENDERBUFFER */
+  /* renderbuffer 为 0 时移除当前关联的 attachment */
+#+END_SRC
 （4）检查帧缓冲区的状态
 贴图和缓冲区格式以及帧缓冲区附加点的各种组合会产生各种情况导致渲染无法完成。修改帧缓冲区附加之后，最好检查一下帧缓冲区的状态。
-GLenum glCheckFramebufferStatus(GLenum target);
-target GL_READ_FRAMEBUFFER, GL_DRAW_FRAMEBUFFER, or GL_FRAMEBUFFER
-有任何错误时返回 0
+#+BEGIN_SRC c
+  GLenum glCheckFramebufferStatus(GLenum target);
+  /* target GL_READ_FRAMEBUFFER, GL_DRAW_FRAMEBUFFER, or GL_FRAMEBUFFER */
+  /* 有任何错误时返回 0 */
+#+END_SRC
 （5）清除缓冲区
-glClear(GL_COLOR_BUFFER_BIT)
+#+BEGIN_SRC c
+glClear(GL_COLOR_BUFFER_BIT);
 void glClearBuffer{fi ui}v(GLenum buffer, GLint drawbuffer, const TYPE *value);
 void glClearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
-buffer GL_COLOR, GL_DEPTH, or GL_STENCIL
+//buffer GL_COLOR, GL_DEPTH, or GL_STENCIL
+#+END_SRC
+
 （6）释放缓冲区
+#+BEGIN_SRC c
 OpenGL 提供了一种机制来标记一个区域或整个帧缓冲区不再使用了，即可以释放了。
 void glInvalidateFramebuffer(GLenum target,GLsizei numAttachments,const GLenum *attachments);
 void glInvalidateSubFramebuffer(GLenum target,GLsizei numAttachmens, const GLenum *attachments,
 GLint x, GLint y,GLsizei width, GLsizei height);
-
+#+END_SRC
 * 八、Writing to Multiple Renderbuffers Simultaneously
-通过多个渲染缓冲区（或贴图）来运用帧缓冲区对象时，可以从片段着色器同步写入数据到多个缓冲区。这避免了处理相同顶点数据多次，也避免
-了光栅化相同的图元多次。
-
-1. 指定输出变量和附加点的对应关系
+通过多个渲染缓冲区（或贴图）来和帧缓冲区对象配合使用时，可以从片段着色器同步写入数据到多个缓冲区。这避免了处理相同顶点数据多次，也避免
+了光栅化相同的图元多次。这种技术被称为 MTR（multiple-render target）
+** 指定输出变量和附加点的对应关系
 通过在片段着色器中用 layout 来指定输出变量和帧缓冲区对象附加点的对应关系。
 layout (location = 0) out vec4 color;
 layout (location = 1) out vec4 normal;
 
+也可以在 shader 链接阶段，通过下面的函数来指导链接器来设置合适的关联关系。
 void glBindFragDataLocation(GLuint program, GLuint colorNumber,const GLchar *name);
 void glBindFragDataLocationIndexed(GLuint program,GLuint colorNumber, GLuint index,const GLchar *name);
 GLint glGetFragDataLocation(GLuint program, const GLchar *name);
 GLint glGetFragDataIndex(GLuint program, const GLchar *name);
 
-2. Selecting Color Buffers for Writing and Reading
-void glDrawBuffer(GLenum mode);
-void glDrawBuffers(GLsizei n, const GLenum *buffers);
-GL_NONE
-GL_FRONT
-GL_FRONT_LEFT
-GL_BACK
-GL_FRONT_RIGHT
-GL_LEFT
-GL_BACK_LEFT
-GL_RIGHT
-GL_BACK_RIGHT
-GL_FRONT_AND_BACK
-GL_COLOR_ATTACHMENTi
-void glReadBuffer(GLenum mode);
-void glEnablei(GLenum capability, GLuint index);
-void glDisablei(GLenum capability, GLuint index);
-GLboolean glIsEnabledi(GLenum capability, GLuint index);
-
-3. Dual-Source Blending
+如果 shader 中已经指定了 location，则通过上面函数指定的关联就会被忽略。
+** Selecting Color Buffers for Writing and Reading
+#+BEGIN_SRC c
+  void glDrawBuffer(GLenum mode);
+  void glDrawBuffers(GLsizei n, const GLenum *buffers);
+  /* mode -  */
+  /* GL_NONE */
+  /* GL_FRONT */
+  /* GL_FRONT_LEFT */
+  /* GL_BACK */
+  /* GL_FRONT_RIGHT */
+  /* GL_LEFT */
+  /* GL_BACK_LEFT */
+  /* GL_RIGHT */
+  /* GL_BACK_RIGHT */
+  /* GL_FRONT_AND_BACK */
+  /* GL_COLOR_ATTACHMENTi */
+  void glReadBuffer(GLenum mode);
+  void glEnablei(GLenum capability, GLuint index);
+  void glDisablei(GLenum capability, GLuint index);
+  GLboolean glIsEnabledi(GLenum capability, GLuint index);
+#+END_SRC
+** Dual-Source Blending
 Dual source blending 是指一种混合模式，片段着色器输出两个颜色值到相同的 buffer 中。为了实现这个目的，
 这两个输出必须指向相同的 buffer 索引，但是用另外的一个参数指定哪个是 color 0，哪个是 color 1。如下：
 layout (location = 0, index = 0) out vec4 first_output;
@@ -277,19 +306,53 @@ GL_ONE_MINUS_SRC1_COLOR
 GL_ONE_MINUS_SRC1_ALPHA
 
 若 GL_MAX_DUAL_SOURCE_DRAW_BUFFERS 值为 1，则 Dual source 混合和渲染到多个缓冲区无法同时使用。
-九、Reading and Copying Pixel Data
-void glReadBuffer()
-指定从什么缓冲区读取数据
-void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels);
-void glClampColor(GLenum target, GLenum clamp);
+* 九、Reading and Copying Pixel Data
+#+BEGIN_SRC c
+  void glReadBuffer(); // 指定从什么缓冲区读取数据
+  void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels);
+  /* format - */
+  /* GL_RED */
+  /* GL_RED_INTEGER */
+  /* ... */
+  /* GL_RGB */
+  /* GL_RGB_INTEGER */
+  /* ... */
+  /* GL_RGBA */
+  /* GL_RGBA_INTEGER */
+  /* GL_STENCIL_INDEX */
+  /* GL_DEPTH_COMPONENT */
+  /* GL_DEPTH_STENCIL */
 
+  /* type - */
+  /* GL_UNSIGNED_BYTE */
+  /* GL_BYTE */
+  /* GL_UNSIGNED_SHORT */
+  /* GL_SHORT */
+  /* GL_UNSIGNED_INT */
+  /* GL_INT */
+  /* ... */
+
+  // OpenGL 很多类型的缓冲区会以标准化[0,1]范围以外的值来存储颜色值。通过 glReadPixels 来读取这些值是，可以使用下面的函数来，指定是否将值固定在标准化范围内
+  void glClampColor(GLenum target, GLenum clamp);
+  target - GL_CLAMP_READ_COLOR
+  clamp  - GL_TRUE GL_FALSE
+#+END_SRC
 * 十、Copying Pixel Rectangles
-void glBlitFramebuffer(GLint srcX0, GLint srcY0,
-GLint srcX1, GLint srcY1,
-GLint dstX0, GLint dstY0,
-GLint dstX1, GLint dstY1,
-GLbitfield buffers, GLenum filter);
-上面函数可用于一个缓冲区的不同区域之间 或者 不同帧缓冲区之间 copy 像素
+下面函数可用于一个缓冲区的不同区域之间 或者 不同帧缓冲区之间 copy 像素.在 copy 过程中可以对像素执行改变尺寸、倒转、转换、过滤操作
+#+BEGIN_SRC c
+  void glBlitFramebuffer(GLint srcX0, GLint srcY0,
+  GLint srcX1, GLint srcY1,
+  GLint dstX0, GLint dstY0,
+  GLint dstX1, GLint dstY1,
+  GLbitfield buffers, GLenum filter);
+  /* buffers - 下面枚举的位或,指定 copy 哪些 buffer 中的内容 */
+  /* GL_COLOR_BUFFER_BIT */
+  /* GL_DEPTH_BUFFER_BIT */
+  /* GL_STENCIL_BUFFER_BIT */
+  /* filter - 如果源和目标大小不同，则使用该参数指定过滤模式 */
+  /* GL_NEAREST */
+  /* GL_LINEAR */
+#+END_SRC
 
 
 

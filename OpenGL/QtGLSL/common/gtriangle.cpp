@@ -5,7 +5,7 @@
 #include <QImage>
 using namespace std;
 
-GTriangle::GTriangle()
+GTriangle::GTriangle(string tex_name)
 {
     _is_inited = false;
 
@@ -13,6 +13,7 @@ GTriangle::GTriangle()
     _kTexCoorAttribLocal = 1;
     _scale = 1.0f;
     _color = glm::vec4(1.0,0.0,0.0,1.0);
+    _tex_name = tex_name;
 }
 
 void GTriangle::GetPosData(GLfloat*& pos_data,int& size, int& count)
@@ -112,7 +113,7 @@ void GTriangle::Init(GLfloat *pos_data, int size, int count)
 
         GLenum param_names[]  = {GL_TEXTURE_WRAP_S,GL_TEXTURE_WRAP_T,GL_TEXTURE_MIN_FILTER,GL_TEXTURE_MAG_FILTER};
         GLenum param_values[] = {GL_REPEAT,GL_REPEAT,GL_LINEAR,GL_LINEAR};
-        GLHelper::LoadTexture(_texture,GL_TEXTURE_2D,param_names,param_values,4,QImage::Format_RGB888,true,"wall.jpg");
+        GLHelper::LoadTexture(_texture,GL_TEXTURE_2D,param_names,param_values,4,QImage::Format_RGB888,true,_tex_name.c_str());
 
         glBindBuffer(GL_ARRAY_BUFFER,0);
         glBindVertexArray(0);

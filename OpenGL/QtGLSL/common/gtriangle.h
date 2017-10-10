@@ -9,7 +9,7 @@
 class GTriangle
 {
 public:
-    GTriangle();
+    GTriangle(std::string tex_name="wall.jpg");
     void Init(GLfloat* pos_data=nullptr, int size=0, int count=0);
     void Draw();
     void SetScale(float scale);
@@ -43,6 +43,8 @@ private:
 
     glm::vec4 _color;
     float     _scale;
+
+    std::string _tex_name;
 };
 
 #endif // GTRIANGLE_H

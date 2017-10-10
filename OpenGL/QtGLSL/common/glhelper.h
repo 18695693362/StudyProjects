@@ -27,9 +27,10 @@ public:
 
     static void Init();
 
+    static void SetDeleteShader(bool is_delete_shader);
     static GLuint CompileShader(GLuint shader_type, const char* shader_str);
-    static GLuint CreateShaderProgram(const char* vertex_shader_str, const char* fragment_shader_str);
-    static GLuint CreateShaderProgramWithFiles(const QString& vert_path, const QString& frag_path);
+    static GLuint CreateShaderProgram(const char* vertex_shader_str, const char* fragment_shader_str, const char* geom_shader_str=nullptr);
+    static GLuint CreateShaderProgramWithFiles(const QString& vert_path, const QString& frag_path, const QString& geom_path="");
     static QString GetShaderTxt(const QString& filePath);
 
     static GLint GetUniformLocal(GLuint program, const char* uniform_name);
@@ -64,6 +65,7 @@ public:
         }
     }
 private:
+    static bool _is_delete_shader;
     static QElapsedTimer _start_timer;
 };
 

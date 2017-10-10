@@ -6,6 +6,7 @@
 #include "../libs/glm/glm/gtx/norm.hpp"
 using namespace std;
 
+bool GLHelper::_is_delete_shader = true;
 GLHelper::GLHelper()
 {
 
@@ -20,6 +21,11 @@ QElapsedTimer GLHelper::_start_timer;
 void GLHelper::Init()
 {
     _start_timer.start();
+}
+
+void GLHelper::SetDeleteShader(bool is_delete_shader)
+{
+    _is_delete_shader = is_delete_shader;
 }
 
 GLuint GLHelper::CompileShader(GLuint shader_type, const char* shader_str)
@@ -45,7 +51,7 @@ GLuint GLHelper::CompileShader(GLuint shader_type, const char* shader_str)
     return shader_obj;
 }
 
-GLuint GLHelper::CreateShaderProgram(const char* vertex_shader_str, const char* fragment_shader_str)
+GLuint GLHelper::CreateShaderProgram(const char* vertex_shader_str, const char* fragment_shader_str, const char *geom_shader_str)
 {
     GLuint vertex_shader_obj = CompileShader(GL_VERTEX_SHADER,vertex_shader_str);
     if(!vertex_shader_obj)
@@ -57,18 +63,34 @@ GLuint GLHelper::CreateShaderProgram(const char* vertex_shader_str, const char* 
     {
         return ~(GLuint)0 - 2;
     }
+    GLuint geom_shader_obj = 0;
+    if (geom_shader_str!=nullptr)
+    {
+        geom_shader_obj = CompileShader(GL_GEOMETRY_SHADER, geom_shader_str);
+    }
     GLuint program = glCreateProgram();
     glAttachShader(program,vertex_shader_obj);
     glAttachShader(program,fragment_shader_obj);
+    if(geom_shader_obj!=0)
+    {
+        glAttachShader(program,geom_shader_obj);
+    }
     glLinkProgram(program);
 
-    if(vertex_shader_obj)
+    if(_is_delete_shader)
     {
-        glDeleteShader(vertex_shader_obj);
-    }
-    if(fragment_shader_obj)
-    {
-        glDeleteShader(fragment_shader_obj);
+        if(vertex_shader_obj)
+        {
+            glDeleteShader(vertex_shader_obj);
+        }
+        if(fragment_shader_obj)
+        {
+            glDeleteShader(fragment_shader_obj);
+        }
+        if(geom_shader_obj)
+        {
+            glDeleteShader(geom_shader_obj);
+        }
     }
 
     GLint status;
@@ -87,9 +109,16 @@ GLuint GLHelper::CreateShaderProgram(const char* vertex_shader_str, const char* 
     return program;
 }
 
-GLuint GLHelper::CreateShaderProgramWithFiles(const QString& vert_path, const QString& frag_path)
+GLuint GLHelper::CreateShaderProgramWithFiles(const QString& vert_path, const QString& frag_path,const QString& geom_path)
 {
-    GLuint program = CreateShaderProgram(GetShaderTxt(vert_path).toStdString().c_str(),GetShaderTxt(frag_path).toStdString().c_str());
+    const char* geom_shader_txt = nullptr;
+    string geom_shader_str;
+    if(!geom_path.isEmpty())
+    {
+        geom_shader_str = GetShaderTxt(geom_path).toStdString();
+        geom_shader_txt = geom_shader_str.c_str();
+    }
+    GLuint program = CreateShaderProgram(GetShaderTxt(vert_path).toStdString().c_str(),GetShaderTxt(frag_path).toStdString().c_str(),geom_shader_txt);
     if(program == (~(GLuint)0 - 1))
     {
         cout << "vert error = " << vert_path.toStdString() << endl;

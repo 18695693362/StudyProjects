@@ -33,23 +33,27 @@ RECTANGLE                   samplerRect             2D rectangle
 BUFFER                      samplerBuffer           1D buffer
 
 * 三、Creating and Initializing Textures
-（1）生成贴图对象名称
+** 生成贴图对象名称
 void glGenTextures(GLsizei n, GLuint *textures);
-（2）创建/绑定贴图对象到激活的纹理单元
+** 创建/绑定贴图对象到激活的纹理单元
+#+BEGIN_SRC c
 void glBindTexture(GLenum target, GLuint texture);
-target GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_1D_ARRAY, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_RECTANGLE,
-GL_TEXTURE_BUFFER, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_2D_MULTISAMPLE_ARRAY
-判断纹理名称是否为纹理对象
+//-target- 
+// GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_1D_ARRAY, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_RECTANGLE,
+// GL_TEXTURE_BUFFER, GL_TEXTURE_CUBE_MAP, GL_TEXTURE_CUBE_MAP_ARRAY, GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_2D_MULTISAMPLE_ARRAY
+// 判断纹理名称是否为纹理对象
 GLboolean glIsTexture(GLuint texture);
-（3）选择激活的纹理绑定点（纹理单元）
+#+END_SRC
+** 选择激活的纹理绑定点（纹理单元）
 默认激活的纹理绑定点为 GL_TEXTURE0
 void glActiveTexture(GLenum texture);
 texture GL_TEXTURE0-GL_TEXTUREi
 GL_MAX_COMBINED_ TEXTURE_IMAGE_UNITS 用来查询支持的最大纹理单元数目
 同一个纹理对象可以同步绑定到多个纹理绑定点。
-（4）删除纹理对象
+** 删除纹理对象
 void glDeleteTextures(GLsizei n, const GLuint *textures);
-（5）为纹理对象指定存储空间和数据
+** 为纹理对象指定存储空间和数据
+#+BEGIN_SRC c
 void glTexStorage1D(GLenum target, GLsizei levels,GLenum internalFormat, GLsizei width);
     target 必须为 GL_TEXTURE_1D
     internalFormat 为 OpenGL 用于存储内部贴图数据的格式
@@ -59,23 +63,17 @@ void glTexStorage2DMultisample(GLenum target, GLsizei samples,GLenum internalFor
 GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
 void glTexStorage3DMultisample(GLenum target, GLsizei samples,GLenum internalFormat,
 GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
-尽管最好的实践是声明不变的贴图存储，但是允许贴图对象改变尺寸以及格式是可以支持的。
-下面的方法指定了可变的纹理
-void glTexImage1D(GLenum target, GLint level,GLint internalFormat, GLsizei width,GLint border, GLenum format, GLenum type,
-const void *data);
-    format 为 应用程序提供的数据的格式
-void glTexImage2D(GLenum target, GLint level,GLint internalFormat, GLsizei width,GLsizei height, GLint border, GLenum format,
-GLenum type, const void *data);
-void glTexImage3D(GLenum target, GLint level,GLint internalFormat, GLsizei width,GLsizei height, GLsizei depth, GLint border,
-GLenum format, GLenum type, const void *data);
-void glTexImage2DMultisample(GLenum target, GLenum samples,GLint internalFormat,GLsizei width, GLsizei height,
-GLboolean fixedsamplelocations);
-void glTexImage3DMultisample(GLenum target, GLenum samples,GLint internalFormat,GLsizei width, GLsizei height, GLsizei depth,
-GLboolean fixedsamplelocations);
-￼
-因为多重采样贴图的数据不能被初始化，glTexSubImage2D()也不能用来更新多重采样贴图的内容。将数据载入多重采样贴图的唯一方法是将多重采样贴图和一个
-framebuffer 对象相关联，然后将数据渲染到其中。
-（6）Texture Formats
+// 尽管最好的实践是声明不变的贴图存储，但是允许贴图对象改变尺寸以及格式是可以支持的。
+// 下面的方法指定了可变的纹理
+void glTexImage1D(GLenum target, GLint level,GLint internalFormat, GLsizei width,GLint border, GLenum format, GLenum type, const void *data);
+// format 为 应用程序提供的数据的格式
+void glTexImage2D(GLenum target, GLint level,GLint internalFormat, GLsizei width,GLsizei height, GLint border, GLenum format, GLenum type, const void *data);
+void glTexImage3D(GLenum target, GLint level,GLint internalFormat, GLsizei width,GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void *data);
+void glTexImage2DMultisample(GLenum target, GLenum samples,GLint internalFormat,GLsizei width, GLsizei height, GLboolean fixedsamplelocations);
+void glTexImage3DMultisample(GLenum target, GLenum samples,GLint internalFormat,GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
+#+END_SRC
+因为多重采样贴图的数据不能被初始化，glTexSubImage2D()也不能用来更新多重采样贴图的内容。将数据载入多重采样贴图的唯一方法是将多重采样贴图和一个 framebuffer 对象相关联，然后将数据渲染到其中。
+*** Texture Formats
 internal format 为 OpenGL 用于存储内部贴图数据的格式。应用程序提供的数据会被转化为这种类型。
 Sized Internal Format       Base Internal Format        R Bits          G Bits          B Bits          A Bits
 GL_R8                       GL_RED                      8
@@ -98,18 +96,17 @@ GL_RGBA                 Red, Green, Blue, Alpha
 每一类纹理类型都有与之对应的代理纹理。代理纹理用来测试 OpenGL 实现的能力。
 
 * 五、Specifying Texture Data
-1. Explicitly Setting Texture Data
+** Explicitly Setting Texture Data
 void glTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format,GLenum type, const void *data);
 void glTexSubImage2D(GLenum target, GLint level, GLint xoffset,GLint yoffset, GLsizei width, GLsizei height, GLenum format,
 GLenum type, const void *data);
 void glTexSubImage3D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset,GLsizei width, GLsizei height,
 GLsizei depth, GLenum format, GLenum type, const void *data);
-￼
-2. Using Pixel Unpack Buffers
+** Using Pixel Unpack Buffers
 当没有 buffer 对象绑定到 GL_PIXEL_UNPACK_BUFFER 时，glTexSubImage**()函数的 data 参数指定了数据的地址。
 当有 buffer 对象绑定到 GL_PIXEL_UNPACK_BUFFER 时，glTexSubImage**()函数的 data 参数指定了绑定到 GL_PIXEL_UNPACK_BUFFER 的 buffer 的偏移量。
 使用 buffer 对象来指定贴图数据的优势是，传递数据到贴图不需要立即执行，直到在渲染器中访问数据。这样数据的传输就可以和应用程序的运行同步进行了。
-3. Copying Data from the Frambuffer
+** Copying Data from the Frambuffer
 可以读取 frambuffer 的部分数据到贴图对象。
 void glCopyTexImage1D(GLenum target, GLint level,GLint internalFormat, GLint x, GLint y,GLsizei width, GLint border);
 void glCopyTexImage2D(GLenum target, GLint level,GLint internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
@@ -121,20 +118,21 @@ void glFramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLin
 void glFramebufferTexture1D(GLenum target, GLenum attachment,GLenum texturetarget,GLuint texture, GLint level);
 void glFramebufferTexture2D(GLenum target,GLenum attachment, GLenum texturetarget, GLuint texture, GLint level);
 void glFramebufferTexture3D(GLenum target, GLenum attachment,GLenum texturetarget, GLuint texture, GLint level, GLint layer);
-
-4. Loading Images from Files
+** Loading Images from Files
 使用 QImage 可以加载图片。
 QImage temp(GLHelper::GetAbsPathRelativeGResPath("wall.jpg").c_str());
 QImage image = temp.convertToFormat(QImage::Format_RGB888);
 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.width(), image.height(),0, GL_RGB, GL_UNSIGNED_BYTE, image.bits());
-
-5. Retrieving Texture Data
+** Retrieving Texture Data
 可以将贴图中的数据读到应用程序内存或一个 buffer 对象。
+#+BEGIN_SRC c
 void glGetTexImage(GLenum target, GLint lod, GLenum format, GLenum type, GLvoid* image);
-target - GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_1D_ARRAY, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_CUBE_MAP_ARRAY,
-GL_TEXTURE_RECTANGLE. GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
-GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, and GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
-读入 image 中的数据大小是由 target、format 和 type 决定的。
+// target - GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_1D_ARRAY, GL_TEXTURE_2D_ARRAY, GL_TEXTURE_CUBE_MAP_ARRAY,
+// GL_TEXTURE_RECTANGLE. GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+// GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, and GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+// 读入 image 中的数据大小是由 target、format 和 type 决定的。
+#+END_SRC
+
 通常来讲将数据读入应用程序不是高效的操作，如果必须要读取贴图数据，应该将数据读到 buffer 对象中，然后将 buffer 映射到应用程序中。
 (1) 绑定 PBO pixel buffer object
 for (int i=0;i<pbo_count;i++)
@@ -160,38 +158,40 @@ SX_DEBUG("glReadPixels() with pbo: %d", pbos[dx]);
 glReadPixels(0, 0, width, height, fmt, GL_UNSIGNED_BYTE, 0);
 
 http://www.roxlu.com/2014/048/fast-pixel-transfers-with-pixel-buffer-objects
-
-6. Texture Data Layout
+** Texture Data Layout
 大多数情况图片数据是从左到右，从上到下在内存贴图图元之间紧密排列。
 可以通过下面的函数来指定图片数据的排列方式：
+#+BEGIN_SRC c
 void glPixelStorei(GLenum pname, GLint param);
 void glPixelStoref(GLenum pname, GLfloat param);
-pname - GL_UNPACK_ROW_LENGTH, GL_UNPACK_SWAP_BYTES, GL_UNPACK_SKIP_PIXELS, GL_UNPACK_SKIP_ROWS, GL_UNPACK_SKIP_IMAGES,
-GL_UNPACK_ALIGNMENT, GL_UNPACK_IMAGE_HEIGHT, or GL_UNPACK_LSB_FIRST
-GL_PACK_ROW_LENGTH, GL_PACK_SWAP_BYTES, GL_PACK_SKIP_PIXELS, GL_PACK_SKIP_ROWS, GL_PACK_SKIP_IMAGES,
-GL_PACK_ALIGNMENT, GL_PACK_IMAGE_HEIGHT, or GL_PACK_LSB_FIRST
-unpack  参数用来指定 OpenGL 如何从应用程序内存或绑定到 GL_PIXEL_UNPACK_BUFFER 的缓冲区读取数据（glTexSubImage2D）。
-packing 参数用来指定 OpenGL 如何将贴图数据写入内存（glGetTexImage）.
+//pname - GL_UNPACK_ROW_LENGTH, GL_UNPACK_SWAP_BYTES, GL_UNPACK_SKIP_PIXELS, GL_UNPACK_SKIP_ROWS, GL_UNPACK_SKIP_IMAGES,
+//GL_UNPACK_ALIGNMENT, GL_UNPACK_IMAGE_HEIGHT, or GL_UNPACK_LSB_FIRST
+//GL_PACK_ROW_LENGTH, GL_PACK_SWAP_BYTES, GL_PACK_SKIP_PIXELS, GL_PACK_SKIP_ROWS, GL_PACK_SKIP_IMAGES,
+//GL_PACK_ALIGNMENT, GL_PACK_IMAGE_HEIGHT, or GL_PACK_LSB_FIRST
+//unpack  参数用来指定 OpenGL 如何从应用程序内存或绑定到 GL_PIXEL_UNPACK_BUFFER 的缓冲区读取数据（glTexSubImage2D）。
+//packing 参数用来指定 OpenGL 如何将贴图数据写入内存（glGetTexImage）.
+#+END_SRC
 
 * 六、Sampler Objects
-1. 简述
+** 简述
 贴图可以通过关联到贴图单元的一个 sampler 变量来读取，并运用 GLSL 内置的函数从贴图图片来获取贴图图元。
 sampler 对象中保存了获取图元方式的相关参数。sampler 对象被绑定到 sampler 单元。
 贴图对象包含一个内置的 sampler 对象，如果没有 sampler 对象绑定到对应的 sampler 单元，则该默认 sampler 对象用来贴图数据读取。
 （1）创建 sampler 对象名称
 void glGenSamplers(GLsizei count, GLuint *samplers);
 （2）创建/绑定 sampler 对象到 sampler 单元
+#+BEGIN_SRC c
 void glBindSampler(GLuint unit, GLuint sampler);
-unit 为 sampler 单元的索引。如果 sampler 为 0，则清除 sampler 单元上绑定的所有 sampler 对象
+// unit 为 sampler 单元的索引。如果 sampler 为 0，则清除 sampler 单元上绑定的所有 sampler 对象
 GLboolean glIsSampler(GLenum id);
-glBindTexture 和 glBindSampler 的不同之处： //void glBindTexture(GLenum target, GLuint texture);
---1-- glBindSampler 没有 target 参数。因为 sampler 对象没有维度一说，所以没必要区别不同类型的 sampler 对象类型。
---2-- glBindSampler 有 unit 参数，没有对应的 glActiveSampler 函数。glActiveTexture 的参数为 GL_TEXTURE0-GLTEXTURi 的常数，i 的最大值是由实现定义的。
-unit 是一个无符号整数，允许任意数目的 sampler 单元。
+// glBindTexture 和 glBindSampler 的不同之处： //void glBindTexture(GLenum target, GLuint texture);
+// --1-- glBindSampler 没有 target 参数。因为 sampler 对象没有维度一说，所以没必要区别不同类型的 sampler 对象类型。
+// --2-- glBindSampler 有 unit 参数，没有对应的 glActiveSampler 函数。glActiveTexture 的参数为 GL_TEXTURE0-GLTEXTURi 的常数，i 的最大值是由实现定义的。
+// unit 是一个无符号整数，允许任意数目的 sampler 单元。
+#+END_SRC
 （3）删除 sampler object
 void glDeleteSamplers(GLsizei count, const GLuint *samplers );
-
-2. Sampler Parameters
+** Sampler Parameters
 void glSamplerParameter{fi}(GLuint sampler, GLenum pname, Type param );
 void glSamplerParameter{fi}v(GLuint sampler, GLenum pname, const Type* param );
 void glSamplerParameterI{i ui}v(GLuint sampler, GLenum pname,const Type* param );
@@ -218,7 +218,7 @@ gvec4 texture(gsamplerCubeArray tex, vec4 P[, float bias]);
 gvec4 为 vec4, ivec4, or uvec4
 gsampler2D 为 sampler2D, isampler2D
 
-1. Texture Coordinates
+** Texture Coordinates
 一个贴图被认为在每个维度上占据了从 0.0 到 1.0 的区域。如果贴图坐标在[0.0,1.0]范围外，贴图坐标需要被修改使他们回到[0.0,1.0]范围。
 OpenGL 通过下面的采样参数来控制修改贴图坐标的行为：
 GL_TEXTURE_WRAP_S 控制 s 轴数据的修改
@@ -231,7 +231,7 @@ GL_REPEAT
 GL_MIRRORED_REPEAT
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-2. Arranging Texture Data
+** Arranging Texture Data
 static const GLenum abgr_swizzle[] =
 {
      GL_ALPHA, GL_RED, GL_GREEN, GL_BLUE
@@ -250,7 +250,7 @@ glTexParameteri( GL_TEXTURE_2D,
                  GL_TEXTURE_SWIZZLE_A,
                  GL_ONE);
 
-3. Using Multiple Textures
+** Using Multiple Textures
 为了使用多个纹理，需要在 shader 中声明多个 uniform sampler 变量。每个变量会索引不同的纹理单元。
 通过 glGetUniformLocation()可以获得 uniform sampler 变量
 使用 glUniform1i()可以修改 uniform sampler 变量的值。
@@ -279,15 +279,13 @@ e.g:
 
 * 八、Complex Texture Types
 贴图通常为一维或二维图片，但是还有一些其他类型的贴图。例如：3D 贴图、贴图数组、立方体映射、阴影、深度-模板以及缓冲区贴图。
-1. 3D Textures
+** 3D Textures
 3D 贴图可以认为是在 3D 网格中排列的体素。
 3D 贴图典型应用是在医学图片或流体模拟中的体渲染。
-
-2. Array Textures
+** Array Textures
 有时候需要在一次渲染中访问多个贴图，例如你需要使用一个角色的漫反射贴图、法线贴图、镜面光贴图以及其他的一些属性。如果为每个
 贴图使用 glBindTexture()会造成性能影响。贴图数组允许你组合一组一维或二维的贴图，他们拥有相同的大小和格式。
-
-3. Cube-Map Textures
+** Cube-Map Textures
 立方体映射贴图用于环境贴图。它包含一组图片，并且将他们当做立方体的每个面。正方体的六个面由六个子贴图表示，他们必须是大小相
 同的正方形。
 Cube-Map 贴图的贴图坐标为(x,y,z) 一个中心点在原点的单位立方体其表面的点的坐标和 Cube-Map 的贴图坐标一一对应。
@@ -295,8 +293,7 @@ Cube-Map 贴图的贴图坐标为(x,y,z) 一个中心点在原点的单位立方
 （2）Environment Map
 （3）无缝 Cube-Map
 可以使用 glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS)来消除立方体各个面连接处明显的接缝
-
-4. Shadow Samplers
+** Shadow Samplers
 在 GLSL 中提供了一种特殊的采样器即 shadow sampler。shadow sampler 在贴图坐标中使用了额外的分量，用来和获取到
 的贴图值进行比较。
 使用 shadow sampler 时，从 texture()返回的值在[0.0,1.0]范围内，指示了通过比较操作的贴图值的部分。
@@ -317,13 +314,11 @@ glSamplerParameteri(sampler,GL_TEXTURE_COMPARE_MODE,GL_NONE)
 设置比较函数
 glSamplerParameteri(sampler,GL_TEXTURE_COMPARE_FUNC,func)
 func 为 GL_LEQUAL, GL_GEQUAL, GL_LESS, GL_GREATER, GL_EQUAL, GL_NOTEQUAL, GL_ALWAYS, or GL_NEVER
-
-5. Depth-Stencil Textures
+** Depth-Stencil Textures
 贴图除了可以保存图片数据，通过使用 GL_DEPTH_STENCIL 贴图格式，还可以保存深度和模板值。
 默认情况下着色器会读取深度值(GL_DEPTH_COMPONENT)，通过下面函数可以设置着色器来读取模板值(GL_STENCIL_COMPONENTS)
 void glTexParameteri(GLenum target​, GL_DEPTH_STENCIL_TEXTURE_MODE, GL_STENCIL_COMPONENTS);
-
-6. Buffer Textures
+** Buffer Textures
 buffer textures 是一种特殊的贴图类型，它可以让着色器访问一个 buffer 对象，将这个 buffer 对象当做一个很大的一维贴图。
 buffer textures 通过 glTexParameteri()设置参数，它没有内置的才采样器并且采样对象对于它是无效的。
 buffer textures 和一维贴图的主要区别为：
@@ -341,101 +336,104 @@ vec4 texelFetch(samplerBuffer s, int coord);
 ivec4 texelFetch(isamplerBuffer s, int coord);
 uvec4 texelFetch(usamplerBuffer s, int coord);
 
-e.g:
-// Buffer to be used as the data store
- GLuint buf;
- // Texture to be used as a buffer texture
- GLuint tex;
-// Data is located somewhere else in this program extern const GLvoid* data;
- // Generate, bind, and initialize a buffer object
- // using the GL_TEXTURE_BUFFER binding. Assume we’re
- // going to use one megabyte of data here.
- glGenBuffers(1, &buf);
- glBindBuffer(GL_TEXTURE_BUFFER,  buf);
- glBufferData(GL_TEXTURE_BUFFER,  1024 * 1024,
-              data, GL_STATIC_DRAW);
- // Now create the buffer texture and associate it
- // with the buffer object.
- glGenTextures(1, &tex);
- glBindTexture(GL_TEXTURE_BUFFER, tex);
- glTexBuffer(GL_TEXTURE_BUFFER, GL_R32F, buf);
+#+BEGIN_SRC c
+  // e.g:
+  // Buffer to be used as the data store
+  GLuint buf;
+  // Texture to be used as a buffer texture
+  GLuint tex;
+  // Data is located somewhere else in this program extern const GLvoid* data;
+  // Generate, bind, and initialize a buffer object
+  // using the GL_TEXTURE_BUFFER binding. Assume we’re
+  // going to use one megabyte of data here.
+  glGenBuffers(1, &buf);
+  glBindBuffer(GL_TEXTURE_BUFFER,  buf);
+  glBufferData(GL_TEXTURE_BUFFER,  1024 * 1024,
+               data, GL_STATIC_DRAW);
+  // Now create the buffer texture and associate it
+  // with the buffer object.
+  glGenTextures(1, &tex);
+  glBindTexture(GL_TEXTURE_BUFFER, tex);
+  glTexBuffer(GL_TEXTURE_BUFFER, GL_R32F, buf);
 
-#version 330 core
-uniform samplerBuffer buf
-in int buf_tex_coord;
-layout (location = 0) out vec4 color;
-void main(void)
-{
-     color = texelFetch(buf, tex_coord);
-}
-
+  #version 330 core
+  uniform samplerBuffer buf
+  in int buf_tex_coord;
+  layout (location = 0) out vec4 color;
+  void main(void)
+  {
+      color = texelFetch(buf, tex_coord);
+  }
+#+END_SRC
 * 九、Texture Views
 OpenGL 允许多个贴图公用一个数据存储。
 首先 创建一个贴图将其初始化为大小不可变的。
 其次 创建一个贴图的贴图视图。
-void glTextureView(GLuint texture, GLenum target,GLuint origTexture, GLenum internalFormat,
-GLuint minLevel, GLuint numLevels, GLuint minLayer, GLuint numLayers);
-target 和 origTexture 必须匹配
-Original Target(GL_TEXTURE*)        Compatible Targets(GL_TEXTURE*)
-1D                                  1D,1D_ARRAY
-2D                                  2D,2D_ARRAY
-.......
-internalFormat 也必须和 origTexture 的 internalFormat 匹配
-OriginalTarget          CompatibleTargets
-128-bit                 GL_RGBA32F,GL_RGBA32UI,GL_RGBA32I
-......
-
+#+BEGIN_SRC c
+  void glTextureView(GLuint texture, GLenum target,GLuint origTexture, GLenum internalFormat,
+  GLuint minLevel, GLuint numLevels, GLuint minLayer, GLuint numLayers);
+  /* target 和 origTexture 必须匹配 */
+  /* Original Target(GL_TEXTURE*)        Compatible Targets(GL_TEXTURE*) */
+  /* 1D                                  1D,1D_ARRAY */
+  /* 2D                                  2D,2D_ARRAY */
+  /* ....... */
+  /* internalFormat 也必须和 origTexture 的 internalFormat 匹配 */
+  /* OriginalTarget          CompatibleTargets */
+  /* 128-bit                 GL_RGBA32F,GL_RGBA32UI,GL_RGBA32I */
+  /* ...... */
+#+END_SRC
 创建了贴图的视图以后，可以在任何可以使用贴图的地方使用贴图视图，包括图片加载和存储或者帧缓存附件，还可以创建
 贴图视图的贴图视图，每个视图都会保存一个到原始数据存储的引用。删除原始的贴图也是合法的。只要有一个数据的视图
 存在，真实的数据就不会被删除。
 
-e.g 1: Creating a Texture View with a New Format
-// Create two texture names - one will be our parent,
- // one will be the view
- GLuint tex[2];
- glGenTextures(2, &tex);
- // Bind the first texture and initialize its data store
- // Here, the store will be 1024 x 1024 2D texture with
- // mipmaps and the format will be GL_RGB8 - 8-bits per
- // component RGB, unsigned normalized
- glBindTexture(GL_TEXTURE_2D, tex[0]);
- glTexStorage2D(GL_TEXTURE_2D, 10, GL_RGB8, 1024, 1024);
-// Now,.create a view of the texture, this time using // GL_RGB8UI so as to receive the raw data from the texture
-glTextureView(tex[1],           // New texture view
-              GL_TEXTURE_2D,    // Target for the new view
-              tex[0],           // Original texture
-              GL_RGB8UI,        // New format
-              0, 10,            // All mipmaps
-              0, 1);            // Only one layer
+#+BEGIN_SRC c
+  //e.g 1: Creating a Texture View with a New Format
+  // Create two texture names - one will be our parent,
+  // one will be the view
+  GLuint tex[2];
+  glGenTextures(2, &tex);
+  // Bind the first texture and initialize its data store
+  // Here, the store will be 1024 x 1024 2D texture with
+  // mipmaps and the format will be GL_RGB8 - 8-bits per
+  // component RGB, unsigned normalized
+  glBindTexture(GL_TEXTURE_2D, tex[0]);
+  glTexStorage2D(GL_TEXTURE_2D, 10, GL_RGB8, 1024, 1024);
+  // Now,.create a view of the texture, this time using // GL_RGB8UI so as to receive the raw data from the texture
+  glTextureView(tex[1],           // New texture view
+                GL_TEXTURE_2D,    // Target for the new view
+                tex[0],           // Original texture
+                GL_RGB8UI,        // New format
+                0, 10,            // All mipmaps
+                0, 1);            // Only one layer
 
-e.g 2: Creating a Texture View with a New Target
-// Create two texture names - one will be our parent,
- // one will be the view
- GLuint tex[2];
- glGenTextures(2, &tex);
-// Bind the first texture and initialize its data store
-// We are going to create a 2D array texture with a layer
-// size of 256x256 texels and 100 layers.
-glBindTexture(GL_TEXTURE_2D_ARRAY, tex[0]);
-glTexStorage3D(GL_TEXTURE_2D_ARRAY, 8, GL_RGAB32F, 256, 256, 100);
- // Now,.create a GL_TEXTURE_2D view of the texture,
- // extracting a single slice from the middle of the array
-glTextureView(tex[1],           // New texture view
-              GL_TEXTURE_2D,    // Target for the new view
-              tex[0],           // Original texture
-              GL_RGBA32F,       // Same format as original texture
-              0, 8,             // All mipmaps
-              50, 1);           // Only one layer
+  //e.g 2: Creating a Texture View with a New Target
+  // Create two texture names - one will be our parent,
+  // one will be the view
+  GLuint tex[2];
+  glGenTextures(2, &tex);
+  // Bind the first texture and initialize its data store
+  // We are going to create a 2D array texture with a layer
+  // size of 256x256 texels and 100 layers.
+  glBindTexture(GL_TEXTURE_2D_ARRAY, tex[0]);
+  glTexStorage3D(GL_TEXTURE_2D_ARRAY, 8, GL_RGAB32F, 256, 256, 100);
+  // Now,.create a GL_TEXTURE_2D view of the texture,
+  // extracting a single slice from the middle of the array
+  glTextureView(tex[1],           // New texture view
+                GL_TEXTURE_2D,    // Target for the new view
+                tex[0],           // Original texture
+                GL_RGBA32F,       // Same format as original texture
+                0, 8,             // All mipmaps
+                50, 1);           // Only one layer
 
+#+END_SRC
 * 十、Compressed Textures
 有两种方法可以将压缩数据放入 OpenGL。
-第一种方法是让 OpenGL 为你压缩数据。这种情况下你提供非压缩数据，但是指定一种
-压缩类型的内部格式。OpenGL 实现会获取原始未压缩数据然后对其进行压缩。因为这是实时的过程，所以 OpenGL 通常会实
-现一个比较简单的算法从而可以快速压缩数据，导致压缩图片质量比较低。
-第二种方法是离线压缩数据，然后将压缩过的数据直接传递给 OpenGL。使用这种方法，你可以花足够的时间来达到想要的图
-片质量而不牺牲运行时性能。
-有很多种压缩算法和压缩格式，并且不同的硬件和 OpenGL 实现会支持不同的格式。为了确定你的 OpenGL 实现支持哪些格式，
-你需要检查扩展的实现列表。
+第一种方法是让 OpenGL 为你压缩数据。
+这种情况下你提供非压缩数据，但是指定一种 压缩类型的内部格式。OpenGL 实现会获取原始未压缩数据然后对其进行压缩。因为这是实时的过程，所以 OpenGL 通常会实 现一个比较简单的算法从而可以快速压缩数据，导致压缩图片质量比较低。
+
+第二种方法是离线压缩数据，然后将压缩过的数据直接传递给 OpenGL。
+使用这种方法，你可以花足够的时间来达到想要的图 片质量而不牺牲运行时性能。 有很多种压缩算法和压缩格式，并且不同的硬件和 OpenGL 实现会支持不同的格式。为了确定你的 OpenGL 实现支持哪些格式， 你需要检查扩展的实现列表。
+
 OpenGL 会保证支持两种家族格式。RGTC(Red-Green 贴图压缩格式)和 BPTC(Block Partitioned 贴图压缩格式)。两种
 格式都是基于块的并且将图元以 4x4 的图元块为单位存储，每一个都独立压缩。这样的数据块很容易被硬件解压。
 
@@ -450,12 +448,11 @@ GLenum format, GLsizei imageSize, const void *data);
 ......
 
 * 十一、Filtering
-1. 简述
+** 简述
 贴图映射可以是直线、正方形、矩形甚至是 3，贴图被映射到一个多边形或表面并且被转换为屏幕坐标后，贴图的每个独立的图元
 很少会直接对应屏幕图片的每个独立的像素。依赖于使用的变换以及应用的贴图映射，屏幕上的一个像素可能对应一个贴图图元的
 一小部分，或者一组图元的集合。
-
-2. Linear Filtering
+** Linear Filtering
 只要贴图的采样率相对于图片的尖峰数据足够高，线性重建的图片依然会有相当高的质量。
 OpenGL 获得你传递给它的贴图坐标，并且查找两个最靠近的样本。依据到这两个点的距离为这两个样本创建权值，然后使用它们的
 权值来创建一个平均权值。
@@ -463,8 +460,7 @@ OpenGL 获得你传递给它的贴图坐标，并且查找两个最靠近的样�
 GL_TEXTURE_MAG_FILTER 和 GL_TEXTURE_MIN_FILTER 这两个参数控制 OpenGL 如何过滤贴图。
 贴图被放大时使用 GL_TEXTURE_MAG_FILTER 参数的配置。需求的贴图分辨率比最高分辨率的 mipmap(level0)高.
 贴图被缩小时使用 GL_TEXTURE_MIN_FILTER 参数的配置。
-
-3. Using and Generating Mipmaps
+** Using and Generating Mipmaps
 GL_TEXTURE_MIN_FILTER 参数控制着，当 mipmap level 比 0 大时，贴图图元如何创建。
 GL_NEAREST 和 GL_LINEAR 设置会关闭 mipmapping，OpenGL 只会使用 level0 贴图。
 GL_NEAREST_MIPMAP_NEAREST、GL_NEAREST_MIPMAP_LINEAR、GL_LINEAR_MIPMAP_NEAREST、GL_LINEAR_MIPMAP_LINEAR 设
@@ -483,9 +479,7 @@ GL_TEXTURE_MAG_FILTER 的默认值为 GL_LINEAR，GL_TEXTURE_MIN_FILTER 的默�
 OpenGL 支持自动生成 mipmap，但是该实现被设计为效率优先于质量，而且不同的实现之间有很大不同。所以当需要高质量，结果一致的时候
 最好自己生成 mipmap。
 void glGenerateMipmap(GLenum target);
-
-4. Calculating the Mipmap Level
-
+** Calculating the Mipmap Level
 λbase (x, y) = log2 [ρ (x, y)]
 λ′ (x, y) = λbase + clamp(biastexobj + biasshader)
 
@@ -496,8 +490,7 @@ void glGenerateMipmap(GLenum target);
 
 lodmin 通过 GL_TEXTURE_MIN_LOD 来设置
 lodmax 通过 GL_TEXTURE_MAX_LOD 来设置
-
-5. Mipmap Level-of-Detail Control
+** Mipmap Level-of-Detail Control
 GL_TEXTURE_BASE_LEVEL 指定 mipmap 的最低等级，即指定最高分辨率的 mipmap 等级
 GL_TEXTURE_MAX_LEVEL 指定 mipmap 的最高等级，即指定最低分辨率的 mipmap 等级
 
@@ -625,8 +618,7 @@ GL_POINT_FADE_THRESHOLD_SIZE                                        指定 fade 
 void glFramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level);
 ......
 对于三维或一维、二维贴图数组，可以通过下面函数将贴图的单层作为 framebuffer 附加点。
-void glFramebufferTextureLayer(GLenum target, GLenum attachment,
-GLuint texture, GLint level, GLint layer);
+void glFramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer);
 
 2. Discading Rendered Data
 首要的规则：在开始渲染一帧之前，你必须清除 framebuffer。
@@ -639,7 +631,6 @@ GLint x, GLint y, GLint width, GLint height);
 void glInvalidateTexImage(GLuint texture, GLint level);
 void glInvalidateTexSubImage(GLuint texture, GLint level,GLint xoffset, GLint yoffset,
 GLint zoffset, GLint width, GLint height, GLint depth);
-
 
 * 十五、贴图最佳实践
 1. Immutable Texuture Storage

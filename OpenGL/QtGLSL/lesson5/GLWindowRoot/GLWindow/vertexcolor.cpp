@@ -1,5 +1,6 @@
 #include "vertexcolor.h"
 #include <iostream>
+#include "../../../common/glfuncdefine.h"
 #include "../../../common/glhelper.h"
 #include "glm/glm.hpp"
 #include "glm/fwd.hpp"
@@ -41,7 +42,7 @@ void VertexColor::initializeGL()
     glClearDepth(1.0f);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
+    //glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     cout << "gl version = " << glGetString(GL_VERSION) << endl;

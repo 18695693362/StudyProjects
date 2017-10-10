@@ -34,39 +34,50 @@ C(B(Av)) = (CBA)v
 （1）可以进行透视投影
 （2）可以通过线性变换来表示平移
 ** 线性变换和矩阵
-（1）平移
-x,y,z 都平移 2.5
-1.0 0.0 0.0 2.5   x   x+2.5
-0.0 1.0 0.0 2.5 * y = y+2.5
-0.0 0.0 1.0 2.5   z   z+2.5
-0.0 0.0 0.0 1.0   1   1    
-（2）缩放
-x,y,z 都缩放 3 倍
-3.0 0.0 0.0 0.0   x   3x
-0.0 3.0 0.0 0.0 * y = 3y
-0.0 0.0 3.0 0.0   z   3z
-0.0 0.0 0.0 1.0   1   1 
-（3）Rotation
-沿 x 轴旋转 50 度
- 1.0  0.0    0.0   0.0   x      x            
- 0.0  cos50 -sin50 0.0   y    cos50*y-sin50*z
- 0.0  sin50  cos50 0.0 * z =  sin50*y+cos50*z
- 0.0  0.0    0.0   1.0   1      1            
-沿 y 轴旋转 50 度
- cos50  0.0   sin50 0.0   x    cos50*x+sin50*z
- 0.0    1.0   0.0   0.0   y      y            
--sin50  0.0   cos50 0.0 * z = -sin50*x+cos50*z
- 0.0    0.0   0.0   1.0   1      1            
-沿 z 轴旋转 50 度
- cos50  -sin50 0.0 0.0   x   cos50*x-sin50*y
- sin50   cos50 0.0 0.0 * y = sin50*x+cos50*y
- 0.0     0.0   1.0 0.0   z      z           
- 0.0     0.0   0.0 1.0   1      1           
-沿任意轴(Rx,Ry,Rz)旋转 o 度
-
-（4）Shearing 切变
- 1 s  *  x  =  x+sy 
- 0 1     y      y   
+- 变换物体和变换坐标系
+  有些情况下需要进行物体变换，另外一些情况下则需要进行坐标系变换。但是，这两种变换实际上是等价的，将物体变换一个量等价于将坐标系变换一个相反的量。
+  变换坐标系，其实就是将以该坐标系表示的所有物体都进行和该坐标系相同的变换。
+  详情可以参考，ComputerGraphicMath 这篇博客的内容。
+- 平移
+  #+BEGIN_EXAMPLE
+  x,y,z 都平移 2.5
+  1.0 0.0 0.0 2.5   x   x+2.5
+  0.0 1.0 0.0 2.5 * y = y+2.5
+  0.0 0.0 1.0 2.5   z   z+2.5
+  0.0 0.0 0.0 1.0   1   1    
+  #+END_EXAMPLE
+- 缩放
+  #+BEGIN_EXAMPLE
+  x,y,z 都缩放 3 倍
+  3.0 0.0 0.0 0.0   x   3x
+  0.0 3.0 0.0 0.0 * y = 3y
+  0.0 0.0 3.0 0.0   z   3z
+  0.0 0.0 0.0 1.0   1   1 
+  #+END_EXAMPLE
+- Rotation
+  #+BEGIN_EXAMPLE
+  沿 x 轴旋转 50 度
+  1.0  0.0    0.0   0.0   x      x            
+  0.0  cos50 -sin50 0.0   y    cos50*y-sin50*z
+  0.0  sin50  cos50 0.0 * z =  sin50*y+cos50*z
+  0.0  0.0    0.0   1.0   1      1            
+  沿 y 轴旋转 50 度
+  cos50  0.0   sin50 0.0   x    cos50*x+sin50*z
+  0.0    1.0   0.0   0.0   y      y            
+  -sin50  0.0   cos50 0.0 * z = -sin50*x+cos50*z
+  0.0    0.0   0.0   1.0   1      1            
+  沿 z 轴旋转 50 度
+  cos50  -sin50 0.0 0.0   x   cos50*x-sin50*y
+  sin50   cos50 0.0 0.0 * y = sin50*x+cos50*y
+  0.0     0.0   1.0 0.0   z      z           
+  0.0     0.0   0.0 1.0   1      1           
+  沿任意轴(Rx,Ry,Rz)旋转 o 度
+  #+END_EXAMPLE
+- Shearing 切变
+  #+BEGIN_EXAMPLE
+  1 s  *  x  =  x+sy 
+  0 1     y      y   
+  #+END_EXAMPLE 
 ** Perspective Projection / Orthographic Projection
 构造透视投影矩阵和正交投影矩阵
 http://www.songho.ca/opengl/gl_projectionmatrix.html
@@ -75,16 +86,66 @@ http://www.songho.ca/opengl/gl_projectionmatrix.html
 （1）平移物体不会修改它的法线，所以法线不需要考虑平移问题
 （2）法线向量用来进行光照计算，其在透视投影之前进行，所以法线向量不需要透视投影。
 需要注意的是法线向量的变换公用物体的变换。
-n′ = M(−1)Tn
+$n_{eye} = (M^{−1})^Tn_{obj}$
+
+http://www.songho.ca/opengl/gl_normaltransform.html
 http://www.cnblogs.com/hefee/p/3817397.html
 ** OpenGL Matrices
 为了优化性能，将对于每个顶点都相同的矩阵运算放在应用程序中进行，计算完毕后传递给顶点着色器。
 （1）OpenGL 中的矩阵行列
-opengl 中矩阵是列主序的
+opengl 中矩阵是列主序的。通过矩阵转置操作可以将列主序矩阵转化为行主序，反之亦然。
+列主序 行主序 影响了矩阵运算的顺序，行主序矩阵从左到右依次计算，列主序矩阵从右到左依次计算。
+#+BEGIN_SRC glsl
 mat3x4 m;
 vec4 v = m[1]; // v 是矩阵 m 的第二列向量
+#+END_SRC
 http://blog.csdn.net/oracleot/article/details/5378746
+** 实现一个摄像机类
+实现一个摄像机其实就是定义一个视觉坐标系。定义这个坐标系，需要坐标系源点在世界坐标系中的位置，以及三个互相垂直的方向向量。
+#+BEGIN_SRC c
+// lookAt 函数返回一个矩阵，可以实现世界坐标到视觉坐标的转换
+glm::mat4 CameraMatrix = glm::LookAt(
+    cameraPosition, // the position of your camera, in world space
+    cameraTarget,   // where you want to look at, in world space
+    upVector        // probably glm::vec3(0,1,0), but (0,-1,0) would make you looking upside-down, which can be great too
+);
+#+END_SRC
 
+- 实现在场景中移动
+  只需要移动摄像机的坐标就可以实现。
+  按下 a 时向左移动，按下 d 时向右移动，按下 w 向前移动，按下 s 向后移动。
+  以向左移动为例，实现方法为，将摄像机坐标系下向左的单位向量 $left_v=(-1,0,0)$ 转换到世界坐标系中 $left_w$ ，然后将 $摄像机坐标+left_w$
+  #+BEGIN_SRC c
+    vec4 left_view = glm::vec3(-1,0,0,1);
+    vec4 left_world = glm::normalize(glm::inverse(CameraMatrix) * left_view);
+    cameraPosition = cameraPosition + left_world;
+    CameraMatrix = glm::LookAt(
+                               cameraPosition,
+                               cameraTarget,
+                               upVector
+                               );
+  #+END_SRC
+- 实现在场景中转动视角
+  只需要旋转摄像机的朝向就可以实现。
+  鼠标往左移动往左转，鼠标往右移动往右转。
+  以向左转为例，实现方法为，将世界坐标系下 cameraTarget 向量绕 upVector 向量逆时针旋转 angle 角度
+  #+BEGIN_SRC c
+    glm::quat rotate = glm::normalize(glm::angleAxis(glm::radians(angle), upVector));
+    cameraTarget = rotate * cameraTarget;
+    CameraMatrix = glm::LookAt(
+                               cameraPosition,
+                               cameraTarget,
+                               upVector
+                               );
+  #+END_SRC
+- 实现场景的缩放
+  鼠标滚轮向上滚动场景放大，鼠标滚轮向下滚动场景缩小。
+  以场景放大为例，实现方法为，增大视野
+  #+BEGIN_SRC c
+  fov = fov + delta;
+  projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f); 
+  #+END_SRC
+https://learnopengl.com/#!Getting-started/Camera
 * 三、OpenGL Transformations
 1. 在 OpenGL 中指定最近和最远的裁剪平面
 void glDepthRange(GLclampd near, GLclampd far);
@@ -99,22 +160,40 @@ void glViewport(GLint x, GLint y, GLint width, GLint height);
 http://www.songho.ca/opengl/gl_projectionmatrix.html
 5. User Clipping
 用户裁切是指添加额外的裁切平面。
+#+BEGIN_SRC c
 glEnable(GL_CLIP_PLANE0);
-开启第 0 个裁剪平面
+// 开启第 0 个裁剪平面
 void glClipPlane(GLenum plane, const GLdouble *equation);
-指定裁剪平面
-gl_ClipDistance 用来指定定点和平面的关系。距离=0 表示定点在裁剪平面上，距离>0 表示顶点在裁剪平面内
-(顶点不会被裁剪)，距离<0 表示顶点在裁剪平面外(顶点被裁剪)；
+//定义一个裁剪平面。equation 参数指向平面方程 Ax + By + Cz + D = 0 的 4 个系数。
+
+//example:
+GLdouble eqn [4]={0.0,1.0,0.0,0.0};  
+GLdouble eqn2 [4] ={1.0,0.0,0.0,0.0};
+glClipPlane(GL_CLIP_PLANE0,eqn);  
+glEnable(GL_CLIP_PLANE0);  
+glClipPlane(GL_CLIP_PLANE1,eqn2);  
+glEnable(GL_CLIP_PLANE1);
+
+// or clip with shader
+// gl_ClipDistance 用来指定定点和平面的关系。距离=0 表示定点在裁剪平面上，距离>0 表示顶点在裁剪平面内 (顶点不会被裁剪)，距离<0 表示顶点在裁剪平面外(顶点被裁剪)；
+#version 330 core
+uniform vec4 Plane; //A,B,C,D for Ax+By+Cz+D=0
+in vect4 Vertex;    //w==1.0
+float gl_ClipDistance[1];
+void main()
+{
+	gl_ClipDistance[0] = dot(Vertex, Plane);
+}
+#+END_SRC
 http://blog.sina.com.cn/s/blog_5ff6097b0100xqvr.html
 
 * 四、Transform Feedback
-1. 简述
+** 简述
 Transform feedback 是在顶点处理结束以后，在图元装配和光栅化之前。当顶点数据组合为图元时，Transform
 feedback 捕获这些顶点数据并且可以将他们的属性记录到缓冲区对象中。
-2. Transform feedback Objects
+** Transform feedback Objects
 transform feedback object 封装了实现 transform feedback 的状态。这些状态包括：
-用于保存捕获到的顶点数据的缓冲区、计数索引每个缓冲区有多少满；
-标示 transform feedback 是否是当前激活的。
+用于保存捕获到的顶点数据的缓冲区、计数索引每个缓冲区有多满、标示 transform feedback 是否是当前激活的。
 （1）创建 transform feedback 对象名称
 void glGenTransformFeedbacks(GLsizei n, GLuint * ids);
 （2）创建/绑定 transform feedback 对象
@@ -122,26 +201,120 @@ void glBindTransformFeedback(GLenum target, GLuint id);
 GLboolean glIsTransformFeedback(GLenum id);
 （3）删除 transform feedback
 void glDeleteTransformFeedbacks(GLsizei n, const GLuint ids);
-3. Transform Feedback Buffers
-void glBindBufferBase(GLenum target, GLuint index, GLuint buffer);
-void glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset,GLsizeiptr size);
-target GL_TRANSFORM_FEEDBACK_BUFFER
-4. Configuring Transform Feedback Varyings
+** Transform Feedback Buffers
+#+BEGIN_SRC c
+  //将当前绑定的缓冲区对象和索引为 index 的 tfbo 关联
+  void glBindBufferBase(GLenum target, GLuint index, GLuint buffer);
+  void glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset,GLsizeiptr size);
+  //-target- GL_TRANSFORM_FEEDBACK_BUFFER
+
+  // example initialization of a Transform Feedback Buffer
+  GLuint buffer;
+  glGenBuffers(1, &buffer);
+
+  glBindBuffer(GL_TRANSFORM_FEEDBACK, buffer);
+  glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, 1024*1024, NULL, GL_DYNAMIC_COPY);
+
+  glBindBufferRange(
+                    GL_TRANSFORM_FEEDBACK_BUFFER,
+                    0,
+                    buffer,
+                    0,
+                    512*1024
+                    );
+  glBindBufferRange(
+                    GL_TRANSFORM_FEEDBACK_BUFFER,
+                    0,
+                    buffer,
+                    512*1024,
+                    512*1024
+                    );
+#+END_SRC
+** Configuring Transform Feedback Varyings
 在 transform feedback 阶段,指定哪些变量会被记录,以及被记录到哪个 buffer 中
-void glTransformFeedbackVaryings(GLuint program, GLsizei count,const GLchar ** varyings, GLenum bufferMode);
-bufferMode
-GL_INTERLEAVED_ATTRIBS
-GL_SEPARATE_ATTRIBS
-注意上面的代码需要在 glLinkProgram()之前调用。
-gl_SkipComponents1, gl_SkipComponents2, gl_SkipComponents3, gl_SkipComponents4, and gl_NextBuffer.
-5. 开始、停止 Transform Feedback
+#+BEGIN_SRC c
+  void glTransformFeedbackVaryings(GLuint program, GLsizei count,const GLchar ** varyings, GLenum bufferMode);
+  //-bufferMode-
+  // GL_INTERLEAVED_ATTRIBS
+  // GL_SEPARATE_ATTRIBS
+  //注意上面的代码需要在 glLinkProgram()之前调用。
+  //
+  // gl_SkipComponents1, gl_SkipComponents2, gl_SkipComponents3, gl_SkipComponents4, and gl_NextBuffer.
+
+  // example 指定需要反馈变换的变量
+  // 如果 bufferMode = GL_INTERLEAVED_ATTRIBS,那么 foo,bar,baz 的值将会紧挨着记录到 TF 缓冲区对象中。
+  // 如果 bufferMode = GL_SEPARATE_ATTRIBS,那么 foo,bar,baz 的值将会分别被记录在各自的 TF 缓冲区对象中。
+  static const char* const vars[] = {"foo", "bar", "baz"};
+  glTransformFeedbackVaryings(
+                              prog,
+                              sizeof(vars)/sizeof(vars[0]),
+                              varyings,
+                              GL_INTERLEAVED_ATTRIBS
+                              );
+  glTransformFeedbackVaryings(
+                              prog,
+                              sizeof(vars)/sizeof(vars[0]),
+                              varyings,
+                              GL_SEPARATE_ATTRIBS
+                              );
+  glLinkProgram(prog);
+
+  // example 在 TF 缓冲区对象中留下间隙
+  static const char* const vars[] = {
+      "foo",
+      "gl_SkipComponents2",
+      "bar",
+      "gl_SkipComponents3"
+      "baz"
+  };
+  glTransformFeedbackVaryings(
+                              prog,
+                              sizeof(vars)/sizeof(vars[0]),
+                              varyings,
+                              GL_INTERLEAVED_ATTRIBS
+                              );
+
+  // example Declare the transform feedback varying names
+  static const char * const vars[] =
+  {
+      // Record foo, a gap of 1 float, bar, and then two floats
+      "foo", "gl_SkipComponents1", "bar", "gl_SkipComponents2"
+      // Move to binding point 1
+      "gl_NextBuffer",
+      // Leave a gap of 4 floats, then record baz, then leave
+      // another gap of 2 floats
+      "gl_SkipComponents4" "baz", "gl_SkipComponents2"
+      // Move to binding point 2
+      "gl_NextBuffer",
+      // Move directly to binding point 3 without directing anything
+      // to binding point 2
+      "gl_NextBuffer",
+      // Record iron and copper with a 3 component gap between them
+      "iron", "gl_SkipComponents3", "copper"
+  };
+  // Set the varyings
+  glTransformFeedbackVaryings(prog,
+                              sizeof(vars) / sizeof(vars[0]),
+                              varyings,
+                              GL_INTERLEAVED_ATTRIBS);
+  // Remember to link the program object
+  glLinkProgram(prog);
+#+END_SRC
+
+** 开始、停止 Transform Feedback
+#+BEGIN_SRC c
 void glBeginTransformFeedback(GLenum primitiveMode);
+-primitiveMode
+GL_POINTS
+GL_LINES
+GL_TRIANGLES
 void glPauseTransformFeedback(void);
 void glResumeTransformFeedback(void);
 void glEndTransformFeedback(void);
-6. 离子系统
+#+END_SRC
+** 离子系统
 实现离子系统
-
+[[file:3_particle_system_simulator.png]]
 
 
 

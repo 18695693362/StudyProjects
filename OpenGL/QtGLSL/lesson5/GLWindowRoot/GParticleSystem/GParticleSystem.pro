@@ -9,31 +9,26 @@ QT       += opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = GLWindow
+TARGET = GParticleSystem
 TEMPLATE = app
 
 SOURCES += main.cpp \
     ../../../common/glhelper.cpp \
-    ../../../common/gdebug.cpp \
+    ../../../common/gcamera.cpp \
+    ../../../common/gtimermgr.cpp \
     ../../../common/gtriangle.cpp \
     goglwidget.cpp \
-    ../../../common/gcubemaptexture.cpp \
-    ../../../common/gcube.cpp \
-    ../../../common/gcamera.cpp \
-    ../../../common/gskybox.cpp \
-    ../../../common/gtimermgr.cpp
+    gparticlesystem.cpp \
+    grandomtexture.cpp
 
 HEADERS  += \
     ../../../common/glhelper.h \
-    ../../../common/gdebug.h \
+    ../../../common/gcamera.h \
+    ../../../common/gtimermgr.h \
     ../../../common/gtriangle.h \
     goglwidget.h \
-    ../../../common/gcubemaptexture.h \
-    ../../../common/gcube.h \
-    ../../../common/gcamera.h \
-    ../../../common/gskybox.h \
-    ../../../common/gtimermgr.h \
-    ../../../common/gmodel.h
+    gparticlesystem.h \
+    grandomtexture.h
 
 CONFIG += c++11
 
@@ -48,7 +43,7 @@ DEPENDPATH += $$PWD/../../../libs/glm
 
 DISTFILES += \
     ../../../TIPS.txt \
-    ../../README.org
+    ../../README.txt
 
 G_RES_DIR = "res"
 G_SRC_DIR = $${PWD}/$${G_RES_DIR}

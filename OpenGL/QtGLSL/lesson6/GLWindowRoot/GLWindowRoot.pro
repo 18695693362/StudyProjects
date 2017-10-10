@@ -5,5 +5,5 @@ SUBDIRS += \
     ../../libs/glm
 
 OTHER_FILES += \
-    ../README.txt \
+    ../README.org \
     ../../TIPS.txt
