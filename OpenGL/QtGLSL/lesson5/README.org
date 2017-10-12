@@ -186,7 +186,6 @@ void main()
 }
 #+END_SRC
 http://blog.sina.com.cn/s/blog_5ff6097b0100xqvr.html
-
 * 四、Transform Feedback
 ** 简述
 Transform feedback 是在顶点处理结束以后，在图元装配和光栅化之前。当顶点数据组合为图元时，Transform
@@ -315,16 +314,24 @@ void glEndTransformFeedback(void);
 ** 离子系统
 实现离子系统
 [[file:3_particle_system_simulator.png]]
-
-
-
-
-
-
-
-
-
-
+* Q&A
+** 关于坐标变换流程
+*** 坐标变换流程是怎样的？
+物体坐标系->世界坐标系->视觉坐标系->裁剪坐标系（clipping 坐标系）->NDC 标准设备坐标系-> 屏幕坐标系
+[[file:1_coordinate_systems.png]]
+*** 坐标裁剪是如何进行的？
+对与每个执行了投影变换后的点 (x_c,y_c,z_c,w_c),如果-w_c=<x_c<=w_c, -w_c=<y_c<=w_c, -w_c=<z_c<=w_c 三个条件都满足，就会保留该顶点，否则该顶点将被裁剪掉。
+*** 为什么坐标裁剪不直接在 NDC 坐标系下进行？
+因为在裁剪坐标系下执行裁剪后，后续需要执行透视除法的顶点就会减少，从而提高性能。
+https://gamedev.stackexchange.com/questions/65789/why-is-clip-space-always-referred-to-as-homogeneous-clip-space
+*** 裁剪坐标系是怎样的坐标系？它的原点-坐标轴是怎样的？
+ 裁剪坐标系是一个齐次坐标系。通过对裁剪坐标系执行透视除法，可以将裁剪坐标系转化
+为 NDC 坐标系。
+https://stackoverflow.com/questions/18875218/opengl-clip-coordinate
+*** OpenGL NDC 标准设备坐标系为什么是左手坐标系？
+因为在视觉坐标系中，摄像机是向着-z 方向看，而在 NDC 坐标系中，摄像机是向着+z 方向看的.
+NDC 使用左手坐标系的话，depth 缓冲区中的值越大，表示对应的顶点离近平面越远.
+https://stackoverflow.com/questions/9384827/why-is-the-normalized-device-coordinate-system-left-handed
 
 
 
