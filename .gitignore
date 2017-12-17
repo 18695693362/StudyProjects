@@ -1,9 +1,9 @@
 ############################################ unity project
 *.userprefs
-OpenGL/UnityCg/Basics/MinimalShader/Library
-OpenGL/UnityCg/Basics/MinimalShader/Temp
-OpenGL/UnityCg/Basics/RGBCube/Library
-OpenGL/UnityCg/Basics/RGBCube/Temp
+SDK/OpenGL/UnityCg/Basics/MinimalShader/Library
+SDK/OpenGL/UnityCg/Basics/MinimalShader/Temp
+SDK/OpenGL/UnityCg/Basics/RGBCube/Library
+SDK/OpenGL/UnityCg/Basics/RGBCube/Temp
 # =============== #
 # Unity generated #
 # =============== #
@@ -62,5 +62,5 @@ BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/obj
 BookReading/ProgrammingInCSharp/TestCSharp/TestCSharp/Properties
 TestCSharp.sln
 
-OpenGL/QtGLSL/libs/glm/Makefile.Debug
-OpenGL/QtGLSL/libs/glm/Makefile.Release
+SDK/OpenGL/QtGLSL/libs/glm/Makefile.Debug
+SDK/OpenGL/QtGLSL/libs/glm/Makefile.Release
