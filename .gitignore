@@ -64,3 +64,5 @@ TestCSharp.sln
 
 SDK/OpenGL/QtGLSL/libs/glm/Makefile.Debug
 SDK/OpenGL/QtGLSL/libs/glm/Makefile.Release
+SDK/Unreal/Intermediate/
+SDK/Unreal/Saved/
