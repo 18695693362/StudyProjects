@@ -66,3 +66,6 @@ SDK/OpenGL/QtGLSL/libs/glm/Makefile.Debug
 SDK/OpenGL/QtGLSL/libs/glm/Makefile.Release
 SDK/Unreal/Intermediate/
 SDK/Unreal/Saved/
+SDK/Unreal/Binaries/
+SDK/Unreal/Build/
+SDK/Unreal/BuildApp/
